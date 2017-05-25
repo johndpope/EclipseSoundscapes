@@ -7,14 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		70E439A017019D60659857BF /* Pods_EclipseSoundscapesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 219BB4393901E45FBC7BD829 /* Pods_EclipseSoundscapesTests.framework */; };
 		B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */; };
 		B72DF5471ED724F300F9E4F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5461ED724F300F9E4F3 /* ViewController.swift */; };
 		B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5481ED724F300F9E4F3 /* Main.storyboard */; };
-		B72DF54D1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B72DF54B1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodeld */; };
 		B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */; };
 		B72DF5521ED724F300F9E4F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */; };
 		B72DF55D1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF55C1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift */; };
 		B72DF5681ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5671ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift */; };
+		B72DF5761ED7251200F9E4F3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5751ED7251200F9E4F3 /* GoogleService-Info.plist */; };
+		B72DF57B1ED7252200F9E4F3 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5771ED7252200F9E4F3 /* AudioManager.swift */; };
+		B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5781ED7252200F9E4F3 /* Authenticator.swift */; };
+		B72DF57D1ED7252200F9E4F3 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5791ED7252200F9E4F3 /* NetworkManager.swift */; };
+		B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */; };
+		B72DF5811ED7259D00F9E4F3 /* EclipseSoundscapes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B72DF57F1ED7259D00F9E4F3 /* EclipseSoundscapes.xcdatamodeld */; };
+		D77B9349CAD58F1DB4B335FF /* Pods_EclipseSoundscapes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */; };
+		EB7C715CF5F62E86B98ABEDD /* Pods_EclipseSoundscapesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A506BF43909D29D3B1E7AEE /* Pods_EclipseSoundscapesUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,11 +43,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A506BF43909D29D3B1E7AEE /* Pods_EclipseSoundscapesUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EclipseSoundscapesUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		219BB4393901E45FBC7BD829 /* Pods_EclipseSoundscapesTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EclipseSoundscapesTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2BC585839D292E608D5F9225 /* Pods-EclipseSoundscapesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesTests/Pods-EclipseSoundscapesTests.release.xcconfig"; sourceTree = "<group>"; };
+		47C2DA347FC12156E3251FBE /* Pods-EclipseSoundscapesUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesUITests/Pods-EclipseSoundscapesUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		574FF5A80B92B374F0B382DF /* Pods-EclipseSoundscapes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapes.release.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapes/Pods-EclipseSoundscapes.release.xcconfig"; sourceTree = "<group>"; };
+		5A5604FF69C8CA6A252C43F5 /* Pods-EclipseSoundscapesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesTests/Pods-EclipseSoundscapesTests.debug.xcconfig"; sourceTree = "<group>"; };
+		778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EclipseSoundscapes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B03672B260885DC3EA96D077 /* Pods-EclipseSoundscapesUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesUITests/Pods-EclipseSoundscapesUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B72DF5411ED724F300F9E4F3 /* EclipseSoundscapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EclipseSoundscapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B72DF5461ED724F300F9E4F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B72DF5491ED724F300F9E4F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		B72DF54C1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EclipseSoundscapes.xcdatamodel; sourceTree = "<group>"; };
 		B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B72DF5511ED724F300F9E4F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B72DF5531ED724F300F9E4F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +64,13 @@
 		B72DF5631ED724F300F9E4F3 /* EclipseSoundscapesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EclipseSoundscapesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B72DF5671ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EclipseSoundscapesUITests.swift; sourceTree = "<group>"; };
 		B72DF5691ED724F300F9E4F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B72DF5751ED7251200F9E4F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B72DF5771ED7252200F9E4F3 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		B72DF5781ED7252200F9E4F3 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
+		B72DF5791ED7252200F9E4F3 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceManager.swift; sourceTree = "<group>"; };
+		B72DF5801ED7259D00F9E4F3 /* EclipseSoundscapes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EclipseSoundscapes.xcdatamodel; sourceTree = "<group>"; };
+		EC9068B8CBBFDE24E65A9DBE /* Pods-EclipseSoundscapes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapes/Pods-EclipseSoundscapes.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D77B9349CAD58F1DB4B335FF /* Pods_EclipseSoundscapes.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70E439A017019D60659857BF /* Pods_EclipseSoundscapesTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,12 +94,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB7C715CF5F62E86B98ABEDD /* Pods_EclipseSoundscapesUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0AC59B163A693564E0A25AC4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EC9068B8CBBFDE24E65A9DBE /* Pods-EclipseSoundscapes.debug.xcconfig */,
+				574FF5A80B92B374F0B382DF /* Pods-EclipseSoundscapes.release.xcconfig */,
+				5A5604FF69C8CA6A252C43F5 /* Pods-EclipseSoundscapesTests.debug.xcconfig */,
+				2BC585839D292E608D5F9225 /* Pods-EclipseSoundscapesTests.release.xcconfig */,
+				47C2DA347FC12156E3251FBE /* Pods-EclipseSoundscapesUITests.debug.xcconfig */,
+				B03672B260885DC3EA96D077 /* Pods-EclipseSoundscapesUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		8DBF39B7320E61B9CF8A0F70 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */,
+				219BB4393901E45FBC7BD829 /* Pods_EclipseSoundscapesTests.framework */,
+				0A506BF43909D29D3B1E7AEE /* Pods_EclipseSoundscapesUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B72DF5381ED724F300F9E4F3 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +131,8 @@
 				B72DF55B1ED724F300F9E4F3 /* EclipseSoundscapesTests */,
 				B72DF5661ED724F300F9E4F3 /* EclipseSoundscapesUITests */,
 				B72DF5421ED724F300F9E4F3 /* Products */,
+				0AC59B163A693564E0A25AC4 /* Pods */,
+				8DBF39B7320E61B9CF8A0F70 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,12 +150,17 @@
 			isa = PBXGroup;
 			children = (
 				B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */,
+				B72DF5771ED7252200F9E4F3 /* AudioManager.swift */,
+				B72DF5781ED7252200F9E4F3 /* Authenticator.swift */,
+				B72DF5791ED7252200F9E4F3 /* NetworkManager.swift */,
+				B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */,
 				B72DF5461ED724F300F9E4F3 /* ViewController.swift */,
 				B72DF5481ED724F300F9E4F3 /* Main.storyboard */,
 				B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */,
 				B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */,
+				B72DF5751ED7251200F9E4F3 /* GoogleService-Info.plist */,
 				B72DF5531ED724F300F9E4F3 /* Info.plist */,
-				B72DF54B1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodeld */,
+				B72DF57F1ED7259D00F9E4F3 /* EclipseSoundscapes.xcdatamodeld */,
 			);
 			path = EclipseSoundscapes;
 			sourceTree = "<group>";
@@ -135,9 +190,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B72DF56C1ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapes" */;
 			buildPhases = (
+				20342CFE5B3F601F3C671F15 /* [CP] Check Pods Manifest.lock */,
 				B72DF53D1ED724F300F9E4F3 /* Sources */,
 				B72DF53E1ED724F300F9E4F3 /* Frameworks */,
 				B72DF53F1ED724F300F9E4F3 /* Resources */,
+				539B9E763E0706F1C28AC4F6 /* [CP] Embed Pods Frameworks */,
+				E0E0399903E491D908D1ED49 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -152,9 +210,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B72DF56F1ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapesTests" */;
 			buildPhases = (
+				659423ABBF938B75E69F3586 /* [CP] Check Pods Manifest.lock */,
 				B72DF5541ED724F300F9E4F3 /* Sources */,
 				B72DF5551ED724F300F9E4F3 /* Frameworks */,
 				B72DF5561ED724F300F9E4F3 /* Resources */,
+				9BF072584B523166DB3FC053 /* [CP] Embed Pods Frameworks */,
+				653DBBE438D073C036DBAE2B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -170,9 +231,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B72DF5721ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapesUITests" */;
 			buildPhases = (
+				6B100D64F61F995D02B9FD32 /* [CP] Check Pods Manifest.lock */,
 				B72DF55F1ED724F300F9E4F3 /* Sources */,
 				B72DF5601ED724F300F9E4F3 /* Frameworks */,
 				B72DF5611ED724F300F9E4F3 /* Resources */,
+				5957E119525E659345B57346 /* [CP] Embed Pods Frameworks */,
+				DF7F64DDA0C572E8FEBD8F1D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -239,6 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B72DF5521ED724F300F9E4F3 /* LaunchScreen.storyboard in Resources */,
+				B72DF5761ED7251200F9E4F3 /* GoogleService-Info.plist in Resources */,
 				B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */,
 				B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */,
 			);
@@ -260,14 +325,156 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		20342CFE5B3F601F3C671F15 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		539B9E763E0706F1C28AC4F6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EclipseSoundscapes/Pods-EclipseSoundscapes-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5957E119525E659345B57346 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EclipseSoundscapesUITests/Pods-EclipseSoundscapesUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		653DBBE438D073C036DBAE2B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EclipseSoundscapesTests/Pods-EclipseSoundscapesTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		659423ABBF938B75E69F3586 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		6B100D64F61F995D02B9FD32 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		9BF072584B523166DB3FC053 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EclipseSoundscapesTests/Pods-EclipseSoundscapesTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DF7F64DDA0C572E8FEBD8F1D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EclipseSoundscapesUITests/Pods-EclipseSoundscapesUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E0E0399903E491D908D1ED49 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EclipseSoundscapes/Pods-EclipseSoundscapes-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B72DF53D1ED724F300F9E4F3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B72DF57D1ED7252200F9E4F3 /* NetworkManager.swift in Sources */,
+				B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */,
 				B72DF5471ED724F300F9E4F3 /* ViewController.swift in Sources */,
+				B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */,
 				B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */,
-				B72DF54D1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodeld in Sources */,
+				B72DF57B1ED7252200F9E4F3 /* AudioManager.swift in Sources */,
+				B72DF5811ED7259D00F9E4F3 /* EclipseSoundscapes.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +626,7 @@
 		};
 		B72DF56D1ED724F300F9E4F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EC9068B8CBBFDE24E65A9DBE /* Pods-EclipseSoundscapes.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 22G24XCXDT;
@@ -432,6 +640,7 @@
 		};
 		B72DF56E1ED724F300F9E4F3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 574FF5A80B92B374F0B382DF /* Pods-EclipseSoundscapes.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 22G24XCXDT;
@@ -445,6 +654,7 @@
 		};
 		B72DF5701ED724F300F9E4F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A5604FF69C8CA6A252C43F5 /* Pods-EclipseSoundscapesTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -460,6 +670,7 @@
 		};
 		B72DF5711ED724F300F9E4F3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2BC585839D292E608D5F9225 /* Pods-EclipseSoundscapesTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -475,6 +686,7 @@
 		};
 		B72DF5731ED724F300F9E4F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 47C2DA347FC12156E3251FBE /* Pods-EclipseSoundscapesUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 22G24XCXDT;
@@ -489,6 +701,7 @@
 		};
 		B72DF5741ED724F300F9E4F3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B03672B260885DC3EA96D077 /* Pods-EclipseSoundscapesUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 22G24XCXDT;
@@ -520,6 +733,7 @@
 				B72DF56E1ED724F300F9E4F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B72DF56F1ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapesTests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +742,7 @@
 				B72DF5711ED724F300F9E4F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B72DF5721ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapesUITests" */ = {
 			isa = XCConfigurationList;
@@ -536,16 +751,17 @@
 				B72DF5741ED724F300F9E4F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		B72DF54B1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodeld */ = {
+		B72DF57F1ED7259D00F9E4F3 /* EclipseSoundscapes.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				B72DF54C1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodel */,
+				B72DF5801ED7259D00F9E4F3 /* EclipseSoundscapes.xcdatamodel */,
 			);
-			currentVersion = B72DF54C1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodel */;
+			currentVersion = B72DF5801ED7259D00F9E4F3 /* EclipseSoundscapes.xcdatamodel */;
 			path = EclipseSoundscapes.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
