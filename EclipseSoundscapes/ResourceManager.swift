@@ -50,7 +50,7 @@ class ResourceManager {
     
     /// Load Coredata on Device
     func loadCoreData(){
-        guard let modelURL = Bundle.main.url(forResource: "Recording", withExtension:"momd") else {
+        guard let modelURL = Bundle.main.url(forResource: "Recordings", withExtension:"momd") else {
             fatalError("Error loading model from bundle")
         }
         guard let mom = NSManagedObjectModel(contentsOf: modelURL) else {
@@ -71,7 +71,7 @@ class ResourceManager {
             
         }
     }
-    
+        
     
     //TODO: Implement Passing the Recording through the notification for any subscribers
     func subscribeRecordingAdded(observer: Any, action: Selector, object: Any? = nil) {
@@ -277,7 +277,8 @@ class ResourceManager {
         json.updateValue(recording.longitude, forKey: Recording.LONG)
         json.updateValue(recording.duration, forKey: Recording.DURATION)
         json.updateValue(recording.info ?? "", forKey: Recording.INFO)
-
+        
+        
         do {
             
             let jsonData = try JSONSerialization.data(withJSONObject: json, options: JSONSerialization.WritingOptions.prettyPrinted)
@@ -296,6 +297,9 @@ class ResourceManager {
         }
         return nil
     }
+    
+    
+    
     
     
     /// Get the Size of the file at the given path
