@@ -1,0 +1,556 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */; };
+		B72DF5471ED724F300F9E4F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5461ED724F300F9E4F3 /* ViewController.swift */; };
+		B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5481ED724F300F9E4F3 /* Main.storyboard */; };
+		B72DF54D1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B72DF54B1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodeld */; };
+		B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */; };
+		B72DF5521ED724F300F9E4F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */; };
+		B72DF55D1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF55C1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift */; };
+		B72DF5681ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5671ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B72DF5591ED724F300F9E4F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B72DF5391ED724F300F9E4F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B72DF5401ED724F300F9E4F3;
+			remoteInfo = EclipseSoundscapes;
+		};
+		B72DF5641ED724F300F9E4F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B72DF5391ED724F300F9E4F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B72DF5401ED724F300F9E4F3;
+			remoteInfo = EclipseSoundscapes;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B72DF5411ED724F300F9E4F3 /* EclipseSoundscapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EclipseSoundscapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B72DF5461ED724F300F9E4F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B72DF5491ED724F300F9E4F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B72DF54C1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EclipseSoundscapes.xcdatamodel; sourceTree = "<group>"; };
+		B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B72DF5511ED724F300F9E4F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B72DF5531ED724F300F9E4F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B72DF5581ED724F300F9E4F3 /* EclipseSoundscapesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EclipseSoundscapesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B72DF55C1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EclipseSoundscapesTests.swift; sourceTree = "<group>"; };
+		B72DF55E1ED724F300F9E4F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B72DF5631ED724F300F9E4F3 /* EclipseSoundscapesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EclipseSoundscapesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B72DF5671ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EclipseSoundscapesUITests.swift; sourceTree = "<group>"; };
+		B72DF5691ED724F300F9E4F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B72DF53E1ED724F300F9E4F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B72DF5551ED724F300F9E4F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B72DF5601ED724F300F9E4F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B72DF5381ED724F300F9E4F3 = {
+			isa = PBXGroup;
+			children = (
+				B72DF5431ED724F300F9E4F3 /* EclipseSoundscapes */,
+				B72DF55B1ED724F300F9E4F3 /* EclipseSoundscapesTests */,
+				B72DF5661ED724F300F9E4F3 /* EclipseSoundscapesUITests */,
+				B72DF5421ED724F300F9E4F3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B72DF5421ED724F300F9E4F3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B72DF5411ED724F300F9E4F3 /* EclipseSoundscapes.app */,
+				B72DF5581ED724F300F9E4F3 /* EclipseSoundscapesTests.xctest */,
+				B72DF5631ED724F300F9E4F3 /* EclipseSoundscapesUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B72DF5431ED724F300F9E4F3 /* EclipseSoundscapes */ = {
+			isa = PBXGroup;
+			children = (
+				B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */,
+				B72DF5461ED724F300F9E4F3 /* ViewController.swift */,
+				B72DF5481ED724F300F9E4F3 /* Main.storyboard */,
+				B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */,
+				B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */,
+				B72DF5531ED724F300F9E4F3 /* Info.plist */,
+				B72DF54B1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodeld */,
+			);
+			path = EclipseSoundscapes;
+			sourceTree = "<group>";
+		};
+		B72DF55B1ED724F300F9E4F3 /* EclipseSoundscapesTests */ = {
+			isa = PBXGroup;
+			children = (
+				B72DF55C1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift */,
+				B72DF55E1ED724F300F9E4F3 /* Info.plist */,
+			);
+			path = EclipseSoundscapesTests;
+			sourceTree = "<group>";
+		};
+		B72DF5661ED724F300F9E4F3 /* EclipseSoundscapesUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B72DF5671ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift */,
+				B72DF5691ED724F300F9E4F3 /* Info.plist */,
+			);
+			path = EclipseSoundscapesUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B72DF5401ED724F300F9E4F3 /* EclipseSoundscapes */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B72DF56C1ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapes" */;
+			buildPhases = (
+				B72DF53D1ED724F300F9E4F3 /* Sources */,
+				B72DF53E1ED724F300F9E4F3 /* Frameworks */,
+				B72DF53F1ED724F300F9E4F3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EclipseSoundscapes;
+			productName = EclipseSoundscapes;
+			productReference = B72DF5411ED724F300F9E4F3 /* EclipseSoundscapes.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B72DF5571ED724F300F9E4F3 /* EclipseSoundscapesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B72DF56F1ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapesTests" */;
+			buildPhases = (
+				B72DF5541ED724F300F9E4F3 /* Sources */,
+				B72DF5551ED724F300F9E4F3 /* Frameworks */,
+				B72DF5561ED724F300F9E4F3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B72DF55A1ED724F300F9E4F3 /* PBXTargetDependency */,
+			);
+			name = EclipseSoundscapesTests;
+			productName = EclipseSoundscapesTests;
+			productReference = B72DF5581ED724F300F9E4F3 /* EclipseSoundscapesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B72DF5621ED724F300F9E4F3 /* EclipseSoundscapesUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B72DF5721ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapesUITests" */;
+			buildPhases = (
+				B72DF55F1ED724F300F9E4F3 /* Sources */,
+				B72DF5601ED724F300F9E4F3 /* Frameworks */,
+				B72DF5611ED724F300F9E4F3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B72DF5651ED724F300F9E4F3 /* PBXTargetDependency */,
+			);
+			name = EclipseSoundscapesUITests;
+			productName = EclipseSoundscapesUITests;
+			productReference = B72DF5631ED724F300F9E4F3 /* EclipseSoundscapesUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B72DF5391ED724F300F9E4F3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = DevByArlindo;
+				TargetAttributes = {
+					B72DF5401ED724F300F9E4F3 = {
+						CreatedOnToolsVersion = 8.3.1;
+						DevelopmentTeam = 22G24XCXDT;
+						ProvisioningStyle = Automatic;
+					};
+					B72DF5571ED724F300F9E4F3 = {
+						CreatedOnToolsVersion = 8.3.1;
+						DevelopmentTeam = 22G24XCXDT;
+						ProvisioningStyle = Automatic;
+						TestTargetID = B72DF5401ED724F300F9E4F3;
+					};
+					B72DF5621ED724F300F9E4F3 = {
+						CreatedOnToolsVersion = 8.3.1;
+						DevelopmentTeam = 22G24XCXDT;
+						ProvisioningStyle = Automatic;
+						TestTargetID = B72DF5401ED724F300F9E4F3;
+					};
+				};
+			};
+			buildConfigurationList = B72DF53C1ED724F300F9E4F3 /* Build configuration list for PBXProject "EclipseSoundscapes" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B72DF5381ED724F300F9E4F3;
+			productRefGroup = B72DF5421ED724F300F9E4F3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B72DF5401ED724F300F9E4F3 /* EclipseSoundscapes */,
+				B72DF5571ED724F300F9E4F3 /* EclipseSoundscapesTests */,
+				B72DF5621ED724F300F9E4F3 /* EclipseSoundscapesUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B72DF53F1ED724F300F9E4F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B72DF5521ED724F300F9E4F3 /* LaunchScreen.storyboard in Resources */,
+				B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */,
+				B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B72DF5561ED724F300F9E4F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B72DF5611ED724F300F9E4F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B72DF53D1ED724F300F9E4F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B72DF5471ED724F300F9E4F3 /* ViewController.swift in Sources */,
+				B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */,
+				B72DF54D1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B72DF5541ED724F300F9E4F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B72DF55D1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B72DF55F1ED724F300F9E4F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B72DF5681ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B72DF55A1ED724F300F9E4F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B72DF5401ED724F300F9E4F3 /* EclipseSoundscapes */;
+			targetProxy = B72DF5591ED724F300F9E4F3 /* PBXContainerItemProxy */;
+		};
+		B72DF5651ED724F300F9E4F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B72DF5401ED724F300F9E4F3 /* EclipseSoundscapes */;
+			targetProxy = B72DF5641ED724F300F9E4F3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B72DF5481ED724F300F9E4F3 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B72DF5491ED724F300F9E4F3 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B72DF5511ED724F300F9E4F3 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B72DF56A1ED724F300F9E4F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B72DF56B1ED724F300F9E4F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B72DF56D1ED724F300F9E4F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 22G24XCXDT;
+				INFOPLIST_FILE = EclipseSoundscapes/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ArlindoGoncalves.EclipseSoundscapes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		B72DF56E1ED724F300F9E4F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 22G24XCXDT;
+				INFOPLIST_FILE = EclipseSoundscapes/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ArlindoGoncalves.EclipseSoundscapes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		B72DF5701ED724F300F9E4F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 22G24XCXDT;
+				INFOPLIST_FILE = EclipseSoundscapesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ArlindoGoncalves.EclipseSoundscapesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EclipseSoundscapes.app/EclipseSoundscapes";
+			};
+			name = Debug;
+		};
+		B72DF5711ED724F300F9E4F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 22G24XCXDT;
+				INFOPLIST_FILE = EclipseSoundscapesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ArlindoGoncalves.EclipseSoundscapesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EclipseSoundscapes.app/EclipseSoundscapes";
+			};
+			name = Release;
+		};
+		B72DF5731ED724F300F9E4F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 22G24XCXDT;
+				INFOPLIST_FILE = EclipseSoundscapesUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ArlindoGoncalves.EclipseSoundscapesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = EclipseSoundscapes;
+			};
+			name = Debug;
+		};
+		B72DF5741ED724F300F9E4F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 22G24XCXDT;
+				INFOPLIST_FILE = EclipseSoundscapesUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ArlindoGoncalves.EclipseSoundscapesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = EclipseSoundscapes;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B72DF53C1ED724F300F9E4F3 /* Build configuration list for PBXProject "EclipseSoundscapes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B72DF56A1ED724F300F9E4F3 /* Debug */,
+				B72DF56B1ED724F300F9E4F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B72DF56C1ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B72DF56D1ED724F300F9E4F3 /* Debug */,
+				B72DF56E1ED724F300F9E4F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		B72DF56F1ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B72DF5701ED724F300F9E4F3 /* Debug */,
+				B72DF5711ED724F300F9E4F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		B72DF5721ED724F300F9E4F3 /* Build configuration list for PBXNativeTarget "EclipseSoundscapesUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B72DF5731ED724F300F9E4F3 /* Debug */,
+				B72DF5741ED724F300F9E4F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		B72DF54B1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B72DF54C1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodel */,
+			);
+			currentVersion = B72DF54C1ED724F300F9E4F3 /* EclipseSoundscapes.xcdatamodel */;
+			path = EclipseSoundscapes.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = B72DF5391ED724F300F9E4F3 /* Project object */;
+}
