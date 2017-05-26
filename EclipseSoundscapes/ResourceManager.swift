@@ -27,9 +27,6 @@ struct RecordingInfo {
 /// Handles All Interation with local storage and CoreData entities
 class ResourceManager {
     
-    
-    
-    
     /// Simple Wrappper for a ([Recording]?) -> Void Completion block
     typealias RecordingFetchCallback = (([Recording]?) -> Void)
     
@@ -42,11 +39,7 @@ class ResourceManager {
     
     
     /// Access to the ResourceManager Object
-    ///
-    /// - Returns: ResourceManager Object
-    static func manager()-> ResourceManager? {
-        return ResourceManager()
-    }
+    static var manager = ResourceManager()
     
     /// Load Coredata on Device
     func loadCoreData(){
