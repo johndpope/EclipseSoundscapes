@@ -58,6 +58,7 @@ class Uploader {
     /// RealtimeDB reference
     var databaseRef : FIRDatabaseReference?
     
+    var recording : Recording!
     var recordingId : String!
     var recordingData : RecordingInfo!
     
@@ -79,14 +80,16 @@ class Uploader {
             print("NO NETWORK DELEGATE. UPLOAD AND DOWNLOAD UPDATES WILL NOT BE GIVEN TO YOU")
         }
         
-        guard  let id = recording.id else {
+        self.recording = recording
+        
+        guard  let id = self.recording.id else {
             //TODO: Throw Error to user if the recording does not exist .... Will Always exist except for clear of local memory
             return
         }
         
         recordingId = id
         
-        guard let data = ResourceManager.manager()?.recordingInfo(recording: recording, debug: true) else {
+        guard let data = ResourceManager.manager.recordingInfo(recording: self.recording, debug: true) else {
             //TODO: Throw Error to user if there wsa an error building the json
             return
         }
@@ -236,13 +239,32 @@ class Uploader {
             case .json:
                 
                 
+                let locationString  = Locator.buildString(withLatitude: (recording.latitude), longitude: (recording.longitude))
+                let locationKey : [String: String] = [recordingId : locationString]
+                
+                
+                
                 uploadInfo.updateValue(downloadUrl, forKey: "jsonUrl")
                 
                 self.delegate?.uploadEnded(with: .jsonSuccess, nil)
                 
                 self.storeRealTimeDB(withId: self.recordingId, info: uploadInfo, completion: { (error) in
                     //Handle Error
-                    self.delegate?.uploadEnded(with: .realtimeSuccess, error)
+                    guard error == nil else {
+                        self.delegate?.uploadEnded(with: .error, error)
+                        return
+                    }
+                
+                    
+                    self.storeReference(reference: locationKey) { (error) in
+                        guard error == nil else {
+                            self.delegate?.uploadEnded(with: .error, error)
+                            return
+                        }
+                        
+                        self.delegate?.uploadEnded(with: .realtimeSuccess, error)
+                    }
+                    
                 })
                 
                 break
