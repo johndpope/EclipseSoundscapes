@@ -47,7 +47,7 @@ class Authenticator {
     
     
     /// Simple Wrappper for a (FIRUser?, Error?) -> Void Completion block
-    typealias AuthenticatorCallback = ((FIRUser?, Error?) -> Void)
+    typealias AuthenticatorCallback = ((User?, Error?) -> Void)
     
     /// Access to the Authenticator Object
     ///
@@ -83,7 +83,7 @@ class Authenticator {
     ///         - FIRAuthErrorCodeInvalidEmail - Indicates the email address is malformed.
     func login(withEmail email : String, password : String, completion:  AuthenticatorCallback? = nil) {
         
-        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+        Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
             guard error == nil else {
                 completion?(nil,error)
                 return
@@ -101,7 +101,7 @@ class Authenticator {
     /// - Parameter completion: optional Completion block containg possible error
      func logout(_ completion:  ((Error?) -> Void)? = nil) {
         do {
-            try FIRAuth.auth()?.signOut()
+            try Auth.auth().signOut()
             print("User Logged Out")
             completion?(nil)
             
@@ -128,7 +128,7 @@ class Authenticator {
     ///         - FIRAuthErrorCodeExpiredActionCode - Indicates the OOB code is expired.
     ///         - FIRAuthErrorCodeInvalidActionCode - Indicates the OOB code is invalid.
      func createAccount(withEmail email: String, password : String, completion :  AuthenticatorCallback? = nil) {
-        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
+        Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
             guard error == nil else {
                 completion?(nil,error)
                 return
@@ -152,7 +152,7 @@ class Authenticator {
     ///             keychain. The NSLocalizedFailureReasonErrorKey field in the NSError. userInfo
     ///             dictionary will contain more information about the error encountered.
     func forgotPassword(withEmail email : String, completion: ((Error?) -> Void)? = nil){
-        FIRAuth.auth()?.sendPasswordReset(withEmail: email, completion: { (error) in
+        Auth.auth().sendPasswordReset(withEmail: email, completion: { (error) in
             guard error == nil else {
                 completion?(error)
                 return
@@ -171,20 +171,20 @@ class Authenticator {
     ///   - password: Password
     ///   - completion: optional Completion block containg possible error
     func changePassword(CurrentPassword password: String, NewPassword newPassword: String, completion : ((Error?) -> Void)? = nil) {
-        guard let user = FIRAuth.auth()?.currentUser, let email = user.email else {
+        guard let user = Auth.auth().currentUser, let email = user.email else {
             let error = AuthError(localizedTitle: "No User Signed In", localizedDescription: "There is no User currently signed into Eclipse Soundscapes", code: 1)
             completion?(error)
             return
         }
-        
-        let credential = FIREmailPasswordAuthProvider.credential(withEmail: email, password: password)
+    
+        let credential = EmailAuthProvider.credential(withEmail: email, password: password)
         
         user.reauthenticate(with: credential) { (error) in
             guard error == nil else {
                 completion?(error)
                 return
             }
-            user.updatePassword(newPassword, completion: { (error) in
+            user.updatePassword(to: newPassword, completion: { (error) in
                 guard error == nil else {
                     completion?(error)
                     return
@@ -217,13 +217,13 @@ class Authenticator {
     ///         - Errors involed are equivalent to possible errors for Login function
     ///     - The deletion is performed if previous considerations pass
     func deleteAccount(withPassword password: String, completion : ((Error?) -> Void)? = nil) {
-        guard let user = FIRAuth.auth()?.currentUser, let email = user.email else {
+        guard let user = Auth.auth().currentUser, let email = user.email else {
             let error = AuthError(localizedTitle: "No User Signed In", localizedDescription: "There is no User currently signed into Eclipse Soundscapes", code: 1)
             completion?(error)
             return
         }
         
-        let credential = FIREmailPasswordAuthProvider.credential(withEmail: email, password: password)
+        let credential = EmailAuthProvider.credential(withEmail: email, password: password)
         
         user.reauthenticate(with: credential) { (error) in
             guard error == nil else {
@@ -249,13 +249,13 @@ class Authenticator {
     ///   - name: New Display Name
     ///   - completion: optional Completion block containg possible error
     func setDisplayName(withName name : String, completion : ((Error?) -> Void)? = nil) {
-        guard let user = FIRAuth.auth()?.currentUser else {
+        guard let user = Auth.auth().currentUser else {
             let error = AuthError(localizedTitle: "No User Signed In", localizedDescription: "There is no User currently signed into Eclipse Soundscapes", code: 1)
             completion?(error)
             return
         }
         
-        let changeReq = user.profileChangeRequest()
+        let changeReq = user.createProfileChangeRequest()
         
         changeReq.displayName = name
         changeReq.commitChanges { (error) in
@@ -275,7 +275,7 @@ class Authenticator {
     /// - Returns: User's Display name (optional)
     /// - Throws: Error if no User currently signed in
     func getDisplayName() throws -> String? {
-        guard let user = FIRAuth.auth()?.currentUser else {
+        guard let user = Auth.auth().currentUser else {
             let error = AuthError(localizedTitle: "No User Signed In", localizedDescription: "There is no User currently signed into Eclipse Soundscapes", code: 1)
             throw error
         }
@@ -284,7 +284,7 @@ class Authenticator {
     }
     
     func getUserInforamtion()throws -> [String:Any]? {
-        guard let user = FIRAuth.auth()?.currentUser else {
+        guard let user = Auth.auth().currentUser else {
             let error = AuthError(localizedTitle: "No User Signed In", localizedDescription: "There is no User currently signed into Eclipse Soundscapes", code: 1)
             throw error
         }

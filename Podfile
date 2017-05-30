@@ -10,8 +10,10 @@ target 'EclipseSoundscapes' do
 pod 'AudioKit', '~> 3.5'
 pod 'Firebase/Core'
 pod 'Firebase/Auth'
-pod 'Firebase/Database'
-pod 'Firebase/Storage' 
+pod 'Firebase/Database', '4.0.0'
+pod 'Firebase/Storage'
+pod 'FBAnnotationClustering'
+pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
 
   target 'EclipseSoundscapesTests' do
     inherit! :search_paths

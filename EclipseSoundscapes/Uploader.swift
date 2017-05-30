@@ -10,128 +10,44 @@ import Foundation
 import Firebase
 import FirebaseStorage
 import FirebaseDatabase
-
-
-/// Network Delegate Methods for recieving network status updates and progresses
-protocol UploadDelegate: NSObjectProtocol {
-    
-    /// Upload Progress Delegate Method
-    ///
-    /// - Parameter progress: Progress of upload (0.0 - 1.0)
-    func updateProgress(with progress: Float)
-    
-    
-    /// Upload Ended Delegate Method
-    ///
-    /// - Parameters:
-    ///   - status: Status for reason Upload Ended
-    ///   - error: Error occured while Upload
-    func uploadEnded(with status: NetworkStatus, _ error: Error?)
-    
-    /// Upload Resumes Delegate Method
-    ///
-    /// - Parameter error: Error occured while trying to resume
-    func uploadResumed(withError error: Error?)
-    
-}
+import GeoFire
 
 
 class Uploader {
     
-    weak var delegate: UploadDelegate?
-    
     /// Firebase Storage Object
-    let storeage = FIRStorage.storage()
-    
-    
-    /// Storage Reference
-    var storageRef : FIRStorageReference?
-    
-    
-    /// Upload Task to handle start/stop/pause/resume of uploads
-    var uploadTask : FIRStorageUploadTask?
-    
+    let storeage = Storage.storage()
     
     /// Firebase RealtimeDB Object
-    let database = FIRDatabase.database()
+    let database = Database.database()
     
     /// RealtimeDB reference
-    var databaseRef : FIRDatabaseReference?
+    var databaseRef : DatabaseReference?
     
     var recording : Recording!
-    var recordingId : String!
-    var recordingData : RecordingInfo!
     
-    
-    var uploadInfo = Dictionary<String, Any>()
-    
-    
-    enum UploadType {
-        case json
-        case audio
-    }
-    
-    /// Start the Upload of the Recording and its information to Firebase
-    ///
-    /// - Parameter recording: Recording to upload
-    func upload(recording : Recording) {
-        
-        if delegate == nil {
-            print("NO NETWORK DELEGATE. UPLOAD AND DOWNLOAD UPDATES WILL NOT BE GIVEN TO YOU")
-        }
-        
+    init(recording: Recording) {
         self.recording = recording
-        
-        guard  let id = self.recording.id else {
-            //TODO: Throw Error to user if the recording does not exist .... Will Always exist except for clear of local memory
-            return
-        }
-        
-        recordingId = id
-        
-        guard let data = ResourceManager.manager.recordingInfo(recording: self.recording, debug: true) else {
-            //TODO: Throw Error to user if there wsa an error building the json
-            return
-        }
-        
-        recordingData = data
-        
-        let url = recordingData.url
-        
-        storeAudio(withURL: url, id: recordingId)
     }
-    
-    func pauseUpload(){
-        if uploadTask != nil {
-            uploadTask?.pause()
-        }
-    }
-    
-    func resumeUpload(){
-        if uploadTask != nil {
-            uploadTask?.resume()
-        }
-    }
-    
-    func stopUpload(){
-        if uploadTask != nil {
-            uploadTask?.cancel()
-        }
-    }
-    
     
     /// Store the Recording's Audio Data to Firebase Storage
     ///
     /// - Parameters:
     ///   - url: URL of the audio data ont he
     ///   - id: Recording's Id
-    fileprivate func storeAudio(withURL url: URL, id: String){
+    fileprivate func storeAudio() -> StorageUploadTask? {
         
-        storageRef = storeage.reference().child(DIRECTORY).child(id).child("\(id)\(AudioManager.FileType)")
+        guard let id = recording.id else {
+            return nil
+        }
         
+        let url = ResourceManager.getRecordingURL(id: id)
         
-        uploadTask = storageRef?.putFile(url)
-        observeUpload(withType: .audio)
+        let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child("\(id)\(AudioManager.FileType)")
+        
+        let uploadTask = storageRef.putFile(from: url)
+        
+        return uploadTask
     }
     
     
@@ -140,12 +56,21 @@ class Uploader {
     /// - Parameters:
     ///   - id: Recording's Id
     ///   - jsonData: Extra information in JSON format
-    fileprivate func storeJSON(withID id: String, jsonData : Data){
+    fileprivate func storeJSON() -> StorageUploadTask?{
         
-        storageRef = storeage.reference().child(DIRECTORY).child(id).child("\(id).json")
+        guard let id = recording.id else {
+            return nil
+        }
         
-        uploadTask = storageRef?.put(jsonData)
-        observeUpload(withType: .json)
+        guard let jsonData = ResourceManager.recordingInfo(recording: self.recording) else {
+            return nil
+        }
+        
+        let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child("\(id).json")
+        
+        let uploadTask = storageRef.putData(jsonData)
+        
+        return uploadTask
     }
     
     
@@ -177,12 +102,21 @@ class Uploader {
         })
     }
     
-     func storeReference(reference: [String: String], completion:  ((Error?)-> Void)?) {
-        databaseRef = database.reference().child("All_Recordings")
+     func storeLocationReference(reference: [String: String], completion:  ((Error?)-> Void)?) {
+        guard let id = recording.id else {
+            //TODO : Handle Error
+            completion?(nil)
+            return
+        }
         
-        databaseRef?.setValue(reference, withCompletionBlock: { (error, ref) in
+        let locationRef = database.reference().child(LocationDirectory)
+        
+        let geoFire = GeoFire(firebaseRef: locationRef)
+        
+        let location = CLLocation(latitude: recording.latitude, longitude: recording.longitude)
+        
+        geoFire?.setLocation(location, forKey: id, withCompletionBlock: { (error) in
             guard error == nil else {
-                //TODO: Handle Error with the upload of the json file
                 completion?(error)
                 return
             }
@@ -190,117 +124,4 @@ class Uploader {
         })
     }
     
-    
-    
-    /// Observe Upload Tasks
-    ///
-    /// - Parameter type: Current type of upload, Audio Data or JSON
-    fileprivate func observeUpload(withType type: UploadType) {
-        uploadTask?.observe(.progress, handler: { (snapshot) in
-            let progress = Float(snapshot.progress!.completedUnitCount)/Float((snapshot.progress?.totalUnitCount)!)
-            if !progress.isNaN {
-                self.delegate?.updateProgress(with: progress)
-            }
-        })
-        
-        uploadTask?.observe(.success, handler: { (snapshot) in
-            self.uploadSucessObserver(withType: type, snapshot: snapshot)
-        })
-        
-        uploadTask?.observe(.resume, handler: { (snapshot) in
-            self.resumeUploadObserver(withType: type, snapshot: snapshot)
-        })
-        
-        uploadTask?.observe(.failure, handler: { (snapshot) in
-            self.stopUploadObserver(withType: type, snapshot: snapshot)
-        })
-        
-        uploadTask?.observe(.unknown, handler: { (snapshot) in
-            self.stopUploadObserver(withType: type, snapshot: snapshot)
-        })
-        uploadTask?.observe(.pause, handler: { (snapshot) in
-            self.pauseUploadObserver(withType: type, snapshot: snapshot)
-        })
-        
-    }
-    
-    fileprivate func uploadSucessObserver(withType type: UploadType, snapshot: FIRStorageTaskSnapshot){
-        if let downloadUrl = snapshot.metadata?.downloadURL()?.absoluteString{
-            switch type {
-            case .audio:
-                
-                uploadInfo.updateValue(downloadUrl, forKey: "audioUrl")
-                
-                self.delegate?.uploadEnded(with: .audioSuccess, nil)
-                self.storeJSON(withID: self.recordingId, jsonData: self.recordingData.data)
-                
-                break
-                
-            case .json:
-                
-                
-                let locationString  = Locator.buildString(withLatitude: (recording.latitude), longitude: (recording.longitude))
-                let locationKey : [String: String] = [recordingId : locationString]
-                
-                
-                
-                uploadInfo.updateValue(downloadUrl, forKey: "jsonUrl")
-                
-                self.delegate?.uploadEnded(with: .jsonSuccess, nil)
-                
-                self.storeRealTimeDB(withId: self.recordingId, info: uploadInfo, completion: { (error) in
-                    //Handle Error
-                    guard error == nil else {
-                        self.delegate?.uploadEnded(with: .error, error)
-                        return
-                    }
-                
-                    
-                    self.storeReference(reference: locationKey) { (error) in
-                        guard error == nil else {
-                            self.delegate?.uploadEnded(with: .error, error)
-                            return
-                        }
-                        
-                        self.delegate?.uploadEnded(with: .realtimeSuccess, error)
-                    }
-                    
-                })
-                
-                break
-            }
-            
-        }
-        
-    }
-    
-    fileprivate func stopUploadObserver(withType type: UploadType, snapshot: FIRStorageTaskSnapshot){
-        
-        if let error = snapshot.error {
-            self.delegate?.uploadEnded(with: .error, error)
-            return
-        }
-        delegate?.uploadEnded(with: .error, nil)
-    }
-    
-    fileprivate func pauseUploadObserver(withType type: UploadType, snapshot: FIRStorageTaskSnapshot) {
-        //TODO: Implement Pause
-        if let error = snapshot.error {
-            self.delegate?.uploadEnded(with: .paused, error)
-            return
-        }
-        
-        delegate?.uploadEnded(with: .paused, nil)
-    }
-    
-    fileprivate func resumeUploadObserver(withType type: UploadType, snapshot: FIRStorageTaskSnapshot){
-        //TODO: Implement Resume
-        
-        if let error = snapshot.error {
-            self.delegate?.uploadResumed(withError: error)
-            return
-        }
-        
-        delegate?.uploadResumed(withError: nil)
-    }
 }

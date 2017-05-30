@@ -11,52 +11,66 @@ import Firebase
 import FirebaseStorage
 import FirebaseDatabase
 
-protocol DownloadDelegate: NSObjectProtocol {
+class DownloadTask : StorageDownloadTask {
     
-    /// Upload Progress Delegate Method
+    
+    var path : URL?
+    
+    /// Stop the download task, and attempt to destory the temporary file that contains the downloaded audio file
     ///
-    /// - Parameter progress: Progress of upload (0.0 - 1.0)
-    func downloadProgress(with progress: Float)
-    
-    
-    /// Upload Ended Delegate Method
-    ///
-    /// - Parameters:
-    ///   - status: Status for reason Upload Ended
-    ///   - error: Error occured while Upload
-    func downloadEnded(with status: NetworkStatus, _ error: Error?)
-    
-    /// Upload Resumes Delegate Method
-    ///
-    /// - Parameter error: Error occured while trying to resume
-    func downloadResumed(withError error: Error?)
-    
+    /// - Throws: Error involved with deleting audio file
+    func stopDownload()throws {
+        super.cancel()
+        do {
+            if self.path != nil {
+                try FileManager.default.removeItem(at: self.path!)
+            }
+        } catch  {
+            throw error
+        }
+    }
 }
 
 class Downloader {
     
-    weak var delegate: DownloadDelegate?
+    var needsAudio  = true
+    var needInfo = true
     
-    /// Download Task to handle start/stop/pause/resume of downloads
-    var downloadTask : FIRStorageTask?
+    /// Firebase Storage Object
+    fileprivate let storeage = Storage.storage()
     
-    // MARK: Download Methods
-    // TODO: Implement Download Methods
+    /// Firebase RealtimeDB Object
+    fileprivate let database = Database.database()
     
-    func download(){
+    /// RealtimeDB reference
+    fileprivate var databaseRef : DatabaseReference?
+    
+    func downloadInforamtion(withId id : String, completion: @escaping (Dictionary<String,Any>?, Error?) -> Void)-> DownloadTask? {
+        let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child(id.appending(".json"))
         
+        let downloadTask = storageRef.getData(maxSize: 1024, completion: { (data, error) in
+            let trackInfo = ResourceManager.buildInfoFromData(withData: data)
+            self.needInfo = false
+            completion(trackInfo, error)
+        }) as! DownloadTask
+        
+        
+        return downloadTask
     }
     
-    func stopDownload() {
+    func downloadAudio(withId id : String, completion: @escaping (URL?, Error?) -> Void)-> DownloadTask?{
         
-    }
+        let recordingName = id.appending(AudioManager.FileType)
+        let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child(recordingName)
+        
+        let tempDirectoryPath = FileManager.default.temporaryDirectory.appendingPathComponent(recordingName)
+        
+        let downloadTask : DownloadTask = storageRef.write(toFile: tempDirectoryPath) { (url, error) in
+            self.needsAudio = false
+            completion(url, error)
+        } as! DownloadTask
+        
     
-    func pauseDownload(snapshot: FIRStorageTaskSnapshot) {
-        
-    }
-    
-    func resumeDownload() {
-        
+        return downloadTask
     }
 }
-

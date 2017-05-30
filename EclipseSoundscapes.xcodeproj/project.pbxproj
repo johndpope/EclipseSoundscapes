@@ -24,6 +24,8 @@
 		B758D8741ED78E120033EE45 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8731ED78E120033EE45 /* Downloader.swift */; };
 		B758D8761ED78E310033EE45 /* Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8751ED78E310033EE45 /* Uploader.swift */; };
 		B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */; };
+		B763FA011ED864F400EEFB27 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B763FA001ED864F400EEFB27 /* Track.swift */; };
+		B7D1515F1EDDD1EE00DEAC31 /* AudioQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */; };
 		D77B9349CAD58F1DB4B335FF /* Pods_EclipseSoundscapes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */; };
 		EB7C715CF5F62E86B98ABEDD /* Pods_EclipseSoundscapesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A506BF43909D29D3B1E7AEE /* Pods_EclipseSoundscapesUITests.framework */; };
 /* End PBXBuildFile section */
@@ -76,6 +78,8 @@
 		B758D8731ED78E120033EE45 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		B758D8751ED78E310033EE45 /* Uploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Uploader.swift; sourceTree = "<group>"; };
 		B758D8781ED794790033EE45 /* Recordings.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Recordings.xcdatamodel; sourceTree = "<group>"; };
+		B763FA001ED864F400EEFB27 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
+		B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioQueue.swift; sourceTree = "<group>"; };
 		EC9068B8CBBFDE24E65A9DBE /* Pods-EclipseSoundscapes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapes/Pods-EclipseSoundscapes.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -165,6 +169,8 @@
 				B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */,
 				B72DF5461ED724F300F9E4F3 /* ViewController.swift */,
 				B72DF5841ED75D9A00F9E4F3 /* Locator.swift */,
+				B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */,
+				B763FA001ED864F400EEFB27 /* Track.swift */,
 				B72DF5481ED724F300F9E4F3 /* Main.storyboard */,
 				B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */,
 				B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */,
@@ -478,6 +484,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B72DF57D1ED7252200F9E4F3 /* Networking.swift in Sources */,
+				B763FA011ED864F400EEFB27 /* Track.swift in Sources */,
 				B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */,
 				B72DF5471ED724F300F9E4F3 /* ViewController.swift in Sources */,
 				B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */,
@@ -486,6 +493,7 @@
 				B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */,
 				B758D8761ED78E310033EE45 /* Uploader.swift in Sources */,
 				B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */,
+				B7D1515F1EDDD1EE00DEAC31 /* AudioQueue.swift in Sources */,
 				B72DF57B1ED7252200F9E4F3 /* AudioManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

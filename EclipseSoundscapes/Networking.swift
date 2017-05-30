@@ -51,7 +51,9 @@ struct NetworkError: AuthErrorProtocol {
 }
 
 
-let DIRECTORY = "citizen_scientists"
+let CitizenScientistsDirectory = "CitizenScientists"
+let LocationDirectory = "Locations"
+let AllRecordings = "Recordings"
 
 
 

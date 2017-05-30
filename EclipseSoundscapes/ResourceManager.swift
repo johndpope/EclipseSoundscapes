@@ -173,7 +173,7 @@ class ResourceManager {
     ///   - path: Path to Recoding Data
     ///   - shouldSave: Specify if modification should be saved in CoreData
     func setSize(recording: Recording, path: String, shouldSave: Bool = true){
-        recording.size = Int64(getFileSize(path: path))
+        recording.size = Int64(ResourceManager.getFileSize(path: path))
         if shouldSave {
             self.save()
             NotificationCenter.default.post(name: Notification.Name.RecordingChanged, object: nil)
@@ -236,7 +236,7 @@ class ResourceManager {
     ///     - Error would involve no Recording Data at the URL of the Recording
     func deleteRecording(recording : Recording, completion: ((Error?) -> Void)? = nil){
         do {
-            let url = getRecordingURL(id: recording.id!)
+            let url = ResourceManager.getRecordingURL(id: recording.id!)
             try FileManager.default.removeItem(at: url)
             managedObjectContext.delete(recording)
             self.save()
@@ -254,12 +254,8 @@ class ResourceManager {
     /// - Parameter:
     ///     - recording: Recording
     ///     - degub: Print the output of the created JSON
-    /// - Returns: tuple of (JSON Data, JSON, AudioURL)
-    func recordingInfo(recording: Recording, debug: Bool = false) -> RecordingInfo? {
-        
-        guard let audioUrl =  getRecordingURL(id: recording.id!) as URL? else {
-            return nil
-        }
+    /// - Returns: Data
+    static func recordingInfo(recording: Recording, debug: Bool = false) -> Data? {
         
         var json = Dictionary<String, Any>()
         json.updateValue(recording.id ?? "", forKey: Recording.ID)
@@ -281,14 +277,29 @@ class ResourceManager {
                 print("json string = \(jsonString)")
             }
             
-            
-            let info = RecordingInfo(data: jsonData, json: json, url: audioUrl)
-            return info
+            return jsonData
             
         } catch _ {
             print ("JSON Failure")
+            return nil
         }
-        return nil
+        
+    }
+    
+    
+    static func buildInfoFromData(withData data: Data?)-> Dictionary<String,Any>? {
+        guard let jsonData = data else  {
+            return nil
+        }
+        
+        do {
+            let jsonObj = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as! Dictionary<String,Any>
+            
+            return jsonObj
+        } catch  {
+            print ("JSON Conversion Failure")
+            return nil
+        }
     }
     
     
@@ -299,7 +310,7 @@ class ResourceManager {
     ///
     /// - Parameter path: Path to File
     /// - Returns: Byte representation of the File Size
-    func getFileSize(path:String) -> UInt64 {
+    static func getFileSize(path:String) -> UInt64 {
         do {
             let fileAttributes = try FileManager.default.attributesOfItem(atPath: path)
             if let fileSize = fileAttributes[FileAttributeKey.size]  {
@@ -317,7 +328,7 @@ class ResourceManager {
     /// Utitly Method to return the Documents Directory URL
     ///
     /// - Returns: Documents Directory URL
-    func getDocumentsDirectory() -> URL {
+    static func getDocumentsDirectory() -> URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
     
@@ -326,7 +337,7 @@ class ResourceManager {
     ///
     /// - Parameter id: Recording's id
     /// - Returns: Recording URL
-    func getRecordingURL(id : String) -> URL {
+    static func getRecordingURL(id : String) -> URL {
         return getDocumentsDirectory().appendingPathComponent(id.appending(AudioManager.FileType))
     }
     
@@ -335,7 +346,7 @@ class ResourceManager {
     ///
     /// - Parameter date: Date
     /// - Returns: Pretty String of the Date
-    func prettyDate(date: Date?) -> String{
+    static func prettyDate(date: Date?) -> String{
         guard date != nil else {
             return ""
         }
