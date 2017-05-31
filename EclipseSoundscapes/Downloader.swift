@@ -60,7 +60,7 @@ class Downloader {
     
     func downloadAudio(withId id : String, completion: @escaping (URL?, Error?) -> Void)-> DownloadTask?{
         
-        let recordingName = id.appending(AudioManager.FileType)
+        let recordingName = id.appending(FileType)
         let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child(recordingName)
         
         let tempDirectoryPath = FileManager.default.temporaryDirectory.appendingPathComponent(recordingName)

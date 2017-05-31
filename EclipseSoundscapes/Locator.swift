@@ -21,18 +21,16 @@ protocol LocatorDelegate {
     
     /// Update of user's lastest location
     ///
-    /// - Parameters:
-    ///   - manager: CLLocationManager
+    /// - Parameter:
     ///   - location: Best last Location
-    func locationFound(_ manager: CLLocationManager, didUpdateBestLocation location: CLLocation)
+    func locator(didUpdateBestLocation location: CLLocation)
     
     
     /// Update of user's lastest location failed
     ///
-    /// - Parameters:
-    ///   - manager: CLLocationManager
+    /// - Parameter:
     ///   - error: Error trying to get user's last location
-    func locationError(_ manager: CLLocationManager, didFailWithError error: Error)
+    func locator(didFailWithError error: Error)
 }
 
 
@@ -46,60 +44,6 @@ class Locator : NSObject {
     
     /// Delegate for Location Updates/Errors/Alerts
     var delegate : LocatorDelegate?
-    
-    
-    /// Check if Location Services are enabled
-    ///
-    /// - Returns: Current Status of Location Services
-    fileprivate func checkLocationServices() -> Bool{
-        return CLLocationManager.locationServicesEnabled()
-    }
-    
-    
-    
-    
-    /// Set Delegate for Location Updates/Errors/Alerts
-    ///
-    /// - Parameter delegate: Locator Delegate
-    func subscribeToLocator(_ delegate : LocatorDelegate){
-        self.delegate = delegate
-    }
-    
-    
-    /// Brings user to the app's settings
-    func openAppSettings(){
-        UIApplication.shared.open(URL.init(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
-    }
-    
-    
-    /// Build Alert for opening App's Settings
-    ///
-    /// - Returns: App Setting Alert
-    func appSettingsAlert() -> UIViewController {
-        let alert = UIAlertController(title: "Location Permission Denied", message: "Turn on Location in Settings > EclipseSignal > Location to allow us to determine your current location", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { (action) in
-            self.openAppSettings()
-        }))
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        return alert
-    }
-    
-    
-    /// Build Alert for opening Privacy Settings
-    ///
-    /// - Returns: Privacy Setting Alert
-    func privacySettingsAlert() -> UIViewController {
-        let alert = UIAlertController(title: "Location Services Off", message: "Turn on Location Services in Settings > Privacy to allow us to determine your current location", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { (action) in
-            self.openLocation()
-        }))
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        return alert
-    }
-    
-}
-
-extension Locator : CLLocationManagerDelegate {
     
     /// Begin gathering Information on the User's Location
     ///     - Start Recording if Authorzation Status is:
@@ -144,6 +88,59 @@ extension Locator : CLLocationManagerDelegate {
         }
         
     }
+
+    
+    
+    /// Check if Location Services are enabled
+    ///
+    /// - Returns: Current Status of Location Services
+    fileprivate func checkLocationServices() -> Bool{
+        return CLLocationManager.locationServicesEnabled()
+    }
+    
+    /// Set Delegate for Location Updates/Errors/Alerts
+    ///
+    /// - Parameter delegate: Locator Delegate
+    func subscribeToLocator(_ delegate : LocatorDelegate){
+        self.delegate = delegate
+    }
+    
+    
+    /// Brings user to the app's settings
+    func openAppSettings(){
+        UIApplication.shared.open(URL.init(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
+    }
+    
+    
+    /// Build Alert for opening App's Settings
+    ///
+    /// - Returns: App Setting Alert
+    func appSettingsAlert() -> UIViewController {
+        let alert = UIAlertController(title: "Location Permission Denied", message: "Turn on Location in Settings > EclipseSignal > Location to allow us to determine your current location", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { (action) in
+            self.openAppSettings()
+        }))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        return alert
+    }
+    
+    
+    /// Build Alert for opening Privacy Settings
+    ///
+    /// - Returns: Privacy Setting Alert
+    func privacySettingsAlert() -> UIViewController {
+        let alert = UIAlertController(title: "Location Services Off", message: "Turn on Location Services in Settings > Privacy to allow us to determine your current location", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { (action) in
+            self.openLocation()
+        }))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        return alert
+    }
+    
+}
+
+extension Locator : CLLocationManagerDelegate {
+    
     
     /// Handle Changes to Location Authorization
     ///     - Start Recording if Authorzation Status is:
@@ -191,7 +188,7 @@ extension Locator : CLLocationManagerDelegate {
     ///   - locations: Latest Location
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[0]
-        delegate?.locationFound(manager, didUpdateBestLocation: location)
+        delegate?.locator(didUpdateBestLocation: location)
         
     }
     
@@ -201,7 +198,7 @@ extension Locator : CLLocationManagerDelegate {
     ///   - manager: CLLocationManager
     ///   - error: Error corresponding to failure of finding Location
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        delegate?.locationError(manager, didFailWithError: error)
+        delegate?.locator(didFailWithError: error)
     }
 }
 

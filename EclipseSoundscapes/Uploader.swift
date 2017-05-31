@@ -35,7 +35,7 @@ class Uploader {
     /// - Parameters:
     ///   - url: URL of the audio data ont he
     ///   - id: Recording's Id
-    fileprivate func storeAudio() -> StorageUploadTask? {
+    func storeAudio() -> StorageUploadTask? {
         
         guard let id = recording.id else {
             return nil
@@ -43,7 +43,7 @@ class Uploader {
         
         let url = ResourceManager.getRecordingURL(id: id)
         
-        let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child("\(id)\(AudioManager.FileType)")
+        let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child("\(id)\(FileType)")
         
         let uploadTask = storageRef.putFile(from: url)
         
@@ -56,7 +56,7 @@ class Uploader {
     /// - Parameters:
     ///   - id: Recording's Id
     ///   - jsonData: Extra information in JSON format
-    fileprivate func storeJSON() -> StorageUploadTask?{
+    func storeJSON() -> StorageUploadTask?{
         
         guard let id = recording.id else {
             return nil
@@ -69,6 +69,7 @@ class Uploader {
         let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child("\(id).json")
         
         let uploadTask = storageRef.putData(jsonData)
+        
         
         return uploadTask
     }

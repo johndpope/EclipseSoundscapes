@@ -338,7 +338,7 @@ class ResourceManager {
     /// - Parameter id: Recording's id
     /// - Returns: Recording URL
     static func getRecordingURL(id : String) -> URL {
-        return getDocumentsDirectory().appendingPathComponent(id.appending(AudioManager.FileType))
+        return getDocumentsDirectory().appendingPathComponent(id.appending(FileType))
     }
     
     
