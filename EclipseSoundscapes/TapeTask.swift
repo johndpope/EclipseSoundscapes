@@ -278,7 +278,7 @@ class RecordTapeTask: TapeTask, TapeTaskType {
         audioFile?.exportAsynchronously(name: "\(reccordingId)", baseDir: .documents, exportFormat: ExportFileType, callback: { (_, error) in
             DispatchQueue.main.async {
                 guard error == nil else {
-                    print("Export Failure: \(error?.localizedDescription)")
+                    print("Export Failure: \(error?.localizedDescription ?? "Unkown Error")")
                     return
                 }
                 print("Exported to Documents Directory")

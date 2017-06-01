@@ -94,7 +94,7 @@ class TapeRecorder : NSObject {
         
         self.mic = AKMicrophone()
         
-        
+        //TODO: Start in a temp directory and then export to the documents directory after recording is completed sucessfully, Otherwise cler the temporary file/directory and delete the current recording
         let recordUrl = ResourceManager.getRecordingURL(id: self.currentRecording.id!)
         do {
             let audioFile = try AKAudioFile(forWriting: recordUrl, settings: settings)
