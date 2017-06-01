@@ -236,11 +236,13 @@ class ResourceManager {
     ///     - Error would involve no Recording Data at the URL of the Recording
     func deleteRecording(recording : Recording, completion: ((Error?) -> Void)? = nil){
         do {
-            let url = ResourceManager.getRecordingURL(id: recording.id!)
-            try FileManager.default.removeItem(at: url)
+            
             managedObjectContext.delete(recording)
             self.save()
             NotificationCenter.default.post(name: Notification.Name.RecordingDeleted, object: nil)
+            if let url = ResourceManager.getRecordingURL(id: recording.id!) as URL? {
+                try FileManager.default.removeItem(at: url)
+            }
             completion?(nil)
             print("File Deleted")
         } catch {
@@ -338,7 +340,7 @@ class ResourceManager {
     /// - Parameter id: Recording's id
     /// - Returns: Recording URL
     static func getRecordingURL(id : String) -> URL {
-        return getDocumentsDirectory().appendingPathComponent(id.appending(FileType))
+        return getDocumentsDirectory().appendingPathComponent(id.appending(FileType)) //TODO: Function to go from Export Type to string
     }
     
     

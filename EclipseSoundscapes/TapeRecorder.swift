@@ -24,29 +24,32 @@ enum AudioError: Error {
     case unknown(Error)
 }
 
-let FileType = ".m4a"
+let FileType = ".caf"
+let ExportFileType = AKAudioFile.ExportFormat.m4a
 let SamplingRate = 44100
 
 class TapeRecorder : NSObject {
     
-    fileprivate var mic : AKMicrophone?
-    fileprivate var recorder : AKNodeRecorder?
+    var mic : AKMicrophone?
+    var recorder : AKNodeRecorder?
     
-    fileprivate var locator = Locator()
-    
-    private var _durationRecorded = 0.0
     
     var durationRecorded : Double {
-        return _durationRecorded
+        guard let duration = recorder?.recordedDuration else {
+            return 0.0
+        }
+        return duration
     }
+    
+    var location : CLLocation!
     
     var task : RecordTapeTask?
     
     var currentRecording : Recording!
     
-    override init() {
+    init(location : CLLocation) {
+        self.location = location
         super.init()
-        locator.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
     }
     
@@ -59,7 +62,11 @@ class TapeRecorder : NSObject {
     }
     
     func requestPermission(handler: @escaping (Bool)->Void){
-        AKSettings.session.requestRecordPermission(handler)
+        AKSettings.session.requestRecordPermission { (granted) in
+            DispatchQueue.main.async {
+                handler(granted)
+            }
+        }
     }
     
     
@@ -67,7 +74,7 @@ class TapeRecorder : NSObject {
         
         
         do {
-            try AKSettings.setSession(category: .record, with: .mixWithOthers)
+            try AKSettings.setSession(category: .playAndRecord, with: .allowBluetoothA2DP)
             AKSettings.audioInputEnabled = true
             
         } catch {
@@ -75,46 +82,39 @@ class TapeRecorder : NSObject {
         }
         
         self.currentRecording = ResourceManager.manager.createRecording()
+        ResourceManager.manager.setLocation(recording: self.currentRecording, location: self.location.coordinate, shouldSave: true)
+    
         
-        locator.getLocation()
-        
-        
-        
-        let settings = [AVEncoderAudioQualityKey: AVAudioQuality.medium.rawValue,
-                        AVEncoderBitRateKey: 16,
-                        AVNumberOfChannelsKey: 1,
-                        AVSampleRateKey: Double(SamplingRate),
-                        AVFormatIDKey:Int(kAudioFormatMPEG4AAC)] as [String : Any]
+        let settings = [AVNumberOfChannelsKey: 1,
+                        AVSampleRateKey: SamplingRate,
+                        AVLinearPCMBitDepthKey:16,
+                        AVEncoderBitRateKey:196000,
+                        AVEncoderAudioQualityKey:AVAudioQuality.high.rawValue
+                        ] as [String : Any]
         
         self.mic = AKMicrophone()
         
-        let recordUrl = ResourceManager.getRecordingURL(id: self.currentRecording.id!)
         
+        let recordUrl = ResourceManager.getRecordingURL(id: self.currentRecording.id!)
         do {
             let audioFile = try AKAudioFile(forWriting: recordUrl, settings: settings)
+            
             self.recorder = try AKNodeRecorder(node: mic, file: audioFile)
+            
         } catch {
             throw error
         }
         
-        
-        
-        
         task = RecordTapeTask(recorder: self)
+        AudioKit.start()
+        task?.start()
+        
         return self.task!
     }
     
-    func startRecording(){
-        
-    }
     
     
-    func stopRecording(){
-        recorder?.stop()
-        task?.stop(.stop)
-    }
-    
-    
+
     //TODO: Implement the recording to pause while interruption is in prpogress and restart after interruption is stoped
     
     /// Interruption Handler
@@ -132,34 +132,6 @@ class TapeRecorder : NSObject {
             //Interruption Ended
         }
     }
-    
-}
-extension TapeRecorder : LocatorDelegate {
-    
-    /// Update of user's lastest location
-    ///
-    /// - Parameter:
-    ///   - location: Best last Location
-    func locator(didUpdateBestLocation location: CLLocation) {
-        
-    }
-
-    /// Update of user's lastest location failed
-    ///
-    /// - Parameter:
-    ///   - error: Error trying to get user's last location
-    func locator(didFailWithError error: Error) {
-        
-    }
-
-    /// Present Alert due to lack of permission or error
-    ///
-    /// - Parameter alert: Alert
-    func presentAlert(_ alert: UIViewController) {
-        
-    }
-
-    
     
 }
 

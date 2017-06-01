@@ -11,7 +11,7 @@ import CoreLocation
 
 
 /// Delegate for Locator class
-protocol LocatorDelegate {
+protocol LocatorDelegate: NSObjectProtocol {
     
     /// Present Alert due to lack of permission or error
     ///
@@ -43,7 +43,7 @@ class Locator : NSObject {
     fileprivate var locationManager  : CLLocationManager!
     
     /// Delegate for Location Updates/Errors/Alerts
-    var delegate : LocatorDelegate?
+    weak var delegate : LocatorDelegate?
     
     /// Begin gathering Information on the User's Location
     ///     - Start Recording if Authorzation Status is:
@@ -68,12 +68,13 @@ class Locator : NSObject {
             break
         case .denied,.restricted:
             
-            if checkLocationServices() { // Location Permission Denied
-                self.delegate?.presentAlert(privacySettingsAlert())
-            }
-            else { //App Location Permission Denied
+            if checkLocationServices() {//App Location Permission Denied
                 
                 self.delegate?.presentAlert(appSettingsAlert())
+            }
+            else { // Location Permission Denied
+                self.delegate?.presentAlert(privacySettingsAlert())
+                
             }
             
             break
@@ -96,13 +97,6 @@ class Locator : NSObject {
     /// - Returns: Current Status of Location Services
     fileprivate func checkLocationServices() -> Bool{
         return CLLocationManager.locationServicesEnabled()
-    }
-    
-    /// Set Delegate for Location Updates/Errors/Alerts
-    ///
-    /// - Parameter delegate: Locator Delegate
-    func subscribeToLocator(_ delegate : LocatorDelegate){
-        self.delegate = delegate
     }
     
     

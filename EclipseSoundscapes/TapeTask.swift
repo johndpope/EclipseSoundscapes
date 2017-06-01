@@ -36,6 +36,7 @@ class TapeTask {
     fileprivate var duration = 0.0
     fileprivate var error : Error?
     
+    
     var taskPiece : TapeTaskPiece {
         return TapeTaskPiece(duration: self.duration, error: error)
     }
@@ -137,12 +138,8 @@ class TapeTask {
         }
     }
     
-    
-}
-
-fileprivate extension TapeTask {
-    func fireWithStatus(_status : TapeTaskStatus, value : Any? = nil){
-        switch _status {
+    fileprivate func fireWithStatus(_ status : TapeTaskStatus, value : Any? = nil){
+        switch status {
         case .duration:
             
             self.duration = value as! Double
@@ -157,14 +154,13 @@ fileprivate extension TapeTask {
             
         case .success:
             
-            
             fireWithHandler(sucessMaster, self.taskPiece)
             break
         }
         
     }
     
-    func fireWithHandler(_ handler : Dictionary<String, TapeCallback>,_ taskPiece: TapeTaskPiece){
+    fileprivate func fireWithHandler(_ handler : Dictionary<String, TapeCallback>,_ taskPiece: TapeTaskPiece){
         
         synced(self) {
             handler.forEach { (key, value) in
@@ -181,7 +177,9 @@ fileprivate extension TapeTask {
         closure()
         objc_sync_exit(lock)
     }
+    
 }
+
 
 
 @objc public protocol TapeTaskType {
@@ -198,34 +196,56 @@ class RecordTapeTask: TapeTask, TapeTaskType {
     
     unowned var tapeRecorder : TapeRecorder
     
+    fileprivate var timer : Timer?
+    
     init(recorder: TapeRecorder) {
         self.tapeRecorder = recorder
         super.init()
     }
     
-    func start() {
-        self.fireWithStatus(_status: .duration, value: tapeRecorder.durationRecorded)
+    func start() { 
+        do {
+            try tapeRecorder.recorder?.record()
+        } catch {
+            super.fireWithStatus(.failure, value: error)
+            return
+        }
+        
+        fireWithStatus(.duration, value: 0.0)
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
     
     func updateTime() {
-        self.fireWithStatus(_status: .duration, value: tapeRecorder.durationRecorded)
+        let duration = tapeRecorder.durationRecorded
+        fireWithStatus(.duration, value: tapeRecorder.durationRecorded)
+        if duration == 30.0{
+            self.stop(.sucess)
+        }
+        
     }
     
     func stop(_ status: AudioStatus, error: Error? = nil) {
+        timer?.invalidate()
+        if (tapeRecorder.recorder?.isRecording)! {
+            tapeRecorder.recorder?.stop()
+        }
         guard error == nil else {
-            self.fireWithStatus(_status: .failure, value: error)
+            fireWithStatus(.failure, value: error)
+            deleteRecording()
             self.removeAllObservers()
             return
         }
         switch status {
         case .interruption:
-            self.fireWithStatus(_status: .failure, value: AudioError.interruption)
+            fireWithStatus(.failure, value: AudioError.interruption)
             break
         case .sucess, .stop:
-            self.fireWithStatus(_status: .success)
+            fireWithStatus(.success)
+            exportFile()
         default:
             break
         }
+        self.removeAllObservers()
     }
     
     //TODO: Implement Pause
@@ -238,7 +258,34 @@ class RecordTapeTask: TapeTask, TapeTaskType {
         
     }
     
+    fileprivate override func fireWithStatus(_ status: TapeTask.TapeTaskStatus, value: Any? = nil) {
+        if status == .success{
+            fireWithHandler(sucessMaster, TapeTaskPiece(duration: self.duration, error: self.error, recording: tapeRecorder.currentRecording))
+        }
+        else {
+            super.fireWithStatus(status, value: value)
+        }
+    }
     
+    private func deleteRecording() {
+        ResourceManager.manager.deleteRecording(recording: tapeRecorder.currentRecording)
+    }
+    
+    private func exportFile() {
+        let audioFile = self.tapeRecorder.recorder?.audioFile
+        let reccordingId = self.tapeRecorder.currentRecording.id!
+        
+        audioFile?.exportAsynchronously(name: "\(reccordingId)", baseDir: .documents, exportFormat: ExportFileType, callback: { (_, error) in
+            DispatchQueue.main.async {
+                guard error == nil else {
+                    print("Export Failure: \(error?.localizedDescription)")
+                    return
+                }
+                print("Exported to Documents Directory")
+            }
+        })
+        
+    }
     
     
 }
