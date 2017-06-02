@@ -9,14 +9,12 @@
 /* Begin PBXBuildFile section */
 		70E439A017019D60659857BF /* Pods_EclipseSoundscapesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 219BB4393901E45FBC7BD829 /* Pods_EclipseSoundscapesTests.framework */; };
 		B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */; };
-		B72DF5471ED724F300F9E4F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5461ED724F300F9E4F3 /* ViewController.swift */; };
 		B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5481ED724F300F9E4F3 /* Main.storyboard */; };
 		B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */; };
 		B72DF5521ED724F300F9E4F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */; };
 		B72DF55D1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF55C1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift */; };
 		B72DF5681ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5671ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift */; };
 		B72DF5761ED7251200F9E4F3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5751ED7251200F9E4F3 /* GoogleService-Info.plist */; };
-		B72DF57B1ED7252200F9E4F3 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5771ED7252200F9E4F3 /* AudioManager.swift */; };
 		B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5781ED7252200F9E4F3 /* Authenticator.swift */; };
 		B72DF57D1ED7252200F9E4F3 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5791ED7252200F9E4F3 /* Networking.swift */; };
 		B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */; };
@@ -25,6 +23,10 @@
 		B758D8761ED78E310033EE45 /* Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8751ED78E310033EE45 /* Uploader.swift */; };
 		B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */; };
 		B763FA011ED864F400EEFB27 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B763FA001ED864F400EEFB27 /* Track.swift */; };
+		B79ED4101EDF4002001D5745 /* TapeTaskPiece.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79ED40F1EDF4002001D5745 /* TapeTaskPiece.swift */; };
+		B79ED4121EDF5C37001D5745 /* TapeRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */; };
+		B7BDFA1B1EE03BA7003348D4 /* TapeTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BDFA1A1EE03BA7003348D4 /* TapeTask.swift */; };
+		B7BDFA1D1EE044A6003348D4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BDFA1C1EE044A6003348D4 /* ViewController.swift */; };
 		B7D1515F1EDDD1EE00DEAC31 /* AudioQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */; };
 		D77B9349CAD58F1DB4B335FF /* Pods_EclipseSoundscapes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */; };
 		EB7C715CF5F62E86B98ABEDD /* Pods_EclipseSoundscapesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A506BF43909D29D3B1E7AEE /* Pods_EclipseSoundscapesUITests.framework */; };
@@ -58,7 +60,6 @@
 		B03672B260885DC3EA96D077 /* Pods-EclipseSoundscapesUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesUITests/Pods-EclipseSoundscapesUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B72DF5411ED724F300F9E4F3 /* EclipseSoundscapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EclipseSoundscapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B72DF5461ED724F300F9E4F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B72DF5491ED724F300F9E4F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B72DF5511ED724F300F9E4F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -70,7 +71,6 @@
 		B72DF5671ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EclipseSoundscapesUITests.swift; sourceTree = "<group>"; };
 		B72DF5691ED724F300F9E4F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B72DF5751ED7251200F9E4F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		B72DF5771ED7252200F9E4F3 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		B72DF5781ED7252200F9E4F3 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		B72DF5791ED7252200F9E4F3 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceManager.swift; sourceTree = "<group>"; };
@@ -79,6 +79,10 @@
 		B758D8751ED78E310033EE45 /* Uploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Uploader.swift; sourceTree = "<group>"; };
 		B758D8781ED794790033EE45 /* Recordings.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Recordings.xcdatamodel; sourceTree = "<group>"; };
 		B763FA001ED864F400EEFB27 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
+		B79ED40F1EDF4002001D5745 /* TapeTaskPiece.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeTaskPiece.swift; sourceTree = "<group>"; };
+		B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeRecorder.swift; sourceTree = "<group>"; };
+		B7BDFA1A1EE03BA7003348D4 /* TapeTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeTask.swift; sourceTree = "<group>"; };
+		B7BDFA1C1EE044A6003348D4 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioQueue.swift; sourceTree = "<group>"; };
 		EC9068B8CBBFDE24E65A9DBE /* Pods-EclipseSoundscapes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapes/Pods-EclipseSoundscapes.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -159,18 +163,13 @@
 		B72DF5431ED724F300F9E4F3 /* EclipseSoundscapes */ = {
 			isa = PBXGroup;
 			children = (
+				B7BDFA1C1EE044A6003348D4 /* ViewController.swift */,
 				B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */,
-				B72DF5771ED7252200F9E4F3 /* AudioManager.swift */,
-				B72DF5781ED7252200F9E4F3 /* Authenticator.swift */,
-				B72DF5791ED7252200F9E4F3 /* Networking.swift */,
-				B758D8731ED78E120033EE45 /* Downloader.swift */,
-				B758D8751ED78E310033EE45 /* Uploader.swift */,
-				B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */,
-				B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */,
-				B72DF5461ED724F300F9E4F3 /* ViewController.swift */,
-				B72DF5841ED75D9A00F9E4F3 /* Locator.swift */,
-				B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */,
-				B763FA001ED864F400EEFB27 /* Track.swift */,
+				B79ED4131EDF5CB1001D5745 /* Audio */,
+				B76F344F1EDE1E09006E76D2 /* Managers */,
+				B76F344E1EDE1DF8006E76D2 /* Networking */,
+				B76F34501EDE1E1D006E76D2 /* Helpers */,
+				B76F344D1EDE1DDE006E76D2 /* Models */,
 				B72DF5481ED724F300F9E4F3 /* Main.storyboard */,
 				B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */,
 				B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */,
@@ -196,6 +195,53 @@
 				B72DF5691ED724F300F9E4F3 /* Info.plist */,
 			);
 			path = EclipseSoundscapesUITests;
+			sourceTree = "<group>";
+		};
+		B76F344D1EDE1DDE006E76D2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */,
+				B763FA001ED864F400EEFB27 /* Track.swift */,
+				B79ED40F1EDF4002001D5745 /* TapeTaskPiece.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		B76F344E1EDE1DF8006E76D2 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				B72DF5791ED7252200F9E4F3 /* Networking.swift */,
+				B758D8731ED78E120033EE45 /* Downloader.swift */,
+				B758D8751ED78E310033EE45 /* Uploader.swift */,
+			);
+			name = Networking;
+			sourceTree = "<group>";
+		};
+		B76F344F1EDE1E09006E76D2 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				B72DF5781ED7252200F9E4F3 /* Authenticator.swift */,
+				B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */,
+				B72DF5841ED75D9A00F9E4F3 /* Locator.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
+		B76F34501EDE1E1D006E76D2 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		B79ED4131EDF5CB1001D5745 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */,
+				B7BDFA1A1EE03BA7003348D4 /* TapeTask.swift */,
+			);
+			name = Audio;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -277,6 +323,11 @@
 						CreatedOnToolsVersion = 8.3.1;
 						DevelopmentTeam = 22G24XCXDT;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					B72DF5571ED724F300F9E4F3 = {
 						CreatedOnToolsVersion = 8.3.1;
@@ -486,15 +537,17 @@
 				B72DF57D1ED7252200F9E4F3 /* Networking.swift in Sources */,
 				B763FA011ED864F400EEFB27 /* Track.swift in Sources */,
 				B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */,
-				B72DF5471ED724F300F9E4F3 /* ViewController.swift in Sources */,
 				B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */,
+				B7BDFA1D1EE044A6003348D4 /* ViewController.swift in Sources */,
+				B7BDFA1B1EE03BA7003348D4 /* TapeTask.swift in Sources */,
+				B79ED4121EDF5C37001D5745 /* TapeRecorder.swift in Sources */,
 				B72DF5851ED75D9A00F9E4F3 /* Locator.swift in Sources */,
 				B758D8741ED78E120033EE45 /* Downloader.swift in Sources */,
 				B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */,
 				B758D8761ED78E310033EE45 /* Uploader.swift in Sources */,
 				B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */,
 				B7D1515F1EDDD1EE00DEAC31 /* AudioQueue.swift in Sources */,
-				B72DF57B1ED7252200F9E4F3 /* AudioManager.swift in Sources */,
+				B79ED4101EDF4002001D5745 /* TapeTaskPiece.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

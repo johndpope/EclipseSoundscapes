@@ -12,7 +12,6 @@ pod 'Firebase/Core'
 pod 'Firebase/Auth'
 pod 'Firebase/Database', '4.0.0'
 pod 'Firebase/Storage'
-pod 'FBAnnotationClustering'
 pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
 
   target 'EclipseSoundscapesTests' do

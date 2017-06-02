@@ -11,7 +11,7 @@ import CoreLocation
 
 
 /// Delegate for Locator class
-protocol LocatorDelegate {
+protocol LocatorDelegate: NSObjectProtocol {
     
     /// Present Alert due to lack of permission or error
     ///
@@ -21,18 +21,16 @@ protocol LocatorDelegate {
     
     /// Update of user's lastest location
     ///
-    /// - Parameters:
-    ///   - manager: CLLocationManager
+    /// - Parameter:
     ///   - location: Best last Location
-    func locationFound(_ manager: CLLocationManager, didUpdateBestLocation location: CLLocation)
+    func locator(didUpdateBestLocation location: CLLocation)
     
     
     /// Update of user's lastest location failed
     ///
-    /// - Parameters:
-    ///   - manager: CLLocationManager
+    /// - Parameter:
     ///   - error: Error trying to get user's last location
-    func locationError(_ manager: CLLocationManager, didFailWithError error: Error)
+    func locator(didFailWithError error: Error)
 }
 
 
@@ -45,7 +43,53 @@ class Locator : NSObject {
     fileprivate var locationManager  : CLLocationManager!
     
     /// Delegate for Location Updates/Errors/Alerts
-    var delegate : LocatorDelegate?
+    weak var delegate : LocatorDelegate?
+    
+    /// Begin gathering Information on the User's Location
+    ///     - Start Recording if Authorzation Status is:
+    ///             - .authorizedWhenInUse
+    ///             - .authorizedAlways
+    ///     - Return error if Authorzation Status is either:
+    ///             - .denied
+    ///             - .restricted
+    ///     - Request Authorization to get Location if Status is:
+    ///             - .notDetermined
+    func getLocation(){
+        
+        let status =  CLLocationManager.authorizationStatus()
+        
+        switch status {
+        case .authorizedWhenInUse, .authorizedAlways:
+            
+            self.locationManager = CLLocationManager()
+            self.locationManager.delegate = self
+            self.locationManager.requestLocation()
+            
+            break
+        case .denied,.restricted:
+            
+            if checkLocationServices() {//App Location Permission Denied
+                
+                self.delegate?.presentAlert(appSettingsAlert())
+            }
+            else { // Location Permission Denied
+                self.delegate?.presentAlert(privacySettingsAlert())
+                
+            }
+            
+            break
+        case .notDetermined:
+            
+            if checkLocationServices(){
+                self.locationManager = CLLocationManager()
+                self.locationManager.delegate = self
+                self.locationManager.requestWhenInUseAuthorization()
+            }
+            break
+        }
+        
+    }
+
     
     
     /// Check if Location Services are enabled
@@ -53,16 +97,6 @@ class Locator : NSObject {
     /// - Returns: Current Status of Location Services
     fileprivate func checkLocationServices() -> Bool{
         return CLLocationManager.locationServicesEnabled()
-    }
-    
-    
-    
-    
-    /// Set Delegate for Location Updates/Errors/Alerts
-    ///
-    /// - Parameter delegate: Locator Delegate
-    func subscribeToLocator(_ delegate : LocatorDelegate){
-        self.delegate = delegate
     }
     
     
@@ -101,49 +135,6 @@ class Locator : NSObject {
 
 extension Locator : CLLocationManagerDelegate {
     
-    /// Begin gathering Information on the User's Location
-    ///     - Start Recording if Authorzation Status is:
-    ///             - .authorizedWhenInUse
-    ///             - .authorizedAlways
-    ///     - Return error if Authorzation Status is either:
-    ///             - .denied
-    ///             - .restricted
-    ///     - Request Authorization to get Location if Status is:
-    ///             - .notDetermined
-    func getLocation(){
-        
-        let status =  CLLocationManager.authorizationStatus()
-        
-        switch status {
-        case .authorizedWhenInUse, .authorizedAlways:
-            
-            self.locationManager = CLLocationManager()
-            self.locationManager.delegate = self
-            self.locationManager.requestLocation()
-            
-            break
-        case .denied,.restricted:
-            
-            if checkLocationServices() { // Location Permission Denied
-                self.delegate?.presentAlert(privacySettingsAlert())
-            }
-            else { //App Location Permission Denied
-                
-                self.delegate?.presentAlert(appSettingsAlert())
-            }
-            
-            break
-        case .notDetermined:
-            
-            if checkLocationServices(){
-                self.locationManager = CLLocationManager()
-                self.locationManager.delegate = self
-                self.locationManager.requestWhenInUseAuthorization()
-            }
-            break
-        }
-        
-    }
     
     /// Handle Changes to Location Authorization
     ///     - Start Recording if Authorzation Status is:
@@ -191,7 +182,7 @@ extension Locator : CLLocationManagerDelegate {
     ///   - locations: Latest Location
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[0]
-        delegate?.locationFound(manager, didUpdateBestLocation: location)
+        delegate?.locator(didUpdateBestLocation: location)
         
     }
     
@@ -201,7 +192,7 @@ extension Locator : CLLocationManagerDelegate {
     ///   - manager: CLLocationManager
     ///   - error: Error corresponding to failure of finding Location
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        delegate?.locationError(manager, didFailWithError: error)
+        delegate?.locator(didFailWithError: error)
     }
 }
 
