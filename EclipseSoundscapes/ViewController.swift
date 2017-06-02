@@ -7,12 +7,18 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseStorage
 import CoreLocation
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var startLabel: UILabel!
     
+    @IBOutlet weak var startButton: UIButton!
+    
+    var isRecording = false 
+    var isPaused = false
     
     var locationManager : Locator!
     var recorder : TapeRecorder!
@@ -25,7 +31,6 @@ class ViewController: UIViewController {
         
         locationManager = Locator()
         locationManager.delegate = self
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,7 +39,19 @@ class ViewController: UIViewController {
     }
     
     @IBAction func start(_ sender: Any) {
-        locationManager.getLocation()
+        if isRecording {
+            if isPaused{
+                task?.resume()
+                isPaused = false
+            }
+            else {
+                task?.pause()
+                isPaused = true
+            }
+        }
+        else {
+            locationManager.getLocation()
+        }
     }
 
     @IBAction func stop(_ sender: Any) {
@@ -66,18 +83,24 @@ class ViewController: UIViewController {
             print("Error: \(error.localizedDescription)")
         }
         
+        isRecording = true
+        
         task?.observe(.duration) { (piece) in
             self.startLabel.text = self.timeString(time: piece.duration)
         }
         task?.observe(.failure) { (piece) in
+            self.isRecording = false
             if let error = piece.error {
                 print("Error: \(error.localizedDescription)")
             }
         }
         task?.observe(.success) { (piece) in
+            self.isRecording = false
             if let recording = piece.recording {
                 print("Location: \(recording.latitude), \(recording.longitude)")
+                self.uploadAudio(recording: recording)
             }
+            
         }
     }
     

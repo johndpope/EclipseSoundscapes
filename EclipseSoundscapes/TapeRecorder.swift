@@ -24,18 +24,19 @@ enum AudioError: Error {
     case unknown(Error)
 }
 
-let FileType = ".caf"
+let FileType = ".m4a"
 let ExportFileType = AKAudioFile.ExportFormat.m4a
 let SamplingRate = 44100
+let RecordingDurationMAX = 30.0//300 5-Minute Max
 
-class TapeRecorder : NSObject {
+class TapeRecorder : NSObject, AVAudioRecorderDelegate {
     
-    var mic : AKMicrophone?
-    var recorder : AKNodeRecorder?
+    let mic : AKMicrophone = AKMicrophone()
+    var recorder : AVAudioRecorder?
     
     
     var durationRecorded : Double {
-        guard let duration = recorder?.recordedDuration else {
+        guard let duration = recorder?.currentTime else {
             return 0.0
         }
         return duration
@@ -47,6 +48,15 @@ class TapeRecorder : NSObject {
     
     var currentRecording : Recording!
     
+    private var settings = [AVNumberOfChannelsKey: 1,
+                           AVSampleRateKey: SamplingRate,
+                           AVLinearPCMBitDepthKey:16,
+                           AVEncoderAudioQualityKey:AVAudioQuality.high.rawValue,
+                           AVFormatIDKey: kAudioFormatMPEG4AAC,
+                           AVEncoderBitRateKey: 196000,
+                           AVLinearPCMIsNonInterleaved: false
+        ] as [String : Any]
+    
     init(location : CLLocation) {
         self.location = location
         super.init()
@@ -57,7 +67,7 @@ class TapeRecorder : NSObject {
         //Remove from Recieving Notification when dealloc'd
         NotificationCenter.default.removeObserver(self)
         
-        mic = nil
+//        mic = nil
         recorder = nil
     }
     
@@ -72,46 +82,32 @@ class TapeRecorder : NSObject {
     
     func prepareRecording()  throws -> RecordTapeTask {
         
-        
         do {
             try AKSettings.setSession(category: .playAndRecord, with: .allowBluetoothA2DP)
             AKSettings.audioInputEnabled = true
+            AudioKit.start()
+            
+            
+            self.currentRecording = ResourceManager.manager.createRecording()
+            ResourceManager.manager.setLocation(recording: self.currentRecording, location: self.location.coordinate, shouldSave: true)
+            
+            let audioFile = ResourceManager.getRecordingURL(id: self.currentRecording.id!)
+            
+            self.recorder = try AVAudioRecorder(url: audioFile, settings: settings)
+            task = RecordTapeTask(recorder: self)
+            
+            task?.start()
             
         } catch {
             throw error
         }
-        
-        self.currentRecording = ResourceManager.manager.createRecording()
-        ResourceManager.manager.setLocation(recording: self.currentRecording, location: self.location.coordinate, shouldSave: true)
-    
-        
-        let settings = [AVNumberOfChannelsKey: 1,
-                        AVSampleRateKey: SamplingRate,
-                        AVLinearPCMBitDepthKey:16,
-                        AVEncoderBitRateKey:196000,
-                        AVEncoderAudioQualityKey:AVAudioQuality.high.rawValue
-                        ] as [String : Any]
-        
-        self.mic = AKMicrophone()
-        
-        //TODO: Start in a temp directory and then export to the documents directory after recording is completed sucessfully, Otherwise cler the temporary file/directory and delete the current recording
-        let recordUrl = ResourceManager.getRecordingURL(id: self.currentRecording.id!)
-        do {
-            let audioFile = try AKAudioFile(forWriting: recordUrl, settings: settings)
-            
-            self.recorder = try AKNodeRecorder(node: mic, file: audioFile)
-            
-        } catch {
-            throw error
-        }
-        
-        task = RecordTapeTask(recorder: self)
-        AudioKit.start()
-        task?.start()
         
         return self.task!
     }
     
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        print("REcoreder did Finish")
+    }
     
     
 

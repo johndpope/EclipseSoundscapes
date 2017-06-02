@@ -103,7 +103,7 @@ class Uploader {
         })
     }
     
-     func storeLocationReference(reference: [String: String], completion:  ((Error?)-> Void)?) {
+     func storeLocationReference(completion:  ((Error?)-> Void)?) {
         guard let id = recording.id else {
             //TODO : Handle Error
             completion?(nil)

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AudioKit
 
 typealias TapeCallback = ((TapeTaskPiece) -> Void)
 
@@ -22,6 +23,7 @@ class TapeTask {
     }
     
     deinit {
+        removeAllObservers()
         durationMaster = nil
         failureMaster = nil
         sucessMaster = nil
@@ -150,6 +152,7 @@ class TapeTask {
             self.error = value as? Error
             
             fireWithHandler(failureMaster, self.taskPiece)
+            removeAllObservers()
             break
             
         case .success:
@@ -204,12 +207,7 @@ class RecordTapeTask: TapeTask, TapeTaskType {
     }
     
     func start() { 
-        do {
-            try tapeRecorder.recorder?.record()
-        } catch {
-            super.fireWithStatus(.failure, value: error)
-            return
-        }
+        tapeRecorder.recorder?.record()
         
         fireWithStatus(.duration, value: 0.0)
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
@@ -217,8 +215,11 @@ class RecordTapeTask: TapeTask, TapeTaskType {
     
     func updateTime() {
         let duration = tapeRecorder.durationRecorded
+        print(String.init(format: "Recording duration: %.2f", duration))
+        
         fireWithStatus(.duration, value: tapeRecorder.durationRecorded)
-        if duration == 30.0{
+        
+        if duration >= RecordingDurationMAX{
             self.stop(.sucess)
         }
         
@@ -229,33 +230,45 @@ class RecordTapeTask: TapeTask, TapeTaskType {
         if (tapeRecorder.recorder?.isRecording)! {
             tapeRecorder.recorder?.stop()
         }
+        AudioKit.stop()
         guard error == nil else {
             fireWithStatus(.failure, value: error)
-            deleteRecording()
-            self.removeAllObservers()
+            deleteTempRecording()
             return
         }
         switch status {
         case .interruption:
-            fireWithStatus(.failure, value: AudioError.interruption)
+            fireWithStatus(.failure, value: AudioError.interruption) //TODO: Have some way to mark track if there was an interruption
             break
         case .sucess, .stop:
             fireWithStatus(.success)
-            exportFile()
+            synced(self) {
+                self.removeAllObservers()
+            }
         default:
             break
         }
-        self.removeAllObservers()
+        
     }
     
     //TODO: Implement Pause
     func pause() {
-        
+        if (tapeRecorder.recorder?.isRecording)! {
+            timer?.invalidate()
+            tapeRecorder.recorder?.pause()
+            print("Recorder Paused")
+        }
+        AudioKit.stop()
     }
     
     //TODO: Implement Resume
     func resume() {
-        
+        AudioKit.start()
+        if !(tapeRecorder.recorder?.isRecording)! {
+            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+            tapeRecorder.recorder?.record()
+            print("Recorder Resumed")
+        }
     }
     
     fileprivate override func fireWithStatus(_ status: TapeTask.TapeTaskStatus, value: Any? = nil) {
@@ -267,25 +280,7 @@ class RecordTapeTask: TapeTask, TapeTaskType {
         }
     }
     
-    private func deleteRecording() {
-        ResourceManager.manager.deleteRecording(recording: tapeRecorder.currentRecording)
+    private func deleteTempRecording() {
+        ResourceManager.manager.deleteRecording(recording: self.tapeRecorder.currentRecording)
     }
-    
-    private func exportFile() {
-        let audioFile = self.tapeRecorder.recorder?.audioFile
-        let reccordingId = self.tapeRecorder.currentRecording.id!
-        
-        audioFile?.exportAsynchronously(name: "\(reccordingId)", baseDir: .documents, exportFormat: ExportFileType, callback: { (_, error) in
-            DispatchQueue.main.async {
-                guard error == nil else {
-                    print("Export Failure: \(error?.localizedDescription ?? "Unkown Error")")
-                    return
-                }
-                print("Exported to Documents Directory")
-            }
-        })
-        
-    }
-    
-    
 }
