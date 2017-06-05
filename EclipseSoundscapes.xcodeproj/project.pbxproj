@@ -16,7 +16,6 @@
 		B72DF5681ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5671ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift */; };
 		B72DF5761ED7251200F9E4F3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5751ED7251200F9E4F3 /* GoogleService-Info.plist */; };
 		B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5781ED7252200F9E4F3 /* Authenticator.swift */; };
-		B72DF57D1ED7252200F9E4F3 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5791ED7252200F9E4F3 /* Networking.swift */; };
 		B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */; };
 		B72DF5851ED75D9A00F9E4F3 /* Locator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5841ED75D9A00F9E4F3 /* Locator.swift */; };
 		B758D8741ED78E120033EE45 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8731ED78E120033EE45 /* Downloader.swift */; };
@@ -72,7 +71,6 @@
 		B72DF5691ED724F300F9E4F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B72DF5751ED7251200F9E4F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B72DF5781ED7252200F9E4F3 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
-		B72DF5791ED7252200F9E4F3 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceManager.swift; sourceTree = "<group>"; };
 		B72DF5841ED75D9A00F9E4F3 /* Locator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locator.swift; sourceTree = "<group>"; };
 		B758D8731ED78E120033EE45 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
@@ -163,8 +161,8 @@
 		B72DF5431ED724F300F9E4F3 /* EclipseSoundscapes */ = {
 			isa = PBXGroup;
 			children = (
-				B7BDFA1C1EE044A6003348D4 /* ViewController.swift */,
 				B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */,
+				B7BDFA1C1EE044A6003348D4 /* ViewController.swift */,
 				B79ED4131EDF5CB1001D5745 /* Audio */,
 				B76F344F1EDE1E09006E76D2 /* Managers */,
 				B76F344E1EDE1DF8006E76D2 /* Networking */,
@@ -210,7 +208,6 @@
 		B76F344E1EDE1DF8006E76D2 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				B72DF5791ED7252200F9E4F3 /* Networking.swift */,
 				B758D8731ED78E120033EE45 /* Downloader.swift */,
 				B758D8751ED78E310033EE45 /* Uploader.swift */,
 			);
@@ -534,7 +531,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B72DF57D1ED7252200F9E4F3 /* Networking.swift in Sources */,
 				B763FA011ED864F400EEFB27 /* Track.swift in Sources */,
 				B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */,
 				B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */,

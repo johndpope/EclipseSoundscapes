@@ -11,8 +11,6 @@ import AudioKit
 
 typealias TapeCallback = ((TapeTaskPiece) -> Void)
 
-
-
 class TapeTask {
     
     init() {

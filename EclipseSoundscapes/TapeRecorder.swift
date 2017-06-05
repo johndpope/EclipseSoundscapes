@@ -31,7 +31,7 @@ let RecordingDurationMAX = 30.0//300 5-Minute Max
 
 class TapeRecorder : NSObject, AVAudioRecorderDelegate {
     
-    let mic : AKMicrophone = AKMicrophone()
+    private var mic : AKMicrophone!
     var recorder : AVAudioRecorder?
     
     
@@ -42,9 +42,9 @@ class TapeRecorder : NSObject, AVAudioRecorderDelegate {
         return duration
     }
     
-    var location : CLLocation!
+    private var location : CLLocation!
     
-    var task : RecordTapeTask?
+    private var task : RecordTapeTask?
     
     var currentRecording : Recording!
     
@@ -58,8 +58,8 @@ class TapeRecorder : NSObject, AVAudioRecorderDelegate {
         ] as [String : Any]
     
     init(location : CLLocation) {
-        self.location = location
         super.init()
+        self.location = location
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
     }
     
@@ -67,7 +67,7 @@ class TapeRecorder : NSObject, AVAudioRecorderDelegate {
         //Remove from Recieving Notification when dealloc'd
         NotificationCenter.default.removeObserver(self)
         
-//        mic = nil
+        mic = nil
         recorder = nil
     }
     
@@ -85,13 +85,14 @@ class TapeRecorder : NSObject, AVAudioRecorderDelegate {
         do {
             try AKSettings.setSession(category: .playAndRecord, with: .allowBluetoothA2DP)
             AKSettings.audioInputEnabled = true
+            mic = AKMicrophone()
             AudioKit.start()
             
             
             self.currentRecording = ResourceManager.manager.createRecording()
             ResourceManager.manager.setLocation(recording: self.currentRecording, location: self.location.coordinate, shouldSave: true)
             
-            let audioFile = ResourceManager.getRecordingURL(id: self.currentRecording.id!)
+            let audioFile = ResourceManager.recordingURL(id: self.currentRecording.id!)
             
             self.recorder = try AVAudioRecorder(url: audioFile, settings: settings)
             task = RecordTapeTask(recorder: self)

@@ -98,7 +98,6 @@ class ViewController: UIViewController {
             self.isRecording = false
             if let recording = piece.recording {
                 print("Location: \(recording.latitude), \(recording.longitude)")
-                self.uploadAudio(recording: recording)
             }
             
         }
