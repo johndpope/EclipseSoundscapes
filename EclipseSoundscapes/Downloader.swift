@@ -13,7 +13,7 @@ import FirebaseDatabase
 
 
 /// Wrapper class for the StorageDownloadTask that removes partially downloaded file if the download is cancelled
-class DownloadTask : StorageDownloadTask {
+public class DownloadTask : StorageDownloadTask {
     
     
     /// Path to the downloaded Audio File
@@ -23,7 +23,7 @@ class DownloadTask : StorageDownloadTask {
     /// Cancel the download task, and attempt to destory the temporary file that contains the downloaded audio file
     ///
     /// - Throws: Error involved with deleting audio file
-    override func cancel() {
+    override public func cancel() {
         super.cancel()
         do {
             if self.path != nil {
@@ -35,7 +35,7 @@ class DownloadTask : StorageDownloadTask {
     }
 }
 
-class Downloader {
+public class Downloader {
     
     /// Firebase Storage Object
     fileprivate let storeage = Storage.storage()

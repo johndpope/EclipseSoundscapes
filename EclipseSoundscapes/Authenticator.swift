@@ -11,14 +11,16 @@ import FirebaseAuth
 import Firebase
 
 
-
-enum AuthError: Error {
+//Authentication Error Codes
+public enum AuthError: Error {
+    
+    /// No User Currently Signed In
     case noCurrentUser
 }
 
 
 /// Authentication Functionality for EclipseSoundscpes Users in connection with Firebase
-class Authenticator {
+public class Authenticator {
     
     /// Simple Wrappper for a (FIRUser?, Error?) -> Void Completion block
     typealias AuthenticatorCallback = ((User?, Error?) -> Void)

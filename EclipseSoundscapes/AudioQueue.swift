@@ -10,7 +10,6 @@
 /// Source:
 ///    Swift Algorithm Club,swift-algorithm-club/Queue/Queue-Optimized.swift, (2017), GitHub repository
 ///    https://github.com/raywenderlich/swift-algorithm-club/blob/master/Queue/Queue-Optimized.swift
-///
 
 /*
  First-in first-out queue (FIFO)

@@ -21,11 +21,12 @@
 		B758D8741ED78E120033EE45 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8731ED78E120033EE45 /* Downloader.swift */; };
 		B758D8761ED78E310033EE45 /* Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8751ED78E310033EE45 /* Uploader.swift */; };
 		B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */; };
-		B763FA011ED864F400EEFB27 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B763FA001ED864F400EEFB27 /* Track.swift */; };
-		B79ED4101EDF4002001D5745 /* TapeTaskPiece.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79ED40F1EDF4002001D5745 /* TapeTaskPiece.swift */; };
+		B763FA011ED864F400EEFB27 /* Tape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B763FA001ED864F400EEFB27 /* Tape.swift */; };
+		B79ED4101EDF4002001D5745 /* TapePiece.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79ED40F1EDF4002001D5745 /* TapePiece.swift */; };
 		B79ED4121EDF5C37001D5745 /* TapeRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */; };
-		B7BDFA1B1EE03BA7003348D4 /* TapeTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BDFA1A1EE03BA7003348D4 /* TapeTask.swift */; };
+		B7BDFA1B1EE03BA7003348D4 /* TapeMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BDFA1A1EE03BA7003348D4 /* TapeMonitor.swift */; };
 		B7BDFA1D1EE044A6003348D4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BDFA1C1EE044A6003348D4 /* ViewController.swift */; };
+		B7C4E1411EE751A6002A0F19 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C4E1401EE751A6002A0F19 /* Utility.swift */; };
 		B7D1515F1EDDD1EE00DEAC31 /* AudioQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */; };
 		D77B9349CAD58F1DB4B335FF /* Pods_EclipseSoundscapes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */; };
 		EB7C715CF5F62E86B98ABEDD /* Pods_EclipseSoundscapesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A506BF43909D29D3B1E7AEE /* Pods_EclipseSoundscapesUITests.framework */; };
@@ -76,11 +77,12 @@
 		B758D8731ED78E120033EE45 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		B758D8751ED78E310033EE45 /* Uploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Uploader.swift; sourceTree = "<group>"; };
 		B758D8781ED794790033EE45 /* Recordings.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Recordings.xcdatamodel; sourceTree = "<group>"; };
-		B763FA001ED864F400EEFB27 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
-		B79ED40F1EDF4002001D5745 /* TapeTaskPiece.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeTaskPiece.swift; sourceTree = "<group>"; };
+		B763FA001ED864F400EEFB27 /* Tape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tape.swift; sourceTree = "<group>"; };
+		B79ED40F1EDF4002001D5745 /* TapePiece.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapePiece.swift; sourceTree = "<group>"; };
 		B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeRecorder.swift; sourceTree = "<group>"; };
-		B7BDFA1A1EE03BA7003348D4 /* TapeTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeTask.swift; sourceTree = "<group>"; };
+		B7BDFA1A1EE03BA7003348D4 /* TapeMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeMonitor.swift; sourceTree = "<group>"; };
 		B7BDFA1C1EE044A6003348D4 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B7C4E1401EE751A6002A0F19 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioQueue.swift; sourceTree = "<group>"; };
 		EC9068B8CBBFDE24E65A9DBE /* Pods-EclipseSoundscapes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapes/Pods-EclipseSoundscapes.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -199,8 +201,8 @@
 			isa = PBXGroup;
 			children = (
 				B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */,
-				B763FA001ED864F400EEFB27 /* Track.swift */,
-				B79ED40F1EDF4002001D5745 /* TapeTaskPiece.swift */,
+				B763FA001ED864F400EEFB27 /* Tape.swift */,
+				B79ED40F1EDF4002001D5745 /* TapePiece.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -227,6 +229,7 @@
 		B76F34501EDE1E1D006E76D2 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				B7C4E1401EE751A6002A0F19 /* Utility.swift */,
 				B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */,
 			);
 			name = Helpers;
@@ -236,7 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */,
-				B7BDFA1A1EE03BA7003348D4 /* TapeTask.swift */,
+				B7BDFA1A1EE03BA7003348D4 /* TapeMonitor.swift */,
 			);
 			name = Audio;
 			sourceTree = "<group>";
@@ -531,11 +534,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B763FA011ED864F400EEFB27 /* Track.swift in Sources */,
+				B7C4E1411EE751A6002A0F19 /* Utility.swift in Sources */,
+				B763FA011ED864F400EEFB27 /* Tape.swift in Sources */,
 				B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */,
 				B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */,
 				B7BDFA1D1EE044A6003348D4 /* ViewController.swift in Sources */,
-				B7BDFA1B1EE03BA7003348D4 /* TapeTask.swift in Sources */,
+				B7BDFA1B1EE03BA7003348D4 /* TapeMonitor.swift in Sources */,
 				B79ED4121EDF5C37001D5745 /* TapeRecorder.swift in Sources */,
 				B72DF5851ED75D9A00F9E4F3 /* Locator.swift in Sources */,
 				B758D8741ED78E120033EE45 /* Downloader.swift in Sources */,
@@ -543,7 +547,7 @@
 				B758D8761ED78E310033EE45 /* Uploader.swift in Sources */,
 				B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */,
 				B7D1515F1EDDD1EE00DEAC31 /* AudioQueue.swift in Sources */,
-				B79ED4101EDF4002001D5745 /* TapeTaskPiece.swift in Sources */,
+				B79ED4101EDF4002001D5745 /* TapePiece.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

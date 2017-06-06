@@ -13,7 +13,7 @@ import FirebaseDatabase
 import GeoFire
 
 /// Upload/Download Status keys
-@objc enum NetworkStatus : Int {
+public enum NetworkStatus {
     case audioSuccess
     case jsonSuccess
     case realtimeSuccess
@@ -30,7 +30,7 @@ let AllRecordings = "Recordings"
 
 
 
-class Uploader {
+public class Uploader {
     
     /// Firebase Storage Object
     let storeage = Storage.storage()
@@ -41,7 +41,9 @@ class Uploader {
     /// RealtimeDB reference
     var databaseRef : DatabaseReference?
     
-    var recording : Recording!
+    
+    /// Recording to upload
+    weak var recording : Recording!
     
     init(recording: Recording) {
         self.recording = recording
@@ -99,28 +101,28 @@ class Uploader {
     ///   - id: Recoding's Information
     ///   - info: Dictionary containg the inforamtion to store
     ///   - completion: optional Completion block possibly containing an error
-    fileprivate func storeAttributes(withId id : String, info : [String: Any], completion: @escaping (Error?)-> Void){
-        databaseRef = database.reference().child(id)
-        
-        
-        
-        //TODO: Implement some kind of tagging for the Geographical locations based on the Latitude and longitude of the Recording
-        //      - Landscape (City, Rural, Oceananic, etc..)
-        
-        
-        databaseRef?.setValue(info, withCompletionBlock: { (error, ref) in
-            guard error == nil else {
-                //TODO: Handle Error with the upload of the json file
-                completion(error)
-                return
-            }
-            
-            
-            
-            
-            completion(nil)
-        })
-    }
+//    func storeAttributes(withId id : String, info : [String: Any], completion: @escaping (Error?)-> Void){
+//        databaseRef = database.reference().child(id)
+//        
+//        
+//        
+//        //TODO: Implement some kind of tagging for the Geographical locations based on the Latitude and longitude of the Recording
+//        //      - Landscape (City, Rural, Oceananic, etc..)
+//        
+//        
+//        databaseRef?.setValue(info, withCompletionBlock: { (error, ref) in
+//            guard error == nil else {
+//                //TODO: Handle Error with the upload of the json file
+//                completion(error)
+//                return
+//            }
+//            
+//            
+//            
+//            
+//            completion(nil)
+//        })
+//    }
     
      func storeLocation(completion:  ((Error?)-> Void)?) {
         guard let id = recording.id else {
