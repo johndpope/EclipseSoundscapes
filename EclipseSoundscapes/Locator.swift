@@ -37,7 +37,9 @@ public protocol LocatorDelegate: NSObjectProtocol {
 /// Handles Obtaining the User's Location
 public class Locator : NSObject {
     
-    static let Radius = 100
+    static var LocationAuthorization : CLAuthorizationStatus {
+        return CLLocationManager.authorizationStatus()
+    }
     
     /// CLLocation Manager Object
     fileprivate var locationManager  : CLLocationManager!

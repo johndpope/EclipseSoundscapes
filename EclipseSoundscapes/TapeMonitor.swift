@@ -10,28 +10,6 @@ import Foundation
 import AVFoundation
 import AudioKit
 
-
-/// Monitor Callback contain the session's TapePiece
-public typealias TapeCallback = ((TapePiece) -> Void)
-
-
-/// Status of the Tape during a Monitor Session
-///
-/// - progress: Monitor progress event
-/// - success: Tape has completed successfully
-/// - failure: Tape has completed due to an error
-/// - pause: Tape was paused
-/// - resume: Tape was resumed
-public enum MonitorStatus {
-    case progress
-    case success
-    case failure
-    case pause
-    case resume
-}
-
-
-
 /// Manages Observation Callbacks throughout Tape Operations
 public class TapeMonitor: NSObject {
 
@@ -99,39 +77,12 @@ public class TapeMonitor: NSObject {
         let callback = handler
         let key = UUID.init().uuidString
         
+        var dictionary = getHandler(fromStatus: status)
         
-        switch status {
-        case .resume:
-            synced(self, closure: { 
-                resumeMaster.updateValue(callback, forKey: key)
-            })
-            break
-        case .pause:
-            synced(self, closure: { 
-                pauseMaster.updateValue(callback, forKey: key)
-            })
-            break
-        case .progress:
-            synced(self, closure: {
-                progressMaster.updateValue(callback, forKey: key)
-            })
-            break
-        case .failure:
-            synced(self, closure: {
-                failureMaster.updateValue(callback, forKey: key)
-            })
-            break
-            
-        case .success:
-            synced(self, closure: {
-                sucessMaster.updateValue(callback, forKey: key)
-            })
-            break
-            
+        synced(self) { 
+            dictionary.updateValue(callback, forKey: key)
+            masterMap.updateValue(status, forKey: key)
         }
-        
-        
-        masterMap.updateValue(status, forKey: key)
         return key
     }
     
@@ -312,11 +263,12 @@ public class RecordTapeMonitor: TapeMonitor, OperationMonitorType {
     
     init(recorder: AVAudioRecorder, _ recording: Recording) {
         self.recorder = recorder
-        self.recording = recording
         super.init()
+        self.recording = recording
+        
     }
     
-    /// Start the monitor and the recorder
+    /// Start the Recorder
     public func start() { 
         recorder.record()
         
@@ -359,6 +311,7 @@ public class RecordTapeMonitor: TapeMonitor, OperationMonitorType {
             break
         case .sucess:
             self.recordingFinished()
+            break
         case .cancel:
             if self.progress <= RecordingDurationMin {
                 super.fire(withStatus: .failure, value: AudioError.tooShort)
@@ -366,23 +319,25 @@ public class RecordTapeMonitor: TapeMonitor, OperationMonitorType {
             else {
                 self.recordingFinished()
             }
+            break
         default:
             break
         }
         
     }
     
-    /// Pause the monitor and the recorder
+    /// Pause the Recorder
     public func pause() {
         if recorder.isRecording {
             timer?.invalidate()
             recorder.pause()
             print("Recorder Paused")
         }
+        super.fire(withStatus: .pause)
         AudioKit.stop()
     }
     
-    /// Resume the monitor and the recorder
+    /// Resume the Recorder
     public func resume() {
         AudioKit.start()
         if recorder.isRecording {
@@ -390,6 +345,7 @@ public class RecordTapeMonitor: TapeMonitor, OperationMonitorType {
             recorder.record()
             print("Recorder Resumed")
         }
+        super.fire(withStatus: .resume)
     }
     
     
@@ -404,4 +360,106 @@ public class RecordTapeMonitor: TapeMonitor, OperationMonitorType {
     private func deleteTempRecording() {
         ResourceManager.manager.deleteRecording(recording: self.recording)
     }
+}
+
+
+/// Manages Observation Callbacks and Operations throughout a Playback
+public class PlayerTapeMonitor: TapeMonitor, OperationMonitorType {
+    
+    enum PlayerState{
+        case notStarted, playing, paused, stoped
+    }
+
+    var state : PlayerState = PlayerState.notStarted
+    
+    //Audio Player
+    unowned var player : AKAudioPlayer
+    
+    /// Local Timer to update duration
+    fileprivate var timer : Timer?
+    
+    init(player: AKAudioPlayer){
+        self.player = player
+        super.init()
+        
+    }
+    
+    /// Start the Player
+    public func start() {
+        player.play()
+        
+        state = .playing
+        super.fire(withStatus: .progress, value: 0.0)
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
+    }
+    
+    
+    /// Update the duration of the current monitor session to the tapeRecorder's duration and fire progress events
+    @objc private func updateProgress() {
+        
+        let progress = player.currentTime
+        print(String.init(format: "Player progress: %.2f", progress))
+        
+        super.fire(withStatus: .progress, value: progress)
+        
+        if progress >= player.endTime {
+            self.stop(.sucess, error: nil)
+        }
+        
+    }
+    
+    /// Stop the monitor and the player with a status
+    ///
+    /// - Parameters:
+    ///   - status: Reason why the monitor was stopped
+    ///   - error: Error involed with the stopage
+    public func stop(_ status: AudioStatus, error: AudioError? = nil) {
+        state = .stoped
+        timer?.invalidate()
+        if player.isPlaying {
+            player.stop()
+        }
+        AudioKit.stop()
+        guard error == nil else {
+            super.fire(withStatus: .failure, value: error)
+            return
+        }
+        switch status {
+        case .sucess: //TODO: Tape has ended
+            super.fire(withStatus: .success)
+            break
+        case .skip: //TODO: Tape was skipped
+            super.fire(withStatus: .failure, value: AudioError.skipped)
+            break
+        case .cancel: //TODO: Audio Playback was ended
+            super.fire(withStatus: .failure, value: AudioError.playbackEnded)
+            break
+        default:
+            break
+        }
+        
+    }
+    
+    /// Pause the Player
+    public func pause() {
+        
+        if player.isPlaying {
+            player.pause()
+        }
+        state = .paused
+        super.fire(withStatus: .pause)
+        AudioKit.stop()
+    }
+    
+    /// Resume the Player
+    public func resume(){
+        
+        AudioKit.start()
+        if player.isStopped{
+            player.resume()
+        }
+        state = .playing
+        super.fire(withStatus: .resume)
+    }
+
 }

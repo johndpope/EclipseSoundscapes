@@ -20,6 +20,7 @@
  Enqueuing and dequeuing are O(1) operations.
  */
 public struct AudioQueue<T> {
+    fileprivate var max = QueueMax
     fileprivate var array = [T?]()
     fileprivate var head = 0
     
@@ -31,8 +32,15 @@ public struct AudioQueue<T> {
         return array.count - head
     }
     
-    public mutating func enqueue(_ element: T) {
-        array.append(element)
+    public mutating func enqueue(_ element: T)->Bool {
+        if self.count < max {
+            array.append(element)
+            return true
+        }
+        else {
+            return false
+        }
+        
     }
     
     public mutating func dequeue() -> T? {

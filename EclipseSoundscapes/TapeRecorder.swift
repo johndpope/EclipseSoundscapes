@@ -11,40 +11,7 @@ import CoreLocation
 import AudioKit
 
 
-/// Status of Audio operation
-///
-/// - sucess: Successful audio operation
-/// - error: Error occured while performing operation
-/// - interruption: Interruption occured while performing operation
-/// - cancel: Audio operation was cancelled
-public enum AudioStatus{
-    case sucess
-    case error
-    case interruption
-    case cancel
-}
 
-/// Error involved during an Audio operation
-///
-/// - tooShort: Audio Recoring was too short
-/// - micPermissionDenied: Permission to Record from internal mic was denied
-/// - system: System generated Error
-/// - unown: Unkown Error
-public enum AudioError: Error {
-    case tooShort
-    case micPermissionDenied
-    case system(Error)
-    case unkown
-}
-
-/// Audio File Type
-let FileType = ".m4a"
-
-/// 5 minute maximum
-let RecordingDurationMax : Double = 300
-
-/// 20 second minimum
-let RecordingDurationMin : Double = 20
 
 
 /// Handles operations for Recording Audio
@@ -86,7 +53,8 @@ public class TapeRecorder : NSObject, AVAudioRecorderDelegate {
     deinit {
         //Remove from Recieving Notification when dealloc'd
         NotificationCenter.default.removeObserver(self)
-        
+        location = nil
+        monitor = nil
         mic = nil
         recorder = nil
     }
