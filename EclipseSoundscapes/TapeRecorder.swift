@@ -10,46 +10,33 @@ import Foundation
 import CoreLocation
 import AudioKit
 
-@objc public enum AudioStatus : Int{
-    case sucess
-    case error
-    case interruption
-    case stop
-}
 
-enum AudioError: Error {
-    
-    case permissionDenied
-    case interruption
-    case unknown(Error)
-}
 
-let FileType = ".m4a"
-let ExportFileType = AKAudioFile.ExportFormat.m4a
-let SamplingRate = 44100
-let RecordingDurationMAX = 30.0//300 5-Minute Max
 
-class TapeRecorder : NSObject, AVAudioRecorderDelegate {
+
+/// Handles operations for Recording Audio
+public class TapeRecorder : NSObject, AVAudioRecorderDelegate {
     
-    let mic : AKMicrophone = AKMicrophone()
-    var recorder : AVAudioRecorder?
+    
+    /// Phone's Microphone
+    private var mic : AKMicrophone!
+    
+    /// Recorder
+    private var recorder : AVAudioRecorder?
+    
+    /// Location of User
+    private var location : CLLocation!
+    
+    /// Monitor for recording operation
+    private var monitor : RecordTapeMonitor?
     
     
-    var durationRecorded : Double {
-        guard let duration = recorder?.currentTime else {
-            return 0.0
-        }
-        return duration
-    }
+    /// Recording during a recording operation
+    private var currentRecording : Recording!
     
-    var location : CLLocation!
-    
-    var task : RecordTapeTask?
-    
-    var currentRecording : Recording!
-    
+    /// Settings to configure the record audio
     private var settings = [AVNumberOfChannelsKey: 1,
-                           AVSampleRateKey: SamplingRate,
+                           AVSampleRateKey: 44100,
                            AVLinearPCMBitDepthKey:16,
                            AVEncoderAudioQualityKey:AVAudioQuality.high.rawValue,
                            AVFormatIDKey: kAudioFormatMPEG4AAC,
@@ -58,61 +45,92 @@ class TapeRecorder : NSObject, AVAudioRecorderDelegate {
         ] as [String : Any]
     
     init(location : CLLocation) {
-        self.location = location
         super.init()
+        self.location = location
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
     }
     
     deinit {
         //Remove from Recieving Notification when dealloc'd
         NotificationCenter.default.removeObserver(self)
-        
-//        mic = nil
+        location = nil
+        monitor = nil
+        mic = nil
         recorder = nil
     }
     
-    func requestPermission(handler: @escaping (Bool)->Void){
+    /// Request Permission from the User to use the microphone to record audio
+    /// - Important: Alert will be non-nil only if the user has denied the Recording Permission
+    /// - Parameter handler: Bool containing wether the user has granted permission or not
+    func requestPermission(handler: @escaping (Bool, UIAlertController?)->Void){
+        let permission = AKSettings.session.recordPermission()
+        
+        
+        switch permission {
+        case AVAudioSessionRecordPermission.granted:
+            handler(true, nil)
+            break
+        case AVAudioSessionRecordPermission.denied:
+            let alert = UIAlertController.appSettingsAlert(title: "Recording Permission Denied", message: "Turn on Location in Settings > EclipseSignal > Microphone to allow us to record your eclipse experience")
+            handler(false, alert)
+            break
+        default:
+            break
+        }
+        
         AKSettings.session.requestRecordPermission { (granted) in
             DispatchQueue.main.async {
-                handler(granted)
+                handler(granted, nil)
             }
         }
     }
     
     
-    func prepareRecording()  throws -> RecordTapeTask {
+    /// Initalize all the components in order to record
+    ///
+    /// - Returns: Record Monitor to manage the recording operation
+    /// - Throws: Error while trying to configure the Audio session or build the recorder
+    func prepareRecording()  throws -> RecordTapeMonitor {
         
         do {
             try AKSettings.setSession(category: .playAndRecord, with: .allowBluetoothA2DP)
             AKSettings.audioInputEnabled = true
+            mic = AKMicrophone()
             AudioKit.start()
             
             
             self.currentRecording = ResourceManager.manager.createRecording()
             ResourceManager.manager.setLocation(recording: self.currentRecording, location: self.location.coordinate, shouldSave: true)
             
-            let audioFile = ResourceManager.getRecordingURL(id: self.currentRecording.id!)
+            let audioFile = ResourceManager.recordingURL(id: self.currentRecording.id!)
             
             self.recorder = try AVAudioRecorder(url: audioFile, settings: settings)
-            task = RecordTapeTask(recorder: self)
+            monitor = RecordTapeMonitor(recorder: self.recorder!, currentRecording)
             
-            task?.start()
+            monitor?.start()
             
         } catch {
             throw error
         }
         
-        return self.task!
+        return self.monitor!
     }
     
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        print("REcoreder did Finish")
+    public func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
+        guard let encodingError = error else {
+            monitor?.stop(.error, error: AudioError.unkown)
+            return
+        }
+        monitor?.stop(.error, error: AudioError.system(encodingError))
+    }
+    
+    public func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        
+        print(flag ? "Recoreder did Finish Fine" : "Recorder finised due to an encoding error")
     }
     
     
 
-    //TODO: Implement the recording to pause while interruption is in prpogress and restart after interruption is stoped
-    
     /// Interruption Handler
     ///
     /// - Parameter notification: Device generated notification about interruption
@@ -122,10 +140,12 @@ class TapeRecorder : NSObject, AVAudioRecorderDelegate {
         
         if theInterruptionType == AVAudioSessionInterruptionType.began.rawValue {
             //Interruption Started
+            self.monitor?.pause()
         }
         
         if theInterruptionType == AVAudioSessionInterruptionType.ended.rawValue {
             //Interruption Ended
+            self.monitor?.resume()
         }
     }
     

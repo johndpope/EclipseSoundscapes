@@ -1,5 +1,5 @@
 //
-//  Track.swift
+//  Tape.swift
 //  EclipseSoundscapes
 //
 //  Created by Anonymous on 5/26/17.
@@ -10,14 +10,23 @@ import Foundation
 import CoreLocation
 
 
-class Track : NSObject {
+/// Audio Recording that has been downloaded from Firebase
+class Tape : NSObject {
     
+    
+    /// Location where the Recording was performed
     var location : CLLocationCoordinate2D?
-    var size : Int64?
+    
+    /// User Set Title of the Recording
     var title : String?
+    
+    /// Duration of the Recording
     var duration : Double?
+    
+    /// Unique ID of the Recording
     var id : String?
     
+    /// URL to the location where the Recording is saved locally
     var audioUrl : URL?
     
     
@@ -38,11 +47,11 @@ class Track : NSObject {
         
     }
     
+    
+    /// Set the Information of the recording
+    ///
+    /// - Parameter info: Key-value pairs containg the inforamtion about the REcording
     func setInformation(info : Dictionary<String, Any>){
-        
-        if let size = info[Recording.SIZE] as? Int64 {
-            self.size = size
-        }
         
         if let title = info[Recording.TITLE] as? String {
             self.title = title
@@ -57,6 +66,10 @@ class Track : NSObject {
         }
     }
     
+    
+    /// Set the location where the Recording is saved locally
+    ///
+    /// - Parameter audioUrl: URL to downloaded audio file
     func setAudioUrl(audioUrl : URL) {
         self.audioUrl = audioUrl
     }

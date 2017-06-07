@@ -12,8 +12,25 @@ import FirebaseStorage
 import FirebaseDatabase
 import GeoFire
 
+/// Upload/Download Status keys
+public enum NetworkStatus {
+    case audioSuccess
+    case jsonSuccess
+    case realtimeSuccess
+    case error
+    case cancelled
+    case paused
+}
 
-class Uploader {
+
+let CitizenScientistsDirectory = "CitizenScientists"
+let LocationDirectory = "Locations"
+let AllRecordings = "Recordings"
+
+
+
+
+public class Uploader {
     
     /// Firebase Storage Object
     let storeage = Storage.storage()
@@ -24,7 +41,9 @@ class Uploader {
     /// RealtimeDB reference
     var databaseRef : DatabaseReference?
     
-    var recording : Recording!
+    
+    /// Recording to upload
+    weak var recording : Recording!
     
     init(recording: Recording) {
         self.recording = recording
@@ -41,7 +60,7 @@ class Uploader {
             return nil
         }
         
-        let url = ResourceManager.getRecordingURL(id: id)
+        let url = ResourceManager.recordingURL(id: id)
         
         let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child("\(id)\(FileType)")
         
@@ -56,19 +75,19 @@ class Uploader {
     /// - Parameters:
     ///   - id: Recording's Id
     ///   - jsonData: Extra information in JSON format
-    func storeJSON() -> StorageUploadTask?{
+    func storeInformation() -> StorageUploadTask?{
         
         guard let id = recording.id else {
             return nil
         }
         
-        guard let jsonData = ResourceManager.recordingInfo(recording: self.recording) else {
+        guard let information = ResourceManager.recordingInfo(recording: self.recording) else {
             return nil
         }
         
         let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child("\(id).json")
         
-        let uploadTask = storageRef.putData(jsonData)
+        let uploadTask = storageRef.putData(information)
         
         
         return uploadTask
@@ -82,28 +101,30 @@ class Uploader {
     ///   - id: Recoding's Information
     ///   - info: Dictionary containg the inforamtion to store
     ///   - completion: optional Completion block possibly containing an error
-    fileprivate func storeRealTimeDB(withId id : String, info : [String: Any], completion: @escaping (Error?)-> Void){
-        databaseRef = database.reference().child(id)
-        
-        databaseRef?.setValue(info, withCompletionBlock: { (error, ref) in
-            guard error == nil else {
-                //TODO: Handle Error with the upload of the json file
-                completion(error)
-                return
-            }
-            
-            
-            //TODO: Implement some kind of tagging for the Geographical locations based on the Latitude and longitude of the Recording
-            //      - Landscape (City, Rural, Oceananic, etc..)
-            
-            
-            
-            
-            completion(nil)
-        })
-    }
+//    func storeAttributes(withId id : String, info : [String: Any], completion: @escaping (Error?)-> Void){
+//        databaseRef = database.reference().child(id)
+//        
+//        
+//        
+//        //TODO: Implement some kind of tagging for the Geographical locations based on the Latitude and longitude of the Recording
+//        //      - Landscape (City, Rural, Oceananic, etc..)
+//        
+//        
+//        databaseRef?.setValue(info, withCompletionBlock: { (error, ref) in
+//            guard error == nil else {
+//                //TODO: Handle Error with the upload of the json file
+//                completion(error)
+//                return
+//            }
+//            
+//            
+//            
+//            
+//            completion(nil)
+//        })
+//    }
     
-     func storeLocationReference(completion:  ((Error?)-> Void)?) {
+     func storeLocation(completion:  ((Error?)-> Void)?) {
         guard let id = recording.id else {
             //TODO : Handle Error
             completion?(nil)

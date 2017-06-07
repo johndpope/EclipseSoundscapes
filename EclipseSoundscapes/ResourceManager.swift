@@ -10,22 +10,9 @@ import Foundation
 import CoreData
 import CoreLocation
 
-/// Authenticator Error Object
-struct RecordingInfo {
-    
-    var data: Data
-    var json: Dictionary<String, Any>
-    var url: URL
-    
-    init(data: Data, json: Dictionary<String, Any>, url: URL) {
-        self.data = data
-        self.json = json
-        self.url = url
-    }
-}
 
-/// Handles All Interation with local storage and CoreData entities
-class ResourceManager {
+/// Handles All Integration with local storage and CoreData entities
+public class ResourceManager {
     
     /// Simple Wrappper for a ([Recording]?) -> Void Completion block
     typealias RecordingFetchCallback = (([Recording]?) -> Void)
@@ -166,21 +153,6 @@ class ResourceManager {
         }
     }
     
-    /// Modify Recording's Size
-    ///
-    /// - Parameters:
-    ///   - recording: Recording to modify
-    ///   - path: Path to Recoding Data
-    ///   - shouldSave: Specify if modification should be saved in CoreData
-    func setSize(recording: Recording, path: String, shouldSave: Bool = true){
-        recording.size = Int64(ResourceManager.getFileSize(path: path))
-        if shouldSave {
-            self.save()
-            NotificationCenter.default.post(name: Notification.Name.RecordingChanged, object: nil)
-        }
-    }
-    
-    
     /// Modify Recording's Location
     ///
     /// - Parameters:
@@ -211,9 +183,7 @@ class ResourceManager {
         if let duration = info[Recording.DURATION] as? TimeInterval{
             setDuration(recording: recording, duration: duration, shouldSave: false)
         }
-        if let path = info[Recording.PATH] as? String{
-            setSize(recording: recording, path: path, shouldSave: false)
-        }
+        
         if let title = info[Recording.TITLE] as? String {
             setTitle(recording: recording, title: title, shouldSave: false)
         }
@@ -240,7 +210,7 @@ class ResourceManager {
             managedObjectContext.delete(recording)
             self.save()
             NotificationCenter.default.post(name: Notification.Name.RecordingDeleted, object: nil)
-            if let url = ResourceManager.getRecordingURL(id: recording.id!) as URL? {
+            if let url = ResourceManager.recordingURL(id: recording.id!) as URL? {
                 try FileManager.default.removeItem(at: url)
             }
             completion?(nil)
@@ -263,7 +233,6 @@ class ResourceManager {
         json.updateValue(recording.id ?? "", forKey: Recording.ID)
         json.updateValue(recording.title ?? "", forKey: Recording.TITLE)
         json.updateValue(prettyDate(date: recording.timestamp as Date?), forKey: Recording.TIMESTAMP)
-        json.updateValue(Float64(recording.size), forKey: Recording.SIZE)
         json.updateValue(recording.latitude, forKey: Recording.LAT)
         json.updateValue(recording.longitude, forKey: Recording.LONG)
         json.updateValue(recording.duration, forKey: Recording.DURATION)
@@ -339,8 +308,8 @@ class ResourceManager {
     ///
     /// - Parameter id: Recording's id
     /// - Returns: Recording URL
-    static func getRecordingURL(id : String) -> URL {
-        return getDocumentsDirectory().appendingPathComponent(id.appending(FileType)) //TODO: Function to go from Export Type to string
+    static func recordingURL(id : String) -> URL {
+        return getDocumentsDirectory().appendingPathComponent(id.appending(FileType))
     }
     
     
@@ -369,7 +338,6 @@ extension Recording{
     static let ID = "id"
     static let LAT = "latitude"
     static let LONG = "longitude"
-    static let SIZE = "size"
     static let INFO = "info"
 }
 

@@ -11,7 +11,7 @@ import CoreLocation
 
 
 /// Delegate for Locator class
-protocol LocatorDelegate: NSObjectProtocol {
+public protocol LocatorDelegate: NSObjectProtocol {
     
     /// Present Alert due to lack of permission or error
     ///
@@ -35,9 +35,11 @@ protocol LocatorDelegate: NSObjectProtocol {
 
 
 /// Handles Obtaining the User's Location
-class Locator : NSObject {
+public class Locator : NSObject {
     
-    static let Radius = 100
+    static var LocationAuthorization : CLAuthorizationStatus {
+        return CLLocationManager.authorizationStatus()
+    }
     
     /// CLLocation Manager Object
     fileprivate var locationManager  : CLLocationManager!
@@ -70,7 +72,7 @@ class Locator : NSObject {
             
             if checkLocationServices() {//App Location Permission Denied
                 
-                self.delegate?.presentAlert(appSettingsAlert())
+                self.delegate?.presentAlert(locationPermissionDeniedAlert())
             }
             else { // Location Permission Denied
                 self.delegate?.presentAlert(privacySettingsAlert())
@@ -100,22 +102,11 @@ class Locator : NSObject {
     }
     
     
-    /// Brings user to the app's settings
-    func openAppSettings(){
-        UIApplication.shared.open(URL.init(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
-    }
-    
-    
     /// Build Alert for opening App's Settings
     ///
     /// - Returns: App Setting Alert
-    func appSettingsAlert() -> UIViewController {
-        let alert = UIAlertController(title: "Location Permission Denied", message: "Turn on Location in Settings > EclipseSignal > Location to allow us to determine your current location", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { (action) in
-            self.openAppSettings()
-        }))
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        return alert
+    func locationPermissionDeniedAlert() -> UIViewController {
+        return UIAlertController.appSettingsAlert(title: "Location Permission Denied", message: "Turn on Location in Settings > EclipseSignal > Location to allow us to determine your current location")
     }
     
     
@@ -148,7 +139,7 @@ extension Locator : CLLocationManagerDelegate {
     /// - Parameters:
     ///   - manager: CLLocationManager
     ///   - status: CLAuthorizationStatus
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         
         
         switch status {
@@ -163,7 +154,7 @@ extension Locator : CLLocationManagerDelegate {
             }
             else { //App Location Permission Denied
                 
-                self.delegate?.presentAlert(appSettingsAlert())
+                self.delegate?.presentAlert(locationPermissionDeniedAlert())
             }
             
             break
@@ -180,7 +171,7 @@ extension Locator : CLLocationManagerDelegate {
     /// - Parameters:
     ///   - manager: CLLocationManager
     ///   - locations: Latest Location
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[0]
         delegate?.locator(didUpdateBestLocation: location)
         
@@ -191,7 +182,7 @@ extension Locator : CLLocationManagerDelegate {
     /// - Parameters:
     ///   - manager: CLLocationManager
     ///   - error: Error corresponding to failure of finding Location
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         delegate?.locator(didFailWithError: error)
     }
 }
@@ -201,9 +192,7 @@ extension Locator {
     /// Source:
     ///    Jeon Suyeol, devxoul, Open Settings > Privacy > Location Service in iOS 10, (2017), GitHubGist file
     ///    https://gist.github.com/devxoul/49d7d8414bce22a7b629a16be9e7f8c0
-    ///
     
-    // Example Usage
     fileprivate func openLocation() {
         guard let workspaceClass = NSClassFromString("LSApplicationWorkspace") else { return }
         let workspace: AnyObject = execute(workspaceClass, "defaultWorkspace")
@@ -223,14 +212,14 @@ extension Locator {
         return method_getImplementation(method)
     }
     
-    func execute(_ owner: AnyObject, _ name: String, with arg1: Any? = nil, arg2: Any? = nil, arg3: Any? = nil) -> AnyObject {
+    private func execute(_ owner: AnyObject, _ name: String, with arg1: Any? = nil, arg2: Any? = nil, arg3: Any? = nil) -> AnyObject {
         let implementation = getImplementation(owner, name)
         typealias Function = @convention(c) (AnyObject, Selector, Any?, Any?, Any?) -> Unmanaged<AnyObject>
         let function = unsafeBitCast(implementation, to: Function.self)
         return function(owner, Selector(name), arg1, arg2, arg3).takeRetainedValue()
     }
     
-    func execute2(_ owner: AnyObject, _ name: String, with arg1: Any? = nil, arg2: Any? = nil, arg3: Any? = nil) {
+    private func execute2(_ owner: AnyObject, _ name: String, with arg1: Any? = nil, arg2: Any? = nil, arg3: Any? = nil) {
         let implementation = getImplementation(owner, name)
         typealias Function = @convention(c) (AnyObject, Selector, Any?, Any?, Any?) -> Void
         let function = unsafeBitCast(implementation, to: Function.self)
