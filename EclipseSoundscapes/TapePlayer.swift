@@ -9,23 +9,33 @@
 import Foundation
 import AudioKit
 
+protocol PlayerDelegate : NSObjectProtocol {
+    func progress(_ progress: Double, )
+    func failed(withError error : AudioError)
+    func finished()
+    func paused()
+    func resumed()
+}
 
 /// Handles operations for Audio Playback
 public class TapePlayer : NSObject {
     
     /// Tape to play audio from
-    weak var tape: Tape!
+    weak var tape: Tape?
     
     //Audio player
     var player : AKAudioPlayer!
     
     /// Monitor for recording operation
-    private var monitor : PlayerTapeMonitor?
+    private var monitor : TapePlaybackSession?
     
-    
-    init(tape: Tape){
-        super.init()
+    convenience init(tape: Tape) {
+        self.init()
         self.tape = tape
+    }
+    
+    override init() {
+        super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
     }
     
@@ -37,17 +47,32 @@ public class TapePlayer : NSObject {
         player = nil
     }
     
-    func prepareRecording() throws -> PlayerTapeMonitor {
+    func setTape(tape: Tape) {
+        self.tape = tape 
+    }
+    
+    func play() throws {
         do {
-            try AKSettings.setSession(category: .playAndRecord, with: .allowBluetoothA2DP)
-            
-            guard let tapeUrl = tape.audioUrl else {
-                throw AudioError.unkown // Throw Error for not having the tape download url
+            try prepareSession()
+            self.player.play()
+        } catch {
+            throw error
+        }
+    }
+    
+    func prepareSession() throws {
+        do {
+            if #available(iOS 10.0, *) {
+                try AKSettings.setSession(category: .playAndRecord, with: .allowBluetoothA2DP)
+            } else {
+                // Fallback on earlier versions
+                try AKSettings.setSession(category: .playAndRecord, with: .allowBluetooth)
             }
-            let audioFile = try AKAudioFile(forReading: tapeUrl)
+            
+            let file  = try AudioManager.makeAudiofile(url: tape?.audioUrl)
         
-            self.player = try AKAudioPlayer(file: audioFile)
-            self.monitor = PlayerTapeMonitor(player: player)
+            self.player = try AKAudioPlayer(file: file)
+            self.monitor = TapePlaybackSession(player: player)
             
             AudioKit.output = self.player
             AudioKit.start()
@@ -60,23 +85,9 @@ public class TapePlayer : NSObject {
     }
     
     
-    func switchTape(tape: Tape) throws ->PlayerTapeMonitor{
-        if self.monitor?.state == PlayerTapeMonitor.PlayerState.playing {
-            self.monitor?.stop(.skip)
-        }
-        
-        self.tape = tape
-        
-        do {
-            let monitor = try prepareRecording()
-            return monitor
-        }
-        catch{
-            throw error
-        }
-        
-    }
-    
+}
+
+extension TapePlayer {
     /// Interruption Handler
     ///
     /// - Parameter notification: Device generated notification about interruption

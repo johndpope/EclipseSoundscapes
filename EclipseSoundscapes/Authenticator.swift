@@ -10,7 +10,6 @@ import Foundation
 import FirebaseAuth
 import Firebase
 
-
 //Authentication Error Codes
 public enum AuthError: Error {
     
@@ -18,13 +17,11 @@ public enum AuthError: Error {
     case noCurrentUser
 }
 
-
 /// Authentication Functionality for EclipseSoundscpes Users in connection with Firebase
 public class Authenticator {
     
     /// Simple Wrappper for a (FIRUser?, Error?) -> Void Completion block
     typealias AuthenticatorCallback = ((User?, Error?) -> Void)
-    
     
     /// Access to the Authenticator Object
     static var auth : Authenticator {
@@ -50,7 +47,7 @@ public class Authenticator {
         
         Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
             guard error == nil else {
-                completion?(nil,error)
+                completion?(nil, error)
                 return
             }
             
@@ -59,7 +56,6 @@ public class Authenticator {
         })
         
     }
-    
     
     /// Sign out the Current User
     ///
@@ -75,13 +71,10 @@ public class Authenticator {
             print("User Logged Out")
             completion?(nil)
             
-        }
-        catch{ let error = error
+        } catch { let error = error
             completion?(error)
         }
     }
-    
-    
     
     /// Create New Account using Email and Password Combination
     ///
@@ -103,15 +96,13 @@ public class Authenticator {
      func createAccount(withEmail email: String, password : String, _ completion :  AuthenticatorCallback? = nil) {
         Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
             guard error == nil else {
-                completion?(nil,error)
+                completion?(nil, error)
                 return
             }
             print("User Created and Logged In")
             completion?(user, nil)
         })
     }
-    
-    
     
     /// Forgot Password for User
     ///
@@ -122,7 +113,7 @@ public class Authenticator {
     ///     - Possible error code:
     ///         - FIRAuthErrorCodeInvalidRecipientEmail - Indicates an invalid recipient email was
     ///             sent in the request.
-    func forgotPassword(withEmail email : String, _ completion: ((Error?) -> Void)? = nil){
+    func forgotPassword(withEmail email : String, _ completion: ((Error?) -> Void)? = nil) {
         Auth.auth().sendPasswordReset(withEmail: email, completion: { (error) in
             guard error == nil else {
                 completion?(error)
@@ -133,8 +124,6 @@ public class Authenticator {
             
         })
     }
-    
-    
     
     /// Change User's Current Password
     ///
@@ -170,8 +159,6 @@ public class Authenticator {
         }
     }
     
-    
-    
     /// Change User's Current Email
     ///
     /// - Parameters:
@@ -184,12 +171,11 @@ public class Authenticator {
     ///         - FIRAuthErrorCodeEmailAlreadyInUse - Indicates the email is already in use by another
     ///             account.
     ///         - FIRAuthErrorCodeInvalidEmail - Indicates the email address is malformed.
-    func changeEmail(password: String, newEmail: String, _ completion : ((Error?) -> Void)? = nil){
+    func changeEmail(password: String, newEmail: String, _ completion : ((Error?) -> Void)? = nil) {
         guard let user = Auth.auth().currentUser, let email = user.email else {
             completion?(AuthError.noCurrentUser)
             return
         }
-        
         
         let credential = EmailAuthProvider.credential(withEmail: email, password: password)
         
@@ -253,7 +239,6 @@ public class Authenticator {
         }
     }
     
-    
     /// Set/Change User's Display Name
     ///
     /// - Parameters:
@@ -279,7 +264,6 @@ public class Authenticator {
         }
     }
     
-    
     /// Return User's Display Name
     ///
     /// - Returns: User's Display name (optional)
@@ -291,7 +275,6 @@ public class Authenticator {
         
         return user.displayName
     }
-    
     
     /// User's Profile information
     ///
@@ -316,7 +299,7 @@ public class Authenticator {
             info.updateValue(displayName, forKey: "displayName")
         }
         
-        return info.count == 0 ? nil : info
+        return info.isEmpty ? nil : info
     }
     
 }

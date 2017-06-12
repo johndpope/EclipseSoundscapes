@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 /// Contains the inforamtion about the Current TapeMonitor Session
 public class TapePiece {
     
@@ -20,7 +19,6 @@ public class TapePiece {
     
     /// Recording after a successful session
     var recording : Recording?
-    
     
     //Access to immuatable session progress
     var progress : Double {

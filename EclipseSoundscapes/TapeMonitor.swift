@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import AudioKit
+import Synchronized
 
 /// Manages Observation Callbacks throughout Tape Operations
 public class TapeMonitor: NSObject {
@@ -58,12 +59,10 @@ public class TapeMonitor: NSObject {
     /// Error during the current Monitor Session
     fileprivate var error : AudioError?
     
-    
     /// Current status of Tape
     var tapePiece : TapePiece {
         return TapePiece(duration: self.progress, error: error)
     }
-    
     
     /// Set Tape Status for the Tape Monitor to observe
     ///
@@ -72,42 +71,41 @@ public class TapeMonitor: NSObject {
     ///   - handler: A callback that fires every time the status event occurs
     /// - Returns: Monitor handle that can be used to remove the observer at any time.
     @discardableResult
-    func observe(_ status: MonitorStatus, handler : @escaping TapeCallback)-> String{
+    func observe(_ status : MonitorStatus, handler : @escaping TapeCallback) -> String {
         
         let callback = handler
         let key = UUID.init().uuidString
         
         var dictionary = getHandler(fromStatus: status)
         
-        synced(self) { 
+        synchronized(object: self) { 
             dictionary.updateValue(callback, forKey: key)
             masterMap.updateValue(status, forKey: key)
         }
+        
         return key
     }
-    
     
     /// Remove a single observer
     ///
     /// - Parameter key: Observer's Monitor Handle generated from the observer function
-    func removeObserver(withKey key :String){
+    func removeObserver(withKey key : String) {
         var dictionary = getHandler(fromMaster: key)
         
-        synced(self) {
+        synchronized(object: self) {
             dictionary?.removeValue(forKey: key)
             masterMap.removeValue(forKey: key)
         }
         
     }
     
-    
     /// Remove all Observers of a Status
     ///
     /// - Parameter status: Status to remove all observers from
-    func removeObserver(withStatus status : MonitorStatus){
+    func removeObserver(withStatus status : MonitorStatus) {
         var dictionary = getHandler(fromStatus: status)
         
-        synced(self) {
+        synchronized(object: self) { 
             dictionary.removeAll()
             masterMap.forEach({ (key, value) in
                 if value == status {
@@ -115,14 +113,11 @@ public class TapeMonitor: NSObject {
                 }
             })
         }
-        
     }
     
-    
-    
     /// Remove all observers from the Tape Monitor
-    func removeAllObservers(){
-        synced(self) {
+    func removeAllObservers() {
+        synchronized(object: self) { 
             resumeMaster.removeAll()
             pauseMaster.removeAll()
             progressMaster.removeAll()
@@ -132,12 +127,11 @@ public class TapeMonitor: NSObject {
         }
     }
     
-    
     /// Get the handler container that holds the observer
     ///
     /// - Parameter key: Observer's Monitor Handle
     /// - Returns: Handler container
-    private func getHandler(fromMaster key : String)-> Dictionary<String, TapeCallback>?{
+    private func getHandler(fromMaster key : String) -> Dictionary<String, TapeCallback>? {
         guard let status = masterMap[key] else {
             return nil
         }
@@ -145,7 +139,6 @@ public class TapeMonitor: NSObject {
         return getHandler(fromStatus: status)
         
     }
-    
     
     /// Get the handler container for a TapeStatus
     ///
@@ -166,13 +159,12 @@ public class TapeMonitor: NSObject {
         }
     }
     
-    
     /// Fire Event for all observers for the provided TapeStatus
     ///
     /// - Parameters:
     ///   - status: TapeStatus to fire an event for
     ///   - value: optional Value associated with the event
-    fileprivate func fire(withStatus status : MonitorStatus, value : Any? = nil){
+    fileprivate func fire(withStatus status : MonitorStatus, value : Any? = nil) {
         
         if value != nil {
             if value is Double {
@@ -184,48 +176,24 @@ public class TapeMonitor: NSObject {
         }
         
         self.fire(withHandler: getHandler(fromStatus: status), self.tapePiece)
-        
-        if status == .failure || status == .success {
-            removeAllObservers()
-        }
     }
-    
     
     /// Fire Event for all observers within the provided Handler
     ///
     /// - Parameters:
     ///   - handler: Handler container
     ///   - tapePiece: TapePiece to pass to observers that contain the information about the current monitor session
-    fileprivate func fire(withHandler handler : Dictionary<String, TapeCallback>,_ tapePiece: TapePiece){
+    fileprivate func fire(withHandler handler : Dictionary<String, TapeCallback>, _ tapePiece: TapePiece) {
         
-        synced(self) {
-            handler.forEach { (key, value) in
+        synchronized(object: self) { 
+            handler.forEach({ (_, value) in
                 DispatchQueue.main.async {
                     value(tapePiece)
                 }
-            }
+            })
         }
-        
     }
-    
-
-    /// Helper Function to obtain objc @synchronized
-    ///
-    /// - Author: Source- Bryan McLemore &  devios1 - [link](https://stackoverflow.com/a/24103086/7542055)
-    ///
-    /// - Parameters:
-    ///   - lock: Object to sync
-    ///   - closure: Closure to exceute in the sync'd state
-    fileprivate func synced(_ lock: Any, closure: () -> ()) {
-        objc_sync_enter(lock)
-        defer {
-            objc_sync_exit(lock)
-        }
-        closure()
-    }
-    
 }
-
 
 /// Functions that a Operational Monitor must implement
 public protocol OperationMonitorType: NSObjectProtocol {
@@ -247,130 +215,14 @@ public protocol OperationMonitorType: NSObjectProtocol {
     func resume()
 }
 
-
-
-/// Manages Observation Callbacks and Operations throughout a Recording
-public class RecordTapeMonitor: TapeMonitor, OperationMonitorType {
-
-    
-    /// Reference to the TapeRecorder's recorder to control it, i.e. record(),stop(),pause(),resume()
-    unowned var recorder : AVAudioRecorder
-    
-    private weak var recording : Recording!
-    
-    /// Local Timer to update duration
-    fileprivate var timer : Timer?
-    
-    init(recorder: AVAudioRecorder, _ recording: Recording) {
-        self.recorder = recorder
-        super.init()
-        self.recording = recording
-        
-    }
-    
-    /// Start the Recorder
-    public func start() { 
-        recorder.record()
-        
-        super.fire(withStatus: .progress, value: 0.0)
-        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
-    }
-    
-    
-    /// Update the duration of the current monitor session to the tapeRecorder's duration and fire progress events
-    @objc private func updateProgress() {
-        let duration = recorder.currentTime
-        print(String.init(format: "Recording duration: %.2f", duration))
-        
-        super.fire(withStatus: .progress, value: duration)
-        
-        if duration >= RecordingDurationMax{
-            self.stop(.sucess, error: nil)
-        }
-        
-    }
-    
-    /// Stop the monitor and the recorder with a status
-    ///
-    /// - Parameters:
-    ///   - status: Reason why the monitor was stopped
-    ///   - error: Error involed with the stopage
-    public func stop(_ status: AudioStatus, error: AudioError?) {
-        timer?.invalidate()
-        if recorder.isRecording {
-            recorder.stop()
-        }
-        AudioKit.stop()
-        guard error == nil else {
-            super.fire(withStatus: .failure, value: error)
-            deleteTempRecording()
-            return
-        }
-        switch status {
-        case .interruption: //TODO: Have some way to mark track if there was an interruption
-            break
-        case .sucess:
-            self.recordingFinished()
-            break
-        case .cancel:
-            if self.progress <= RecordingDurationMin {
-                super.fire(withStatus: .failure, value: AudioError.tooShort)
-            }
-            else {
-                self.recordingFinished()
-            }
-            break
-        default:
-            break
-        }
-        
-    }
-    
-    /// Pause the Recorder
-    public func pause() {
-        if recorder.isRecording {
-            timer?.invalidate()
-            recorder.pause()
-            print("Recorder Paused")
-        }
-        super.fire(withStatus: .pause)
-        AudioKit.stop()
-    }
-    
-    /// Resume the Recorder
-    public func resume() {
-        AudioKit.start()
-        if recorder.isRecording {
-            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
-            recorder.record()
-            print("Recorder Resumed")
-        }
-        super.fire(withStatus: .resume)
-    }
-    
-    
-    /// Handle the passing of the current tapeRecorder's recordings after a successful session
-    private func recordingFinished(){
-        fire(withHandler: sucessMaster, TapePiece(duration: self.progress, error: self.error, recording: self.recording))
-    }
-    
-    
-    
-    /// Delete the current session's recording if the session ended with an Error
-    private func deleteTempRecording() {
-        ResourceManager.manager.deleteRecording(recording: self.recording)
-    }
-}
-
-
 /// Manages Observation Callbacks and Operations throughout a Playback
-public class PlayerTapeMonitor: TapeMonitor, OperationMonitorType {
+public class TapePlaybackSession: TapeMonitor, OperationMonitorType {
     
-    enum PlayerState{
-        case notStarted, playing, paused, stoped
+    enum PlayerState {
+        case stoped, playing, paused
     }
 
-    var state : PlayerState = PlayerState.notStarted
+    var state : PlayerState = PlayerState.stoped
     
     //Audio Player
     unowned var player : AKAudioPlayer
@@ -378,9 +230,10 @@ public class PlayerTapeMonitor: TapeMonitor, OperationMonitorType {
     /// Local Timer to update duration
     fileprivate var timer : Timer?
     
-    init(player: AKAudioPlayer){
+    init(player : AKAudioPlayer) {
         self.player = player
         super.init()
+        player.completionHandler = self.playingEnded
         
     }
     
@@ -393,7 +246,6 @@ public class PlayerTapeMonitor: TapeMonitor, OperationMonitorType {
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
     }
     
-    
     /// Update the duration of the current monitor session to the tapeRecorder's duration and fire progress events
     @objc private func updateProgress() {
         
@@ -401,11 +253,6 @@ public class PlayerTapeMonitor: TapeMonitor, OperationMonitorType {
         print(String.init(format: "Player progress: %.2f", progress))
         
         super.fire(withStatus: .progress, value: progress)
-        
-        if progress >= player.endTime {
-            self.stop(.sucess, error: nil)
-        }
-        
     }
     
     /// Stop the monitor and the player with a status
@@ -414,22 +261,15 @@ public class PlayerTapeMonitor: TapeMonitor, OperationMonitorType {
     ///   - status: Reason why the monitor was stopped
     ///   - error: Error involed with the stopage
     public func stop(_ status: AudioStatus, error: AudioError? = nil) {
-        state = .stoped
-        timer?.invalidate()
-        if player.isPlaying {
-            player.stop()
-        }
-        AudioKit.stop()
+        
+        stopMonitor()
         guard error == nil else {
             super.fire(withStatus: .failure, value: error)
             return
         }
         switch status {
-        case .sucess: //TODO: Tape has ended
+        case .success: //TODO: Tape has ended
             super.fire(withStatus: .success)
-            break
-        case .skip: //TODO: Tape was skipped
-            super.fire(withStatus: .failure, value: AudioError.skipped)
             break
         case .cancel: //TODO: Audio Playback was ended
             super.fire(withStatus: .failure, value: AudioError.playbackEnded)
@@ -437,12 +277,14 @@ public class PlayerTapeMonitor: TapeMonitor, OperationMonitorType {
         default:
             break
         }
-        
+        deleteDownloadedTape()
     }
     
     /// Pause the Player
     public func pause() {
-        
+        if timer?.isValid ?? true {
+            timer?.invalidate()
+        }
         if player.isPlaying {
             player.pause()
         }
@@ -452,14 +294,49 @@ public class PlayerTapeMonitor: TapeMonitor, OperationMonitorType {
     }
     
     /// Resume the Player
-    public func resume(){
-        
+    public func resume() {
         AudioKit.start()
-        if player.isStopped{
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
+        if player.isStopped {
             player.resume()
         }
         state = .playing
         super.fire(withStatus: .resume)
+    }
+    
+    func switchTape(tape: Tape) throws {
+        super.fire(withStatus: .failure, value: AudioError.skipped)
+        if self.state != .stoped {
+            stopMonitor()
+        }
+        do {
+            let file = try AudioManager.makeAudiofile(url: tape.audioUrl)
+            try self.player.replace(file: file)
+            self.start()
+        } catch {
+            throw error
+        }
+    }
+    
+    private func playingEnded() {
+        if state == .stoped {
+            return
+        }
+        self.stopMonitor()
+        self.stop(.success)
+    }
+    
+    private func stopMonitor() {
+        state = .stoped
+        timer?.invalidate()
+        if player.isPlaying {
+            player.stop()
+        }
+        AudioKit.stop()
+    }
+    
+    private func deleteDownloadedTape() {
+        AKAudioFile.cleanTempDirectory()
     }
 
 }

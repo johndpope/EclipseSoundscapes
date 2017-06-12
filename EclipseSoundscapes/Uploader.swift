@@ -12,40 +12,24 @@ import FirebaseStorage
 import FirebaseDatabase
 import GeoFire
 
-/// Upload/Download Status keys
-public enum NetworkStatus {
-    case audioSuccess
-    case jsonSuccess
-    case realtimeSuccess
-    case error
-    case cancelled
-    case paused
-}
-
-
-let CitizenScientistsDirectory = "CitizenScientists"
-let LocationDirectory = "Locations"
-let AllRecordings = "Recordings"
-
-
-
-
+/// Manages Uploads from Firebase
 public class Uploader {
     
     /// Firebase Storage Object
-    let storeage = Storage.storage()
+    private var  storeage : Storage!
     
     /// Firebase RealtimeDB Object
-    let database = Database.database()
+    private var database : Database!
     
     /// RealtimeDB reference
     var databaseRef : DatabaseReference?
-    
     
     /// Recording to upload
     weak var recording : Recording!
     
     init(recording: Recording) {
+        storeage = Storage.storage()
+        database = Database.database()
         self.recording = recording
     }
     
@@ -69,13 +53,12 @@ public class Uploader {
         return uploadTask
     }
     
-    
     /// Store Recording's extra inforamtion to Firebase Storgae
     ///
     /// - Parameters:
     ///   - id: Recording's Id
     ///   - jsonData: Extra information in JSON format
-    func storeInformation() -> StorageUploadTask?{
+    func storeInformation() -> StorageUploadTask? {
         
         guard let id = recording.id else {
             return nil
@@ -89,12 +72,9 @@ public class Uploader {
         
         let uploadTask = storageRef.putData(information)
         
-        
         return uploadTask
     }
-    
-    
-    
+
     /// Store Information about the recording into the RealtimeDB
     ///
     /// - Parameters:
@@ -124,7 +104,7 @@ public class Uploader {
 //        })
 //    }
     
-     func storeLocation(completion:  ((Error?)-> Void)?) {
+     func storeLocation(completion : ((Error?) -> Void)?) {
         guard let id = recording.id else {
             //TODO : Handle Error
             completion?(nil)

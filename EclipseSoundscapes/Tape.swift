@@ -9,10 +9,8 @@
 import Foundation
 import CoreLocation
 
-
 /// Audio Recording that has been downloaded from Firebase
-class Tape : NSObject {
-    
+public class Tape : NSObject {
     
     /// Location where the Recording was performed
     var location : CLLocationCoordinate2D?
@@ -29,7 +27,6 @@ class Tape : NSObject {
     /// URL to the location where the Recording is saved locally
     var audioUrl : URL?
     
-    
     init(withAudio audioUrl : URL) {
         super.init()
         
@@ -37,7 +34,7 @@ class Tape : NSObject {
         
     }
     
-    init(withInfo info : Dictionary<String, Any>,_ audioUrl : URL? = nil) {
+    init(withInfo info : Dictionary<String, Any>, _ audioUrl : URL? = nil) {
         super.init()
         setInformation(info: info)
         
@@ -47,11 +44,13 @@ class Tape : NSObject {
         
     }
     
-    
     /// Set the Information of the recording
     ///
     /// - Parameter info: Key-value pairs containg the inforamtion about the REcording
-    func setInformation(info : Dictionary<String, Any>){
+    func setInformation(info : Dictionary<String, Any>) {
+        if let id  = info[Recording.ID] as? String {
+            self.id = id
+        }
         
         if let title = info[Recording.TITLE] as? String {
             self.title = title
@@ -65,7 +64,6 @@ class Tape : NSObject {
             self.location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         }
     }
-    
     
     /// Set the location where the Recording is saved locally
     ///
