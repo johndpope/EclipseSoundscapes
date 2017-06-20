@@ -12,24 +12,28 @@ import FirebaseStorage
 
 class RecordingViewController: UIViewController {
     
+    @IBOutlet weak var activityMonitor: UIActivityIndicatorView!
+    @IBOutlet weak var startBtn: UIButton!
+    @IBOutlet weak var mediaControls: UIView!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var recordBtn: UIButton!
-    
-    @IBOutlet weak var stopBtn: UIButton!
-    @IBOutlet weak var playBtn: UIButton!
-    @IBOutlet weak var pauseBtn: UIButton!
-    
+
+    @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
     
     var locator : Locator!
     
     var uploadTask : StorageUploadTask?
     
-    enum RecordingState {
-        case idle, recording, uploading, uploadingPaused
+    enum State {
+        case idle, locating, recording, recordingPaused, uploading, uploadingPaused
     }
     
-    var state = RecordingState.idle
+    var state = State.idle {
+        didSet {
+            self.updateUI()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,13 +42,12 @@ class RecordingViewController: UIViewController {
         locator = Locator()
         locator.delegate = self
         
-        stopBtn.setImage(#imageLiteral(resourceName: "stop").withRenderingMode(.alwaysTemplate), for: .normal)
-        playBtn.setImage(#imageLiteral(resourceName: "play").withRenderingMode(.alwaysTemplate), for: .normal)
-        pauseBtn.setImage(#imageLiteral(resourceName: "pause").withRenderingMode(.alwaysTemplate), for: .normal)
+        recordBtn.layer.cornerRadius = recordBtn.frame.width/2
+        cancelBtn.layer.cornerRadius = cancelBtn.frame.width/2
         
-        stopBtn.tintColor = .white
-        playBtn.tintColor = .white
-        pauseBtn.tintColor = .white
+        startBtn.layer.cornerRadius = 5
+        
+        updateUI()
     }
     
     override func didReceiveMemoryWarning() {
@@ -52,37 +55,44 @@ class RecordingViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func pause(_ sender: Any) {
-        if state == .uploading {
-            self.uploadTask?.pause()
-            self.state = .uploadingPaused
-            updateUI()
-        } else {
-            self.recorder?.pause()
-        }
-    }
-    @IBAction func play(_ sender: Any) {
-        if state == .uploadingPaused {
-            self.uploadTask?.resume()
-            self.state = .uploading
-            updateUI()
-        } else {
-            self.recorder?.resume()
-        }
-        
-    }
     @IBAction func stop(_ sender: Any) {
         if state == .uploadingPaused || state == .uploading {
             self.uploadTask?.cancel()
+            
+        } else if state == .locating {
+            self.locator.stopLocating()
+            
         } else {
             self.recorder?.stop(.cancel, error: nil)
         }
+        self.state = .idle
     }
-    
-    @IBAction func start(_ sender: Any) {
-        self.locator.getLocation(withAccuracy: kCLLocationAccuracyThreeKilometers)
-        self.state = .recording
-        updateUI()
+    @IBAction func record( _ sender : Any) {
+        
+        switch state {
+        case .idle:
+            self.locator.getLocation(withAccuracy: kCLLocationAccuracyThreeKilometers)
+            self.state = .locating
+            break
+        case .recording:
+            self.recorder?.pause()
+            self.state = .recordingPaused
+            break
+        case .recordingPaused:
+            self.recorder?.resume()
+            self.state = .recording
+            break
+        case .uploading:
+            self.uploadTask?.pause()
+            self.state = .uploadingPaused
+            break
+        case.uploadingPaused:
+            self.uploadTask?.resume()
+            self.state = .uploading
+            break
+        default:
+            break
+        }
     }
     
     var recorder : TapeRecorder?
@@ -104,7 +114,8 @@ class RecordingViewController: UIViewController {
     
     private func startRecording() {
         do {
-            try self.recorder?.start()
+            try self.recorder?.record()
+            self.state = .recording
         } catch {
             print(error)
         }
@@ -160,7 +171,6 @@ class RecordingViewController: UIViewController {
             
             DispatchQueue.main.async {
                 self.state = .idle
-                self.updateUI()
             }
             
         }
@@ -169,45 +179,41 @@ class RecordingViewController: UIViewController {
     func updateUI() {
         switch self.state {
         case .idle:
-            self.recordBtn.isEnabled = true
-            self.recordBtn.tintColor = .blue
             
-            self.playBtn.isEnabled = false
-            self.playBtn.tintColor = .lightGray
-            
-            self.pauseBtn.isEnabled = false
-            self.pauseBtn.tintColor = .lightGray
-            
-            self.progressBar.setProgress(0.0, animated: true)
-            
+            cancelBtn.isHidden = true
+            mediaControls.isHidden = true
+            startBtn.isHidden = false
+            activityMonitor.isHidden = true
+            activityMonitor.stopAnimating()
+            break
+        case .locating:
+            startBtn.isHidden = true
+            activityMonitor.startAnimating()
+            activityMonitor.isHidden = false
+            self.cancelBtn.isHidden = false
             break
         case .recording:
-            self.recordBtn.isEnabled = false
-            self.recordBtn.tintColor = .lightGray
             
-            self.playBtn.isEnabled = true
-            self.playBtn.tintColor = .white
+            mediaControls.isHidden = false
+            recordBtn.backgroundColor = .red
+            break
+        case .recordingPaused:
             
-            self.pauseBtn.isEnabled = true
-            self.pauseBtn.tintColor = .white
-            
+            recordBtn.backgroundColor = .white
             break
         case .uploading:
-            self.recordBtn.isEnabled = false
-            self.recordBtn.tintColor = .lightGray
             
-            self.playBtn.isEnabled = false
-            self.playBtn.tintColor = .lightGray
-            
+            recordBtn.backgroundColor = UIColor.init(red: 219/255, green: 93/255, blue: 18/255, alpha: 1.0)
+            break
         case .uploadingPaused:
-            self.recordBtn.isEnabled = false
-            self.recordBtn.tintColor = .lightGray
             
-            self.pauseBtn.isEnabled = false
-            self.pauseBtn.tintColor = .lightGray
-            
+            recordBtn.backgroundColor = .white
             break
         }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
 }
 
@@ -221,14 +227,12 @@ extension RecordingViewController : RecordingDelegate {
     func failed(withError error : AudioError) {
         print("Failed \(error.localizedDescription)")
         self.state = .idle
-        updateUI()
     }
     func finished(_ recording: Recording) {
         print("Finished!!")
         self.uploadAudio(recording: recording)
         
         self.state = .uploading
-        self.updateUI()
     }
     func paused() {
         print("Puased!!")
@@ -239,13 +243,16 @@ extension RecordingViewController : RecordingDelegate {
 }
 extension RecordingViewController : LocatorDelegate {
     
-    func presentAlert(_ alert : UIViewController) {
+    func presentFailureAlert(_ alert : UIViewController) {
+        activityMonitor.stopAnimating()
+        activityMonitor.isHidden = true
         self.present(alert, animated: true, completion: nil)
     }
     
     func locator(didUpdateBestLocation location: CLLocation) {
+        activityMonitor.stopAnimating()
+        activityMonitor.isHidden = true
         record(atLocation: location)
-        
     }
     
     func locator(didFailWithError error: Error) {

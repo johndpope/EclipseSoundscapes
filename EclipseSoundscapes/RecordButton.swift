@@ -1,14 +1,14 @@
 //
-//  PlaybackControls.swift
+//  RecordButton.swift
 //  EclipseSoundscapes
 //
-//  Created by Anonymous on 6/10/17.
+//  Created by Anonymous on 6/15/17.
 //  Copyright © 2017 DevByArlindo. All rights reserved.
 //
 
 import UIKit
 
-class PlaybackControls: UIView {
+class RecordButton: UIButton {
 
     /*
     // Only override draw() if you perform custom drawing.

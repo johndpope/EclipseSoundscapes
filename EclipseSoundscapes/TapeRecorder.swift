@@ -6,8 +6,9 @@
 //  Copyright © 2017 DevByArlindo. All rights reserved.
 //
 
-import Foundation
 import CoreLocation
+import UIKit
+import AVFoundation
 import AudioKit
 
 protocol RecordingDelegate: NSObjectProtocol {
@@ -23,8 +24,8 @@ public class TapeRecorder : NSObject {
     
     weak var delegate : RecordingDelegate?
     
-    /// Phone's Microphone
-    private var mic : AKMicrophone!
+//    /// Phone's Microphone
+//    private var mic : AKMicrophone!
     
     /// Recorder
     private var recorder : AVAudioRecorder!
@@ -46,7 +47,6 @@ public class TapeRecorder : NSObject {
                            AVLinearPCMBitDepthKey:16,
                            AVEncoderAudioQualityKey:AVAudioQuality.high.rawValue,
                            AVFormatIDKey: kAudioFormatMPEG4AAC,
-                           AVEncoderBitRateKey: 196000,
                            AVLinearPCMIsNonInterleaved: false
         ] as [String : Any]
     
@@ -60,7 +60,6 @@ public class TapeRecorder : NSObject {
         //Remove from Recieving Notification when dealloc'd
         NotificationCenter.default.removeObserver(self)
         location = nil
-        mic = nil
         recorder = nil
     }
     
@@ -101,7 +100,6 @@ public class TapeRecorder : NSObject {
                 try AKSettings.setSession(category: .playAndRecord, with: .allowBluetooth)
             }
             AKSettings.audioInputEnabled = true
-            mic = AKMicrophone()
             AudioKit.start()
             
             self.currentRecording = ResourceManager.manager.createRecording()
@@ -120,7 +118,7 @@ public class TapeRecorder : NSObject {
     }
     
     /// Start the Recorder
-    func start() throws {
+    func record() throws {
         
         do {
             try self.prepareRecording()
@@ -161,7 +159,7 @@ public class TapeRecorder : NSObject {
         AudioKit.stop()
         guard error == nil else {
             self.delegate?.failed(withError: error!)
-            deleteTempRecording()
+            deleteRecording()
             return
         }
         switch status {
@@ -173,6 +171,7 @@ public class TapeRecorder : NSObject {
         case .cancel:
             if self.progress <= RecordingDurationMin {
                 self.delegate?.failed(withError: AudioError.tooShort)
+                self.deleteRecording()
             } else {
                 self.recordingFinished()
             }
@@ -216,7 +215,7 @@ public class TapeRecorder : NSObject {
     }
     
     /// Delete the current session's recording if the session ended with an Error
-    private func deleteTempRecording() {
+    private func deleteRecording() {
         recorder.deleteRecording()
     }
 }

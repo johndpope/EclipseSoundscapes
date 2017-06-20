@@ -24,10 +24,6 @@ public struct AudioQueue<T> {
     fileprivate var array = [T?]()
     fileprivate var head = 0
     
-    public var underMin: Bool {
-        return self.count < minQueueSize
-    }
-    
     public var isEmpty: Bool {
         return self.count == 0 // swiftlint:disable:this empty_count
     }

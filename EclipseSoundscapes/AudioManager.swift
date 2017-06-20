@@ -12,7 +12,6 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 import GeoFire
-import AudioKit
 import Synchronized
 
 public protocol AudioManagerDelegate: NSObjectProtocol {
@@ -20,13 +19,15 @@ public protocol AudioManagerDelegate: NSObjectProtocol {
     func emptyRecordingQueue()
     func playback(tape: Tape)
     func playbackError(error: Error?)
+    func downloading()
+    func stopDownloading()
 }
 
-public class AudioManager: NSObject {//TODO: REDO EVERYTHING
+public class AudioManager: NSObject {
     
     weak var delegate : AudioManagerDelegate?
     
-    static var playbackQueue = AudioQueue<String>()
+    var playbackQueue = AudioQueue<String>()
     
     static var playbackHistory = Set<String>()
     
@@ -57,16 +58,9 @@ public class AudioManager: NSObject {//TODO: REDO EVERYTHING
     }
     
     func nextTape() -> Bool {
-        guard let tapeId = AudioManager.playbackQueue.dequeue() else {
-            delegate?.emptyRecordingQueue()
+        guard let tapeId = playbackQueue.dequeue() else {
             return false
         }
-        synchronized(object: self) { 
-            if AudioManager.playbackQueue.isEmpty {
-                delegate?.emptyRecordingQueue()
-            }
-        }
-        
         self.downloadRecording(recordingId: tapeId)
         return true
     }
@@ -79,6 +73,18 @@ public class AudioManager: NSObject {//TODO: REDO EVERYTHING
             }
             self.downloadInfo(recordingId: recordingId, audioUrl: audioUrl)
         }
+        downloadTask?.observe(.progress, handler: { (snapshot) in
+            // Failure
+            print("Audio: \(snapshot.progress?.fractionCompleted ?? 0.0)")
+        })
+        
+        downloadTask?.observe(.pause, handler: { (_) in
+            self.delegate?.stopDownloading()
+        })
+        
+        downloadTask?.observe(.resume, handler: { (_) in
+            self.delegate?.downloading()
+        })
         
         downloadTask?.observe(.failure, handler: { (snapshot) in
             // Failure
@@ -101,6 +107,18 @@ public class AudioManager: NSObject {//TODO: REDO EVERYTHING
             self.delegate?.playbackError(error: snapshot.error)
             self.downloader.delete()
         })
+        downloadTask?.observe(.progress, handler: { (snapshot) in
+            // Failure
+            print("Info: \(snapshot.progress?.fractionCompleted ?? 0.0)")
+        })
+        
+        downloadTask?.observe(.pause, handler: { (_) in
+            self.delegate?.stopDownloading()
+        })
+        
+        downloadTask?.observe(.resume, handler: { (_) in
+            self.delegate?.downloading()
+        })
     }
     
     func getTapedBasedOn(location: CLLocation) {
@@ -120,39 +138,30 @@ public class AudioManager: NSObject {//TODO: REDO EVERYTHING
             guard let audioId = id, let audioLocation = location else {
                 return
             }
-            
-            print("Recording at \(audioLocation.coordinate.latitude),\(audioLocation.coordinate.longitude)")
-            
             if !AudioManager.playbackHistory.contains(audioId) {
-                AudioManager.playbackQueue.enqueue(audioId)
+                print("Added Recording at \(audioLocation.coordinate.latitude),\(audioLocation.coordinate.longitude)")
+                self.playbackQueue.enqueue(audioId)
                 self.delegate?.recievedRecordings()
+                AudioManager.playbackHistory.update(with: audioId)
             }
+            
         }
         
-        query.observeReady { 
+        query.observeReady {
             //Query Finished
             //TODO: Increase Radius size if there is not enough Recordings in the Queue
-            
-            synchronized(object: self, closure: {
-                if AudioManager.playbackQueue.underMin {
-                    query.radius = SearchRadius.increase(radius: query.radius)
+            if self.playbackQueue.isEmpty {
+                if SearchRadius.largerThanMax(radius: query.radius) {
+                    self.delegate?.emptyRecordingQueue()
+                    query.removeObserver(withFirebaseHandle: self.queryHandle)
+                } else {
                     print("Increaing Radius")
+                    query.radius = SearchRadius.increase(radius: query.radius)
                 }
-            })
-            
+                
+            } else {
+                query.removeAllObservers()
+            }
         }
-    }
-    
-    class func makeAudiofile(url : URL?) throws -> AKAudioFile {
-        guard let tapeUrl = url else {
-            throw AudioError.noTapeSet // Throw Error for not having the tape download url
-        }
-        do {
-            let audioFile = try AKAudioFile(forReading: tapeUrl)
-            return audioFile
-        } catch {
-            throw error
-        }
-        
     }
 }

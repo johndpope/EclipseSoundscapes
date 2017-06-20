@@ -41,6 +41,15 @@ public enum AudioStatus {
     case cancel
 }
 
+/// Status of Playback operation
+///
+/// - finished: Sucessful audio playback
+/// - cancel: Playback was cancelled
+/// - skip: Plyabck was skipped
+public enum PlaybackStatus {
+    case finished, cancel, skip
+}
+
 /// Error involved during an Audio operation
 ///
 /// - tooShort: Audio Recoring was too short

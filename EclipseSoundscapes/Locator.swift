@@ -15,7 +15,7 @@ public protocol LocatorDelegate: NSObjectProtocol {
     /// Present Alert due to lack of permission or error
     ///
     /// - Parameter alert: Alert
-    func presentAlert(_ alert : UIViewController)
+    func presentFailureAlert(_ alert : UIViewController)
     
     /// Update of user's lastest location
     ///
@@ -67,9 +67,9 @@ public class Locator : NSObject {
             
             if checkLocationServices() {//App Location Permission Denied
                 
-                self.delegate?.presentAlert(locationPermissionDeniedAlert())
+                self.delegate?.presentFailureAlert(locationPermissionDeniedAlert())
             } else { // Location Permission Denied
-                self.delegate?.presentAlert(privacySettingsAlert())
+                self.delegate?.presentFailureAlert(privacySettingsAlert())
                 
             }
             
@@ -138,10 +138,10 @@ extension Locator : CLLocationManagerDelegate {
         case .denied, .restricted:
             
             if checkLocationServices() { // Location Permission Denied
-                self.delegate?.presentAlert(privacySettingsAlert())
+                self.delegate?.presentFailureAlert(privacySettingsAlert())
             } else { //App Location Permission Denied
                 
-                self.delegate?.presentAlert(locationPermissionDeniedAlert())
+                self.delegate?.presentFailureAlert(locationPermissionDeniedAlert())
             }
             
             break
@@ -170,6 +170,10 @@ extension Locator : CLLocationManagerDelegate {
     ///   - error: Error corresponding to failure of finding Location
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         delegate?.locator(didFailWithError: error)
+    }
+    
+    public func stopLocating() {
+        self.locationManager.stopUpdatingLocation()
     }
 }
 

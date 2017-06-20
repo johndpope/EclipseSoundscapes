@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "001-fast-forward-control-button.png",
+      "filename" : "icons8-Fast Forward-100.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "001-fast-forward-control-button@2x.png",
+      "filename" : "icons8-Fast Forward-100@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "001-fast-forward-control-button@3x.png",
+      "filename" : "icons8-Fast Forward-100@3x.png",
       "scale" : "3x"
     }
   ],

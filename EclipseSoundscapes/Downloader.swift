@@ -10,7 +10,6 @@ import Foundation
 import Firebase
 import FirebaseStorage
 import FirebaseDatabase
-import AudioKit
 
 /// Manages Downloads from Firebase
 public class Downloader {
@@ -43,13 +42,7 @@ public class Downloader {
         let recordingName = id.appending(FileType)
         let storageRef = storeage.reference().child(CitizenScientistsDirectory).child(id).child(recordingName)
         
-        var audioPath : URL
-        if #available(iOS 10.0, *) {
-            audioPath = FileManager.default.temporaryDirectory.appendingPathComponent(recordingName)
-        } else {
-            // Fallback on earlier versions
-            audioPath = URL.init(string: NSTemporaryDirectory().appending(recordingName))!
-        }
+        let audioPath = ResourceManager.getDocumentsDirectory().appendingPathComponent(recordingName)
         
         let downloadTask = storageRef.write(toFile: audioPath) { (url, error) in
             guard error == nil else {
@@ -88,7 +81,7 @@ public class Downloader {
     /// Delete a partial Audio download
     /// - Important: Call when a download started but was canceled
     func delete() {
-        AKAudioFile.cleanTempDirectory()
+        ResourceManager.deleteFile(atPath: self.path)
     }
     
 }

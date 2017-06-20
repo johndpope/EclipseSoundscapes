@@ -17,7 +17,7 @@ class Utility {
     static func timeString(time:TimeInterval) -> String {
         let minutes = Int(time) / 60
         let seconds = time - Double(minutes) * 60
-        return String(format:"%02i:%02i", minutes, Int(seconds))
+        return String(format:"%2i:%02i", minutes, Int(seconds))
     }
 }
 
@@ -34,6 +34,23 @@ extension UIAlertController {
         }))
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         return alert
+    }
+}
+
+extension UIView {
+    func grayScale(point:CGPoint) -> CGFloat {
+        let pixel = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: 4)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+        let context = CGContext(data: pixel, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
+        
+        context!.translateBy(x: -point.x, y: -point.y)
+        layer.render(in: context!)
+        
+        let scale = (CGFloat(pixel[0])/255.0 + CGFloat(pixel[1])/255.0 + CGFloat(pixel[2])/255.0)/3
+        
+        return scale
+        
     }
 }
 
@@ -77,6 +94,10 @@ public class SearchRadius {
     /// - Returns: New SearchRasius
     class func increase(radius: Double ) -> Double {
         let miles = radius / 1.60934
-        return (miles + 10) * 1.60934
+        return (miles + 25) * 1.60934
+    }
+    
+    class func largerThanMax(radius: Double) -> Bool {
+        return (radius / 1.60934) >= 1000 // miles
     }
 }

@@ -126,4 +126,14 @@ public class Uploader {
         })
     }
     
+//    private func storeRecordingToUser(completion : ((Error?) -> Void)) {
+//        
+//        guard let user = Auth.auth().currentUser, let id = recording.id else {
+//            completion(nil) //TODO: Handle Error is user is not there....
+//            return
+//        }
+//        
+//        let userRef = database.reference().child("Users").child(user.uid).child("recordings")
+//        
+//    }
 }

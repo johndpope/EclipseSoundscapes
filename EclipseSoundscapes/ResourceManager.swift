@@ -293,6 +293,21 @@ public class ResourceManager {
         return getDocumentsDirectory().appendingPathComponent(id.appending(FileType))
     }
     
+    /// Delete a File at path
+    ///
+    /// - Parameter path: Path to file
+    static func deleteFile(atPath path: URL?) {
+        guard let url = path else {
+            print("Path is nil")
+            return
+        }
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            print("Download File delete Error: \(error.localizedDescription)")
+        }
+    }
+    
     /// Utitlty to Convert a Date to a User Friendly String
     ///
     /// - Parameter date: Date

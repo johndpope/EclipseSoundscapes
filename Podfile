@@ -7,7 +7,7 @@ target 'EclipseSoundscapes' do
 
   # Pods for EclipseSoundscapes
 
-pod 'AudioKit', '~> 3.5'
+pod 'AudioKit'
 pod 'Firebase/Core'
 pod 'Firebase/Auth'
 pod 'Firebase/Database', '4.0.0'
