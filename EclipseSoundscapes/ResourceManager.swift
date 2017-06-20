@@ -10,7 +10,6 @@ import Foundation
 import CoreData
 import CoreLocation
 
-
 /// Handles All Integration with local storage and CoreData entities
 public class ResourceManager {
     
@@ -18,18 +17,16 @@ public class ResourceManager {
     typealias RecordingFetchCallback = (([Recording]?) -> Void)
     
     /// Simple Wrappper for a (Error?)->Void Completion block
-    typealias RecordingModifyCallback = ((Error?)->Void)
-    
+    typealias RecordingModifyCallback = ((Error?) -> Void)
     
     /// Intance of NSManagedObjectContext
     var managedObjectContext : NSManagedObjectContext!
-    
     
     /// Access to the ResourceManager Object
     static var manager = ResourceManager()
     
     /// Load Coredata on Device
-    func loadCoreData(){
+    func loadCoreData() {
         guard let modelURL = Bundle.main.url(forResource: "Recordings", withExtension:"momd") else {
             fatalError("Error loading model from bundle")
         }
@@ -51,7 +48,6 @@ public class ResourceManager {
             
         }
     }
-        
     
     //TODO: Implement Passing the Recording through the notification for any subscribers
     func subscribeRecordingAdded(observer: Any, action: Selector, object: Any? = nil) {
@@ -102,7 +98,6 @@ public class ResourceManager {
             }
             completion(fetchedRecording)
             
-            
         } catch {
             print("Failed to fetch Records: \(error)")
             throw error
@@ -120,14 +115,13 @@ public class ResourceManager {
         return recording
     }
     
-    
     /// Modify Recording's Title
     ///
     /// - Parameters:
     ///   - recording: Recording to modify
     ///   - title: Desired Recording Title
     ///   - shouldSave: Specify if modification should be saved in CoreData
-    func setTitle(recording : Recording, title: String?, shouldSave: Bool = true){
+    func setTitle(recording : Recording, title: String?, shouldSave: Bool = true) {
         recording.title = title
         if shouldSave {
             self.save()
@@ -136,16 +130,13 @@ public class ResourceManager {
         }
     }
     
-    
-    
-    
     /// Modify Recording's Duration
     ///
     /// - Parameters:
     ///   - recording: Recording to modify
     ///   - duration: Duration of Recoding
     ///   - shouldSave: Specify if modification should be saved in CoreData
-    func setDuration(recording: Recording, duration: TimeInterval, shouldSave: Bool = true){
+    func setDuration(recording: Recording, duration: TimeInterval, shouldSave: Bool = true) {
         recording.duration = duration
         if shouldSave {
             self.save()
@@ -159,10 +150,9 @@ public class ResourceManager {
     ///   - recording: Recording to modify
     ///   - location: Structure Containg Recording Latitude and Longitude
     ///   - shouldSave: Specify if modification should be saved in CoreData
-    func setLocation(recording: Recording, location: CLLocationCoordinate2D, shouldSave: Bool = true){
+    func setLocation(recording: Recording, location: CLLocationCoordinate2D, shouldSave: Bool = true) {
         recording.latitude = location.latitude
         recording.longitude = location.longitude
-        
         
         if shouldSave {
             self.save()
@@ -179,8 +169,8 @@ public class ResourceManager {
     ///         - duration
     ///         - title
     ///         - location
-    func instertRecording(recording: Recording, info: Dictionary<String, Any>){
-        if let duration = info[Recording.DURATION] as? TimeInterval{
+    func instertRecording(recording: Recording, info: Dictionary<String, Any>) {
+        if let duration = info[Recording.DURATION] as? TimeInterval {
             setDuration(recording: recording, duration: duration, shouldSave: false)
         }
         
@@ -197,14 +187,13 @@ public class ResourceManager {
         NotificationCenter.default.post(name: Notification.Name.RecordingAdded, object: nil)
     }
     
-    
     /// Delete the given Recording
     ///
     /// - Parameters:
     ///   - recording: Recording
     ///   - completion: optional Completion block that containing a possible error
     ///     - Error would involve no Recording Data at the URL of the Recording
-    func deleteRecording(recording : Recording, completion: ((Error?) -> Void)? = nil){
+    func deleteRecording(recording : Recording, completion: ((Error?) -> Void)? = nil) {
         do {
             
             managedObjectContext.delete(recording)
@@ -238,7 +227,6 @@ public class ResourceManager {
         json.updateValue(recording.duration, forKey: Recording.DURATION)
         json.updateValue(recording.info ?? "", forKey: Recording.INFO)
         
-        
         do {
             
             let jsonData = try JSONSerialization.data(withJSONObject: json, options: JSONSerialization.WritingOptions.prettyPrinted)
@@ -257,25 +245,20 @@ public class ResourceManager {
         
     }
     
-    
-    static func buildInfoFromData(withData data: Data?)-> Dictionary<String,Any>? {
-        guard let jsonData = data else  {
+    static func buildInfoFromData(withData data: Data?) -> Dictionary<String, Any>? {
+        guard let jsonData = data else {
             return nil
         }
         
         do {
-            let jsonObj = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as! Dictionary<String,Any>
+            let jsonObj = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as! Dictionary<String, Any>
             
             return jsonObj
-        } catch  {
+        } catch {
             print ("JSON Conversion Failure")
             return nil
         }
     }
-    
-    
-    
-    
     
     /// Get the Size of the file at the given path
     ///
@@ -284,7 +267,7 @@ public class ResourceManager {
     static func getFileSize(path:String) -> UInt64 {
         do {
             let fileAttributes = try FileManager.default.attributesOfItem(atPath: path)
-            if let fileSize = fileAttributes[FileAttributeKey.size]  {
+            if let fileSize = fileAttributes[FileAttributeKey.size] {
                 return (fileSize as! NSNumber).uint64Value
             } else {
                 print("Failed to get a size attribute from path: \(path)")
@@ -295,14 +278,12 @@ public class ResourceManager {
         return 0
     }
     
-    
     /// Utitly Method to return the Documents Directory URL
     ///
     /// - Returns: Documents Directory URL
     static func getDocumentsDirectory() -> URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
-    
     
     /// Utitly Method to return the Recording's URL
     ///
@@ -312,12 +293,26 @@ public class ResourceManager {
         return getDocumentsDirectory().appendingPathComponent(id.appending(FileType))
     }
     
+    /// Delete a File at path
+    ///
+    /// - Parameter path: Path to file
+    static func deleteFile(atPath path: URL?) {
+        guard let url = path else {
+            print("Path is nil")
+            return
+        }
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            print("Download File delete Error: \(error.localizedDescription)")
+        }
+    }
     
     /// Utitlty to Convert a Date to a User Friendly String
     ///
     /// - Parameter date: Date
     /// - Returns: Pretty String of the Date
-    static func prettyDate(date: Date?) -> String{
+    static func prettyDate(date: Date?) -> String {
         guard date != nil else {
             return ""
         }
@@ -329,7 +324,7 @@ public class ResourceManager {
     }
 }
 
-extension Recording{
+extension Recording {
     static let LOCATION = "location"
     static let DURATION = "duration"
     static let TITLE = "title"

@@ -12,55 +12,116 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 import GeoFire
+import Synchronized
 
-
-@objc public protocol AudioManagerDelegate: NSObjectProtocol {
+public protocol AudioManagerDelegate: NSObjectProtocol {
     func recievedRecordings()
     func emptyRecordingQueue()
-    @objc optional func presentAlert(_ alert : UIViewController)
-    @objc optional func failedLocationRequest(error: Error)
+    func playback(tape: Tape)
+    func playbackError(error: Error?)
+    func downloading()
+    func stopDownloading()
 }
 
 public class AudioManager: NSObject {
     
-    
-    
-    var locator = Locator()
-    
     weak var delegate : AudioManagerDelegate?
     
-    static var playbackQueue = AudioQueue<String>()
+    var playbackQueue = AudioQueue<String>()
     
     static var playbackHistory = Set<String>()
     
-    private var database = Database.database()
+    private var database :Database!
     
-    var queryHandle : UInt = 0
-
-    func next() -> String? {
-        guard let tapeId = AudioManager.playbackQueue.dequeue() else {
-            delegate?.emptyRecordingQueue()
-            return nil
-        }
-        if AudioManager.playbackQueue.count == 0 {
-            delegate?.emptyRecordingQueue()
-        }
-        
-        return tapeId
+    var queryHandle :UInt = 0
+    
+    let downloader = Downloader()
+    
+    var downloadTask : StorageDownloadTask?
+    
+    public override init() {
+        super.init()
+        database = Database.database()
     }
     
-    func prepareGetTapes() {
-        locator.delegate = self
-        locator.getLocation()
+    func pause() {
+        self.downloadTask?.pause()
     }
     
-    func getTapedBasedOn(location: CLLocation){
-        let locatonStatus = Locator.LocationAuthorization
-        
-        if locatonStatus != .authorizedAlways && locatonStatus != .authorizedWhenInUse {
-            delegate?.failedLocationRequest?(error: AudioError.locationPermissionError)
-            return
+    func resume() {
+        self.downloadTask?.resume()
+    }
+    
+    func stop() {
+        self.downloadTask?.cancel()
+        downloader.delete()
+    }
+    
+    func nextTape() -> Bool {
+        guard let tapeId = playbackQueue.dequeue() else {
+            return false
         }
+        self.downloadRecording(recordingId: tapeId)
+        return true
+    }
+    
+    private func downloadRecording(recordingId : String) {
+        
+        downloadTask = downloader.downloadAudio(withId: recordingId) { (url, error) in
+            guard error == nil, let audioUrl = url else {
+                return
+            }
+            self.downloadInfo(recordingId: recordingId, audioUrl: audioUrl)
+        }
+        downloadTask?.observe(.progress, handler: { (snapshot) in
+            // Failure
+            print("Audio: \(snapshot.progress?.fractionCompleted ?? 0.0)")
+        })
+        
+        downloadTask?.observe(.pause, handler: { (_) in
+            self.delegate?.stopDownloading()
+        })
+        
+        downloadTask?.observe(.resume, handler: { (_) in
+            self.delegate?.downloading()
+        })
+        
+        downloadTask?.observe(.failure, handler: { (snapshot) in
+            // Failure
+            self.delegate?.playbackError(error: snapshot.error)
+            self.downloader.delete()
+        })
+    }
+    
+    private func downloadInfo (recordingId : String, audioUrl : URL) {
+        downloadTask = downloader.downloadInforamtion(withId: recordingId) { (info, error) in
+            guard error == nil, let audioInfo = info else {
+                return
+            }
+            let tape = Tape(withInfo: audioInfo, audioUrl)
+            
+            self.delegate?.playback(tape: tape)
+        }
+        downloadTask?.observe(.failure, handler: { (snapshot) in
+            // Failure
+            self.delegate?.playbackError(error: snapshot.error)
+            self.downloader.delete()
+        })
+        downloadTask?.observe(.progress, handler: { (snapshot) in
+            // Failure
+            print("Info: \(snapshot.progress?.fractionCompleted ?? 0.0)")
+        })
+        
+        downloadTask?.observe(.pause, handler: { (_) in
+            self.delegate?.stopDownloading()
+        })
+        
+        downloadTask?.observe(.resume, handler: { (_) in
+            self.delegate?.downloading()
+        })
+    }
+    
+    func getTapedBasedOn(location: CLLocation) {
         
         let locationRef = database.reference().child(LocationDirectory)
         
@@ -68,48 +129,39 @@ public class AudioManager: NSObject {
             return
         }
         
-        guard let query = geoFire.query(at: location, withRadius: Radius/1000) else {
+        guard let query = geoFire.query(at: location, withRadius: SearchRadius.radius(withSize: RadiusSize.fifty)) else {
             return
         }
         
-        query.observeReady { 
-            //TODO: Change UI for Through delegate method when the Data is Ready
-        }
-        
-        queryHandle = query.observe(.keyEntered) { (id, audioLocation) in
-            if let audioId = id {
-                if AudioManager.playbackQueue.enqueue(audioId){
-                    self.delegate?.recievedRecordings()
-                }
-                
-                
+        queryHandle = query.observe(.keyEntered) { (id, location) in
+            
+            guard let audioId = id, let audioLocation = location else {
+                return
+            }
+            if !AudioManager.playbackHistory.contains(audioId) {
+                print("Added Recording at \(audioLocation.coordinate.latitude),\(audioLocation.coordinate.longitude)")
+                self.playbackQueue.enqueue(audioId)
+                self.delegate?.recievedRecordings()
+                AudioManager.playbackHistory.update(with: audioId)
             }
             
         }
         
-    }
-    
-    
-    
-    
-}
-extension AudioManager : LocatorDelegate {
-    
-    public func presentAlert(_ alert : UIViewController){
-        if let window = UIApplication.shared.keyWindow {
-            if let root = window.rootViewController{
-                root.present(alert, animated: true, completion: nil)
+        query.observeReady {
+            //Query Finished
+            //TODO: Increase Radius size if there is not enough Recordings in the Queue
+            if self.playbackQueue.isEmpty {
+                if SearchRadius.largerThanMax(radius: query.radius) {
+                    self.delegate?.emptyRecordingQueue()
+                    query.removeObserver(withFirebaseHandle: self.queryHandle)
+                } else {
+                    print("Increaing Radius")
+                    query.radius = SearchRadius.increase(radius: query.radius)
+                }
+                
+            } else {
+                query.removeAllObservers()
             }
         }
-        delegate?.presentAlert?(alert)
-    }
-    
-    public func locator(didUpdateBestLocation location: CLLocation){
-        getTapedBasedOn(location: location)
-    }
-    
-    
-    public func locator(didFailWithError error: Error){
-        delegate?.failedLocationRequest?(error: error)
     }
 }

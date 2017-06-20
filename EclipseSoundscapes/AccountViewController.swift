@@ -1,21 +1,19 @@
 //
-//  ViewController.swift
+//  AccountViewController.swift
 //  EclipseSoundscapes
 //
-//  Created by Anonymous on 6/1/17.
+//  Created by Anonymous on 6/16/17.
 //  Copyright © 2017 DevByArlindo. All rights reserved.
 //
 
 import UIKit
 
-class ViewController: UIViewController {
+class AccountViewController: UIViewController {
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        print("Hellow Soundscapes")
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,5 +21,3 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 }
-
-

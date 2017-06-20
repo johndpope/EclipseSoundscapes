@@ -7,10 +7,10 @@
 //
 
 import Foundation
+import UIKit
 
 /// Monitor Callback contain the session's TapePiece
 public typealias TapeCallback = ((TapePiece) -> Void)
-
 
 /// Status of the Tape during a Monitor Session
 ///
@@ -34,13 +34,20 @@ public enum MonitorStatus {
 /// - error: Error occured while performing operation
 /// - interruption: Interruption occured while performing operation
 /// - cancel: Audio operation was cancelled
-public enum AudioStatus{
-    case sucess
+public enum AudioStatus {
+    case success
     case error
     case interruption
     case cancel
-    case skip
-    
+}
+
+/// Status of Playback operation
+///
+/// - finished: Sucessful audio playback
+/// - cancel: Playback was cancelled
+/// - skip: Plyabck was skipped
+public enum PlaybackStatus {
+    case finished, cancel, skip
 }
 
 /// Error involved during an Audio operation
@@ -55,22 +62,35 @@ public enum AudioError: Error {
     case locationPermissionError
     case system(Error)
     case unkown
+    case noTapeSet
     case playbackEnded
     case skipped
     case needMoreTapes
 }
 
+/// Upload/Download Status keys
+public enum NetworkStatus {
+    case audioSuccess
+    case jsonSuccess
+    case realtimeSuccess
+    case error(Error)
+    case cancelled
+    case paused
+}
+
+/// Key for CitizenScientists Directory in Firebase
+let CitizenScientistsDirectory = "CitizenScientists"
+
+/// Key for GeoFire data in Firebase RealtimeDB
+let LocationDirectory = "Locations"
+
+//let AllRecordings = "Recordings"
+
 /// Audio File Type
 let FileType = ".m4a"
 
 /// 5 minute maximum
-let RecordingDurationMax : Double = 300
+let RecordingDurationMax :Double = 300
 
 /// 20 second minimum
-let RecordingDurationMin : Double = 20
-
-let Radius : Double = 160934//100 miles in meters
-
-let QueueMax = 10
-
-let QueueMin = 2
+let RecordingDurationMin :Double = 20
