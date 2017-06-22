@@ -1,0 +1,21 @@
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "3i3-xI-zUZ"; */
+"3i3-xI-zUZ.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Start!"; ObjectID = "6ZB-Yx-ird"; */
+"6ZB-Yx-ird.normalTitle" = "Start!";
+
+/* Class = "UITabBarItem"; title = "Playback"; ObjectID = "Dkc-Ad-cGI"; */
+"Dkc-Ad-cGI.title" = "Playback";
+
+/* Class = "UITabBarItem"; title = "RumbleMap"; ObjectID = "Sis-96-fKs"; */
+"Sis-96-fKs.title" = "RumbleMap";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "SxL-h1-4VD"; */
+"SxL-h1-4VD.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "ZpM-4V-6LY"; */
+"ZpM-4V-6LY.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Listen Now!!"; ObjectID = "bUP-e1-8Ac"; */
+"bUP-e1-8Ac.normalTitle" = "Listen Now!!";

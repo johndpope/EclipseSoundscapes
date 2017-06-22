@@ -13,6 +13,7 @@ import FirebaseDatabase
 import FirebaseStorage
 import GeoFire
 import Synchronized
+import UserNotifications
 
 public protocol AudioManagerDelegate: NSObjectProtocol {
     func recievedRecordings()
@@ -163,5 +164,71 @@ public class AudioManager: NSObject {
                 query.removeAllObservers()
             }
         }
+    }
+    
+    //TODO: Find out if we are going to provide any information about the audio recording
+    func loadAudio(withName name: String, withExtension ext: String = FileType) -> TapePlayer? {
+        guard let url = Bundle.main.url(forResource: name, withExtension: ext) else {
+            return nil
+        }
+        
+        let tape = Tape(withAudio: url)
+        return TapePlayer(tape: tape)
+    }
+    
+    static func registerEclipseNotifications() {
+        
+        let contact1Date = "06-21-2017 10:30:00"
+        registerLocalNotification(withDate: date(fromString: contact1Date))
+    }
+    
+    static func notificationPermission(_ handler : @escaping (Bool?) -> Void ) {
+        
+        if #available(iOS 10.0, *) {
+            let options: UNAuthorizationOptions = [.alert, .sound]
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options: options) { (granted, error) in
+                guard error == nil else {
+                    print(error?.localizedDescription ?? "Error")
+                    handler(nil)
+                    return
+                }
+                handler(granted)
+            }
+        } else {
+            // Fallback on earlier versions
+            guard let setting  = UIApplication.shared.currentUserNotificationSettings else {
+                handler(false)//Present alert to have the user accept notifications in settings
+                return
+            }
+            
+            if setting.types == [] {
+                handler(false) //Present alert to have the user accept notifications
+            } else {
+                handler(true)
+            }
+        }
+        
+    }
+    
+    static func date(fromString str: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        return dateFormatter.date(from: str)
+    }
+    
+    fileprivate static func registerLocalNotification(withDate date: Date?) {
+        guard let registerDate = date else {
+            print("Date was not Properly Formatted")
+            return
+        }
+        let localNotificationSilent = UILocalNotification()
+        localNotificationSilent.fireDate = registerDate
+        localNotificationSilent.repeatInterval = .day
+        localNotificationSilent.alertBody = "Started!"
+        localNotificationSilent.alertAction = "swipe to hear!"
+        localNotificationSilent.category = "PLAY_CATEGORY"
+        UIApplication.shared.scheduleLocalNotification(localNotificationSilent)
     }
 }

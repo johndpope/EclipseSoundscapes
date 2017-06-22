@@ -1,0 +1,25 @@
+/* 
+  Localizable.strings
+  EclipseSoundscapes
+
+  Created by Anonymous on 6/20/17.
+  Copyright © 2017 DevByArlindo. All rights reserved.
+*/
+
+"Start" = "Start";
+"Double Tap to Start RumbleMap" = "Double Tap to Start RumbleMap";
+"Begin interaction with Eclipse Images" = "Begin interaction with Eclipse Images";
+
+"Listen Now" = "Listen Now";
+
+"Next" = "Next";
+"Shows the next Eclipse Picture" = "Shows the next Eclipse Picture";
+
+"Previous" = "Previous";
+"Shows the previous Eclipse Image" = "Shows the previous Eclipse Image";
+
+"Contact Point" = "Contact Point %d";
+
+"Zoom scale" = "Zoom scale %0.1f %";
+
+"Marker Placed" = "Marker Placed";

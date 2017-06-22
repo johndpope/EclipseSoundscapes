@@ -9,9 +9,6 @@
 import Foundation
 import UIKit
 
-/// Monitor Callback contain the session's TapePiece
-public typealias TapeCallback = ((TapePiece) -> Void)
-
 /// Status of the Tape during a Monitor Session
 ///
 /// - progress: Monitor progress event
