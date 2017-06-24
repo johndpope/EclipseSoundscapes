@@ -77,7 +77,12 @@ class PlaybackViewController: UIViewController {
         
         startBtn.layer.cornerRadius = 5
         
+        setText()
         updateUI()
+    }
+    
+    func setText() {
+        self.startBtn.setTitle("Listen Now".localized().appending("!!"), for: .normal)
     }
     
     @IBAction func play(_ sender: Any) {

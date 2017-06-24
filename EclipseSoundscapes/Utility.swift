@@ -54,6 +54,28 @@ extension UIView {
     }
 }
 
+extension CGPoint : Hashable {
+    public var hashValue: Int {
+        return Int(x).hashValue << 32 ^ Int(y).hashValue
+    }
+    
+    func strideUpY(to limit : CGFloat = 2) -> StrideTo<CGFloat> {
+        return stride(from: y.rounded(), to: y.rounded() + limit, by: 1)
+    }
+    
+    func strideDownY(to limit : CGFloat = 2) -> StrideTo<CGFloat> {
+       return stride(from: y.rounded(), to: y.rounded() - limit, by: -1)
+    }
+    
+    func strideUpX(to limit : CGFloat = 2) -> StrideTo<CGFloat> {
+        return stride(from: x.rounded(), to: x.rounded() + limit, by: 1)
+    }
+    
+    func strideDownX(to limit : CGFloat = 2) -> StrideTo<CGFloat> {
+        return stride(from: x.rounded(), to: x.rounded() - limit, by: -1)
+    }
+}
+
 public enum RadiusSize {
     case ten
     case fifty

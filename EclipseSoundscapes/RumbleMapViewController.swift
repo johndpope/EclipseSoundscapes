@@ -8,13 +8,12 @@
 
 import UIKit
 import AudioKit
+import Localize_Swift
 
 struct EclipseImage {
     var image : UIImage
-    var name : String
     
-    init(name : String, image: UIImage) {
-        self.name = name
+    init(image: UIImage) {
         self.image = image
     }
 }
@@ -27,33 +26,52 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var rightArrowBtn: UIButton!
     @IBOutlet weak var leftArrowBtn: UIButton!
-    @IBOutlet weak var startBtn: UIButton!
     
     var eclipseImages = [EclipseImage]()
     var currentIndex = 0
     
     var boomBox : AKFMOscillator!
     var envelope : AKAmplitudeEnvelope!
-    var mixer : AKMixer!
+    var envelopeMixer : AKMixer!
+    
+    var whiteNoise : AKWhiteNoise!
+    var whiteNoiseFilter : AKLowPassFilter!
+    var whiteNoiseMixer : AKMixer!
+    
+    var masterMixer : AKMixer!
     
     var dataGainControl : Double = 0.0 {
         didSet {
-            self.mixer.volume = self.dataGainControl
+            self.envelopeMixer.volume = self.dataGainControl
         }
     }
     
+    var modControl : Double = 1.0 {
+        didSet {
+            if modControl < 1 {
+                modControl += 1
+            }
+            self.boomBox.modulatingMultiplier = modControl
+        }
+    }
+    
+    var modScale : CGFloat = 10
+    
     var isZooming = false
     var zoomScale : CGFloat = 1.0
+    
+    var markerContainer : MarkerContainer!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        
         setupRumbleSounds()
+        setupView()
         setupZoom()
         registerGestures()
-        setupView()
+        setText()
         loadImages()
     }
     
@@ -74,45 +92,63 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         envelope = AKAmplitudeEnvelope(boomBox, attackDuration: 1.0, decayDuration: 0.1, sustainLevel: 1.0, releaseDuration: 0.1)
         
-        mixer = AKMixer.init(envelope)
+        envelopeMixer = AKMixer.init(envelope)
         
-        AudioKit.output = mixer
+        whiteNoise = AKWhiteNoise(amplitude: 0.3)
+        whiteNoiseFilter = AKLowPassFilter.init(whiteNoise, cutoffFrequency: 8000, resonance: 0)
+        whiteNoiseMixer = AKMixer.init(whiteNoiseFilter)
+        
+        masterMixer = AKMixer.init(whiteNoiseMixer, envelopeMixer)
+        
+        AudioKit.output = masterMixer
         AudioKit.start()
     }
     
     func setupView() {
         rightArrowBtn.setImage(#imageLiteral(resourceName: "Right_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
         rightArrowBtn.tintColor = .white
-        rightArrowBtn.accessibilityLabel = "Next"
-        rightArrowBtn.accessibilityHint = "Shows the next Eclipse Image"
+        
         rightArrowBtn.accessibilityTraits = UIAccessibilityTraitButton
         
         leftArrowBtn.setImage(#imageLiteral(resourceName: "Left_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
         leftArrowBtn.tintColor = .white
-        leftArrowBtn.accessibilityLabel = "Previous"
-        leftArrowBtn.accessibilityHint = "Shows the previous Eclipse Image"
+        
         leftArrowBtn.accessibilityTraits = UIAccessibilityTraitButton
         
+        rumbleMapContainer.isAccessibilityElement = true
+        
+        rumbleMapContainer.accessibilityLabel = "Start".localized()
+        rumbleMapContainer.accessibilityHint = "Double Tap to Start RumbleMap".localized()
+        
         contactImage.isAccessibilityElement = true
+        contactImage.accessibilityTraits |= ~UIAccessibilityTraitAllowsDirectInteraction
         contactImage.accessibilityLabel = "RumbleMap"
-        contactImage.accessibilityTraits = UIAccessibilityTraitAllowsDirectInteraction
         
-        startBtn.layer.cornerRadius = 10
-        startBtn.accessibilityLabel = "Start"
-        startBtn.accessibilityHint = "Begin interaction with Eclipse Images"
-        startBtn.accessibilityTraits = UIAccessibilityTraitButton
-        
+        titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.accessibilityTraits = UIAccessibilityTraitHeader // TODO: Add description here
+        
+        markerContainer = MarkerContainer(frame: contactImage.frame)
+    }
+    
+    func setText() {
+        
+        rightArrowBtn.accessibilityLabel = "Next".localized()
+        rightArrowBtn.accessibilityHint = "Shows the next Eclipse Image".localized()
+        
+        leftArrowBtn.accessibilityLabel = "Previous".localized()
+        leftArrowBtn.accessibilityHint = "Shows the previous Eclipse Image".localized()
+        
+        titleLabel.text = "Contact Point".localizedFormat(currentIndex+1)
+        titleLabel.accessibilityLabel = "Contact Point".localizedFormat(currentIndex+1)
     }
     
     func loadImages() {
         var names = ["Eclipse_1", "Eclipse_2", "Eclipse_3", "Eclipse_4"]
         for i in 0...names.count-1 {
-            let eclipseImage = EclipseImage(name: "Contact Point \(i+1)", image: UIImage(named: names[i])!)
+            let eclipseImage = EclipseImage(image: UIImage(named: names[i])!)
             eclipseImages.append(eclipseImage)
         }
         contactImage.image = eclipseImages[currentIndex].image
-        titleLabel.text = eclipseImages[currentIndex].name
     }
     
     override func didReceiveMemoryWarning() {
@@ -120,7 +156,6 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         // Dispose of any resources that can be recreated.
     }
     @IBAction func startRumbleMap(_ sender: Any) {
-        startBtn.isHidden = true
         rumbleMapContainer.isHidden = false
         titleLabel.isHidden = false
         leftArrowBtn.isHidden = false
@@ -136,7 +171,8 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         
         contactImage.image = eclipseImages[currentIndex].image
-        titleLabel.text = eclipseImages[currentIndex].name
+        titleLabel.text = "Contact Point".localizedFormat(currentIndex+1)
+        titleLabel.accessibilityLabel = "Contact Point".localizedFormat(currentIndex+1)
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, titleLabel)
     }
     @IBAction func previousImage(_ sender: Any) {
@@ -147,33 +183,57 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         
         contactImage.image = eclipseImages[currentIndex].image
-        titleLabel.text = eclipseImages[currentIndex].name
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, titleLabel)
+        titleLabel.text = "Contact Point".localizedFormat(currentIndex+1)
+        titleLabel.accessibilityLabel = "Contact Point".localizedFormat(currentIndex+1)
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.titleLabel)
     }
     
     func registerGestures() {
         contactImage.isUserInteractionEnabled = true
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tap))
-        tapGesture.numberOfTapsRequired = 2
-        rumbleMapContainer.addGestureRecognizer(tapGesture)
+        let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(self.stop))
+        tapGesture1.numberOfTapsRequired = 2
+        tapGesture1.numberOfTouchesRequired = 1
+        contactImage.addGestureRecognizer(tapGesture1)
+        
+        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(self.zoomOut))
+        tapGesture2.numberOfTapsRequired = 1
+        tapGesture2.numberOfTouchesRequired = 2
+        rumbleMapContainer.addGestureRecognizer(tapGesture2)
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan(_:)))
         panGesture.maximumNumberOfTouches = 1
         panGesture.delegate = self
-        rumbleMapContainer.addGestureRecognizer(panGesture)
+        contactImage.addGestureRecognizer(panGesture)
         
         let touchDownGesture = UILongPressGestureRecognizer(target: self, action: #selector(touchDown(_:)))
         touchDownGesture.minimumPressDuration = 0
         touchDownGesture.delegate = self
-        rumbleMapContainer.addGestureRecognizer(touchDownGesture)
+        contactImage.addGestureRecognizer(touchDownGesture)
+        
+        let markerGesture = UILongPressGestureRecognizer(target: self, action: #selector(saveMarkerPosition(_:)))
+        markerGesture.minimumPressDuration = 2.0
+        markerGesture.allowableMovement = 0.00001
+        markerGesture.delegate = self
+        rumbleMapContainer.addGestureRecognizer(markerGesture)
     }
     
-    func tap() {
-        
+    func start() {
+        rumbleMapContainer.isAccessibilityElement = false
+        contactImage.accessibilityTraits |= UIAccessibilityTraitAllowsDirectInteraction
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, contactImage)
+    }
+    
+    func stop () {
+        rumbleMapContainer.isAccessibilityElement = true
+        print("Stopped")
+        contactImage.accessibilityTraits |= ~UIAccessibilityTraitAllowsDirectInteraction
+    }
+    
+    func zoomOut() {
         if self.scrollView.zoomScale != 1.0 {
             self.scrollView.setZoomScale(1.0, animated: true)
-            print("Tapped!!")
+            print("Zoomed Out")
         }
     }
     
@@ -189,18 +249,37 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         if recognizer.state == .began && !isZooming {
             let location = recognizer.location(in: recognizer.view)
-            if let grayScale = recognizer.view?.grayScale(point: location) {
-                print(grayScale)
-                dataGainControl = Double(grayScale)
+            print(location)
+            
+            if markerContainer.contains(location) {
+                print("Over Maker")
             }
             
-            boomBox.play()
-            envelope.play()
-            mixer.play()
+            if let grayScale = recognizer.view?.grayScale(point: location) {
+                //                print(grayScale)
+                
+                if grayScale == 0.0 {
+                    dataGainControl = 0.0
+                    whiteNoiseMixer.volume = 0.01
+                    whiteNoise.play()
+                    whiteNoiseFilter.play()
+                    
+                } else {
+                    
+                    whiteNoiseMixer.volume = 0.0
+                    
+                    dataGainControl = Double(grayScale)
+                    modControl = Double(grayScale*modScale)
+                    
+                    boomBox.play()
+                    envelope.play()
+                }
+            }
             
         } else if recognizer.state == .ended {
             envelope.stop()
-            mixer.stop()
+            whiteNoiseFilter.stop()
+            whiteNoise.stop()
         }
     }
     
@@ -212,9 +291,46 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         if recognizer.state == .began || recognizer.state == .changed {
             let location = recognizer.location(in: recognizer.view)
+            print(location)
+            
+            if markerContainer.contains(location) {
+                print("Over Maker")
+            }
+            
             if let grayScale = recognizer.view?.grayScale(point: location) {
-                print(grayScale)
-                dataGainControl = Double(grayScale)
+                //                print(grayScale)
+                
+                if grayScale == 0.0 {
+                    dataGainControl = 0.0
+                    whiteNoiseMixer.volume = 0.01
+                    
+                    if whiteNoise.isStopped || whiteNoiseFilter.isStopped {
+                        whiteNoise.play()
+                        whiteNoiseFilter.play()
+                    }
+                    
+                } else {
+                    whiteNoiseMixer.volume = 0.0
+                    
+                    dataGainControl = Double(grayScale)
+                    modControl = Double(grayScale*modScale)
+                    
+                    if boomBox.isStopped || envelope.isStopped {
+                        boomBox.play()
+                        envelope.play()
+                    }
+                }
+            }
+        }
+    }
+    
+    func saveMarkerPosition(_ recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == .began {
+            let location = recognizer.location(in: recognizer.view)
+            if !markerContainer.contains(location) {
+                markerContainer.insert(location)
+                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, "Marker Placed".localized())
+                print("Marker Placed")
             }
         }
     }
@@ -239,7 +355,7 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
         isZooming = true
         envelope.stop()
-        mixer.stop()
+        whiteNoiseMixer.stop()
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
@@ -247,9 +363,8 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         if scale > zoomScale + 0.1 || scale < zoomScale - 0.1 {
             zoomScale = scale
-            let zoomString = String.init(format: "Zoom scale %0.1f %%", zoomScale)
+            let zoomString = "Zoom scale".localizedFormat(zoomScale)
             contactImage.accessibilityValue = zoomString
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, zoomString)
         }
     }
     
@@ -267,3 +382,81 @@ extension RumbleMapViewController : UIScrollViewDelegate {
         return self.contactImage
     }
 }
+
+class MarkerContainer : NSObject {
+    
+    private var container : Dictionary<CGFloat, Dictionary<CGFloat, Bool>>!
+    
+    init(frame: CGRect) {
+        super.init()
+        container = Dictionary<CGFloat, Dictionary<CGFloat, Bool>>()
+        
+        for column in stride(from: 0.0, through: frame.height, by: 1.0) {
+            var rowDictionary = Dictionary<CGFloat, Bool>()
+            for row in stride(from: 0.0, through: frame.width, by: 1.0) {
+                rowDictionary.updateValue(false, forKey: row)
+            }
+            container.updateValue(rowDictionary, forKey: column)
+            
+        }
+    }
+    
+    func contains(_ point: CGPoint) -> Bool {
+        
+        guard let column = container[point.y.rounded()], let flag = column[point.x.rounded()] else {
+            return false
+        }
+        return flag
+    }
+    
+    func insert(_ point: CGPoint) {
+        
+        let negativeY = point.strideDownY()
+        let positiveY = point.strideUpY()
+        
+        let negativeX = point.strideDownX()
+        let positiveX = point.strideUpX()
+        
+        for i in positiveY {
+            if var column = container[i] {
+                for j in positiveX {
+                    column.updateValue(true, forKey: j)
+                }
+                
+                for j in negativeX {
+                    column.updateValue(true, forKey: j)
+                }
+            }
+        }
+        
+        for i in negativeY {
+            if var column = container[i] {
+                for j in positiveX {
+                    column.updateValue(true, forKey: j)
+                }
+                
+                for j in negativeX {
+                    column.updateValue(true, forKey: j)
+                }
+            }
+        }
+    }
+    
+    func remove(_ point: CGPoint) {
+        guard var column = container[point.y] else {
+            return
+        }
+        column.updateValue(false, forKey: point.x.rounded())
+    }
+    
+    override var description: String {
+        return self.container.description
+    }
+    
+    subscript(index: CGFloat) -> Dictionary<CGFloat, Bool>? {
+        get {
+            return container[index]
+        }
+    }
+}
+

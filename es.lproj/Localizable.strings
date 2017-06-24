@@ -1,0 +1,25 @@
+/* 
+  Localizable.strings
+  EclipseSoundscapes
+
+  Created by Anonymous on 6/20/17.
+  Copyright © 2017 DevByArlindo. All rights reserved.
+*/
+
+
+"Start" = "Empezar";
+"Begin interaction with Eclipse Images" = "Comience la interacción con Las Imágenes de Eclipse";
+
+"Listen Now" = "Escucha Ahora";
+
+"Next" = "Siguiente";
+"Shows the next Eclipse Image" = "Muestra la siguiente imagen de Eclipse";
+
+"Previous" = "Anterior";
+"Shows the previous Eclipse Image" = "Muestra la imagen de Eclipse anterior";
+
+"Contact Point" = "Punto de contacto %d";
+
+"Zoom scale" = "Escala de zoom %0.1f %";
+
+"Marker Placed" = "Marcador colocado";
