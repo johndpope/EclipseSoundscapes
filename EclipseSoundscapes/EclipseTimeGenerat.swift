@@ -9,7 +9,6 @@
 //  Solar Eclipse Calculator for Google Maps (Xavier Jubier: http://xjubier.free.fr/)
 //  Some of the code is inspired by Chris O'Byrne (http://www.chris.obyrne.com/)
 
-
 import UIKit
 
 class EclipseTimeGenerator {
@@ -59,14 +58,14 @@ class EclipseTimeGenerator {
         // d
         ans = elements[15] * t + elements[14]
         ans = ans * t + elements[13]
-        ans = ans * D2R
+        ans *= D2R
         circumstances[4] = ans
         // sin d and cos d
         circumstances[5] = sin(ans)
         circumstances[6] = cos(ans)
         // dd
         ans = 2.0 * elements[15] * t + elements[14]
-        ans = ans * D2R
+        ans *= D2R
         circumstances[12] = ans
         // m
         ans = elements[18] * t + elements[17]
@@ -74,11 +73,11 @@ class EclipseTimeGenerator {
         if ans >= 360.0 {
             ans -= 360.0
         }
-        ans = ans * D2R
+        ans *= D2R
         circumstances[7] = ans
         // dm
         ans = 2.0 * elements[18] * t + elements[17]
-        ans = ans * D2R
+        ans *= D2R
         circumstances[13] = ans
         // l1 and dl1
         let type = circumstances[0]
@@ -432,16 +431,26 @@ class EclipseTimeGenerator {
     
     // Display the information about 1st contact
     func displayc1() -> String {
-        return "\(getdate(c1)) \(gettime(c1)) alt: \(getalt(c1))"
+        return "C1: \(getdate(c1)) \(gettime(c1)) alt: \(getalt(c1))\u{00B0} azi: \(getazi(c1))\u{00B0}"
+    }
+    // Display the information about 2nd contact
+    func displayc2() -> String {
+        return "C2: \(getdate(c2)) \(gettime(c2)) alt: \(getalt(c2))\u{00B0} azi: \(getazi(c2))\u{00B0}"
     }
     
     // Display the information about maximum eclipse
     func displaymid() -> String {
-        return "\(getdate(mid)) \(gettime(mid)) alt: \(getalt(mid))"
+        return "MID: \(getdate(mid)) \(gettime(mid)) alt: \(getalt(mid))\u{00B0} azi: \(getazi(mid))\u{00B0}"
+    }
+    
+    //
+    // Display the information about 3rd contact
+    func displayc3() -> String {
+        return "C3: \(getdate(c3)) \(gettime(c3)) alt: \(getalt(c3))\u{00B0} azi: \(getazi(c3))\u{00B0}"
     }
     // Display the information about 4th contact
     func displayc4() -> String {
-        return "\(getdate(c4)) \(gettime(c4)) alt: \(getalt(c4))"
+        return "C4: \(getdate(c4)) \(gettime(c4)) alt: \(getalt(c4))\u{00B0} azi: \(getazi(c4))\u{00B0}"
     }
     
     // Get the altitude
@@ -459,10 +468,151 @@ class EclipseTimeGenerator {
         return ans
     }
     
+    // Get the azimuth
+    func getazi(_ circumstances : [Double]) -> String {
+        var ans = ""   
+        var t = circumstances[32] * R2D
+        
+        if t < 0.0 {
+            t += 360.0   
+        } else if t >= 360.0 {
+            t -= 360.0   
+        }
+        
+        if t < 100.0 {
+            ans.append("0")
+        } else if t < 10.0 {
+            ans.append("0")
+        }
+        ans.append(String.init(format: "%.1f", t))
+        
+        return ans
+    }
+    
+    // Get the duration in 00m00.0s format
+    func getduration() -> String {
+        var tmp = c3[1] - c2[1]
+        if tmp < 0.0 {
+            tmp += 24.0
+        } else if tmp >= 24.0 {
+            tmp -= 24.0
+        }
+        tmp = (tmp * 60.0) - 60.0 * floor(tmp) + 0.05 / 60.0
+        var ans = String.init(format: "%fm", floor(tmp))
+        tmp = (tmp * 60.0) - 60.0 * floor(tmp)
+        if tmp < 10.0 {
+            ans.append("0")
+            ans.append(String(floor(tmp)))
+            ans.append(".")
+            ans.append(String.init(format: "%fs", floor((tmp - floor(tmp)) * 10.0)))
+        }
+        return ans
+    }
+    
+    // Get the obscuration
+    func getcoverage() -> String {
+        var a = 0.0
+        var b = 0.0
+        var c = 0.0
+        
+        if mid[34] <= 0.0 {
+            return "0.00%"
+        } else if mid[34] >= 1.0 {
+            return "100.00%"
+        }
+        if mid[36] == 2 {
+            c = mid[35] * mid[35]
+        } else {
+            c = acos((mid[28] * mid[28] + mid[29] * mid[29] - 2.0 * mid[33] * mid[33]) / (mid[28] * mid[28] - mid[29] * mid[29]))
+            b = acos((mid[28] * mid[29] + mid[33] * mid[33]) / mid[33] / (mid[28] + mid[29]))
+            a = Double.pi - b - c
+            c = ((mid[35] * mid[35] * a + b) - mid[35] * sin(c)) / Double.pi
+        }
+        return String.init(format: "%.2f%%", c * 100)
+    }
+    
     //
     // Compute the local circumstances
     func loc_circ(_ lat : Double, _ lon : Double) {
         readdata(lat, lon)
         getall()
+    }
+    
+    func printTimes() {
+        var partialEvent = false
+        var isEclipse = true
+        
+        var c1Display = ""
+        var c2Display = ""
+        var c3Display = ""
+        var c4Display = ""
+        
+        let midDisplay = displaymid()
+        if mid[36] > 0 {
+            // There is an eclipse
+            c1Display = displayc1()
+            c4Display = displayc4()
+            if mid[36] > 1 {
+                // Total/annular eclipse
+                c2Display = displayc2()
+                c3Display = displayc3()
+                if c1[31] <= 0.0 && c4[31] <= 0.0 {
+                    // Sun below the horizon for the entire duration of the event
+                    isEclipse = false
+                } else {
+                    // Sun above the horizon for at least some of the event
+                    if c2[31] <= 0.0 && c3[31] <= 0.0 {
+                        // Sun below the horizon for just the total/annular event
+                        partialEvent = true
+                        print("Partial Solar Eclipse")
+                    } else {
+                        // Sun above the horizon for at least some of the total/annular event
+                        if c2[31] > 0.0 && c3[31] > 0.0 {
+                            // Sun above the horizon for the entire annular/total event
+                            if mid[36] == 2 {
+                                print("Annular Solar Eclipse" )
+                                print("Duration of Annularity: \(getduration())")
+                            } else {
+                                print("Total Solar Eclipse" )
+                                print("Duration of Totality: \(getduration())")
+                            }
+                        } else {
+                            // Sun below the horizon for at least some of the annular/total event
+                            print("???")
+                        }
+                    }
+                }
+            } else {
+                // Partial eclipse
+                if c1[31] <= 0.0 && c4[31] <= 0.0 {
+                    // Sun below the horizon
+                    isEclipse = false
+                } else {
+                    partialEvent = true
+                    print("Partial Solar Eclipse")
+                }
+            }
+        } else {
+            // No eclipse
+            isEclipse = false
+        }
+        
+        if isEclipse == true {
+            let maxmag = (mid[34] * 1000).rounded() / 1000.0
+            print("Magnitude: \(maxmag)")
+            print("Obscuration: \(getcoverage())")
+            print(c1Display)
+            if partialEvent == false {
+                print(c2Display)
+            }
+            print(midDisplay)
+            if partialEvent == false {
+                print(c3Display)
+            }
+            print(c4Display)
+        } else {
+            // No eclipse
+            print("No Solar Eclipse")
+        }
     }
 }

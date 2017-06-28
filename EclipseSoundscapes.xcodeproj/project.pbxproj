@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		70E439A017019D60659857BF /* Pods_EclipseSoundscapesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 219BB4393901E45FBC7BD829 /* Pods_EclipseSoundscapesTests.framework */; };
-		B71BCE471EF457950095C46B /* RumbleMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71BCE461EF457950095C46B /* RumbleMapViewController.swift */; };
 		B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */; };
 		B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5481ED724F300F9E4F3 /* Main.storyboard */; };
 		B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */; };
@@ -26,6 +25,8 @@
 		B763FA011ED864F400EEFB27 /* Tape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B763FA001ED864F400EEFB27 /* Tape.swift */; };
 		B76842681EF4120C000C2189 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76842671EF4120C000C2189 /* AccountViewController.swift */; };
 		B769E93C1EFAA76D008393A6 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B769E93B1EFAA76D008393A6 /* EventsViewController.swift */; };
+		B77417F11F0361EC00663C2E /* RumbleMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77417F01F0361EC00663C2E /* RumbleMapViewController.swift */; };
+		B77417F41F03628700663C2E /* EclipseTimeGenerat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77417F31F03628700663C2E /* EclipseTimeGenerat.swift */; };
 		B7964C341EF9B76400000CF8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B7964C361EF9B76400000CF8 /* Localizable.strings */; };
 		B79ED4121EDF5C37001D5745 /* TapeRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */; };
 		B7BBB4FC1EE8690A00C0D855 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */; };
@@ -36,7 +37,6 @@
 		B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */; };
 		D77B9349CAD58F1DB4B335FF /* Pods_EclipseSoundscapes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */; };
 		DB73A8211EFF31A100B23098 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB73A8201EFF31A100B23098 /* GoogleService-Info.plist */; };
-		DB73A8231EFF338F00B23098 /* EclipseTimeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB73A8221EFF338F00B23098 /* EclipseTimeGenerator.swift */; };
 		EB7C715CF5F62E86B98ABEDD /* Pods_EclipseSoundscapesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A506BF43909D29D3B1E7AEE /* Pods_EclipseSoundscapesUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -66,7 +66,6 @@
 		5A5604FF69C8CA6A252C43F5 /* Pods-EclipseSoundscapesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesTests/Pods-EclipseSoundscapesTests.debug.xcconfig"; sourceTree = "<group>"; };
 		778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EclipseSoundscapes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B03672B260885DC3EA96D077 /* Pods-EclipseSoundscapesUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesUITests/Pods-EclipseSoundscapesUITests.release.xcconfig"; sourceTree = "<group>"; };
-		B71BCE461EF457950095C46B /* RumbleMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RumbleMapViewController.swift; sourceTree = "<group>"; };
 		B72DF5411ED724F300F9E4F3 /* EclipseSoundscapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EclipseSoundscapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B72DF5491ED724F300F9E4F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -90,6 +89,8 @@
 		B763FA001ED864F400EEFB27 /* Tape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tape.swift; sourceTree = "<group>"; };
 		B76842671EF4120C000C2189 /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		B769E93B1EFAA76D008393A6 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
+		B77417F01F0361EC00663C2E /* RumbleMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RumbleMapViewController.swift; sourceTree = "<group>"; };
+		B77417F31F03628700663C2E /* EclipseTimeGenerat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EclipseTimeGenerat.swift; sourceTree = "<group>"; };
 		B7964C301EF9B6BB00000CF8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		B7964C311EF9B6BB00000CF8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B7964C351EF9B76400000CF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -102,7 +103,6 @@
 		B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		DB73A8201EFF31A100B23098 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		DB73A8221EFF338F00B23098 /* EclipseTimeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EclipseTimeGenerator.swift; sourceTree = "<group>"; };
 		EC9068B8CBBFDE24E65A9DBE /* Pods-EclipseSoundscapes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapes/Pods-EclipseSoundscapes.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -238,13 +238,13 @@
 		B76F34501EDE1E1D006E76D2 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				DB73A8221EFF338F00B23098 /* EclipseTimeGenerator.swift */,
 				B79ED4131EDF5CB1001D5745 /* Audio */,
 				B76F344E1EDE1DF8006E76D2 /* Networking */,
 				B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */,
 				B72DF5841ED75D9A00F9E4F3 /* Locator.swift */,
 				B7C4E1401EE751A6002A0F19 /* Utility.swift */,
 				B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */,
+				B77417F31F03628700663C2E /* EclipseTimeGenerat.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -272,9 +272,9 @@
 				B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */,
 				B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */,
 				B769E93B1EFAA76D008393A6 /* EventsViewController.swift */,
-				B71BCE461EF457950095C46B /* RumbleMapViewController.swift */,
 				B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */,
 				B76842671EF4120C000C2189 /* AccountViewController.swift */,
+				B77417F01F0361EC00663C2E /* RumbleMapViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -442,7 +442,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		539B9E763E0706F1C28AC4F6 /* [CP] Embed Pods Frameworks */ = {
@@ -502,7 +502,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		6B100D64F61F995D02B9FD32 /* [CP] Check Pods Manifest.lock */ = {
@@ -517,7 +517,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		9BF072584B523166DB3FC053 /* [CP] Embed Pods Frameworks */ = {
@@ -586,21 +586,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7C4E1411EE751A6002A0F19 /* Utility.swift in Sources */,
-				DB73A8231EFF338F00B23098 /* EclipseTimeGenerator.swift in Sources */,
 				B73AE7341EE8332300BDBCE8 /* TapePlayer.swift in Sources */,
 				B76842681EF4120C000C2189 /* AccountViewController.swift in Sources */,
 				B763FA011ED864F400EEFB27 /* Tape.swift in Sources */,
 				B7BBB4FC1EE8690A00C0D855 /* AudioManager.swift in Sources */,
 				B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */,
 				B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */,
+				B77417F11F0361EC00663C2E /* RumbleMapViewController.swift in Sources */,
 				B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */,
+				B77417F41F03628700663C2E /* EclipseTimeGenerat.swift in Sources */,
 				B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */,
 				B79ED4121EDF5C37001D5745 /* TapeRecorder.swift in Sources */,
 				B7BD1AD31EF02A8800A739FA /* PlaybackViewController.swift in Sources */,
 				B769E93C1EFAA76D008393A6 /* EventsViewController.swift in Sources */,
 				B72DF5851ED75D9A00F9E4F3 /* Locator.swift in Sources */,
 				B758D8741ED78E120033EE45 /* Downloader.swift in Sources */,
-				B71BCE471EF457950095C46B /* RumbleMapViewController.swift in Sources */,
 				B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */,
 				B758D8761ED78E310033EE45 /* Uploader.swift in Sources */,
 				B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */,

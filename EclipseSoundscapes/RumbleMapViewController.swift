@@ -11,7 +11,7 @@ import AudioKit
 import Localize_Swift
 
 struct EclipseImage {
-    var image : UIImage
+    var image : UIImage!
     
     init(image: UIImage) {
         self.image = image
@@ -22,7 +22,7 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var contactImage: UIImageView!
-    @IBOutlet weak var rumbleMapContainer: UIView!
+    @IBOutlet weak var rumbleMapContainer: RumbleMapView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var rightArrowBtn: UIButton!
     @IBOutlet weak var leftArrowBtn: UIButton!
@@ -55,13 +55,12 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    var modScale : CGFloat = 10
+    var modScale : CGFloat = 4
     
     var isZooming = false
     var zoomScale : CGFloat = 1.0
     
     var markerContainer : MarkerContainer!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,9 +115,11 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         leftArrowBtn.accessibilityTraits = UIAccessibilityTraitButton
         
         rumbleMapContainer.isAccessibilityElement = true
-        
         rumbleMapContainer.accessibilityLabel = "Start".localized()
         rumbleMapContainer.accessibilityHint = "Double Tap to Start RumbleMap".localized()
+        rumbleMapContainer.setAccessibilityAction { 
+            self.start()
+        }
         
         contactImage.isAccessibilityElement = true
         contactImage.accessibilityTraits |= ~UIAccessibilityTraitAllowsDirectInteraction
@@ -155,14 +156,7 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    @IBAction func startRumbleMap(_ sender: Any) {
-        rumbleMapContainer.isHidden = false
-        titleLabel.isHidden = false
-        leftArrowBtn.isHidden = false
-        rightArrowBtn.isHidden = false
-        
-        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.titleLabel)
-    }
+    
     @IBAction func nextImage(_ sender: Any) {
         currentIndex += 1
         
@@ -175,6 +169,7 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
         titleLabel.accessibilityLabel = "Contact Point".localizedFormat(currentIndex+1)
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, titleLabel)
     }
+    
     @IBAction func previousImage(_ sender: Any) {
         currentIndex -= 1
         
@@ -219,14 +214,17 @@ class RumbleMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func start() {
+        print("Started")
         rumbleMapContainer.isAccessibilityElement = false
+        rumbleMapContainer.accessibilityTraits |= UIAccessibilityTraitNone
         contactImage.accessibilityTraits |= UIAccessibilityTraitAllowsDirectInteraction
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, contactImage)
     }
     
     func stop () {
-        rumbleMapContainer.isAccessibilityElement = true
         print("Stopped")
+        rumbleMapContainer.isAccessibilityElement = true
+        rumbleMapContainer.accessibilityTraits |= ~UIAccessibilityTraitNone
         contactImage.accessibilityTraits |= ~UIAccessibilityTraitAllowsDirectInteraction
     }
     
@@ -383,6 +381,20 @@ extension RumbleMapViewController : UIScrollViewDelegate {
     }
 }
 
+class RumbleMapView : UIView {
+    
+    var action : (() -> Void)?
+    
+    func setAccessibilityAction(_ action: @escaping (() -> Void)) {
+        self.action = action
+    }
+    
+    override func accessibilityActivate() -> Bool {
+        self.action?()
+        return true
+    }
+}
+
 class MarkerContainer : NSObject {
     
     private var container : Dictionary<CGFloat, Dictionary<CGFloat, Bool>>!
@@ -391,7 +403,7 @@ class MarkerContainer : NSObject {
         super.init()
         container = Dictionary<CGFloat, Dictionary<CGFloat, Bool>>()
         
-        for column in stride(from: 0.0, through: frame.height, by: 1.0) {
+        for column in stride(from: 0.0, through: frame.height+1, by: 1.0) {
             var rowDictionary = Dictionary<CGFloat, Bool>()
             for row in stride(from: 0.0, through: frame.width, by: 1.0) {
                 rowDictionary.updateValue(false, forKey: row)
@@ -417,36 +429,59 @@ class MarkerContainer : NSObject {
         let negativeX = point.strideDownX()
         let positiveX = point.strideUpX()
         
-        for i in positiveY {
-            if var column = container[i] {
-                for j in positiveX {
-                    column.updateValue(true, forKey: j)
-                }
-                
-                for j in negativeX {
-                    column.updateValue(true, forKey: j)
-                }
+        for i in positiveY where container[i] != nil {
+            
+            var column = container[i]
+            for j in positiveX {
+                column?.updateValue(true, forKey: j)
+            }
+            
+            for j in negativeX {
+                column?.updateValue(true, forKey: j)
             }
         }
         
-        for i in negativeY {
-            if var column = container[i] {
-                for j in positiveX {
-                    column.updateValue(true, forKey: j)
-                }
-                
-                for j in negativeX {
-                    column.updateValue(true, forKey: j)
-                }
+        for i in negativeY where container[i] != nil {
+            var column = container[i]
+            for j in positiveX {
+                column?.updateValue(true, forKey: j)
+            }
+            
+            for j in negativeX {
+                column?.updateValue(true, forKey: j)
             }
         }
     }
     
     func remove(_ point: CGPoint) {
-        guard var column = container[point.y] else {
-            return
+        let negativeY = point.strideDownY()
+        let positiveY = point.strideUpY()
+        
+        let negativeX = point.strideDownX()
+        let positiveX = point.strideUpX()
+        
+        for i in positiveY where container[i] != nil {
+            
+            var column = container[i]
+            for j in positiveX {
+                column?.updateValue(false, forKey: j)
+            }
+            
+            for j in negativeX {
+                column?.updateValue(false, forKey: j)
+            }
         }
-        column.updateValue(false, forKey: point.x.rounded())
+        
+        for i in negativeY where container[i] != nil {
+            var column = container[i]
+            for j in positiveX {
+                column?.updateValue(false, forKey: j)
+            }
+            
+            for j in negativeX {
+                column?.updateValue(false, forKey: j)
+            }
+        }
     }
     
     override var description: String {
@@ -459,4 +494,3 @@ class MarkerContainer : NSObject {
         }
     }
 }
-

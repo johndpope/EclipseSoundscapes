@@ -44,4 +44,6 @@ identifier_name:
     - RecordingDurationMin
     - RecordingDurationMax
     - FileType
+    - R2D
+    - D2R
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, junit, html, emoji)
