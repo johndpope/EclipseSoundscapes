@@ -11,7 +11,6 @@ import CoreLocation
 import Firebase
 import FirebaseDatabase
 import FirebaseStorage
-import GeoFire
 import Synchronized
 import UserNotifications
 
@@ -122,49 +121,49 @@ public class AudioManager: NSObject {
         })
     }
     
-    func getTapedBasedOn(location: CLLocation) {
-        
-        let locationRef = database.reference().child(LocationDirectory)
-        
-        guard let geoFire = GeoFire(firebaseRef: locationRef) else {
-            return
-        }
-        
-        guard let query = geoFire.query(at: location, withRadius: SearchRadius.radius(withSize: RadiusSize.fifty)) else {
-            return
-        }
-        
-        queryHandle = query.observe(.keyEntered) { (id, location) in
-            
-            guard let audioId = id, let audioLocation = location else {
-                return
-            }
-            if !AudioManager.playbackHistory.contains(audioId) {
-                print("Added Recording at \(audioLocation.coordinate.latitude),\(audioLocation.coordinate.longitude)")
-                self.playbackQueue.enqueue(audioId)
-                self.delegate?.recievedRecordings()
-                AudioManager.playbackHistory.update(with: audioId)
-            }
-            
-        }
-        
-        query.observeReady {
-            //Query Finished
-            //TODO: Increase Radius size if there is not enough Recordings in the Queue
-            if self.playbackQueue.isEmpty {
-                if SearchRadius.largerThanMax(radius: query.radius) {
-                    self.delegate?.emptyRecordingQueue()
-                    query.removeObserver(withFirebaseHandle: self.queryHandle)
-                } else {
-                    print("Increaing Radius")
-                    query.radius = SearchRadius.increase(radius: query.radius)
-                }
-                
-            } else {
-                query.removeAllObservers()
-            }
-        }
-    }
+//    func getTapedBasedOn(location: CLLocation) {
+//        
+//        let locationRef = database.reference().child(LocationDirectory)
+//        
+//        guard let geoFire = GeoFire(firebaseRef: locationRef) else {
+//            return
+//        }
+//        
+//        guard let query = geoFire.query(at: location, withRadius: SearchRadius.radius(withSize: RadiusSize.fifty)) else {
+//            return
+//        }
+//        
+//        queryHandle = query.observe(.keyEntered) { (id, location) in
+//            
+//            guard let audioId = id, let audioLocation = location else {
+//                return
+//            }
+//            if !AudioManager.playbackHistory.contains(audioId) {
+//                print("Added Recording at \(audioLocation.coordinate.latitude),\(audioLocation.coordinate.longitude)")
+//                self.playbackQueue.enqueue(audioId)
+//                self.delegate?.recievedRecordings()
+//                AudioManager.playbackHistory.update(with: audioId)
+//            }
+//            
+//        }
+//        
+//        query.observeReady {
+//            //Query Finished
+//            //TODO: Increase Radius size if there is not enough Recordings in the Queue
+//            if self.playbackQueue.isEmpty {
+//                if SearchRadius.largerThanMax(radius: query.radius) {
+//                    self.delegate?.emptyRecordingQueue()
+//                    query.removeObserver(withFirebaseHandle: self.queryHandle)
+//                } else {
+//                    print("Increaing Radius")
+//                    query.radius = SearchRadius.increase(radius: query.radius)
+//                }
+//                
+//            } else {
+//                query.removeAllObservers()
+//            }
+//        }
+//    }
     
     //TODO: Find out if we are going to provide any information about the audio recording
     func loadAudio(withName name: String, withExtension ext: String = FileType) -> TapePlayer? {

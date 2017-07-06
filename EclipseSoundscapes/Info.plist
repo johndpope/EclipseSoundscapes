@@ -32,9 +32,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We would like to store the location of the Recording to help with our Mission.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>We would like to record your experience during the Eclipse.</string>
+	<string>We would like to use your location to keep you informed about the 2017 Eclipse</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

@@ -21,7 +21,7 @@ class RecordingViewController: UIViewController {
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
     
-    var locator : Locator!
+    var locator : Location!
     
     var uploadTask : StorageUploadTask?
     
@@ -39,7 +39,7 @@ class RecordingViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        locator = Locator()
+        locator = Location()
         locator.delegate = self
         
         recordBtn.layer.cornerRadius = recordBtn.frame.width/2
@@ -163,17 +163,17 @@ class RecordingViewController: UIViewController {
     }
     
     func uploadLocationRef() {
-        uploader.storeLocation { (lerror) in
-            if let error = lerror {
-                print("Location Ref error: \(error.localizedDescription)")
-            }
-            print("Upload Complete")
-            
-            DispatchQueue.main.async {
-                self.state = .idle
-            }
-            
-        }
+//        uploader.storeLocation { (lerror) in
+//            if let error = lerror {
+//                print("Location Ref error: \(error.localizedDescription)")
+//            }
+//            print("Upload Complete")
+//            
+//            DispatchQueue.main.async {
+//                self.state = .idle
+//            }
+//            
+//        }
     }
     
     func updateUI() {
@@ -241,7 +241,7 @@ extension RecordingViewController : RecordingDelegate {
         print("Resumed!!")
     }
 }
-extension RecordingViewController : LocatorDelegate {
+extension RecordingViewController : LocationDelegate {
     
     func presentFailureAlert(_ alert : UIViewController) {
         activityMonitor.stopAnimating()

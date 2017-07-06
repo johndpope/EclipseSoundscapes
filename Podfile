@@ -12,10 +12,10 @@ pod 'Firebase/Core'
 pod 'Firebase/Auth'
 pod 'Firebase/Database', '4.0.0'
 pod 'Firebase/Storage'
-pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
-pod 'SwiftLint'
 pod 'Synchronized', '~> 2.0'
 pod 'Localize-Swift'
+pod 'BRYXBanner'
+pod 'SwiftSpinner'
 
   target 'EclipseSoundscapesTests' do
     inherit! :search_paths
