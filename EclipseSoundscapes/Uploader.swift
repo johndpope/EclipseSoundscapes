@@ -10,7 +10,6 @@ import Foundation
 import Firebase
 import FirebaseStorage
 import FirebaseDatabase
-import GeoFire
 
 /// Manages Uploads from Firebase
 public class Uploader {
@@ -104,27 +103,27 @@ public class Uploader {
 //        })
 //    }
     
-     func storeLocation(completion : ((Error?) -> Void)?) {
-        guard let id = recording.id else {
-            //TODO : Handle Error
-            completion?(nil)
-            return
-        }
-        
-        let locationRef = database.reference().child(LocationDirectory)
-        
-        let geoFire = GeoFire(firebaseRef: locationRef)
-        
-        let location = CLLocation(latitude: recording.latitude, longitude: recording.longitude)
-        
-        geoFire?.setLocation(location, forKey: id, withCompletionBlock: { (error) in
-            guard error == nil else {
-                completion?(error)
-                return
-            }
-            completion?(nil)
-        })
-    }
+//     func storeLocation(completion : ((Error?) -> Void)?) {
+//        guard let id = recording.id else {
+//            //TODO : Handle Error
+//            completion?(nil)
+//            return
+//        }
+//        
+//        let locationRef = database.reference().child(LocationDirectory)
+//        
+//        let geoFire = GeoFire(firebaseRef: locationRef)
+//        
+//        let location = CLLocation(latitude: recording.latitude, longitude: recording.longitude)
+//        
+//        geoFire?.setLocation(location, forKey: id, withCompletionBlock: { (error) in
+//            guard error == nil else {
+//                completion?(error)
+//                return
+//            }
+//            completion?(nil)
+//        })
+//    }
     
 //    private func storeRecordingToUser(completion : ((Error?) -> Void)) {
 //        

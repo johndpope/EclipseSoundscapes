@@ -12,7 +12,34 @@
 
 import UIKit
 
+enum EclipseType {
+    case partial, full, none
+}
+
+struct EclipseEvent {
+    var name : String = ""
+    var date : String = ""
+    var time : String = ""
+    var alt : String = ""
+    var azi : String = ""
+    
+    init(name : String, date : String, time : String, alt : String, azi : String) {
+        self.name = name
+        self.date = date
+        self.time = time
+        self.alt = alt
+        self.azi = azi
+    }
+}
+
 class EclipseTimeGenerator {
+    
+    var longitude : Double!
+    var latitude : Double!
+    
+    
+    var isEclipse = true
+    var isPartial = false
     
     var R2D = 180.0 / Double.pi
     var D2R = Double.pi / 180
@@ -31,8 +58,75 @@ class EclipseTimeGenerator {
     var c3 = [Double](repeating: 0.0, count: 40)
     var c4 = [Double](repeating: 0.0, count: 40)
     
+    
+    
+    var latString : String {
+        get {
+            return String(format: "%.3f\u{00B0} %@", abs(latitude), latitude > 0 ? "North": "South")
+        }
+    }
+    
+    var lonString : String {
+        get {
+            return String(format: "%.3f\u{00B0} %@", abs(longitude), longitude > 0 ? "East": "West")
+        }
+    }
+    
+    var type : EclipseType = .full
+    
+    var magnitude : String? {
+        get {
+            if type == .none {
+                return nil
+            }
+            return String((mid[34] * 1000).rounded() / 1000)
+        }
+    }
+    
+    var duration : String? {
+        get {
+            if type == .full {
+                return getduration()
+            }
+            return nil
+        }
+    }
+    
+    var coverage : String? {
+        get {
+            if type == .full {
+                return getcoverage()
+            }
+            return nil
+        }
+    }
+    
+    var contact1 : EclipseEvent {
+        return EclipseEvent(name: "Start of partial eclipse (C1)", date: getdate(c1), time: gettime(c1), alt: getalt(c1), azi: getazi(c1))
+    }
+    
+    var contact2 : EclipseEvent {
+        return EclipseEvent(name: "Start of total eclipse (C2)", date: getdate(c2), time: gettime(c2), alt: getalt(c2), azi: getazi(c2))
+    }
+    
+    var contactMid : EclipseEvent {
+        return EclipseEvent(name: "Maximum eclipse", date: getdate(mid), time: gettime(mid), alt: getalt(mid), azi: getazi(mid))
+    }
+    
+    var contact3 : EclipseEvent {
+        return EclipseEvent(name: "End of total eclipse (C3)", date: getdate(c3), time: gettime(c3), alt: getalt(c3), azi: getazi(c3))
+    }
+    
+    var contact4 : EclipseEvent {
+        return EclipseEvent(name: "End of partial eclipse (C4)", date: getdate(c4), time: gettime(c4), alt: getalt(c4), azi: getazi(c4))
+    }
+    
     init(latitude: Double, longitude: Double) {
+        self.longitude = longitude
+        self.latitude = latitude
         loc_circ(latitude, longitude)
+        printTimes()
+        
     }
     
     // Populate the circumstances array with the time-only dependent circumstances (x, y, d, m, ...)
@@ -59,14 +153,14 @@ class EclipseTimeGenerator {
         // d
         ans = elements[15] * t + elements[14]
         ans = ans * t + elements[13]
-        ans = ans * D2R
+        ans *= D2R
         circumstances[4] = ans
         // sin d and cos d
         circumstances[5] = sin(ans)
         circumstances[6] = cos(ans)
         // dd
         ans = 2.0 * elements[15] * t + elements[14]
-        ans = ans * D2R
+        ans *= D2R
         circumstances[12] = ans
         // m
         ans = elements[18] * t + elements[17]
@@ -74,11 +168,11 @@ class EclipseTimeGenerator {
         if ans >= 360.0 {
             ans -= 360.0
         }
-        ans = ans * D2R
+        ans *= D2R
         circumstances[7] = ans
         // dm
         ans = 2.0 * elements[18] * t + elements[17]
-        ans = ans * D2R
+        ans *= D2R
         circumstances[13] = ans
         // l1 and dl1
         let type = circumstances[0]
@@ -314,7 +408,7 @@ class EclipseTimeGenerator {
     // This is used in getday()
     // Pads digits
     func padDigits(_ n : Double, _ totalDigits : Int ) -> String {
-        var nString = String(n)
+        var nString = String.init(format: "%.0f", n)
         
         var pd = ""
         if totalDigits > nString.characters.count {
@@ -327,24 +421,6 @@ class EclipseTimeGenerator {
     
     // Get the local date
     func getdate(_ circumstances : [Double]) -> String {
-        /*
-         var i
-         var searchString = document.location.search
-         
-         // strip off the leading '?'
-         searchString = searchString.substring(1)
-         
-         var nvPairs = searchString.split("&")
-         
-         for (i = 0  i < nvPairs.length  i++) {
-         var nvPair = nvPairs[i].split("=")
-         var name = nvPair[0]
-         var value = nvPair[1]
-         if (name == 'Ecl') {
-         return value.substring(0, 4) + "/" + value.substring(4, 6) + "/" + value.substring(6, 8)
-         }
-         }
-         */
         
         let jd = elements[0]
         
@@ -357,8 +433,8 @@ class EclipseTimeGenerator {
             t -= 24.0 // and jd++ below
         }
         var a = 0.0
-        var y = 0.0
-        var m = 0.0
+        var y = 0.0 // Year
+        var m = 0.0 // Month
         var day = 0.0
         let jdm = jd + 0.5
         let z = floor(jdm)
@@ -393,7 +469,9 @@ class EclipseTimeGenerator {
             day -= 1
         }
         
-        return "\(padDigits(floor(y), 4))/\(padDigits(floor(m), 2))/\(padDigits(floor(day), 2))"
+        let date = String.init(format: "%.0f-%.0f-%.0f", floor(m), floor(day), floor(y))
+        
+        return date
     }
     
     // Get the local time
@@ -409,54 +487,139 @@ class EclipseTimeGenerator {
         if t < 10.0 {
             ans.append("0")
         }
-        ans.append("\(String(floor(t))):")
+        
+        let hour = String.init(format: "%.0f", floor(t))
+        ans.append(hour)
+        ans.append(":")
+        
         t = (t * 60.0) - 60.0 * floor(t)
         if t < 10.0 {
             ans.append("0")
         }
-        ans.append("\(String(floor(t))):")
+        
+        let minute = String.init(format: "%.0f", floor(t))
+        ans.append(minute)
+        ans.append(":")
+        
         t = (t * 60.0) - 60.0 * floor(t)
         if t < 10.0 {
             ans.append("0")
         }
-        ans.append(String(floor(t)))
+        
+        let second = String.init(format: "%.0f", floor(t))
+        ans.append(second)
         ans.append(".")
-        ans.append(String(floor(10.0 * (t - floor(t)))))
-        // Add an asterix if the altitude is less than zero
-        if circumstances[31] <= 0.0 {
-            ans.append("*")
-        }
+        
+        let milisecond = String.init(format: "%.0f", floor(10.0 * (t - floor(t))))
+        ans.append(milisecond)
         
         return ans
     }
     
     // Display the information about 1st contact
     func displayc1() -> String {
-        return "\(getdate(c1)) \(gettime(c1)) alt: \(getalt(c1))"
+        return "C1: \(getdate(c1)) \(gettime(c1)) alt: \(getalt(c1)) azi: \(getazi(c1))"
+    }
+    // Display the information about 2nd contact
+    func displayc2() -> String  {
+        return "C2: \(getdate(c2)) \(gettime(c2)) alt: \(getalt(c2)) azi: \(getazi(c2))"
     }
     
     // Display the information about maximum eclipse
     func displaymid() -> String {
-        return "\(getdate(mid)) \(gettime(mid)) alt: \(getalt(mid))"
+        return "MID: \(getdate(mid)) \(gettime(mid)) alt: \(getalt(mid))azi: \(getazi(mid))"
+    }
+    
+    //
+    // Display the information about 3rd contact
+    func displayc3() -> String  {
+        return "C3: \(getdate(c3)) \(gettime(c3)) alt: \(getalt(c3)) azi: \(getazi(c3))"
     }
     // Display the information about 4th contact
     func displayc4() -> String {
-        return "\(getdate(c4)) \(gettime(c4)) alt: \(getalt(c4))"
+        return "C4: \(getdate(c4)) \(gettime(c4)) alt: \(getalt(c4)) azi: \(getazi(c4))"
     }
     
     // Get the altitude
     func getalt(_ circumstances : [Double]) -> String {
         var ans = ""
         let t = circumstances[31] * R2D
-        if abs(t) < 10.0 {
-            if t >= 0.0 {
-                ans += "0"
-            } else {
-                ans.append("-0")
-            }
-        }
-        ans.append(String.init(format: "%.1f", abs(t)))
+//        if abs(t) < 10.0 {
+//            if t >= 0.0 {
+//                ans += "0"
+//            } else {
+//                ans.append("-0")
+//            }
+//        }
+        ans.append(String.init(format: "%.1f\u{00B0}", abs(t)))
         return ans
+    }
+    
+    // Get the azimuth
+    func getazi(_ circumstances : [Double]) -> String {
+        var ans = ""
+        var t = circumstances[32] * R2D
+        
+        if t < 0.0 {
+            t += 360.0
+        } else if (t >= 360.0) {
+            t -= 360.0
+        }
+        
+//        if (t < 100.0) {
+//            ans.append("0")
+//        } else if (t < 10.0) {
+//            ans.append("0")
+//        }
+        ans.append(String.init(format: "%.1f\u{00B0}", t))
+        
+        return ans
+    }
+    
+    // Get the duration in 00m00.0s format
+    func getduration() -> String {
+        
+        var tmp = c3[1] - c2[1]
+        if tmp < 0.0 {
+            tmp += 24.0
+        } else if (tmp >= 24.0) {
+            tmp -= 24.0
+        }
+        
+        tmp = (tmp * 60.0) - 60.0 * floor(tmp) + 0.05 / 60.0
+        let minutes = String.init(format: "%.0fm",floor(tmp))
+        
+        var singleDigit : String?
+        tmp = (tmp * 60.0) - 60.0 * floor(tmp)
+        if tmp < 10.0 {
+            singleDigit = "0"
+        }
+        
+        let seconds = String.init(format: "%.0f.%.0fs", floor(tmp),floor((tmp - floor(tmp)) * 10.0))
+        
+        return "\(minutes)\(singleDigit ?? "")\(seconds)"
+    }
+    
+    // Get the obscuration
+    func getcoverage() -> String{
+        var a = 0.0
+        var b = 0.0
+        var c = 0.0
+        
+        if mid[34] <= 0.0 {
+            return "0.00%"
+        } else if mid[34] >= 1.0 {
+            return "100.00%"
+        }
+        if mid[36] == 2 {
+            c = mid[35] * mid[35]
+        } else {
+            c = acos((mid[28] * mid[28] + mid[29] * mid[29] - 2.0 * mid[33] * mid[33]) / (mid[28] * mid[28] - mid[29] * mid[29]))
+            b = acos((mid[28] * mid[29] + mid[33] * mid[33]) / mid[33] / (mid[28] + mid[29]))
+            a = Double.pi - b - c
+            c = ((mid[35] * mid[35] * a + b) - mid[35] * sin(c)) / Double.pi
+        }
+        return String.init(format: "%.2f%%", c * 100)
     }
     
     //
@@ -464,5 +627,94 @@ class EclipseTimeGenerator {
     func loc_circ(_ lat : Double, _ lon : Double) {
         readdata(lat, lon)
         getall()
+    }
+    
+    func printTimes() {
+        isPartial = false
+        isEclipse = true
+        
+        var c1Display = ""
+        var c2Display = ""
+        var c3Display = ""
+        var c4Display = ""
+        
+        let midDisplay = displaymid()
+        if mid[36] > 0 {
+            // There is an eclipse
+            c1Display = displayc1()
+            c4Display = displayc4()
+            if mid[36] > 1 {
+                // Total/annular eclipse
+                c2Display = displayc2()
+                c3Display = displayc3()
+                if c1[31] <= 0.0 && c4[31] <= 0.0 {
+                    // Sun below the horizon for the entire duration of the event
+                    isEclipse = false
+                    print("No Solar Eclipse")
+                } else {
+                    // Sun above the horizon for at least some of the event
+                    if c2[31] <= 0.0 && c3[31] <= 0.0 {
+                        // Sun below the horizon for just the total/annular event
+                        isPartial = true
+                        print("Partial Solar Eclipse")
+                    } else {
+                        // Sun above the horizon for at least some of the total/annular event
+                        if c2[31] > 0.0 && c3[31] > 0.0 {
+                            // Sun above the horizon for the entire annular/total event
+                            if mid[36] == 2 {
+                                print("Annular Solar Eclipse" )
+                                print("Duration of Annularity: \(getduration())")
+                            } else {
+                                print("Total Solar Eclipse" )
+                                print("Duration of Totality: \(getduration())")
+                            }
+                        } else {
+                            // Sun below the horizon for at least some of the annular/total event
+                            print("???")
+                        }
+                    }
+                }
+            } else {
+                // Partial eclipse
+                if c1[31] <= 0.0 && c4[31] <= 0.0 {
+                    // Sun below the horizon
+                    isEclipse = false
+                    print("No Solar Eclipse")
+                } else {
+                    isPartial = true
+                    print("Partial Solar Eclipse")
+                }
+            }
+        } else {
+            // No eclipse
+            isEclipse = false
+            print("No Solar Eclipse")
+        }
+        
+        if isEclipse == true {
+            let maxmag = (mid[34] * 1000).rounded() / 1000.0
+            print("Magnitude: \(maxmag)")
+            print("Obscuration: \(getcoverage())")
+            print(c1Display)
+            if isPartial == false {
+                print(c2Display)
+            }
+            print(midDisplay)
+            if isPartial == false {
+                print(c3Display)
+                
+            }
+            print(c4Display)
+        }
+        
+        if isEclipse {
+            if isPartial {
+                type = .partial
+            } else {
+                type = .full
+            }
+        } else {
+            type = .none
+        }
     }
 }

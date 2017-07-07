@@ -26,7 +26,7 @@ class PlaybackViewController: UIViewController {
     @IBOutlet weak var skipBtn: UIButton!
     @IBOutlet weak var playBtn: UIButton!
     
-    let locator = Locator()
+    let locator = Location()
     let audioManager = AudioManager()
     
     var downloadTask : StorageDownloadTask?
@@ -131,8 +131,9 @@ class PlaybackViewController: UIViewController {
                 self.locator.getLocation(withAccuracy: kCLLocationAccuracyThreeKilometers)
                 return
             }
+            print(latitude, longitude)
             
-            audioManager.getTapedBasedOn(location: CLLocation(latitude: latitude, longitude: longitude))
+//            audioManager.getTapedBasedOn(location: CLLocation(latitude: latitude, longitude: longitude))
             self.state = .downloading
         }
         
@@ -242,7 +243,7 @@ extension PlaybackViewController : PlayerDelegate {
     }
 }
 
-extension PlaybackViewController : LocatorDelegate {
+extension PlaybackViewController : LocationDelegate {
     
     func presentFailureAlert(_ alert : UIViewController) {
         self.state = .idle
@@ -250,7 +251,7 @@ extension PlaybackViewController : LocatorDelegate {
     }
     
     func locator(didUpdateBestLocation location: CLLocation) {
-        self.audioManager.getTapedBasedOn(location: location)
+//        self.audioManager.getTapedBasedOn(location: location)
     }
     
     func locator(didFailWithError error: Error) {

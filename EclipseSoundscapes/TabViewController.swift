@@ -10,8 +10,6 @@ import UIKit
 import CoreLocation
 
 class TabViewController: UITabBarController {
-    
-    var locator : Locator?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,8 +17,6 @@ class TabViewController: UITabBarController {
         // Do any additional setup after loading the view.
 //        signIn()
         
-        locator = Locator()
-        locator?.delegate = self
         self.tabBar.barTintColor = UIColor.init(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
         self.tabBar.tintColor = UIColor.init(red: 214/255, green: 93/255, blue: 18/255, alpha: 1.0)
     }
@@ -49,25 +45,36 @@ class TabViewController: UITabBarController {
         }
     }
     
-    func getLocation() {
-        locator?.getLocation()
-    }
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
 }
-extension TabViewController : LocatorDelegate {
-    func presentFailureAlert(_ alert : UIViewController) {
-        self.present(alert, animated: true, completion: nil)
+
+extension UITabBarController {
+    
+    func setTabBarVisible(visible:Bool, animated:Bool) {
+        
+        //* This cannot be called before viewDidLayoutSubviews(), because the frame is not set before this time
+        
+        // bail if the current state matches the desired state
+        if tabBarIsVisible() == visible { return }
+        
+        // get a frame calculation ready
+        let frame = self.tabBar.frame
+        let height = frame.size.height
+        let offsetY = (visible ? -height : height)
+        
+        // zero duration means no animation
+        let duration:TimeInterval = (animated ? 0.3 : 0.0)
+        
+        //  animate the tabBar
+        UIView.animate(withDuration: duration) {
+            self.tabBar.frame = frame.offsetBy(dx: 0, dy: offsetY)
+            return
+        }
     }
     
-    func locator(didUpdateBestLocation location: CLLocation) {
-        UserDefaults.standard.set(location.coordinate.longitude, forKey: "Longitude")
-        UserDefaults.standard.set(location.coordinate.latitude, forKey: "Latitude")
-    }
-    
-    func locator(didFailWithError error: Error) {
-        print(error.localizedDescription)
+    func tabBarIsVisible() -> Bool {
+        return self.tabBar.frame.origin.y < view.frame.maxY
     }
 }
