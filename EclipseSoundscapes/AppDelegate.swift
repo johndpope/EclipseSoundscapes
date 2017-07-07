@@ -17,12 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     override init() {
         super.init()
         FirebaseApp.configure()
+        FirebaseConfiguration.shared.setLoggerLevel(.min)
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        ResourceManager.manager.loadCoreData()
         return true
     }
 

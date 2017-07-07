@@ -23,13 +23,13 @@ import UIKit
 
 public struct SPConstraintsAssistent {
     
-    static func setEqualSizeConstraint(_ subView: UIView, superVuew: UIView) {
+    static func setEqualSizeConstraint(_ subView: UIView, superView: UIView) {
         subView.translatesAutoresizingMaskIntoConstraints = false;
         let topMarginConstraint = NSLayoutConstraint(
             item: subView,
             attribute: NSLayoutAttribute.topMargin,
             relatedBy: NSLayoutRelation.equal,
-            toItem: superVuew,
+            toItem: superView,
             attribute: NSLayoutAttribute.top,
             multiplier: 1,
             constant: 0)
@@ -38,7 +38,7 @@ public struct SPConstraintsAssistent {
             item: subView,
             attribute: NSLayoutAttribute.bottomMargin,
             relatedBy: NSLayoutRelation.equal,
-            toItem: superVuew,
+            toItem: superView,
             attribute: NSLayoutAttribute.bottom,
             multiplier: 1,
             constant: 0)
@@ -47,7 +47,7 @@ public struct SPConstraintsAssistent {
             item: subView,
             attribute: NSLayoutAttribute.leadingMargin,
             relatedBy: NSLayoutRelation.equal,
-            toItem: superVuew,
+            toItem: superView,
             attribute: NSLayoutAttribute.leading,
             multiplier: 1,
             constant: 0)
@@ -56,12 +56,12 @@ public struct SPConstraintsAssistent {
             item: subView,
             attribute: NSLayoutAttribute.trailingMargin,
             relatedBy: NSLayoutRelation.equal,
-            toItem: superVuew,
+            toItem: superView,
             attribute: NSLayoutAttribute.trailing,
             multiplier: 1,
             constant: 0)
         
-        superVuew.addConstraints([
+        superView.addConstraints([
             topMarginConstraint, bottomMarginConstraint, leadingMarginConstraint, trailingMarginConstraint
             ])
     }

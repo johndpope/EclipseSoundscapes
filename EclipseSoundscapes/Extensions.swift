@@ -115,7 +115,11 @@ extension UIFontDescriptor {
             name = "Futura-MediumItalic"
             break
         case .bold :
-            name = "Futura-Bold"
+            if #available(iOS 10.0, *) {
+                name = "Futura-Bold"
+            } else {
+                name = "Futura-CondensedMedium"
+            }
             break
         }
 
@@ -225,11 +229,15 @@ extension UIFont {
             name = "Futura-MediumItalic"
             break
         case .bold :
-            name = "Futura-Bold"
+            if #available(iOS 10.0, *) {
+                name = "Futura-Bold"
+            } else {
+                name = "Futura-CondensedMedium"
+            }
             break
         }
         
-        return UIFont.init(name:  name, size: size)!
+        return UIFont.init(name: name, size: size)!
     }
     
 }

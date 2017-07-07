@@ -21,9 +21,15 @@
 
 import UIKit
 
+public enum PermissionState {
+    case accepted, denied, untouched
+}
+
 public protocol SPRequestPermissionTwiceControlInterface {
     
     var permission: SPRequestPermissionType {get set}
+    
+    func setPermissionState(state: PermissionState)
     
     func setNormalState(animated: Bool)
     
@@ -32,6 +38,8 @@ public protocol SPRequestPermissionTwiceControlInterface {
     func addAction(_ target: Any?, action: Selector)
     
     func addAsSubviewTo(_ view: UIView)
+    
+    
 }
 
 

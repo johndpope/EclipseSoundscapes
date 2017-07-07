@@ -30,6 +30,29 @@ class SPRequestPermissionTwiceControl: UIButton, SPRequestPermissionTwiceControl
     var normalColor: UIColor
     var selectedColor: UIColor
     
+    private var permissionState = PermissionState.untouched {
+        didSet {
+            switch permissionState {
+            case .accepted:
+                self.accessibilityValue = "Permission Accepted"
+                self.iconView.backgroundColor = selectedColor
+                break
+            case .denied:
+                self.accessibilityValue = "Permission Denied"
+                self.iconView.backgroundColor = .red
+                self.backgroundColor = .red
+                self.setTitleColor(normalColor, for: .normal)
+                self.iconView.setSelectedState(with: .white)
+                break
+            case .untouched:
+                self.accessibilityValue = "Permission not accepted yet"
+                self.iconView.backgroundColor = normalColor
+                self.backgroundColor = normalColor
+                break
+            }
+        }
+    }
+    
     init(permissionType: SPRequestPermissionType, title: String, normalIconImage: UIImage, selectedIconImage: UIImage, normalColor: UIColor, selectedColor: UIColor) {
         self.permission = permissionType
         
@@ -42,7 +65,7 @@ class SPRequestPermissionTwiceControl: UIButton, SPRequestPermissionTwiceControl
         super.init(frame: CGRect.zero)
         self.setTitle(title, for: UIControlState.normal)
         self.commonInit()
-        //self.iconView.backgroundColor = UIColor.red
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -52,13 +75,14 @@ class SPRequestPermissionTwiceControl: UIButton, SPRequestPermissionTwiceControl
     private func commonInit() {
         self.layer.borderWidth = 1
         self.addSubview(self.iconView)
-        self.titleLabel?.font = UIFont.init(name: SPRequestPermissionData.fonts.base() + "-Medium", size: 14)
+        self.titleLabel?.font = SPRequestPermissionData.fonts.base(fontName: .condensedMedium, size: 14)
         if UIScreen.main.bounds.width < 335 {
-            self.titleLabel?.font = UIFont.init(name: SPRequestPermissionData.fonts.base() + "-Medium", size: 12)
+            self.titleLabel?.font = SPRequestPermissionData.fonts.base(fontName: .condensedMedium, size: 12)
         }
         self.titleLabel?.minimumScaleFactor = 0.5
         self.titleLabel?.adjustsFontSizeToFitWidth = true
         self.setNormalState(animated: false)
+        self.setPermissionState(state: .untouched)
     }
     
     func setNormalState(animated: Bool) {
@@ -86,6 +110,10 @@ class SPRequestPermissionTwiceControl: UIButton, SPRequestPermissionTwiceControl
         self.setTitleColor(colorForTitle, for: UIControlState.normal)
         self.setTitleColor(colorForTitle.withAlphaComponent(0.62), for: UIControlState.highlighted)
         self.iconView.setSelectedState(with: self.normalColor) 
+    }
+    
+    func setPermissionState(state: PermissionState) {
+        self.permissionState = state
     }
     
     internal func addAction(_ target: Any?, action: Selector) {

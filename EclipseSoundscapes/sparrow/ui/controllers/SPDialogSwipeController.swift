@@ -245,7 +245,7 @@ public class SPDialogSwipeController<DialogView: UIView, BottomView: UIView>: UI
         self.view.addSubview(self.backgroundView)
         self.view.addSubview(self.bottomView)
         self.view.addSubview(self.contentView)
-        SPConstraintsAssistent.setEqualSizeConstraint(backgroundView, superVuew: self.view)
+        SPConstraintsAssistent.setEqualSizeConstraint(backgroundView, superView: self.view)
         self.contentView.addSubview(self.dialogView)
         self.backgroundView.setGradeAlpha(0, blurRaius: 0)
         self.contentView.backgroundColor = UIColor.clear

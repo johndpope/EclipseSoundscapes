@@ -51,6 +51,7 @@ class SPRequestPermissionDialogInteractivePresenter {
         self.viewController.setBottomTitle(self.dataSource.bottomAdviceTitle())
         self.viewController.setUnderDialogTitle(self.dataSource.underDialogAdviceTitle())
         
+        
         for permission in permissions {
             let control = self.createControlForPermission(permission)
             controls.append(control)
@@ -81,9 +82,11 @@ class SPRequestPermissionDialogInteractivePresenter {
             if self.permissionManager.isAuthorizedPermission(control.permission) {
                 self.eventsDelegate?.didAllowPermission(permission: control.permission)
                 control.setSelectedState(animated: true)
+                control.setPermissionState(state: .accepted)
             } else {
                 self.eventsDelegate?.didDeniedPermission(permission: control.permission)
                 control.setNormalState(animated: true)
+                control.setPermissionState(state: .denied)
                 
                 if !(control.permission == .notification) {
                     self.showDialogForProtectPermissionOnViewController()
@@ -199,8 +202,10 @@ class SPRequestPermissionDialogInteractivePresenter {
         for control in controls {
             if permissionManager.isAuthorizedPermission(control.permission) {
                 control.setSelectedState(animated: false)
+                control.setPermissionState(state: .accepted)
             } else {
                 control.setNormalState(animated: false)
+                control.setPermissionState(state: .denied)
             }
         }
     }

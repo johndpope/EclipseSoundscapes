@@ -52,14 +52,14 @@ class SPTitleWithSubtitleView: UIView {
         
         self.subtitleLabel.text = "Subtitle"
         self.subtitleLabel.layer.shadowColor = UIColor.black.cgColor
-        self.subtitleLabel.font = UIFont.fonts.AvenirNext(type: .Medium, size: 14)
+        self.subtitleLabel.font = SPRequestPermissionData.fonts.base(fontName: .meduium, size: 14)
         self.subtitleLabel.textColor = UIColor.white
         self.subtitleLabel.setCenteringAlignment()
         self.subtitleLabel.numberOfLines = 0
         self.addSubview(self.subtitleLabel)
         
         self.titleLabel.text = "Title"
-        self.titleLabel.font = UIFont.fonts.AvenirNext(type: .DemiBold, size: 25)
+        self.titleLabel.font = SPRequestPermissionData.fonts.base(fontName: .extraBold, size: 22)
         self.titleLabel.textColor = UIColor.white
         self.titleLabel.setCenteringAlignment()
         self.addSubview(self.titleLabel)

@@ -47,33 +47,21 @@ public class SPRequestPermissionDialogInteractiveView: UIView {
         self.addSubview(self.headerView)
         self.headerView.backgroundColor  = UIColor.clear
         self.headerView.titleLabel.textColor = UIColor.white
-        self.headerView.titleLabel.font = UIFont.init(
-            name: SPRequestPermissionData.fonts.base() + "-Medium",
-            size: 24
-        )
+        self.headerView.titleLabel.font = SPRequestPermissionData.fonts.base(fontName: .extraBold, size: 22)
         self.headerView.titleLabel.minimumScaleFactor = 0.5
         self.headerView.subtitleLabel.textColor = UIColor.white
-        self.headerView.subtitleLabel.font = UIFont.init(
-            name: SPRequestPermissionData.fonts.base() + "-Medium",
-            size: 12
-        )
+        self.headerView.subtitleLabel.font = SPRequestPermissionData.fonts.base(fontName: .meduium, size: 12)
         self.headerView.subtitleLabel.minimumScaleFactor = 0.5
         self.headerView.subtitleLabel.numberOfLines = 0
         self.topLabel.setCenteringAlignment()
         self.topLabel.textColor = UIColor.black.withAlphaComponent(0.45)
         self.topLabel.minimumScaleFactor = 0.7
         self.topLabel.adjustsFontSizeToFitWidth = true
-        self.topLabel.font = UIFont.init(
-            name: SPRequestPermissionData.fonts.base() + "-Medium",
-            size: 12
-        )
+        self.topLabel.font = SPRequestPermissionData.fonts.base(fontName: .condensedMedium, size: 12)
         self.topLabel.numberOfLines = 0
         self.bottomLabel.setCenteringAlignment()
         self.bottomLabel.textColor = UIColor.black.withAlphaComponent(0.4)
-        self.bottomLabel.font = UIFont.init(
-            name: SPRequestPermissionData.fonts.base() + "-Regular",
-            size: 10
-        )
+        self.bottomLabel.font = SPRequestPermissionData.fonts.base(fontName: .condensedMedium, size: 12)
         self.bottomLabel.numberOfLines = 0
         self.bottomLabel.minimumScaleFactor = 0.7
         self.bottomLabel.adjustsFontSizeToFitWidth = true
@@ -81,6 +69,8 @@ public class SPRequestPermissionDialogInteractiveView: UIView {
         self.buttonsContainerView.maxItemSideSize = 50
         self.buttonsContainerView.spaceFactor = 0.055
         self.buttonsContainerView.minSpace = 8
+        
+        setAccesibility()
     }
     
     override public func layoutSubviews() {
@@ -181,5 +171,17 @@ public class SPRequestPermissionDialogInteractiveView: UIView {
         default:
             return 0.36
         }
+    }
+    
+    private func setAccesibility() {
+        
+        self.headerView.titleLabel.isAccessibilityElement = false
+        
+        self.headerView.subtitleLabel.accessibilityTraits = UIAccessibilityTraitStaticText
+        
+        self.buttonsContainerView.subviews.forEach { (view) in
+            view.accessibilityHint = "Double Tap to Accept"
+        }
+        
     }
 }

@@ -59,19 +59,19 @@ extension CGPoint : Hashable {
         return Int(x).hashValue << 32 ^ Int(y).hashValue
     }
     
-    func strideUpY(to limit : CGFloat = 5) -> StrideTo<CGFloat> {
+    func strideUpY(to limit : CGFloat = 7) -> StrideTo<CGFloat> {
         return stride(from: y.rounded(), to: y.rounded() + limit, by: 1)
     }
     
-    func strideDownY(to limit : CGFloat = 5) -> StrideTo<CGFloat> {
+    func strideDownY(to limit : CGFloat = 7) -> StrideTo<CGFloat> {
        return stride(from: y.rounded(), to: y.rounded() - limit, by: -1)
     }
     
-    func strideUpX(to limit : CGFloat = 5) -> StrideTo<CGFloat> {
+    func strideUpX(to limit : CGFloat = 7) -> StrideTo<CGFloat> {
         return stride(from: x.rounded(), to: x.rounded() + limit, by: 1)
     }
     
-    func strideDownX(to limit : CGFloat = 5) -> StrideTo<CGFloat> {
+    func strideDownX(to limit : CGFloat = 7) -> StrideTo<CGFloat> {
         return stride(from: x.rounded(), to: x.rounded() - limit, by: -1)
     }
 }

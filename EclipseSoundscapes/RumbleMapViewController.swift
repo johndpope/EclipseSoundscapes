@@ -91,6 +91,12 @@ class RumbleMapViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(setText), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(leftApplication), name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(returnToApplication), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceConnectedNotification), name: Notification.Name.AVAudioSessionRouteChange, object: nil)
+        // add interruption handler
+        NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+        
         setSession(active: true)
     }
     
@@ -256,7 +262,7 @@ class RumbleMapViewController: UIViewController {
         
         let markerGesture = UILongPressGestureRecognizer(target: self, action: #selector(saveMarkerPosition(_:)))
         markerGesture.delegate = self
-        markerGesture.minimumPressDuration = 2.0
+        markerGesture.minimumPressDuration = 1.5
         rumbleMap.addGestureRecognizer(markerGesture)
     }
     
@@ -311,10 +317,15 @@ class RumbleMapViewController: UIViewController {
     }
     
     func touchDown(_ recognizer: UILongPressGestureRecognizer) {
-        
+        print(recognizer.numberOfTouches)
+        if recognizer.numberOfTouches > 2 {
+            envelope.stop()
+            tickSound.stop()
+            return
+        }
         if recognizer.state == .began && !isZooming {
             let location = recognizer.location(in: recognizer.view)
-            print(location)
+//            print(location)
             if !(recognizer.view?.frame.contains(location))! {
                 envelope.stop()
                 tickSound.stop()
@@ -338,7 +349,7 @@ class RumbleMapViewController: UIViewController {
         
         if recognizer.state == .began || recognizer.state == .changed {
             let location = recognizer.location(in: recognizer.view)
-            print(location)
+//            print(location)
             if !(recognizer.view?.frame.contains(location))! {
                 envelope.stop()
                 tickSound.stop()
@@ -424,6 +435,54 @@ class RumbleMapViewController: UIViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    
+    //MARK: Notification Handlers
+    func leftApplication() {
+        print("Left")
+        setSession(active: false)
+    }
+    
+    func returnToApplication(){
+        print("Returned")
+        setSession(active: true)
+    }
+    
+    /// Notification handler for AVAudioSessionRouteChange to catch changes to device connection from the audio jack.
+    ///
+    /// - Parameter notification: Notification object cointaing AVAudioSessionRouteChange data
+    func deviceConnectedNotification(notification: Notification){
+        
+        let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
+        switch audioRouteChangeReason {
+        case AVAudioSessionRouteChangeReason.newDeviceAvailable.rawValue: ///device is connected
+            
+            break
+            
+        case AVAudioSessionRouteChangeReason.oldDeviceUnavailable.rawValue: ///device is not connected
+            
+            break
+            
+        default:
+            break
+        }
+    }
+    
+    //TODO: Implement the recording to pause while interruption is in prpogress and restart after interruption is stoped
+    /// Interruption Handler
+    ///
+    /// - Parameter notification: Device generated notification about interruption
+    func handleInterruption(_ notification: Notification) {
+        let theInterruptionType = (notification as NSNotification).userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
+        NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSessionInterruptionType.began.rawValue ? "Begin Interruption" : "End Interruption")
+        
+        if theInterruptionType == AVAudioSessionInterruptionType.began.rawValue {
+            
+        }
+        
+        if theInterruptionType == AVAudioSessionInterruptionType.ended.rawValue {
+        }
     }
 }
 

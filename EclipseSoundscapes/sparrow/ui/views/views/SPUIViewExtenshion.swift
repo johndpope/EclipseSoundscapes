@@ -148,7 +148,7 @@ public extension UIView {
         let gradeView = UIView.init()
         gradeView.alpha = 0
         self.addSubview(gradeView)
-        SPConstraintsAssistent.setEqualSizeConstraint(gradeView, superVuew: self)
+        SPConstraintsAssistent.setEqualSizeConstraint(gradeView, superView: self)
         gradeView.alpha = alpha
         gradeView.backgroundColor = color
         return gradeView

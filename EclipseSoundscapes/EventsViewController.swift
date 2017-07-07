@@ -57,6 +57,7 @@ class EventsViewController: UIViewController {
         errorBtn.titleLabel?.textAlignment = .center
         errorBtn.setTitle(Location.string.general, for: .normal)
         
+        
         countDownView.translatesAutoresizingMaskIntoConstraints = false
         
         infoView = InfoView()
@@ -72,6 +73,7 @@ class EventsViewController: UIViewController {
         
         countDownView.alpha = 0
         infoView.alpha = 0
+        showError()
     }
     
     func setText() {
@@ -142,6 +144,7 @@ class EventsViewController: UIViewController {
         UIView.animate(withDuration: 0.3, animations: {
             self.countDownView.alpha = 0.0
             self.infoView.alpha = 0.0
+            self.errorBtn.alpha = 1.0
         }, completion: { (_) in
             self.countDownView.isHidden = true
             self.infoView.isHidden = true
@@ -196,9 +199,13 @@ extension EventsViewController : LocationDelegate {
         setCountdown("\(timeGenerator.contact1.date) \(timeGenerator.contact1.time)")
         infoView.timeGenerator = timeGenerator
         foundLocationOnce = true
-        if isSpinnerShowing {
-            hideSpinner()
+        hideError { 
+            if self.isSpinnerShowing {
+                self.hideSpinner()
+            }
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.countDownView)
         }
+        
     }
     
     func locator(didFailWithError error: Error) {
@@ -219,8 +226,10 @@ extension EventsViewController : LocationDelegate {
             errorBtn.setTitle(Location.string.unkown, for: .normal)
             break
         }
-        hideSpinner()
-        showError { 
+        if self.isSpinnerShowing {
+            self.hideSpinner()
+        }
+        showError {
             self.infoView.clear()
             self.countDownView.clear()
             self.locator.stopLocating()
@@ -232,10 +241,8 @@ extension EventsViewController : LocationDelegate {
 extension EventsViewController : SPRequestPermissionEventsDelegate {
     func didHide() {
         if Location.checkPermission() {
-            hideError({ 
-                self.getlocation(animated: true)
-            })
-            
+            errorBtn.setTitle(Location.string.general, for: .normal)
+            getlocation(animated: true)
         } else {
             showError()
         }

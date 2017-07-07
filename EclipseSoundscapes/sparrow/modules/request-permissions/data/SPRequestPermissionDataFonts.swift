@@ -24,8 +24,8 @@ import UIKit
 extension SPRequestPermissionData {
     
     struct fonts {
-        static func base() -> String {
-            return "AvenirNext"
+        static func base(fontName: Futura = .condensedMedium, size: CGFloat = 16) -> UIFont {
+            return UIFont.getDefautlFont(fontName, size: size)
         }
     }
 }

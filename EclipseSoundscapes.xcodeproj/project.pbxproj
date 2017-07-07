@@ -56,7 +56,6 @@
 		B79263B01F0D7B8200062B8D /* SPUIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B792632B1F0D7B8200062B8D /* SPUIImageExtension.swift */; };
 		B79263B11F0D7B8200062B8D /* SPUIScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B792632C1F0D7B8200062B8D /* SPUIScreenExtension.swift */; };
 		B79263B21F0D7B8200062B8D /* SPUIViewControllerExtenshion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B792632D1F0D7B8200062B8D /* SPUIViewControllerExtenshion.swift */; };
-		B79263B31F0D7B8200062B8D /* SPUIFontExtenshion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B792632F1F0D7B8200062B8D /* SPUIFontExtenshion.swift */; };
 		B79263B51F0D7B8200062B8D /* SPLaunchAnimationTwitterExtenshion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79263351F0D7B8200062B8D /* SPLaunchAnimationTwitterExtenshion.swift */; };
 		B79263B61F0D7B8200062B8D /* SPLaunchAnimationSlideExtenshion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79263371F0D7B8200062B8D /* SPLaunchAnimationSlideExtenshion.swift */; };
 		B79263B71F0D7B8200062B8D /* SPLaunchAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79263381F0D7B8200062B8D /* SPLaunchAnimation.swift */; };
@@ -212,7 +211,6 @@
 		B792632B1F0D7B8200062B8D /* SPUIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPUIImageExtension.swift; sourceTree = "<group>"; };
 		B792632C1F0D7B8200062B8D /* SPUIScreenExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPUIScreenExtension.swift; sourceTree = "<group>"; };
 		B792632D1F0D7B8200062B8D /* SPUIViewControllerExtenshion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPUIViewControllerExtenshion.swift; sourceTree = "<group>"; };
-		B792632F1F0D7B8200062B8D /* SPUIFontExtenshion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPUIFontExtenshion.swift; sourceTree = "<group>"; };
 		B79263351F0D7B8200062B8D /* SPLaunchAnimationTwitterExtenshion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLaunchAnimationTwitterExtenshion.swift; sourceTree = "<group>"; };
 		B79263371F0D7B8200062B8D /* SPLaunchAnimationSlideExtenshion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLaunchAnimationSlideExtenshion.swift; sourceTree = "<group>"; };
 		B79263381F0D7B8200062B8D /* SPLaunchAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLaunchAnimation.swift; sourceTree = "<group>"; };
@@ -467,7 +465,6 @@
 				B792631A1F0D7B8200062B8D /* constraints */,
 				B792631D1F0D7B8200062B8D /* delay */,
 				B79263231F0D7B8200062B8D /* extension */,
-				B792632E1F0D7B8200062B8D /* fonts */,
 				B79263321F0D7B8200062B8D /* launch */,
 				B79263391F0D7B8200062B8D /* layout */,
 				B792633B1F0D7B8200062B8D /* modules */,
@@ -521,14 +518,6 @@
 				B792632D1F0D7B8200062B8D /* SPUIViewControllerExtenshion.swift */,
 			);
 			path = extension;
-			sourceTree = "<group>";
-		};
-		B792632E1F0D7B8200062B8D /* fonts */ = {
-			isa = PBXGroup;
-			children = (
-				B792632F1F0D7B8200062B8D /* SPUIFontExtenshion.swift */,
-			);
-			path = fonts;
 			sourceTree = "<group>";
 		};
 		B79263321F0D7B8200062B8D /* launch */ = {
@@ -1327,7 +1316,6 @@
 				B7BD1AD31EF02A8800A739FA /* PlaybackViewController.swift in Sources */,
 				B79263CA1F0D7B8200062B8D /* SPRequestPermissionEventsDelegate.swift in Sources */,
 				B769E93C1EFAA76D008393A6 /* EventsViewController.swift in Sources */,
-				B79263B31F0D7B8200062B8D /* SPUIFontExtenshion.swift in Sources */,
 				B7806E5E1F0D5B580052A7CD /* CountdownView.swift in Sources */,
 				B79263A91F0D7B8200062B8D /* SPArrayExtension.swift in Sources */,
 				B79263CE1F0D7B8200062B8D /* SPTypes.swift in Sources */,

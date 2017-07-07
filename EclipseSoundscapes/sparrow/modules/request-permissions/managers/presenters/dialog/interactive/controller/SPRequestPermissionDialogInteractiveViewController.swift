@@ -25,6 +25,8 @@ public class SPRequestPermissionDialogInteractiveViewController: SPDialogSwipeCo
     
     public var presenter: SPRequestPermissionDialogInteractivePresenterDelegate
     
+    private var closeBtn : UIButton!
+    
     init(presenter: SPRequestPermissionDialogInteractivePresenterDelegate) {
         self.presenter = presenter
         super.init(dialogView: SPRequestPermissionDialogInteractiveView())
@@ -37,17 +39,14 @@ public class SPRequestPermissionDialogInteractiveViewController: SPDialogSwipeCo
         self.dialogViewSidesRelativeFactor = 0.667
         self.dialogViewPortraitYtranslationFactor = 0.96
         self.dialogViewLandscapeYtranslationFactor = 1
-        
-        self.bottomView.font = UIFont.init(
-            name: SPRequestPermissionData.fonts.base() + "-Regular",
-            size: 12
-        )
+        self.bottomView.font = SPRequestPermissionData.fonts.base(fontName: .meduium, size: 12)
         self.bottomView.textColor = UIColor.white
         self.bottomView.setShadowOffsetForLetters(heightOffset: 1, opacity: 0.4)
         self.bottomView.setCenteringAlignment()
         self.bottomView.numberOfLines = 0
-        
+
         setupCloseBtn()
+        setAccesibility()
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -67,13 +66,10 @@ public class SPRequestPermissionDialogInteractiveViewController: SPDialogSwipeCo
     }
 
     private func setupCloseBtn() {
-        let closeBtn = UIButton(type: .custom)
+        closeBtn = UIButton(type: .custom)
         closeBtn.setTitle("X", for: .normal)
         closeBtn.titleLabel?.textColor = .white
-        closeBtn.titleLabel?.font = UIFont.init(
-            name: SPRequestPermissionData.fonts.base() + "-Medium",
-            size: 24
-        )
+        closeBtn.titleLabel?.font = SPRequestPermissionData.fonts.base(fontName: .extraBold, size: 22)
         closeBtn.translatesAutoresizingMaskIntoConstraints = false
         closeBtn.addTarget(self, action: #selector(SPRequestPermissionDialogInteractiveViewController.close), for: .touchUpInside)
         
@@ -87,6 +83,13 @@ public class SPRequestPermissionDialogInteractiveViewController: SPDialogSwipeCo
     
     @objc private func close() {
         self.hide()
+    }
+    
+    private func setAccesibility() {
+        self.bottomView.isAccessibilityElement = false
+        
+        self.closeBtn.accessibilityLabel = "Close"
+        self.closeBtn.accessibilityHint = "Double Tap to Close"
     }
 }
 
