@@ -2,124 +2,132 @@
 //  AudioManager.swift
 //  EclipseSoundscapes
 //
-//  Created by Anonymous on 6/7/17.
-//  Copyright © 2017 DevByArlindo. All rights reserved.
+//  Created by Arlindo Goncalves on 6/7/17.
 //
+//  Copyright © 2017 Arlindo Goncalves.
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see [http://www.gnu.org/licenses/].
+//
+//  For Contact email: arlindo@eclipsesoundscapes.org
 
 import Foundation
 import CoreLocation
-import Firebase
-import FirebaseDatabase
-import FirebaseStorage
 import Synchronized
-import UserNotifications
 
-public protocol AudioManagerDelegate: NSObjectProtocol {
-    func recievedRecordings()
-    func emptyRecordingQueue()
-    func playback(tape: Tape)
-    func playbackError(error: Error?)
-    func downloading()
-    func stopDownloading()
-}
+//public protocol AudioManagerDelegate: NSObjectProtocol {
+//    func recievedRecordings()
+//    func emptyRecordingQueue()
+//    func playback(tape: Tape)
+//    func playbackError(error: Error?)
+//    func downloading()
+//    func stopDownloading()
+//}
 
 public class AudioManager: NSObject {
     
-    weak var delegate : AudioManagerDelegate?
+//    weak var delegate : AudioManagerDelegate?
+//    
+//    static var playbackHistory = Set<String>()
+//    
+//    private var database :Database!
+//    
+//    var queryHandle :UInt = 0
+//    
+//    let downloader = Downloader()
+//    
+//    var downloadTask : StorageDownloadTask?
+//    
+//    public override init() {
+//        super.init()
+//        database = Database.database()
+//    }
+//    
+//    func pause() {
+//        self.downloadTask?.pause()
+//    }
+//    
+//    func resume() {
+//        self.downloadTask?.resume()
+//    }
+//    
+//    func stop() {
+//        self.downloadTask?.cancel()
+//        downloader.delete()
+//    }
     
-    var playbackQueue = AudioQueue<String>()
+//    func nextTape() -> Bool {
+//        guard let tapeId = playbackQueue.dequeue() else {
+//            return false
+//        }
+//        self.downloadRecording(recordingId: tapeId)
+//        return true
+//    }
     
-    static var playbackHistory = Set<String>()
-    
-    private var database :Database!
-    
-    var queryHandle :UInt = 0
-    
-    let downloader = Downloader()
-    
-    var downloadTask : StorageDownloadTask?
-    
-    public override init() {
-        super.init()
-        database = Database.database()
-    }
-    
-    func pause() {
-        self.downloadTask?.pause()
-    }
-    
-    func resume() {
-        self.downloadTask?.resume()
-    }
-    
-    func stop() {
-        self.downloadTask?.cancel()
-        downloader.delete()
-    }
-    
-    func nextTape() -> Bool {
-        guard let tapeId = playbackQueue.dequeue() else {
-            return false
-        }
-        self.downloadRecording(recordingId: tapeId)
-        return true
-    }
-    
-    private func downloadRecording(recordingId : String) {
-        
-        downloadTask = downloader.downloadAudio(withId: recordingId) { (url, error) in
-            guard error == nil, let audioUrl = url else {
-                return
-            }
-            self.downloadInfo(recordingId: recordingId, audioUrl: audioUrl)
-        }
-        downloadTask?.observe(.progress, handler: { (snapshot) in
-            // Failure
-            print("Audio: \(snapshot.progress?.fractionCompleted ?? 0.0)")
-        })
-        
-        downloadTask?.observe(.pause, handler: { (_) in
-            self.delegate?.stopDownloading()
-        })
-        
-        downloadTask?.observe(.resume, handler: { (_) in
-            self.delegate?.downloading()
-        })
-        
-        downloadTask?.observe(.failure, handler: { (snapshot) in
-            // Failure
-            self.delegate?.playbackError(error: snapshot.error)
-            self.downloader.delete()
-        })
-    }
-    
-    private func downloadInfo (recordingId : String, audioUrl : URL) {
-        downloadTask = downloader.downloadInforamtion(withId: recordingId) { (info, error) in
-            guard error == nil, let audioInfo = info else {
-                return
-            }
-            let tape = Tape(withInfo: audioInfo, audioUrl)
-            
-            self.delegate?.playback(tape: tape)
-        }
-        downloadTask?.observe(.failure, handler: { (snapshot) in
-            // Failure
-            self.delegate?.playbackError(error: snapshot.error)
-            self.downloader.delete()
-        })
-        downloadTask?.observe(.progress, handler: { (snapshot) in
-            // Failure
-            print("Info: \(snapshot.progress?.fractionCompleted ?? 0.0)")
-        })
-        
-        downloadTask?.observe(.pause, handler: { (_) in
-            self.delegate?.stopDownloading()
-        })
-        
-        downloadTask?.observe(.resume, handler: { (_) in
-            self.delegate?.downloading()
-        })
-    }
+//    private func downloadRecording(recordingId : String) {
+//        
+//        downloadTask = downloader.downloadAudio(withId: recordingId) { (url, error) in
+//            guard error == nil, let audioUrl = url else {
+//                return
+//            }
+//            self.downloadInfo(recordingId: recordingId, audioUrl: audioUrl)
+//        }
+//        downloadTask?.observe(.progress, handler: { (snapshot) in
+//            // Failure
+//            print("Audio: \(snapshot.progress?.fractionCompleted ?? 0.0)")
+//        })
+//        
+//        downloadTask?.observe(.pause, handler: { (_) in
+//            self.delegate?.stopDownloading()
+//        })
+//        
+//        downloadTask?.observe(.resume, handler: { (_) in
+//            self.delegate?.downloading()
+//        })
+//        
+//        downloadTask?.observe(.failure, handler: { (snapshot) in
+//            // Failure
+//            self.delegate?.playbackError(error: snapshot.error)
+//            self.downloader.delete()
+//        })
+//    }
+//    
+//    private func downloadInfo (recordingId : String, audioUrl : URL) {
+//        downloadTask = downloader.downloadInforamtion(withId: recordingId) { (info, error) in
+//            guard error == nil, let audioInfo = info else {
+//                return
+//            }
+//            let tape = Tape(withInfo: audioInfo, audioUrl)
+//            
+//            self.delegate?.playback(tape: tape)
+//        }
+//        downloadTask?.observe(.failure, handler: { (snapshot) in
+//            // Failure
+//            self.delegate?.playbackError(error: snapshot.error)
+//            self.downloader.delete()
+//        })
+//        downloadTask?.observe(.progress, handler: { (snapshot) in
+//            // Failure
+//            print("Info: \(snapshot.progress?.fractionCompleted ?? 0.0)")
+//        })
+//        
+//        downloadTask?.observe(.pause, handler: { (_) in
+//            self.delegate?.stopDownloading()
+//        })
+//        
+//        downloadTask?.observe(.resume, handler: { (_) in
+//            self.delegate?.downloading()
+//        })
+//    }
     
 //    func getTapedBasedOn(location: CLLocation) {
 //        
@@ -173,61 +181,5 @@ public class AudioManager: NSObject {
         
         let tape = Tape(withAudio: url)
         return TapePlayer(tape: tape)
-    }
-    
-    static func registerEclipseNotifications() {
-        
-        let contact1Date = "06-21-2017 10:30:00"
-        registerLocalNotification(withDate: date(fromString: contact1Date))
-    }
-    
-    static func notificationPermission(_ handler : @escaping (Bool?) -> Void ) {
-        
-        if #available(iOS 10.0, *) {
-            let options: UNAuthorizationOptions = [.alert, .sound]
-            let center = UNUserNotificationCenter.current()
-            center.requestAuthorization(options: options) { (granted, error) in
-                guard error == nil else {
-                    print(error?.localizedDescription ?? "Error")
-                    handler(nil)
-                    return
-                }
-                handler(granted)
-            }
-        } else {
-            // Fallback on earlier versions
-            guard let setting  = UIApplication.shared.currentUserNotificationSettings else {
-                handler(false)//Present alert to have the user accept notifications in settings
-                return
-            }
-            
-            if setting.types == [] {
-                handler(false) //Present alert to have the user accept notifications
-            } else {
-                handler(true)
-            }
-        }
-        
-    }
-    
-    static func date(fromString str: String) -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-        return dateFormatter.date(from: str)
-    }
-    
-    fileprivate static func registerLocalNotification(withDate date: Date?) {
-        guard let registerDate = date else {
-            print("Date was not Properly Formatted")
-            return
-        }
-        let localNotificationSilent = UILocalNotification()
-        localNotificationSilent.fireDate = registerDate
-        localNotificationSilent.repeatInterval = .day
-        localNotificationSilent.alertBody = "Started!"
-        localNotificationSilent.alertAction = "swipe to hear!"
-        localNotificationSilent.category = "PLAY_CATEGORY"
-        UIApplication.shared.scheduleLocalNotification(localNotificationSilent)
     }
 }

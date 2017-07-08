@@ -2,21 +2,31 @@
 //  TabViewController.swift
 //  EclipseSoundscapes
 //
-//  Created by Anonymous on 6/12/17.
-//  Copyright © 2017 DevByArlindo. All rights reserved.
+//  Created by Arlindo Goncalves on 6/12/17.
 //
+//  Copyright © 2017 Arlindo Goncalves.
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see [http://www.gnu.org/licenses/].
+//
+//  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import CoreLocation
 
 class TabViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-//        signIn()
-        
         self.tabBar.barTintColor = UIColor.init(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0)
         self.tabBar.tintColor = UIColor.init(red: 214/255, green: 93/255, blue: 18/255, alpha: 1.0)
     }
@@ -28,21 +38,6 @@ class TabViewController: UITabBarController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        getLocation()
-    }
-    
-    func signIn() {
-        Authenticator.auth.signIn(withEmail: "Username", password: "Password") { (_, error) in
-            guard error == nil else {
-                let alert = UIAlertController(title: "We couldn't Sign You in", message: "\(error?.localizedDescription ?? "")", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Try Again", style: .default, handler: { (_) in
-                    self.signIn()
-                }))
-                alert.addAction(UIAlertAction(title: "Not Now", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                return
-            }
-        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
