@@ -8,14 +8,11 @@ target 'EclipseSoundscapes' do
   # Pods for EclipseSoundscapes
 
 pod 'AudioKit'
-pod 'Firebase/Core'
-pod 'Firebase/Auth'
-pod 'Firebase/Database', '4.0.0'
-pod 'Firebase/Storage'
 pod 'Synchronized', '~> 2.0'
 pod 'Localize-Swift'
 pod 'BRYXBanner'
 pod 'SwiftSpinner'
+pod 'Eureka'
 
   target 'EclipseSoundscapesTests' do
     inherit! :search_paths

@@ -19,6 +19,7 @@
 		B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */; };
 		B73AE7341EE8332300BDBCE8 /* TapePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73AE7331EE8332300BDBCE8 /* TapePlayer.swift */; };
 		B73AE7361EE860A900BDBCE8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73AE7351EE860A900BDBCE8 /* Constants.swift */; };
+		B7447A801F141EEF0077F1F7 /* SectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7447A7F1F141EEF0077F1F7 /* SectionHeader.xib */; };
 		B75632B41F04037D00106B46 /* mapmarker.wav in Resources */ = {isa = PBXBuildFile; fileRef = B75632B31F04037D00106B46 /* mapmarker.wav */; };
 		B75632B61F04038500106B46 /* xytick.wav in Resources */ = {isa = PBXBuildFile; fileRef = B75632B51F04038500106B46 /* xytick.wav */; };
 		B758D8741ED78E120033EE45 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8731ED78E120033EE45 /* Downloader.swift */; };
@@ -123,11 +124,11 @@
 		B7BBB4FC1EE8690A00C0D855 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */; };
 		B7BD1AD31EF02A8800A739FA /* PlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */; };
 		B7C4E1411EE751A6002A0F19 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C4E1401EE751A6002A0F19 /* Utility.swift */; };
-		B7D1515F1EDDD1EE00DEAC31 /* AudioQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */; };
+		B7E7A9881F12A40200B239B8 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9871F12A40200B239B8 /* MoreViewController.swift */; };
+		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
 		B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */; };
 		B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */; };
 		D77B9349CAD58F1DB4B335FF /* Pods_EclipseSoundscapes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */; };
-		DB73A8211EFF31A100B23098 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB73A8201EFF31A100B23098 /* GoogleService-Info.plist */; };
 		EB7C715CF5F62E86B98ABEDD /* Pods_EclipseSoundscapesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A506BF43909D29D3B1E7AEE /* Pods_EclipseSoundscapesUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -174,6 +175,7 @@
 		B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceManager.swift; sourceTree = "<group>"; };
 		B73AE7331EE8332300BDBCE8 /* TapePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapePlayer.swift; sourceTree = "<group>"; };
 		B73AE7351EE860A900BDBCE8 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		B7447A7F1F141EEF0077F1F7 /* SectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SectionHeader.xib; sourceTree = "<group>"; };
 		B75632B31F04037D00106B46 /* mapmarker.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = mapmarker.wav; sourceTree = "<group>"; };
 		B75632B51F04038500106B46 /* xytick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xytick.wav; sourceTree = "<group>"; };
 		B758D8731ED78E120033EE45 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
@@ -281,10 +283,10 @@
 		B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
 		B7C4E1401EE751A6002A0F19 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
-		B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioQueue.swift; sourceTree = "<group>"; };
+		B7E7A9871F12A40200B239B8 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
-		DB73A8201EFF31A100B23098 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EC9068B8CBBFDE24E65A9DBE /* Pods-EclipseSoundscapes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapes/Pods-EclipseSoundscapes.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -377,7 +379,6 @@
 				B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */,
 				B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */,
 				B7964C361EF9B76400000CF8 /* Localizable.strings */,
-				DB73A8201EFF31A100B23098 /* GoogleService-Info.plist */,
 				B72DF5531ED724F300F9E4F3 /* Info.plist */,
 			);
 			path = EclipseSoundscapes;
@@ -437,7 +438,6 @@
 				B76F344E1EDE1DF8006E76D2 /* Networking */,
 				B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */,
 				B7C4E1401EE751A6002A0F19 /* Utility.swift */,
-				B7D1515E1EDDD1EE00DEAC31 /* AudioQueue.swift */,
 				B77417F31F03628700663C2E /* EclipseTimeGenerat.swift */,
 				B7806DB61F0D58AD0052A7CD /* MarkerContainer.swift */,
 			);
@@ -939,6 +939,8 @@
 		B7F522F31EEC588500A53A4A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B7447A7F1F141EEF0077F1F7 /* SectionHeader.xib */,
+				B7E7A9891F12A59600B239B8 /* LogoView.swift */,
 				B7806E531F0D5B400052A7CD /* CountDown */,
 				B71751011F0DB789002EBE90 /* InfoView.swift */,
 				B7806DB81F0D58CA0052A7CD /* RumbleView.swift */,
@@ -956,6 +958,7 @@
 				B769E93B1EFAA76D008393A6 /* EventsViewController.swift */,
 				B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */,
 				B77417F01F0361EC00663C2E /* RumbleMapViewController.swift */,
+				B7E7A9871F12A40200B239B8 /* MoreViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1033,7 +1036,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0830;
-				ORGANIZATIONNAME = DevByArlindo;
+				ORGANIZATIONNAME = "Arlindo Goncalves";
 				TargetAttributes = {
 					B72DF5401ED724F300F9E4F3 = {
 						CreatedOnToolsVersion = 8.3.1;
@@ -1089,9 +1092,9 @@
 				B7964C341EF9B76400000CF8 /* Localizable.strings in Resources */,
 				B75632B61F04038500106B46 /* xytick.wav in Resources */,
 				B72DF5521ED724F300F9E4F3 /* LaunchScreen.storyboard in Resources */,
-				DB73A8211EFF31A100B23098 /* GoogleService-Info.plist in Resources */,
 				B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */,
 				B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */,
+				B7447A801F141EEF0077F1F7 /* SectionHeader.xib in Resources */,
 				B7806E5B1F0D5B580052A7CD /* CountdownView.xib in Resources */,
 				B75632B41F04037D00106B46 /* mapmarker.wav in Resources */,
 			);
@@ -1280,6 +1283,7 @@
 				B79263C61F0D7B8200062B8D /* SPRequestPermissionDialogInteractiveView.swift in Sources */,
 				B79263DD1F0D7B8200062B8D /* SPCollectionView.swift in Sources */,
 				B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */,
+				B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */,
 				B79263EF1F0D7B8200062B8D /* SPBezierPathFigureLogos.swift in Sources */,
 				B79263BF1F0D7B8200062B8D /* SPPermissionsManager.swift in Sources */,
 				B79263CC1F0D7B8200062B8D /* SPRequestPermission.swift in Sources */,
@@ -1301,6 +1305,7 @@
 				B7806DB91F0D58CA0052A7CD /* RumbleView.swift in Sources */,
 				B79263E11F0D7B8200062B8D /* SPRhombusPatternView.swift in Sources */,
 				B79263D91F0D7B8200062B8D /* SPSegmentControlProtocol.swift in Sources */,
+				B7E7A9881F12A40200B239B8 /* MoreViewController.swift in Sources */,
 				B79263E21F0D7B8200062B8D /* SPParallaxTableViewCell.swift in Sources */,
 				B79263C81F0D7B8200062B8D /* SPRequestPermissionTwiceControl.swift in Sources */,
 				B79263E81F0D7B8200062B8D /* SPGradientView.swift in Sources */,
@@ -1357,7 +1362,6 @@
 				B79263B91F0D7B8200062B8D /* SPRequestPermissionDataColors.swift in Sources */,
 				B79263C31F0D7B8200062B8D /* SPRequestPermissionDialogInteractiveDataSourceInterface.swift in Sources */,
 				B79263A31F0D7B8200062B8D /* NSLayoutConstraintExtenshion.swift in Sources */,
-				B7D1515F1EDDD1EE00DEAC31 /* AudioQueue.swift in Sources */,
 				B79263B61F0D7B8200062B8D /* SPLaunchAnimationSlideExtenshion.swift in Sources */,
 				B79263DA1F0D7B8200062B8D /* SPSegmentControlStyleProtocol.swift in Sources */,
 				B79263AB1F0D7B8200062B8D /* SPCGRectExtension.swift in Sources */,
