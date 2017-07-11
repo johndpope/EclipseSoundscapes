@@ -12,6 +12,7 @@ pod 'Synchronized', '~> 2.0'
 pod 'Localize-Swift'
 pod 'BRYXBanner'
 pod 'SwiftSpinner'
+pod 'Eureka'
 
   target 'EclipseSoundscapesTests' do
     inherit! :search_paths
