@@ -976,6 +976,7 @@
 				B72DF53F1ED724F300F9E4F3 /* Resources */,
 				539B9E763E0706F1C28AC4F6 /* [CP] Embed Pods Frameworks */,
 				E0E0399903E491D908D1ED49 /* [CP] Copy Pods Resources */,
+				B7447A821F145AE80077F1F7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1221,6 +1222,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EclipseSoundscapesTests/Pods-EclipseSoundscapesTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		B7447A821F145AE80077F1F7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/AudioKit.framework/fix-framework.sh\"";
 		};
 		DF7F64DDA0C572E8FEBD8F1D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
