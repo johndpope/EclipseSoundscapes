@@ -1,8 +1,8 @@
 //
-//  LogoView.swift
+//  BioView.swift
 //  EclipseSoundscapes
 //
-//  Created by Arlindo Goncalves on 7/9/17.
+//  Created by Arlindo Goncalves on 7/18/17.
 //
 //  Copyright © 2017 Arlindo Goncalves.
 //  This program is free software: you can redistribute it and/or modify
@@ -22,12 +22,14 @@
 
 import UIKit
 
-class LogoView: UIView {
+class BioView: UIView {
     
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var jobTitleLabel: UILabel!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+    
 }
-

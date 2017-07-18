@@ -1,8 +1,8 @@
 //
-//  LogoView.swift
+//  SettingsViewController.swift
 //  EclipseSoundscapes
 //
-//  Created by Arlindo Goncalves on 7/9/17.
+//  Created by Arlindo Goncalves on 7/18/17.
 //
 //  Copyright © 2017 Arlindo Goncalves.
 //  This program is free software: you can redistribute it and/or modify
@@ -20,14 +20,22 @@
 //
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
-import UIKit
+import Eureka
 
-class LogoView: UIView {
+class SettingsViewController : FormViewController {
     
-    @IBOutlet weak var imageView: UIImageView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initializeForm()
+        
+        self.navigationItem.title = "Settings"
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(close))
+    }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    private func initializeForm() {
+    }
+    
+    @objc private func close() {
+        self.dismiss(animated: true, completion: nil)
     }
 }
-

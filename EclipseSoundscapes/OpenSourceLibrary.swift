@@ -1,8 +1,8 @@
 //
-//  LogoView.swift
+//  OpenSourceLibrary.swift
 //  EclipseSoundscapes
 //
-//  Created by Arlindo Goncalves on 7/9/17.
+//  Created by Arlindo Goncalves on 7/18/17.
 //
 //  Copyright © 2017 Arlindo Goncalves.
 //  This program is free software: you can redistribute it and/or modify
@@ -22,12 +22,12 @@
 
 import UIKit
 
-class LogoView: UIView {
+class OpenSourceLibrary : NSObject {
+    var title : String
+    var license : String?
     
-    @IBOutlet weak var imageView: UIImageView!
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    init(title: String, license: String) {
+        self.title = title
+        self.license = Utility.getFile(license, type: "txt")
     }
 }
-

@@ -1,8 +1,8 @@
 //
-//  LogoView.swift
+//  InstructionsViewController.swift
 //  EclipseSoundscapes
 //
-//  Created by Arlindo Goncalves on 7/9/17.
+//  Created by Arlindo Goncalves on 7/18/17.
 //
 //  Copyright © 2017 Arlindo Goncalves.
 //  This program is free software: you can redistribute it and/or modify
@@ -22,12 +22,14 @@
 
 import UIKit
 
-class LogoView: UIView {
+class IntructionsViewController : UIViewController {
     
-    @IBOutlet weak var imageView: UIImageView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    @IBAction func close(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
-
