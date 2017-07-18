@@ -55,7 +55,7 @@ class MoreViewController : FormViewController {
                 $0.cell.textView.isEditable = false
                 $0.cell.isUserInteractionEnabled = false
                 }.cellUpdate({ (cell, row) in
-                    cell.textView.text = "During an eclipse, we gaze in amazement as day becomes night. But, along with the striking visual effects, the soundscape of natural environments changes dramatically."
+                    cell.textView.text = "On August 21, 2017, millions of people will view a total solar eclipse as it passes through the United States. However, for the visually impaired, or others who are unable to see the eclipse with their own eyes, the Eclipse Soundscapes Project delivers a multisensory experience of this exciting celestial event. The project, from NASA’s Heliophysics Education Consortium, will include illustrated audio descriptions of the eclipse in real time, recordings of the changing environmental sounds during the eclipse, and an interactive “rumble map” app that will allow users to visualize the eclipse through touch."
                     cell.accessibilityLabel = cell.textView.text
                     cell.accessibilityTraits = UIAccessibilityTraitStaticText
                     cell.textView.isAccessibilityElement = false
@@ -99,6 +99,8 @@ class MoreViewController : FormViewController {
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
+        
+        +++ Section()
     }
     
     func setDefaults() {
@@ -108,7 +110,7 @@ class MoreViewController : FormViewController {
         self.tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         self.tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         self.tableView.backgroundColor = UIColor(r: 75, g: 75, b: 75)
-        view.backgroundColor = UIColor(r: 75, g: 75, b: 75)
+        view.backgroundColor = .black
         URLRow.defaultCellUpdate = { cell, row in cell.textField.textColor = .blue }
     }
     

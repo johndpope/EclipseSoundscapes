@@ -37,10 +37,17 @@ public protocol LocationDelegate: NSObjectProtocol {
     /// - Parameter:
     ///   - error: Error trying to get user's last location
     func locator(didFailWithError error: Error)
+    
+    
+    /// If User has diabled location updates
+    func notGranted()
 }
 
 /// Handles Obtaining the User's Location
 public class Location : NSObject {
+    
+    static var isGranted = false
+    
     
     /// CLLocation Manager Object
     fileprivate var locationManager  : CLLocationManager!
@@ -53,6 +60,7 @@ public class Location : NSObject {
     var isReoccuring = false
     var interval : TimeInterval = 60 //30*60 // 30 minutes
     
+    
     struct string {
         static let general = "Don't miss the Eclipse. We need your location to proceed. Press to Continue."
         static let denied = "Location Services is Denied. Press to Continue"
@@ -61,15 +69,25 @@ public class Location : NSObject {
         static let unkown = "Error Occured. Press to Retry"
     }
     
-    /// Begin gathering Information on the User's Location
-    func getLocation(withAccuracy accuracy: CLLocationAccuracy = kCLLocationAccuracyBest, reocurring: Bool = true) {
+    public override init() {
+        super.init()
         self.locationManager = CLLocationManager()
         self.locationManager.delegate = self
-        self.locationManager.desiredAccuracy = accuracy
-        isReoccuring = reocurring
-        self.locationManager.requestLocation()
+        
+        Location.isGranted = SPRequestPermission.isAllowPermission(.locationWhenInUse)
     }
-
+    
+    /// Begin gathering Information on the User's Location
+    func getLocation(withAccuracy accuracy: CLLocationAccuracy = kCLLocationAccuracyBest, reocurring: Bool = true) {
+        if Location.isGranted {
+            self.locationManager.desiredAccuracy = accuracy
+            isReoccuring = reocurring
+            self.locationManager.requestLocation()
+        } else {
+            self.delegate?.notGranted()
+        }
+    }
+    
     fileprivate func setupReoccuringRequests() {
         if #available(iOS 10.0, *) {
             timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false, block: { (timer) in
@@ -81,8 +99,12 @@ public class Location : NSObject {
         }
     }
     
-   @objc private func request() {
-        self.locationManager.requestLocation()
+    @objc private func request() {
+        if Location.isGranted {
+            self.locationManager.requestLocation()
+        } else {
+            self.delegate?.notGranted()
+        }
     }
     
     /// Check if Location Services are enabled
@@ -106,7 +128,7 @@ public class Location : NSObject {
         self.timer?.invalidate()
         self.timer = nil
     }
-
+    
 }
 
 class LocationDataSource : SPRequestPermissionDialogInteractiveDataSource {

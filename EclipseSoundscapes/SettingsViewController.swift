@@ -21,6 +21,8 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import Eureka
+import CoreLocation
+
 
 class SettingsViewController : FormViewController {
     
@@ -33,6 +35,39 @@ class SettingsViewController : FormViewController {
     }
     
     private func initializeForm() {
+        form
+            +++ SwitchRow() {
+                $0.title = "Notifications"
+                $0.value = SPRequestPermission.isAllowPermission(.notification)
+                }.onChange({ (row) in
+                    if let flag = row.value {
+                        if flag {
+                            if !SPRequestPermission.isAllowPermission(.notification) {
+                                SPRequestPermission.dialog.interactive.present(on: self, with: [.notification])
+                            } else {
+                                
+                            }
+                        } else {
+                            
+                        }
+                    }
+                })
+            <<< SwitchRow() {
+                $0.title = "Location"
+                $0.value = SPRequestPermission.isAllowPermission(.locationWhenInUse) && Location.isGranted
+                }.onChange({ (row) in
+                    if let flag = row.value {
+                        if flag {
+                            if !SPRequestPermission.isAllowPermission(.locationWhenInUse) {
+                                SPRequestPermission.dialog.interactive.present(on: self, with: [.locationWhenInUse])
+                            } else {
+                                Location.isGranted = true
+                            }
+                        } else {
+                            Location.isGranted = false
+                        }
+                    }
+                })
     }
     
     @objc private func close() {

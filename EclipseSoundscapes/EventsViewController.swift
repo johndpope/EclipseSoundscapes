@@ -38,6 +38,8 @@ class EventsViewController: UIViewController {
     var foundLocationOnce = false
     var isSpinnerShowing = false
     
+    var banner : Banner?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -61,6 +63,11 @@ class EventsViewController: UIViewController {
         } else {
             (view as! UIScrollView).contentSize = CGSize(width: (view as! UIScrollView).contentSize.width, height: screenheight)
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        banner?.dismiss()
     }
     
     func configureContent() {
@@ -154,6 +161,9 @@ class EventsViewController: UIViewController {
     }
     
     func showError(_ completion: (()->Void)? = nil ) {
+        if self.isSpinnerShowing {
+            self.hideSpinner()
+        }
         self.errorBtn.isHidden = false
         UIView.animate(withDuration: 0.3, animations: {
             self.countDownView.alpha = 0.0
@@ -244,15 +254,24 @@ extension EventsViewController : LocationDelegate {
             errorBtn.setTitle(Location.string.unkown, for: .normal)
             break
         }
-        if self.isSpinnerShowing {
-            self.hideSpinner()
-        }
         showError {
             self.infoView.clear()
             self.countDownView.clear()
             self.locator.stopLocating()
         }
         
+    }
+    
+    func notGranted() {
+        banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.") {
+            self.present(UINavigationController(rootViewController: SettingsViewController()), animated: true, completion: nil)
+        }
+        banner?.show(duration: 5.0)
+        showError {
+            self.infoView.clear()
+            self.countDownView.clear()
+            self.locator.stopLocating()
+        }
     }
 }
 
@@ -261,8 +280,10 @@ extension EventsViewController : SPRequestPermissionEventsDelegate {
         if Location.checkPermission() {
             errorBtn.setTitle(Location.string.general, for: .normal)
             getlocation(animated: true)
+            Location.isGranted = true
         } else {
             showError()
+            Location.isGranted = false
         }
     }
     
