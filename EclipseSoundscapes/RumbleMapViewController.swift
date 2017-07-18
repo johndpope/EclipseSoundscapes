@@ -23,6 +23,7 @@
 import UIKit
 import AudioKit
 import Localize_Swift
+import BRYXBanner
 
 class RumbleMapViewController: UIViewController {
     
@@ -114,19 +115,19 @@ class RumbleMapViewController: UIViewController {
         setSession(active: true)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if !isSessionActive {
-            setSession(active: true)
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if isSessionActive {
-            setSession(active: false)
-        }
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        if !isSessionActive {
+//            setSession(active: true)
+//        }
+//    }
+//    
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        if isSessionActive {
+//            setSession(active: false)
+//        }
+//    }
     
     func setText() {
         titleLabel.font = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(fontName: .bold, textStyle: .headline), size: 0)
@@ -151,6 +152,11 @@ class RumbleMapViewController: UIViewController {
             
         } catch {
             print("Error: \(error.localizedDescription)")
+            let banner = Banner(title: "Something Bad Happened", subtitle: error.localizedDescription + "Press to try again", didTapBlock: {
+                self.setSession(active: true)
+            })
+            banner.show()
+        
         }
     }
     
@@ -169,6 +175,7 @@ class RumbleMapViewController: UIViewController {
         })
         
         tickMixer = AKMixer.init(tickSound)
+        
         
         let markerFile = try! AKAudioFile(forReading: Bundle.main.url(forResource: "mapmarker", withExtension: ".wav")!)
         markerSound = try! AKAudioPlayer(file: markerFile, looping: false, completionHandler: {
@@ -318,7 +325,6 @@ class RumbleMapViewController: UIViewController {
     func zoomOut() {
         if self.scrollView.zoomScale != 1.0 {
             self.scrollView.setZoomScale(1.0, animated: true)
-            print("Zoomed Out")
         }
     }
     
@@ -331,7 +337,6 @@ class RumbleMapViewController: UIViewController {
     }
     
     func touchDown(_ recognizer: UILongPressGestureRecognizer) {
-        print(recognizer.numberOfTouches)
         if recognizer.numberOfTouches > 2 {
             envelope.stop()
             tickSound.stop()
@@ -339,7 +344,6 @@ class RumbleMapViewController: UIViewController {
         }
         if recognizer.state == .began && !isZooming {
             let location = recognizer.location(in: recognizer.view)
-//            print(location)
             if !(recognizer.view?.frame.contains(location))! {
                 envelope.stop()
                 tickSound.stop()
@@ -363,7 +367,6 @@ class RumbleMapViewController: UIViewController {
         
         if recognizer.state == .began || recognizer.state == .changed {
             let location = recognizer.location(in: recognizer.view)
-//            print(location)
             if !(recognizer.view?.frame.contains(location))! {
                 envelope.stop()
                 tickSound.stop()
@@ -382,7 +385,6 @@ class RumbleMapViewController: UIViewController {
             if !markerSound.isPlaying {
                 markerSound.play()
             }
-            print("Over Maker")
         } else {
             markerSound.stop()
         }
@@ -420,7 +422,6 @@ class RumbleMapViewController: UIViewController {
                 
                 markerControl = 1.0
                 markerSound.play()
-                print("Marker Placed at \(location.debugDescription)")
                 UserDefaults.standard.set(location.x, forKey: "\(currentIndex)rumblePoint-X")
                 UserDefaults.standard.set(location.y, forKey: "\(currentIndex)rumblePoint-Y")
                 
@@ -454,13 +455,11 @@ class RumbleMapViewController: UIViewController {
     
     //MARK: Notification Handlers
     func leftApplication() {
-        print("Left")
-        setSession(active: false)
+        setSession(active: false)//Left
     }
     
     func returnToApplication(){
-        print("Returned")
-        setSession(active: true)
+        setSession(active: true)//Returned
     }
     
     /// Notification handler for AVAudioSessionRouteChange to catch changes to device connection from the audio jack.

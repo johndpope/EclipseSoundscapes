@@ -8,7 +8,6 @@ target 'EclipseSoundscapes' do
   # Pods for EclipseSoundscapes
 
 pod 'AudioKit'
-pod 'Synchronized', '~> 2.0'
 pod 'Localize-Swift'
 pod 'BRYXBanner'
 pod 'SwiftSpinner'

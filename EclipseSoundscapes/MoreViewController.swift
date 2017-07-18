@@ -28,28 +28,89 @@ class MoreViewController : FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setDefaults()
-        form +++
-        Section() {
-            var header = HeaderFooterView<LogoView>(.nibFile(name: "SectionHeader", bundle: nil))
-            header.onSetupView = { (view, section) -> () in
-                view.imageView.alpha = 0;
-                UIView.animate(withDuration: 2.0, animations: { [weak view] in
-                    view?.imageView.alpha = 1
-                })
-                view.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
-                UIView.animate(withDuration: 1.0, animations: { [weak view] in
-                    view?.layer.transform = CATransform3DIdentity
-                })
+        initializeForm()
+    }
+    
+    private func initializeForm() {
+        form
+            +++ Section() {
+                var header = HeaderFooterView<LogoView>(.nibFile(name: "SectionHeader", bundle: nil))
+                header.onSetupView = { (view, section) -> () in
+                    view.imageView.alpha = 0;
+                    UIView.animate(withDuration: 2.0, animations: { [weak view] in
+                        view?.imageView.alpha = 1
+                    })
+                    view.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
+                    UIView.animate(withDuration: 1.0, animations: { [weak view] in
+                        view?.layer.transform = CATransform3DIdentity
+                    })
+                }
+                $0.header = header
             }
-            $0.header = header
-            }
+            
+            +++ Section("About Us")
+            <<< TextAreaRow(){
+                $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
+                $0.cell.layer.borderColor = UIColor.clear.cgColor
+                $0.cell.textView.isEditable = false
+                $0.cell.isUserInteractionEnabled = false
+                }.cellUpdate({ (cell, row) in
+                    cell.textView.text = "On August 21, 2017, millions of people will view a total solar eclipse as it passes through the United States. However, for the visually impaired, or others who are unable to see the eclipse with their own eyes, the Eclipse Soundscapes Project delivers a multisensory experience of this exciting celestial event. The project, from NASA’s Heliophysics Education Consortium, will include illustrated audio descriptions of the eclipse in real time, recordings of the changing environmental sounds during the eclipse, and an interactive “rumble map” app that will allow users to visualize the eclipse through touch."
+                    cell.accessibilityLabel = cell.textView.text
+                    cell.accessibilityTraits = UIAccessibilityTraitStaticText
+                    cell.textView.isAccessibilityElement = false
+                    cell.textView.font = UIFont.getDefautlFont(.meduium, size: 13)
+                })
+            <<< ButtonRow("Our team") { (row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.cell.imageView?.image = #imageLiteral(resourceName: "team")
+                row.presentationMode = .segueName(segueName: "Team", onDismiss: nil)
+                }.cellUpdate({ (cell, _) in
+                    cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
+                })
+            <<< ButtonRow("Our Partners") { (row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.cell.imageView?.image = #imageLiteral(resourceName: "partners")
+                row.presentationMode = .segueName(segueName: "Partners", onDismiss: nil)
+                }.cellUpdate({ (cell, _) in
+                    cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
+                })
+            
+            +++ Section("More Information")
+            
+            <<< ButtonRow("How to use this app"){ (row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.cell.imageView?.image = #imageLiteral(resourceName: "manual")
+                row.presentationMode = .segueName(segueName: "Instructions", onDismiss: nil)
+                }.cellUpdate({ (cell, _) in
+                    cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
+                })
+            <<< ButtonRow("Settings"){ (row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.cell.imageView?.image = #imageLiteral(resourceName: "settings")
+                row.presentationMode = .segueName(segueName: "Settings", onDismiss: nil)
+                }.cellUpdate({ (cell, _) in
+                    cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
+                })
+            <<< ButtonRow("Legal"){ (row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.cell.imageView?.image = #imageLiteral(resourceName: "legal")
+                row.presentationMode = .segueName(segueName: "Legal", onDismiss: nil)
+                }.cellUpdate({ (cell, _) in
+                    cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
+                })
         
+        +++ Section()
     }
     
     func setDefaults() {
-//        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        self.navigationController?.navigationBar.barTintColor = UIColor(r: 75, g: 75, b: 75)
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
+        self.tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        self.tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        self.tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         self.tableView.backgroundColor = UIColor(r: 75, g: 75, b: 75)
+        view.backgroundColor = .black
         URLRow.defaultCellUpdate = { cell, row in cell.textField.textColor = .blue }
     }
     
@@ -67,4 +128,8 @@ class MoreViewController : FormViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 }

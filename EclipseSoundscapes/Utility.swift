@@ -33,6 +33,20 @@ class Utility {
         let seconds = time - Double(minutes) * 60
         return String(format:"%2i:%02i", minutes, Int(seconds))
     }
+    
+    static func getFile(_ filename: String, type : String) -> String? {
+        if let path = Bundle.main.path(forResource: filename, ofType: type) {
+            do {
+                let text = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
+                return text
+            } catch {
+                print("Failed to read text from \(filename)")
+            }
+        } else {
+            print("Failed to load file from app bundle \(filename)")
+        }
+        return nil
+    }
 }
 
 extension UIAlertController {

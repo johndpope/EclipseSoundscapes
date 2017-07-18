@@ -20,6 +20,22 @@
 		B73AE7341EE8332300BDBCE8 /* TapePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73AE7331EE8332300BDBCE8 /* TapePlayer.swift */; };
 		B73AE7361EE860A900BDBCE8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73AE7351EE860A900BDBCE8 /* Constants.swift */; };
 		B7447A801F141EEF0077F1F7 /* SectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7447A7F1F141EEF0077F1F7 /* SectionHeader.xib */; };
+		B745AE191F1E3BB20025946C /* PartnersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE181F1E3BB20025946C /* PartnersViewController.swift */; };
+		B745AE1D1F1E65570025946C /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE1C1F1E65570025946C /* InstructionsViewController.swift */; };
+		B745AE1F1F1E65900025946C /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE1E1F1E65900025946C /* SettingsViewController.swift */; };
+		B745AE211F1E65B50025946C /* LegalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE201F1E65B50025946C /* LegalViewController.swift */; };
+		B745AE231F1E697F0025946C /* OpenSourceLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE221F1E697F0025946C /* OpenSourceLibrary.swift */; };
+		B745AE251F1E6A190025946C /* OpenSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE241F1E6A190025946C /* OpenSourceViewController.swift */; };
+		B745AE301F1E79820025946C /* AudioKit-License.txt in Resources */ = {isa = PBXBuildFile; fileRef = B745AE2A1F1E79820025946C /* AudioKit-License.txt */; };
+		B745AE311F1E79820025946C /* BRYXBanner-License.txt in Resources */ = {isa = PBXBuildFile; fileRef = B745AE2B1F1E79820025946C /* BRYXBanner-License.txt */; };
+		B745AE331F1E79820025946C /* Eureka-License.txt in Resources */ = {isa = PBXBuildFile; fileRef = B745AE2D1F1E79820025946C /* Eureka-License.txt */; };
+		B745AE341F1E79820025946C /* Localize-Swift-License.txt in Resources */ = {isa = PBXBuildFile; fileRef = B745AE2E1F1E79820025946C /* Localize-Swift-License.txt */; };
+		B745AE351F1E79820025946C /* SwiftSpinner-License.txt in Resources */ = {isa = PBXBuildFile; fileRef = B745AE2F1F1E79820025946C /* SwiftSpinner-License.txt */; };
+		B745AE371F1E8A230025946C /* LicenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE361F1E8A230025946C /* LicenseViewController.swift */; };
+		B745AE391F1E8AB90025946C /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = B745AE381F1E8AB90025946C /* LICENSE.txt */; };
+		B745AE3B1F1E8D260025946C /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE3A1F1E8D260025946C /* TeamViewController.swift */; };
+		B745AE3D1F1E8D630025946C /* BioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE3C1F1E8D630025946C /* BioView.swift */; };
+		B745AE3F1F1E8D6E0025946C /* BioView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B745AE3E1F1E8D6E0025946C /* BioView.xib */; };
 		B75632B41F04037D00106B46 /* mapmarker.wav in Resources */ = {isa = PBXBuildFile; fileRef = B75632B31F04037D00106B46 /* mapmarker.wav */; };
 		B75632B61F04038500106B46 /* xytick.wav in Resources */ = {isa = PBXBuildFile; fileRef = B75632B51F04038500106B46 /* xytick.wav */; };
 		B758D8741ED78E120033EE45 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8731ED78E120033EE45 /* Downloader.swift */; };
@@ -176,6 +192,22 @@
 		B73AE7331EE8332300BDBCE8 /* TapePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapePlayer.swift; sourceTree = "<group>"; };
 		B73AE7351EE860A900BDBCE8 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B7447A7F1F141EEF0077F1F7 /* SectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SectionHeader.xib; sourceTree = "<group>"; };
+		B745AE181F1E3BB20025946C /* PartnersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartnersViewController.swift; sourceTree = "<group>"; };
+		B745AE1C1F1E65570025946C /* InstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsViewController.swift; sourceTree = "<group>"; };
+		B745AE1E1F1E65900025946C /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		B745AE201F1E65B50025946C /* LegalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegalViewController.swift; sourceTree = "<group>"; };
+		B745AE221F1E697F0025946C /* OpenSourceLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSourceLibrary.swift; sourceTree = "<group>"; };
+		B745AE241F1E6A190025946C /* OpenSourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSourceViewController.swift; sourceTree = "<group>"; };
+		B745AE2A1F1E79820025946C /* AudioKit-License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "AudioKit-License.txt"; sourceTree = "<group>"; };
+		B745AE2B1F1E79820025946C /* BRYXBanner-License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "BRYXBanner-License.txt"; sourceTree = "<group>"; };
+		B745AE2D1F1E79820025946C /* Eureka-License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Eureka-License.txt"; sourceTree = "<group>"; };
+		B745AE2E1F1E79820025946C /* Localize-Swift-License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Localize-Swift-License.txt"; sourceTree = "<group>"; };
+		B745AE2F1F1E79820025946C /* SwiftSpinner-License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SwiftSpinner-License.txt"; sourceTree = "<group>"; };
+		B745AE361F1E8A230025946C /* LicenseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseViewController.swift; sourceTree = "<group>"; };
+		B745AE381F1E8AB90025946C /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		B745AE3A1F1E8D260025946C /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
+		B745AE3C1F1E8D630025946C /* BioView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BioView.swift; sourceTree = "<group>"; };
+		B745AE3E1F1E8D6E0025946C /* BioView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BioView.xib; sourceTree = "<group>"; };
 		B75632B31F04037D00106B46 /* mapmarker.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = mapmarker.wav; sourceTree = "<group>"; };
 		B75632B51F04038500106B46 /* xytick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xytick.wav; sourceTree = "<group>"; };
 		B758D8731ED78E120033EE45 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
@@ -405,6 +437,12 @@
 		B75632B71F04038D00106B46 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B745AE2A1F1E79820025946C /* AudioKit-License.txt */,
+				B745AE2B1F1E79820025946C /* BRYXBanner-License.txt */,
+				B745AE2D1F1E79820025946C /* Eureka-License.txt */,
+				B745AE2E1F1E79820025946C /* Localize-Swift-License.txt */,
+				B745AE2F1F1E79820025946C /* SwiftSpinner-License.txt */,
+				B745AE381F1E8AB90025946C /* LICENSE.txt */,
 				B75632B31F04037D00106B46 /* mapmarker.wav */,
 				B75632B51F04038500106B46 /* xytick.wav */,
 			);
@@ -415,6 +453,7 @@
 			isa = PBXGroup;
 			children = (
 				B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */,
+				B745AE221F1E697F0025946C /* OpenSourceLibrary.swift */,
 				B763FA001ED864F400EEFB27 /* Tape.swift */,
 			);
 			name = Models;
@@ -942,8 +981,10 @@
 				B7447A7F1F141EEF0077F1F7 /* SectionHeader.xib */,
 				B7E7A9891F12A59600B239B8 /* LogoView.swift */,
 				B7806E531F0D5B400052A7CD /* CountDown */,
-				B71751011F0DB789002EBE90 /* InfoView.swift */,
+				B745AE3C1F1E8D630025946C /* BioView.swift */,
+				B745AE3E1F1E8D6E0025946C /* BioView.xib */,
 				B7806DB81F0D58CA0052A7CD /* RumbleView.swift */,
+				B71751011F0DB789002EBE90 /* InfoView.swift */,
 				B792630F1F0D740500062B8D /* InfoTableViewCell.swift */,
 			);
 			name = Views;
@@ -959,6 +1000,13 @@
 				B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */,
 				B77417F01F0361EC00663C2E /* RumbleMapViewController.swift */,
 				B7E7A9871F12A40200B239B8 /* MoreViewController.swift */,
+				B745AE181F1E3BB20025946C /* PartnersViewController.swift */,
+				B745AE3A1F1E8D260025946C /* TeamViewController.swift */,
+				B745AE1C1F1E65570025946C /* InstructionsViewController.swift */,
+				B745AE1E1F1E65900025946C /* SettingsViewController.swift */,
+				B745AE201F1E65B50025946C /* LegalViewController.swift */,
+				B745AE241F1E6A190025946C /* OpenSourceViewController.swift */,
+				B745AE361F1E8A230025946C /* LicenseViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1089,12 +1137,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B745AE331F1E79820025946C /* Eureka-License.txt in Resources */,
+				B745AE3F1F1E8D6E0025946C /* BioView.xib in Resources */,
 				B79263F61F0D9A1900062B8D /* PlaybackViewController.xib in Resources */,
 				B7964C341EF9B76400000CF8 /* Localizable.strings in Resources */,
+				B745AE341F1E79820025946C /* Localize-Swift-License.txt in Resources */,
 				B75632B61F04038500106B46 /* xytick.wav in Resources */,
+				B745AE311F1E79820025946C /* BRYXBanner-License.txt in Resources */,
 				B72DF5521ED724F300F9E4F3 /* LaunchScreen.storyboard in Resources */,
 				B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */,
 				B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */,
+				B745AE391F1E8AB90025946C /* LICENSE.txt in Resources */,
+				B745AE351F1E79820025946C /* SwiftSpinner-License.txt in Resources */,
+				B745AE301F1E79820025946C /* AudioKit-License.txt in Resources */,
 				B7447A801F141EEF0077F1F7 /* SectionHeader.xib in Resources */,
 				B7806E5B1F0D5B580052A7CD /* CountdownView.xib in Resources */,
 				B75632B41F04037D00106B46 /* mapmarker.wav in Resources */,
@@ -1278,6 +1333,7 @@
 				B79263D41F0D7B8200062B8D /* SPStatusBarManagerViewController.swift in Sources */,
 				B73AE7341EE8332300BDBCE8 /* TapePlayer.swift in Sources */,
 				B79263D81F0D7B8200062B8D /* SPSegmentControllCell.swift in Sources */,
+				B745AE3D1F1E8D630025946C /* BioView.swift in Sources */,
 				B79263EC1F0D7B8200062B8D /* SPUILabelExtenshion.swift in Sources */,
 				B79263D61F0D7B8200062B8D /* SPLinesCircleButtonsView.swift in Sources */,
 				B79263B01F0D7B8200062B8D /* SPUIImageExtension.swift in Sources */,
@@ -1289,6 +1345,7 @@
 				B79263C41F0D7B8200062B8D /* SPRequestPermissionDialogInteractivePresenterInterface.swift in Sources */,
 				B79263101F0D740500062B8D /* InfoTableViewCell.swift in Sources */,
 				B763FA011ED864F400EEFB27 /* Tape.swift in Sources */,
+				B745AE371F1E8A230025946C /* LicenseViewController.swift in Sources */,
 				B7BBB4FC1EE8690A00C0D855 /* AudioManager.swift in Sources */,
 				B79263C11F0D7B8200062B8D /* SPRequestPermissionDialogInteractiveDataSource.swift in Sources */,
 				B79263BC1F0D7B8200062B8D /* SPRequestPermissionDataViews.swift in Sources */,
@@ -1296,6 +1353,7 @@
 				B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */,
 				B79263C61F0D7B8200062B8D /* SPRequestPermissionDialogInteractiveView.swift in Sources */,
 				B79263DD1F0D7B8200062B8D /* SPCollectionView.swift in Sources */,
+				B745AE1F1F1E65900025946C /* SettingsViewController.swift in Sources */,
 				B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */,
 				B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */,
 				B79263EF1F0D7B8200062B8D /* SPBezierPathFigureLogos.swift in Sources */,
@@ -1344,7 +1402,9 @@
 				B79263AA1F0D7B8200062B8D /* SPBezierPathExtension.swift in Sources */,
 				B7806E5C1F0D5B580052A7CD /* CountdownNumberView.swift in Sources */,
 				B79263E91F0D7B8200062B8D /* SPPatternView.swift in Sources */,
+				B745AE231F1E697F0025946C /* OpenSourceLibrary.swift in Sources */,
 				B758D8741ED78E120033EE45 /* Downloader.swift in Sources */,
+				B745AE1D1F1E65570025946C /* InstructionsViewController.swift in Sources */,
 				B79263EB1F0D7B8200062B8D /* SPTitleWithSubtitleView.swift in Sources */,
 				B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */,
 				B79263D31F0D7B8200062B8D /* SPParalaxTableViewController.swift in Sources */,
@@ -1363,7 +1423,9 @@
 				B79263B11F0D7B8200062B8D /* SPUIScreenExtension.swift in Sources */,
 				B79263D01F0D7B8200062B8D /* SPExtenshionViewController.swift in Sources */,
 				B79263DC1F0D7B8200062B8D /* SPCollectionViewCell.swift in Sources */,
+				B745AE211F1E65B50025946C /* LegalViewController.swift in Sources */,
 				B79263A11F0D7B8200062B8D /* SPAnimationUpward.swift in Sources */,
+				B745AE251F1E6A190025946C /* OpenSourceViewController.swift in Sources */,
 				B79263E41F0D7B8200062B8D /* SPBannerWithTitlesView.swift in Sources */,
 				B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */,
 				B79263E01F0D7B8200062B8D /* SPPageItemsScalingCollectionLayout.swift in Sources */,
@@ -1373,7 +1435,9 @@
 				B79263E51F0D7B8200062B8D /* SPBlurView.swift in Sources */,
 				B79263AD1F0D7B8200062B8D /* SPStrideableExtension.swift in Sources */,
 				B79263E61F0D7B8200062B8D /* SPGradeWithBlurView.swift in Sources */,
+				B745AE3B1F1E8D260025946C /* TeamViewController.swift in Sources */,
 				B79263B91F0D7B8200062B8D /* SPRequestPermissionDataColors.swift in Sources */,
+				B745AE191F1E3BB20025946C /* PartnersViewController.swift in Sources */,
 				B79263C31F0D7B8200062B8D /* SPRequestPermissionDialogInteractiveDataSourceInterface.swift in Sources */,
 				B79263A31F0D7B8200062B8D /* NSLayoutConstraintExtenshion.swift in Sources */,
 				B79263B61F0D7B8200062B8D /* SPLaunchAnimationSlideExtenshion.swift in Sources */,
