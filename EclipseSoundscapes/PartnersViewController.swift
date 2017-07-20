@@ -40,7 +40,7 @@ class PartnersViewController : FormViewController {
     
     
     var members : [Partner] = [
-        Partner(name: "NASA (National Aeronautics and Space Administration)", website: "https://www.nasa.gov/", bio: "NASA is an independent agency of the United States federal government which conducts the civilian space program, aeronautics, and aerospace research. NASA is leading an educational outreach effort surrounding the August 2017 Eclipse which includes information and live coverage of the event. NASA is partnering with Eclipse Soundscapes to provide the script calculating the timing of the eclipse, as well as the funding that makes Eclipse Soundscapes possible.", photo: #imageLiteral(resourceName: "NASA")),
+        Partner(name: "NASA", website: "https://www.nasa.gov/", bio: "NASA is an independent agency of the United States federal government which conducts the civilian space program, aeronautics, and aerospace research. NASA is leading an educational outreach effort surrounding the August 2017 Eclipse which includes information and live coverage of the event. NASA is partnering with Eclipse Soundscapes to provide the script calculating the timing of the eclipse, as well as the funding that makes Eclipse Soundscapes possible.", photo: #imageLiteral(resourceName: "NASA")),
         
         Partner(name: "National Park Service", website: "https://www.nps.gov/", bio: "The National Parks Service (an agency of the United States Department of the Interior) manages national parks, monuments, conservation, and historical sites throughout the United States. The NPS is partnering with Eclipse Soundscapes during the August 2017 Eclipse to collect mono and binaural field recordings in parks across the country, especially those in the path of totality. They will collect data the day before, the day of, and the day after the eclipse in order to study how wildlife sounds fluctuate with the changes in light caused by the eclipse.", photo: #imageLiteral(resourceName: "National_Parkers_logo")),
         
@@ -57,7 +57,7 @@ class PartnersViewController : FormViewController {
         Partner(name: "Citizen CATE", website: "http://eclipse2017.nso.edu/citizen-cate/", bio: "The Citizen CATE (Continental-America Telescopic Eclipse) Experiment is an effort to document the 2017 Eclipse by capturing images of the inner solar corona using a network of more than 60 telescopes. CATE is working with high schools, universities, education groups, astronomy clubs, national science research labs, and corporate sponsors to produce 90 minutes of continuous, high-resolution, and rapid-cadence images detailing the Sun’s inner corona...More TBD", photo: #imageLiteral(resourceName: "nso_logo_200_a")),
         
         Partner(name: "Brigham Young University, Idaho", website: "http://www.byui.edu/eclipse-2017", bio: "Brigham Young University (BYU) is a private research university with three locations, including Rexburg, Idaho. They are partnering with Eclipse Soundscapes to provide a series of field recordings of the 2017 Eclipse, including audio of an active beehive. Because Rexburg lies in the path of totality, BYU is hosting a number of viewing and educational events with the City of Rexburg.", photo: #imageLiteral(resourceName: "byu"))
-        ]
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +68,10 @@ class PartnersViewController : FormViewController {
     }
     
     private func initializeForm() {
+        
+        self.automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
+        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
         
         for member in members {
             form
@@ -102,24 +106,26 @@ class PartnersViewController : FormViewController {
                 }
                 <<< TextAreaRow(){
                     $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
-                    $0.cell.layer.borderColor = UIColor.clear.cgColor
-                    $0.cell.textView.isEditable = false
-                    $0.cell.isUserInteractionEnabled = false
+                    let cell = $0.cell
+                    cell?.layer.borderColor = UIColor.clear.cgColor
+                    cell?.textView.isEditable = false
+                    cell?.isUserInteractionEnabled = false
+                    
+                    cell?.textView.alpha = 0
+                    UIView.animate(withDuration: 2.0, animations: { [weak view = cell?.textView] in
+                        view?.alpha = 1
+                    })
+                    cell?.textView.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
+                    UIView.animate(withDuration: 1.0, animations: { [weak view = cell?.textView] in
+                        view?.layer.transform = CATransform3DIdentity
+                    })
+                    
                     }.cellUpdate({ (cell, row) in
                         cell.textView.text = member.bio
                         cell.accessibilityLabel = cell.textView.text
                         cell.accessibilityTraits = UIAccessibilityTraitStaticText
                         cell.textView.isAccessibilityElement = false
                         cell.textView.font = UIFont.getDefautlFont(.meduium, size: 13)
-                        
-                        cell.textView.alpha = 0
-                        UIView.animate(withDuration: 2.0, animations: { [weak view = cell.textView] in
-                            view?.alpha = 1
-                        })
-                        cell.textView.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
-                        UIView.animate(withDuration: 1.0, animations: { [weak view = cell.textView] in
-                            view?.layer.transform = CATransform3DIdentity
-                        })
                     })
             
         }

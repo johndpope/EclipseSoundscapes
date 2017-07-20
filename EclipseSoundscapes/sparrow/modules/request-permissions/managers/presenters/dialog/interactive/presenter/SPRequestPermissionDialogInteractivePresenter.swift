@@ -109,6 +109,7 @@ class SPRequestPermissionDialogInteractivePresenter {
                         })
                     } else {
                         control.setSelectedState(animated: true)
+                        control.setPermissionState(state: .denied)
                         var denidedPermission: [SPRequestPermissionType] = []
                         for permission in self.permissions {
                             if !self.permissionManager.isAuthorizedPermission(permission) {

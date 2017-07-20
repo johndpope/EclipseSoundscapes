@@ -30,6 +30,15 @@ class SPRequestPermissionTwiceControl: UIButton, SPRequestPermissionTwiceControl
     var normalColor: UIColor
     var selectedColor: UIColor
     
+    var cancelIcon : UIImage {
+        get {
+            let requestWidth: CGFloat = 100
+            let checkedBezierPath  = SPBezierPathFigure.icons.cancel()
+            checkedBezierPath.resizeTo(width: requestWidth)
+            return checkedBezierPath.convertToImage(fill: true, stroke: false, color: UIColor.black).withRenderingMode(.alwaysTemplate)
+        }
+    }
+    
     private var permissionState = PermissionState.untouched {
         didSet {
             switch permissionState {
@@ -39,10 +48,11 @@ class SPRequestPermissionTwiceControl: UIButton, SPRequestPermissionTwiceControl
                 break
             case .denied:
                 self.accessibilityValue = "Permission Denied"
+                self.layer.borderColor = UIColor.red.cgColor
                 self.iconView.backgroundColor = .red
                 self.backgroundColor = .red
                 self.setTitleColor(normalColor, for: .normal)
-                self.iconView.setSelectedState(with: .white)
+                self.iconView.setSelectedState(with: .white, cancelIcon)
                 break
             case .untouched:
                 self.accessibilityValue = "Permission not accepted yet"
@@ -63,6 +73,7 @@ class SPRequestPermissionTwiceControl: UIButton, SPRequestPermissionTwiceControl
         self.normalColor = normalColor
         self.selectedColor = selectedColor
         super.init(frame: CGRect.zero)
+        iconView.iconImage = cancelIcon.withRenderingMode(.alwaysTemplate)
         self.setTitle(title, for: UIControlState.normal)
         self.commonInit()
         
@@ -82,7 +93,6 @@ class SPRequestPermissionTwiceControl: UIButton, SPRequestPermissionTwiceControl
         self.titleLabel?.minimumScaleFactor = 0.5
         self.titleLabel?.adjustsFontSizeToFitWidth = true
         self.setNormalState(animated: false)
-        self.setPermissionState(state: .untouched)
     }
     
     func setNormalState(animated: Bool) {
@@ -158,7 +168,7 @@ class SPRequestPermissionIconView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setSelectedState(with color: UIColor = .white) {
+    func setSelectedState(with color: UIColor = .white,_ icon : UIImage? = nil) {
         var settingColor = color
         if settingColor == UIColor.clear {
             settingColor = UIColor.white
@@ -209,7 +219,7 @@ class SPRequestPermissionIconView: UIView {
             })
         })
         delay(0.05, closure: {
-            self.setIconImageView(self.selectedIconImage!)
+            self.setIconImageView(icon ?? self.selectedIconImage!)
         })
     }
     

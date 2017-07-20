@@ -69,8 +69,6 @@ public class SPRequestPermissionDialogInteractiveView: UIView {
         self.buttonsContainerView.maxItemSideSize = 50
         self.buttonsContainerView.spaceFactor = 0.055
         self.buttonsContainerView.minSpace = 8
-        
-        setAccesibility()
     }
     
     override public func layoutSubviews() {
@@ -171,17 +169,5 @@ public class SPRequestPermissionDialogInteractiveView: UIView {
         default:
             return 0.36
         }
-    }
-    
-    private func setAccesibility() {
-        
-        self.headerView.titleLabel.isAccessibilityElement = false
-        
-        self.headerView.subtitleLabel.accessibilityTraits = UIAccessibilityTraitStaticText
-        
-        self.buttonsContainerView.subviews.forEach { (view) in
-            view.accessibilityHint = "Double Tap to Accept"
-        }
-        
     }
 }

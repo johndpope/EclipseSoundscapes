@@ -24,6 +24,7 @@ import Eureka
 
 class LegalViewController : FormViewController {
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
@@ -31,8 +32,13 @@ class LegalViewController : FormViewController {
         self.navigationItem.title = "Legal"
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
     }
-    
+
     private func initializeForm() {
+        
+        self.automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
+        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
+        
         form
             +++ ButtonRow("License"){(row: ButtonRow) -> Void in
                 row.title = row.tag
@@ -41,7 +47,7 @@ class LegalViewController : FormViewController {
             <<< ButtonRow("Open Source Libraries"){(row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.presentationMode = PresentationMode.segueName(segueName: "OpenSourceLibraries", onDismiss: nil)
-            }
+        }
         
     }
     

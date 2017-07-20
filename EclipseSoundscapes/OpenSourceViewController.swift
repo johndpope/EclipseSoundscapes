@@ -31,7 +31,8 @@ class OpenSourceViewController : FormViewController {
                                            OpenSourceLibrary.init(title: "BRYXBanner", license: "BRYXBanner-License"),
                                            OpenSourceLibrary.init(title: "Eureka", license: "Eureka-License"),
                                            OpenSourceLibrary.init(title: "SwiftSpinner", license: "SwiftSpinner-License"),
-                                           OpenSourceLibrary.init(title: "Localize-Swift", license: "Localize-Swift-License")]
+                                           OpenSourceLibrary.init(title: "Localize-Swift", license: "Localize-Swift-License"),
+                                           OpenSourceLibrary.init(title: "Eclipse Soundscapes", license: "LICENSE")]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +42,11 @@ class OpenSourceViewController : FormViewController {
     }
     
     private func initializeForm() {
+        
+        self.automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
+        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
+        
         form
             +++ Section("Libraries We Use")
             <<< TextAreaRow(){

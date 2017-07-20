@@ -104,11 +104,9 @@ class MoreViewController : FormViewController {
     }
     
     func setDefaults() {
-        self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        self.tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
-        self.tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        self.tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        self.tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        self.automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
+        tableView.scrollIndicatorInsets = UIEdgeInsetsMake(20, 0, 0, 0)
         self.tableView.backgroundColor = UIColor(r: 75, g: 75, b: 75)
         view.backgroundColor = .black
         URLRow.defaultCellUpdate = { cell, row in cell.textField.textColor = .blue }

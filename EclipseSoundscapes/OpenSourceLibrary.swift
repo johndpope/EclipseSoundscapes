@@ -28,6 +28,6 @@ class OpenSourceLibrary : NSObject {
     
     init(title: String, license: String) {
         self.title = title
-        self.license = Utility.getFile(license, type: "txt")
+        self.license = Utility.getFile(license, type: "txt") ?? license
     }
 }

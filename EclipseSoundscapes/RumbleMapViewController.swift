@@ -111,17 +111,15 @@ class RumbleMapViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceConnectedNotification), name: Notification.Name.AVAudioSessionRouteChange, object: nil)
         // add interruption handler
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
-        
-        setSession(active: true)
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        if !isSessionActive {
-//            setSession(active: true)
-//        }
-//    }
-//    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !isSessionActive {
+            setSession(active: true)
+        }
+    }
+//
 //    override func viewDidDisappear(_ animated: Bool) {
 //        super.viewDidDisappear(animated)
 //        if isSessionActive {
@@ -234,7 +232,7 @@ class RumbleMapViewController: UIViewController {
     }
     
     func loadImages() {
-        var names = ["Eclipse_1", "Eclipse_2", "Eclipse_3", "Eclipse_4"]
+        var names = ["Eclipse_1", "Eclipse_2", "Eclipse_3", "Eclipse_4", "Tse2006l_1640_15"]
         for i in 0...names.count-1 {
             eclipseImages.append(UIImage(named: names[i])!)
             markerContainers.append(MarkerContainer(frame: rumbleMap.frame).restore(forIndex: i))
@@ -495,6 +493,7 @@ class RumbleMapViewController: UIViewController {
         }
         
         if theInterruptionType == AVAudioSessionInterruptionType.ended.rawValue {
+            
         }
     }
 }

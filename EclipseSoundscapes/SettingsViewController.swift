@@ -35,6 +35,11 @@ class SettingsViewController : FormViewController {
     }
     
     private func initializeForm() {
+        
+        self.automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
+        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
+        
         form
             +++ SwitchRow() {
                 $0.title = "Notifications"
@@ -52,16 +57,15 @@ class SettingsViewController : FormViewController {
                         }
                     }
                 })
-            <<< SwitchRow() {
+            <<< SwitchRow("Location") {
                 $0.title = "Location"
                 $0.value = SPRequestPermission.isAllowPermission(.locationWhenInUse) && Location.isGranted
                 }.onChange({ (row) in
-                    if let flag = row.value {
-                        if flag {
-                            if !SPRequestPermission.isAllowPermission(.locationWhenInUse) {
-                                SPRequestPermission.dialog.interactive.present(on: self, with: [.locationWhenInUse])
-                            } else {
-                                Location.isGranted = true
+                    if let switchOn = row.value {
+                        if switchOn {
+                            Location.isGranted = true
+                            if !Location.checkPermission(){
+                                SPRequestPermission.dialog.interactive.present(on: self, with: [.locationWhenInUse], delegate: self)
                             }
                         } else {
                             Location.isGranted = false
@@ -72,5 +76,28 @@ class SettingsViewController : FormViewController {
     
     @objc private func close() {
         self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension SettingsViewController: SPRequestPermissionEventsDelegate {
+    
+    func didHide() {
+        let isAllowed = Location.checkPermission()
+        let row = (form.rowBy(tag: "Location") as! SwitchRow)
+        row.cell.switchControl.setOn(isAllowed, animated: true)
+        row.value = isAllowed
+        
+    }
+    
+    func didAllowPermission(permission: SPRequestPermissionType) {
+        
+    }
+    
+    func didDeniedPermission(permission: SPRequestPermissionType) {
+        
+    }
+    
+    func didSelectedPermission(permission: SPRequestPermissionType) {
+        
     }
 }

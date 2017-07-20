@@ -94,7 +94,11 @@ class EventsViewController: UIViewController {
         
         countDownView.alpha = 0
         infoView.alpha = 0
-        showError()
+        if Location.checkPermission() {
+            getlocation(animated: true)
+        } else  {
+            showError()
+        }
     }
     
     func setText() {
@@ -122,13 +126,22 @@ class EventsViewController: UIViewController {
     }
     
     func getlocation(animated : Bool) {
-        if Location.checkPermission() {
+        banner?.dismiss()
+        
+        if Location.isGranted {
             if animated {
                 showSpinner()
             }
             locator.getLocation()
         } else {
-            Location.permission(on: self)
+            if !Location.checkPermission() {
+                locator.permission(on: self)
+            } else {
+                banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.") {
+                    self.present(UINavigationController(rootViewController: SettingsViewController()), animated: true, completion: nil)
+                }
+                banner?.show(duration: 5.0)
+            }
         }
     }
     
@@ -263,39 +276,23 @@ extension EventsViewController : LocationDelegate {
     }
     
     func notGranted() {
-        banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.") {
-            self.present(UINavigationController(rootViewController: SettingsViewController()), animated: true, completion: nil)
-        }
-        banner?.show(duration: 5.0)
         showError {
             self.infoView.clear()
             self.countDownView.clear()
             self.locator.stopLocating()
         }
-    }
-}
-
-extension EventsViewController : SPRequestPermissionEventsDelegate {
-    func didHide() {
-        if Location.checkPermission() {
-            errorBtn.setTitle(Location.string.general, for: .normal)
-            getlocation(animated: true)
-            Location.isGranted = true
+        
+        if !Location.isGranted {
+            banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.") {
+                self.present(UINavigationController(rootViewController: SettingsViewController()), animated: true, completion: nil)
+            }
+            banner?.show(duration: 5.0)
         } else {
-            showError()
-            Location.isGranted = false
+            locator.permission(on: self)
         }
     }
     
-    func didAllowPermission(permission: SPRequestPermissionType) {
-        
-    }
-    
-    func didDeniedPermission(permission: SPRequestPermissionType) {
-        
-    }
-    
-    func didSelectedPermission(permission: SPRequestPermissionType) {
-        
+    func didGrant() {
+        showSpinner()
     }
 }

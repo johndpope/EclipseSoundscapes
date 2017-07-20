@@ -38,9 +38,11 @@ public protocol LocationDelegate: NSObjectProtocol {
     ///   - error: Error trying to get user's last location
     func locator(didFailWithError error: Error)
     
-    
     /// If User has diabled location updates
     func notGranted()
+    
+    /// If User has granted location updates
+    func didGrant()
 }
 
 /// Handles Obtaining the User's Location
@@ -79,13 +81,12 @@ public class Location : NSObject {
     
     /// Begin gathering Information on the User's Location
     func getLocation(withAccuracy accuracy: CLLocationAccuracy = kCLLocationAccuracyBest, reocurring: Bool = true) {
-        if Location.isGranted {
-            self.locationManager.desiredAccuracy = accuracy
-            isReoccuring = reocurring
-            self.locationManager.requestLocation()
-        } else {
-            self.delegate?.notGranted()
+        self.locationManager.desiredAccuracy = accuracy
+        if reocurring {
+            isReoccuring = true
+            setupReoccuringRequests()
         }
+        request()
     }
     
     fileprivate func setupReoccuringRequests() {
@@ -103,6 +104,7 @@ public class Location : NSObject {
         if Location.isGranted {
             self.locationManager.requestLocation()
         } else {
+            stopLocating()
             self.delegate?.notGranted()
         }
     }
@@ -118,8 +120,8 @@ public class Location : NSObject {
         return SPRequestPermission.isAllowPermission(.locationWhenInUse)
     }
     
-    static func permission(on controller: UIViewController) {
-        SPRequestPermission.dialog.interactive.present(on: controller, with: [.locationWhenInUse], dataSource: LocationDataSource(), delegate: controller as? SPRequestPermissionEventsDelegate)
+    func permission(on controller: UIViewController) {
+        SPRequestPermission.dialog.interactive.present(on: controller, with: [.locationWhenInUse], dataSource: LocationDataSource(), delegate: self)
         controller.view.isAccessibilityElement = false
     }
     
@@ -129,6 +131,31 @@ public class Location : NSObject {
         self.timer = nil
     }
     
+}
+
+extension Location : SPRequestPermissionEventsDelegate {
+    public func didHide() {
+        if Location.checkPermission() {
+            Location.isGranted = true
+            self.delegate?.didGrant()
+            getLocation()
+        } else {
+            Location.isGranted = false
+            self.delegate?.notGranted()
+        }
+    }
+    
+    public func didAllowPermission(permission: SPRequestPermissionType) {
+        
+    }
+    
+    public func didDeniedPermission(permission: SPRequestPermissionType) {
+        
+    }
+    
+    public func didSelectedPermission(permission: SPRequestPermissionType) {
+        
+    }
 }
 
 class LocationDataSource : SPRequestPermissionDialogInteractiveDataSource {

@@ -25,7 +25,6 @@ import UIKit
 
 class LicenseViewController : FormViewController {
     
-    
     var libraries : [OpenSourceLibrary] = [OpenSourceLibrary.init(title: "Eclipse Soundscapes", license: "LICENSE")]
     
     override func viewDidLoad() {
@@ -36,6 +35,11 @@ class LicenseViewController : FormViewController {
     }
     
     private func initializeForm() {
+        
+        self.automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
+        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
+        
         for lib in libraries {
             form
                 +++ Section(lib.title)

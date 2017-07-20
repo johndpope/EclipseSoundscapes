@@ -28,6 +28,12 @@ class BioView: UIView {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var jobTitleLabel: UILabel!
     
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        jobTitleLabel.adjustsFontSizeToFitWidth = true
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }

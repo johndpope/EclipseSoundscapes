@@ -32,7 +32,6 @@
 		B745AE341F1E79820025946C /* Localize-Swift-License.txt in Resources */ = {isa = PBXBuildFile; fileRef = B745AE2E1F1E79820025946C /* Localize-Swift-License.txt */; };
 		B745AE351F1E79820025946C /* SwiftSpinner-License.txt in Resources */ = {isa = PBXBuildFile; fileRef = B745AE2F1F1E79820025946C /* SwiftSpinner-License.txt */; };
 		B745AE371F1E8A230025946C /* LicenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE361F1E8A230025946C /* LicenseViewController.swift */; };
-		B745AE391F1E8AB90025946C /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = B745AE381F1E8AB90025946C /* LICENSE.txt */; };
 		B745AE3B1F1E8D260025946C /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE3A1F1E8D260025946C /* TeamViewController.swift */; };
 		B745AE3D1F1E8D630025946C /* BioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE3C1F1E8D630025946C /* BioView.swift */; };
 		B745AE3F1F1E8D6E0025946C /* BioView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B745AE3E1F1E8D6E0025946C /* BioView.xib */; };
@@ -140,6 +139,7 @@
 		B7BBB4FC1EE8690A00C0D855 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */; };
 		B7BD1AD31EF02A8800A739FA /* PlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */; };
 		B7C4E1411EE751A6002A0F19 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C4E1401EE751A6002A0F19 /* Utility.swift */; };
+		B7DE878F1F20FBE6001F69D8 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */; };
 		B7E7A9881F12A40200B239B8 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9871F12A40200B239B8 /* MoreViewController.swift */; };
 		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
 		B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */; };
@@ -204,7 +204,6 @@
 		B745AE2E1F1E79820025946C /* Localize-Swift-License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Localize-Swift-License.txt"; sourceTree = "<group>"; };
 		B745AE2F1F1E79820025946C /* SwiftSpinner-License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SwiftSpinner-License.txt"; sourceTree = "<group>"; };
 		B745AE361F1E8A230025946C /* LicenseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseViewController.swift; sourceTree = "<group>"; };
-		B745AE381F1E8AB90025946C /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		B745AE3A1F1E8D260025946C /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
 		B745AE3C1F1E8D630025946C /* BioView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BioView.swift; sourceTree = "<group>"; };
 		B745AE3E1F1E8D6E0025946C /* BioView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BioView.xib; sourceTree = "<group>"; };
@@ -315,6 +314,7 @@
 		B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
 		B7C4E1401EE751A6002A0F19 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		B7E7A9871F12A40200B239B8 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
@@ -442,7 +442,7 @@
 				B745AE2D1F1E79820025946C /* Eureka-License.txt */,
 				B745AE2E1F1E79820025946C /* Localize-Swift-License.txt */,
 				B745AE2F1F1E79820025946C /* SwiftSpinner-License.txt */,
-				B745AE381F1E8AB90025946C /* LICENSE.txt */,
+				B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */,
 				B75632B31F04037D00106B46 /* mapmarker.wav */,
 				B75632B51F04038500106B46 /* xytick.wav */,
 			);
@@ -1147,9 +1147,9 @@
 				B72DF5521ED724F300F9E4F3 /* LaunchScreen.storyboard in Resources */,
 				B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */,
 				B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */,
-				B745AE391F1E8AB90025946C /* LICENSE.txt in Resources */,
 				B745AE351F1E79820025946C /* SwiftSpinner-License.txt in Resources */,
 				B745AE301F1E79820025946C /* AudioKit-License.txt in Resources */,
+				B7DE878F1F20FBE6001F69D8 /* LICENSE.txt in Resources */,
 				B7447A801F141EEF0077F1F7 /* SectionHeader.xib in Resources */,
 				B7806E5B1F0D5B580052A7CD /* CountdownView.xib in Resources */,
 				B75632B41F04037D00106B46 /* mapmarker.wav in Resources */,
