@@ -30,7 +30,10 @@ class LegalViewController : FormViewController {
         initializeForm()
         
         self.navigationItem.title = "Legal"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
+        let button = UIBarButtonItem(image: #imageLiteral(resourceName: "left-small"), style: .plain, target: self, action: #selector(close))
+        button.tintColor = .black
+        button.accessibilityLabel = "Back"
+        self.navigationItem.leftBarButtonItem = button
     }
 
     private func initializeForm() {

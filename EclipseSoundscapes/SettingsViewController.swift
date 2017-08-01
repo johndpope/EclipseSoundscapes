@@ -26,36 +26,41 @@ import CoreLocation
 
 class SettingsViewController : FormViewController {
     
+    var currentSetting : SPRequestPermissionType?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
-        
         self.navigationItem.title = "Settings"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(close))
+        let button = UIBarButtonItem(image: #imageLiteral(resourceName: "left-small"), style: .plain, target: self, action: #selector(close))
+        button.tintColor = .black
+        button.accessibilityLabel = "Back"
+        self.navigationItem.leftBarButtonItem = button
     }
     
-    private func initializeForm() {
+    @objc private func initializeForm() {
         
         self.automaticallyAdjustsScrollViewInsets = false
         tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
         tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
         
         form
-            +++ SwitchRow() {
+            +++ SwitchRow("Notification") {
                 $0.title = "Notifications"
                 $0.value = SPRequestPermission.isAllowPermission(.notification)
                 }.onChange({ (row) in
-                    if let flag = row.value {
-                        if flag {
-                            if !SPRequestPermission.isAllowPermission(.notification) {
-                                SPRequestPermission.dialog.interactive.present(on: self, with: [.notification])
-                            } else {
-                                
+                    if let switchOn = row.value {
+                        if switchOn {
+                            NotificationHelper.appGrated = true
+                            if !NotificationHelper.isGranted{
+                                self.currentSetting = .notification
+                                SPRequestPermission.dialog.interactive.present(on: self, with: [.notification],dataSource: NotificationDataSource(), delegate: self)
                             }
                         } else {
-                            
+                            NotificationHelper.appGrated = false
                         }
                     }
+                    
                 })
             <<< SwitchRow("Location") {
                 $0.title = "Location"
@@ -63,12 +68,13 @@ class SettingsViewController : FormViewController {
                 }.onChange({ (row) in
                     if let switchOn = row.value {
                         if switchOn {
-                            Location.isGranted = true
-                            if !Location.checkPermission(){
-                                SPRequestPermission.dialog.interactive.present(on: self, with: [.locationWhenInUse], delegate: self)
+                            Location.appGrated = true
+                            if !Location.isGranted{
+                                self.currentSetting = .locationWhenInUse
+                                SPRequestPermission.dialog.interactive.present(on: self, with: [.locationWhenInUse],dataSource: LocationDataSource(), delegate: self)
                             }
                         } else {
-                            Location.isGranted = false
+                            Location.appGrated = false
                         }
                     }
                 })
@@ -82,19 +88,56 @@ class SettingsViewController : FormViewController {
 extension SettingsViewController: SPRequestPermissionEventsDelegate {
     
     func didHide() {
-        let isAllowed = Location.checkPermission()
-        let row = (form.rowBy(tag: "Location") as! SwitchRow)
-        row.cell.switchControl.setOn(isAllowed, animated: true)
-        row.value = isAllowed
+        guard let type = currentSetting else {
+            return
+        }
+        switch type {
+        case .notification:
+            let isAllowed = NotificationHelper.checkPermission()
+            NotificationHelper.appGrated = isAllowed
+            let row = (form.rowBy(tag: "Notification") as! SwitchRow)
+            row.cell.switchControl.setOn(isAllowed, animated: true)
+            row.value = isAllowed
+            
+            break
+        case .locationWhenInUse :
+            let isAllowed = Location.checkPermission()
+            Location.appGrated = isAllowed
+            let row = (form.rowBy(tag: "Location") as! SwitchRow)
+            row.cell.switchControl.setOn(isAllowed, animated: true)
+            row.value = isAllowed
+            break
+        default:
+            break
+        }
+        
         
     }
     
     func didAllowPermission(permission: SPRequestPermissionType) {
-        
+        switch permission {
+        case .notification:
+            NotificationHelper.appGrated = true
+            break
+        case .locationWhenInUse :
+            Location.appGrated = true
+            break
+        default:
+            break
+        }
     }
     
     func didDeniedPermission(permission: SPRequestPermissionType) {
-        
+        switch permission {
+        case .notification:
+            NotificationHelper.appGrated = false
+            break
+        case .locationWhenInUse :
+            Location.appGrated = false
+            break
+        default:
+            break
+        }
     }
     
     func didSelectedPermission(permission: SPRequestPermissionType) {

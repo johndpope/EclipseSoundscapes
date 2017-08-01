@@ -47,6 +47,42 @@ class Utility {
         }
         return nil
     }
+    
+    /// Gets the Top-most ViewController
+    static func getTopViewController() -> UIViewController {
+        
+        var viewController = UIViewController()
+        
+        if let vc =  UIApplication.shared.delegate?.window??.rootViewController {
+            
+            viewController = vc
+            var presented = vc
+            
+            while let top = presented.presentedViewController {
+                presented = top
+                viewController = top
+            }
+        }
+        
+        return viewController
+    }
+    
+    
+    /// Get Local Time from UTC
+    ///
+    /// - Parameter date: UTC Date String
+    /// - Returns: Local Time Date String 
+    static func UTCToLocal(date:String) -> String {
+        let dateFormator = DateFormatter()
+        dateFormator.dateFormat = "HH:mm:ss.S"
+        dateFormator.timeZone = TimeZone(abbreviation: "UTC")
+        
+        let dt = dateFormator.date(from: date)
+        dateFormator.timeZone = TimeZone.current
+        dateFormator.dateFormat = "h:mm:ss a"
+        
+        return dateFormator.string(from: dt!)
+    }
 }
 
 extension UIAlertController {
@@ -66,6 +102,22 @@ extension UIAlertController {
 }
 
 extension UIView {
+    
+    /// Get Rombus Pattern View
+    ///
+    /// - Returns: Rombus Pattern View
+    class func rombusPattern() -> UIView {
+        let patternView = SPRequestPermissionData.views.patternView()
+        let gradientView = SPGradientWithPictureView.init()
+        gradientView.startColor = SPRequestPermissionData.colors.gradient.dark.lightColor()
+        gradientView.endColor = SPRequestPermissionData.colors.gradient.dark.darkColor()
+        gradientView.startColorPoint = CGPoint.init(x: 0.5, y: 0)
+        gradientView.endColorPoint = CGPoint.init(x: 0.5, y: 1)
+        gradientView.pictureView = patternView
+        
+        return gradientView
+    }
+    
     func grayScale(point:CGPoint) -> CGFloat {
         let pixel = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: 4)
         let colorSpace = CGColorSpaceCreateDeviceRGB()

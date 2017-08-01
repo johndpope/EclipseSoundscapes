@@ -48,7 +48,19 @@ class MoreViewController : FormViewController {
                 $0.header = header
             }
             
-            +++ Section("About Us")
+            +++ Section("About Us") { section in
+                var header = HeaderFooterView<UIView>(HeaderFooterProvider.class)
+                header.onSetupView = { view, section in
+                    let label = InsetLabel()
+                    label.textColor = .white
+                    label.text = "About Us"
+                    label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    label.font = UIFont.getDefautlFont(.condensedMedium, size: 14)
+                    view.addSubview(label)
+                }
+                
+                section.header = header
+            }
             <<< TextAreaRow(){
                 $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
                 $0.cell.layer.borderColor = UIColor.clear.cgColor
@@ -60,6 +72,13 @@ class MoreViewController : FormViewController {
                     cell.accessibilityTraits = UIAccessibilityTraitStaticText
                     cell.textView.isAccessibilityElement = false
                     cell.textView.font = UIFont.getDefautlFont(.meduium, size: 13)
+                })
+            <<< ButtonRow("How to use the Rumble Map"){ (row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.cell.imageView?.image = #imageLiteral(resourceName: "manual")
+                row.presentationMode = .show(controllerProvider: ControllerProvider.callback { return IntructionsViewController(){ _ in } }, onDismiss: nil)
+                }.cellUpdate({ (cell, _) in
+                    cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
             <<< ButtonRow("Our team") { (row: ButtonRow) -> Void in
                 row.title = row.tag
@@ -76,15 +95,6 @@ class MoreViewController : FormViewController {
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
             
-            +++ Section("More Information")
-            
-            <<< ButtonRow("How to use this app"){ (row: ButtonRow) -> Void in
-                row.title = row.tag
-                row.cell.imageView?.image = #imageLiteral(resourceName: "manual")
-                row.presentationMode = .segueName(segueName: "Instructions", onDismiss: nil)
-                }.cellUpdate({ (cell, _) in
-                    cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
-                })
             <<< ButtonRow("Settings"){ (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.cell.imageView?.image = #imageLiteral(resourceName: "settings")
@@ -129,5 +139,24 @@ class MoreViewController : FormViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+}
+
+class InsetLabel: UILabel {
+    let topInset = CGFloat(10)
+    let bottomInset = CGFloat(10)
+    let leftInset = CGFloat(10)
+    let rightInset = CGFloat(10)
+    
+    override func drawText(in rect: CGRect) {
+        let insets: UIEdgeInsets = UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+        super.drawText(in: UIEdgeInsetsInsetRect(rect, insets))
+    }
+    
+    override public var intrinsicContentSize: CGSize {
+        var intrinsicSuperViewContentSize = super.intrinsicContentSize
+        intrinsicSuperViewContentSize.height += topInset + bottomInset
+        intrinsicSuperViewContentSize.width += leftInset + rightInset
+        return intrinsicSuperViewContentSize
     }
 }

@@ -22,7 +22,6 @@
 
 import Foundation
 import CoreLocation
-import Synchronized
 
 //public protocol AudioManagerDelegate: NSObjectProtocol {
 //    func recievedRecordings()

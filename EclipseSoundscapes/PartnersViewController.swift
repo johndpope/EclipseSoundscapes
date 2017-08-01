@@ -22,24 +22,10 @@
 
 import Eureka
 
-struct Partner {
-    var name: String
-    var website: String
-    var bio : String
-    var photo: UIImage?
-    
-    init(name: String, website: String, bio: String, photo: UIImage?) {
-        self.name = name
-        self.website = website
-        self.bio = bio
-        self.photo = photo
-    }
-}
-
 class PartnersViewController : FormViewController {
     
     
-    var members : [Partner] = [
+    var partners : [Partner] = [
         Partner(name: "NASA", website: "https://www.nasa.gov/", bio: "NASA is an independent agency of the United States federal government which conducts the civilian space program, aeronautics, and aerospace research. NASA is leading an educational outreach effort surrounding the August 2017 Eclipse which includes information and live coverage of the event. NASA is partnering with Eclipse Soundscapes to provide the script calculating the timing of the eclipse, as well as the funding that makes Eclipse Soundscapes possible.", photo: #imageLiteral(resourceName: "NASA")),
         
         Partner(name: "National Park Service", website: "https://www.nps.gov/", bio: "The National Parks Service (an agency of the United States Department of the Interior) manages national parks, monuments, conservation, and historical sites throughout the United States. The NPS is partnering with Eclipse Soundscapes during the August 2017 Eclipse to collect mono and binaural field recordings in parks across the country, especially those in the path of totality. They will collect data the day before, the day of, and the day after the eclipse in order to study how wildlife sounds fluctuate with the changes in light caused by the eclipse.", photo: #imageLiteral(resourceName: "National_Parkers_logo")),
@@ -64,7 +50,10 @@ class PartnersViewController : FormViewController {
         initializeForm()
         
         self.navigationItem.title = "Our Partners"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(close))
+        let button = UIBarButtonItem(image: #imageLiteral(resourceName: "left-small"), style: .plain, target: self, action: #selector(close))
+        button.tintColor = .black
+        button.accessibilityLabel = "Back"
+        self.navigationItem.leftBarButtonItem = button
     }
     
     private func initializeForm() {
@@ -73,87 +62,64 @@ class PartnersViewController : FormViewController {
         tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
         tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
         
-        for member in members {
-            form
-                +++ Section() {
-                    var header = HeaderFooterView<BioView>(.nibFile(name: "BioView", bundle: nil))
-                    header.onSetupView = { (view, section) -> () in
-                        if let photo = member.photo {
-                            view.imageView.image = photo
-                        }
-                        view.nameLabel.text = member.name
-                        view.jobTitleLabel.text = member.website
-                        view.jobTitleLabel.textColor = UIColor(r: 0, g: 122, b: 184)
-                        let gesture = WebtouchGesture(target: self, action: #selector(self.openWebsite(gesture:)))
-                        gesture.website = member.website
-                        view.jobTitleLabel.addGestureRecognizer(gesture)
-                        
-                        view.imageView.alpha = 0
-                        view.nameLabel.alpha = 0
-                        view.jobTitleLabel.alpha = 0
-                        UIView.animate(withDuration: 2.0, animations: { [weak view] in
-                            view?.imageView.alpha = 1
-                            view?.nameLabel.alpha = 1
-                            view?.jobTitleLabel.alpha = 1
-                        })
-                        view.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
-                        UIView.animate(withDuration: 1.0, animations: { [weak view] in
-                            view?.layer.transform = CATransform3DIdentity
-                        })
-                    }
-                    $0.header = header
-                    
-                }
-                <<< TextAreaRow(){
-                    $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
-                    let cell = $0.cell
-                    cell?.layer.borderColor = UIColor.clear.cgColor
-                    cell?.textView.isEditable = false
-                    cell?.isUserInteractionEnabled = false
-                    
-                    cell?.textView.alpha = 0
-                    UIView.animate(withDuration: 2.0, animations: { [weak view = cell?.textView] in
-                        view?.alpha = 1
-                    })
-                    cell?.textView.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
-                    UIView.animate(withDuration: 1.0, animations: { [weak view = cell?.textView] in
-                        view?.layer.transform = CATransform3DIdentity
-                    })
-                    
-                    }.cellUpdate({ (cell, row) in
-                        cell.textView.text = member.bio
-                        cell.accessibilityLabel = cell.textView.text
-                        cell.accessibilityTraits = UIAccessibilityTraitStaticText
-                        cell.textView.isAccessibilityElement = false
-                        cell.textView.font = UIFont.getDefautlFont(.meduium, size: 13)
-                    })
-            
+        for partner in partners {
+            addPartner(partner)
         }
         
+        let section = form.allSections[0]
+        section.header = HeaderFooterView<UIView>(HeaderFooterProvider.class)
+        section.header?.height = {CGFloat.leastNormalMagnitude}
+    }
+    
+    func addPartner(_ partner: Partner) {
+        form
+            +++ PartnerRow { row in
+                row.value = partner
+                if let cell = row.cell {
+                    cell.memberImageView.alpha = 0
+                    cell.nameLabel.alpha = 0
+                    cell.websiteBtn.alpha = 0
+                    UIView.animate(withDuration: 2.0, animations: { [weak cell = cell] in
+                        cell?.memberImageView.alpha = 1
+                        cell?.nameLabel.alpha = 1
+                        cell?.websiteBtn.alpha = 1
+                    })
+                    cell.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
+                    UIView.animate(withDuration: 1.0, animations: { [weak cell = cell] in
+                        cell?.layer.transform = CATransform3DIdentity
+                    })
+                }
+            }
+            <<< TextAreaRow(){
+                $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
+                let cell = $0.cell
+                cell?.layer.borderColor = UIColor.clear.cgColor
+                cell?.textView.isEditable = false
+                cell?.isUserInteractionEnabled = false
+                
+                cell?.textView.alpha = 0
+                UIView.animate(withDuration: 2.0, animations: { [weak view = cell?.textView] in
+                    view?.alpha = 1
+                })
+                cell?.textView.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
+                UIView.animate(withDuration: 1.0, animations: { [weak view = cell?.textView] in
+                    view?.layer.transform = CATransform3DIdentity
+                })
+                
+                }.cellUpdate({ (cell, row) in
+                    cell.textView.text = partner.bio
+                    cell.accessibilityLabel = cell.textView.text
+                    cell.accessibilityTraits = UIAccessibilityTraitStaticText
+                    cell.textView.isAccessibilityElement = false
+                    cell.textView.font = UIFont.getDefautlFont(.meduium, size: 13)
+                })
         
     }
+
     
     @objc private func close() {
         self.dismiss(animated: true, completion: nil)
     }
-    
-    func openWebsite(gesture : WebtouchGesture) {
-        guard let wesite = gesture.website, let url = URL.init(string: wesite) else {
-            return
-        }
-        let alert = UIAlertController(title: "Open in Safari", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Sure", style: .destructive, handler: { _ in
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                // Fallback on earlier versions
-                UIApplication.shared.openURL(url)
-            }
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
-    
 }
 
 class WebtouchGesture : UITapGestureRecognizer {

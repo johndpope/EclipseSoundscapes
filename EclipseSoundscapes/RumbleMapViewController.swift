@@ -22,68 +22,65 @@
 
 import UIKit
 import AudioKit
-import Localize_Swift
 import BRYXBanner
+
+struct Event {
+    var name: String
+    var description : NSAttributedString?
+    var image : UIImage?
+    
+    init(name: String) {
+        self.name = name
+        let text = Utility.getFile(name, type: "txt")
+        self.description = NSAttributedString(string: text ?? "", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont.getDefautlFont(.meduium, size: 18)])
+        
+        self.image = UIImage(named: name)
+    }
+}
+
 
 class RumbleMapViewController: UIViewController {
     
+    //    var EventImages = [Event(name: "First Contact"),
+    //                       Event(name: "Baily's Beads"),
+    //                       Event(name: "Corona"),
+    //                       Event(name: "Diamond Ring"),
+    //                       Event(name: "Helmet Streamers"),
+    //                       Event(name: "Prominence"),
+    //                       Event(name: "Sun as a Star"),
+    //                       Event(name: "Totality")]
+    
+    var EventImages = [Event(name: "Baily's Beads"),
+                       Event(name: "Corona"),
+                       Event(name: "Diamond Ring"),
+                       Event(name: "Helmet Streamers"),
+                       Event(name: "Prominence")]
+    
+    
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @IBOutlet weak var descriptionBtn: UIButton!
+    @IBOutlet weak var rumbleBtn: UIButton!
+    
     @IBOutlet weak var controlView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var rumbleMap: RumbleMap!
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var rightArrowBtn: UIButton!
-    @IBOutlet weak var leftArrowBtn: UIButton!
     
-    var eclipseImages = [UIImage]()
+    @IBOutlet weak var nextBtn: UIButton!
+    @IBOutlet weak var previousBtn: UIButton!
+    @IBOutlet weak var descriptionTextView: UITextView!
+    
+    @IBOutlet weak var startRumbleBtn: UIButton!
+    @IBOutlet weak var previewImageView: UIImageView!
+    
+    var rumbleMap: RumbleMap?
+    
     var currentIndex = 0
-    
-    var boomBox : AKFMOscillator!
-    var envelope : AKAmplitudeEnvelope!
-    var envelopeMixer : AKMixer!
-    
-    var tickSound : AKAudioPlayer!
-    var tickMixer : AKMixer!
-    
-    var markerSound : AKAudioPlayer!
-    var markerMixer : AKMixer!
-    
-    var masterMixer : AKMixer!
-    
-    var dataGainControl : Double = 0.0 {
-        didSet {
-            self.envelopeMixer.volume = self.dataGainControl
-        }
-    }
-    
-    var modControl : Double = 1.0 {
-        didSet {
-            if modControl < 1 {
-                modControl += 1
-            }
-            self.boomBox.modulatingMultiplier = modControl
-        }
-    }
-    
-    var tickControl : Double = 0.0 {
-        didSet {
-            self.tickMixer.volume = self.tickControl
-        }
-    }
-    
-    var markerControl : Double = 0.0 {
-        didSet {
-            self.markerMixer.volume = self.markerControl
-        }
-    }
     
     var modScale : CGFloat = 6
     
-    var isZooming = false
-    var zoomScale : CGFloat = 1.0
-    
-    var markerContainer : MarkerContainer!
-    
-    var markerContainers = [MarkerContainer]()
     
     var stopGesture : UITapGestureRecognizer?
     
@@ -93,16 +90,9 @@ class RumbleMapViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        setupView()
-        setupZoom()
-        registerGestures()
-        setAccessibleViews()
+        configureView()
         loadImages()
         setText()
-        
-        titleLabel.adjustsFontSizeToFitWidth = true
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(voiceOverStatuschaned), name: NSNotification.Name(rawValue: UIAccessibilityVoiceOverStatusChanged), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(setText), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
         
@@ -113,176 +103,53 @@ class RumbleMapViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if !isSessionActive {
-            setSession(active: true)
-        }
+    func configureView() {
+        let background = UIView.rombusPattern()
+        background.frame = view.bounds
+        background.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.insertSubview(background, at: 0)
+        
+        startRumbleBtn.addTarget(self, action: #selector(openRumbleMap), for: .touchUpInside)
+        startRumbleBtn.titleLabel?.numberOfLines = 0
+        startRumbleBtn.titleLabel?.textAlignment = .center
+        
+        nextBtn.setImage(#imageLiteral(resourceName: "Right_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
+        nextBtn.tintColor = .white
+        nextBtn.accessibilityHint = "Shows the next Eclipse Image"
+        
+        
+        previousBtn.setImage(#imageLiteral(resourceName: "Left_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
+        previousBtn.tintColor = .white
+        previousBtn.accessibilityHint = "Shows the previous Eclipse Image"
+        
+        titleLabel.adjustsFontSizeToFitWidth = true
+        
+        let height = rumbleBtn.frame.height
+        let rWidth = rumbleBtn.frame.width
+        let bWidth = descriptionBtn.frame.width
+        
+        rumbleBtn.setBackgroundImage(UIImage.selectionIndiciatorImage(color: UIColor.init(r: 227, g: 94, b: 5), size: CGSize.init(width: rWidth, height: height), lineWidth: 2, position: .bottom)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        
+        rumbleBtn.tintColor = UIColor.init(r: 227, g: 94, b: 5)
+        rumbleBtn.accessibilityTraits |= UIAccessibilityTraitSelected
+        
+        descriptionBtn.setBackgroundImage(UIImage.selectionIndiciatorImage(color: .white, size: CGSize.init(width: bWidth, height: height), lineWidth: 2, position: .bottom)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        
+        descriptionTextView.textContainerInset = UIEdgeInsetsMake(20, 20, 10, 20)
+        descriptionTextView.accessibilityTraits = UIAccessibilityTraitStaticText
     }
-//
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        if isSessionActive {
-//            setSession(active: false)
-//        }
-//    }
+    
     
     func setText() {
         titleLabel.font = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(fontName: .bold, textStyle: .headline), size: 0)
     }
     
-    func setSession(active: Bool) {
-        
-        do {
-            if active {
-                try AKSettings.setSession(category: .playback)
-                try AKSettings.session.setActive(true, with: .notifyOthersOnDeactivation)
-                AKSettings.playbackWhileMuted = true
-                setupRumbleSounds()
-                AudioKit.start()
-                isSessionActive = true
-            } else {
-                stopRumbleSound()
-                AudioKit.stop()
-                try AKSettings.session.setActive(false)
-                isSessionActive = false
-            }
-            
-        } catch {
-            print("Error: \(error.localizedDescription)")
-            let banner = Banner(title: "Something Bad Happened", subtitle: error.localizedDescription + "Press to try again", didTapBlock: {
-                self.setSession(active: true)
-            })
-            banner.show()
-        
-        }
-    }
-    
-    func setupRumbleSounds() {
-        boomBox = AKFMOscillator(waveform: AKTable.init(), baseFrequency: 55, carrierMultiplier: 4, modulatingMultiplier: 1, modulationIndex: 1, amplitude: 1)
-        
-        boomBox.rampTime = 0.01
-        
-        envelope = AKAmplitudeEnvelope(boomBox, attackDuration: 1.0, decayDuration: 0.1, sustainLevel: 1.0, releaseDuration: 0.1)
-        
-        envelopeMixer = AKMixer.init(envelope)
-        
-        let tickFile = try! AKAudioFile(forReading: Bundle.main.url(forResource: "xytick", withExtension: ".wav")!)
-        tickSound = try! AKAudioPlayer(file: tickFile, looping: true, completionHandler: {
-            self.tickControl = 0.0
-        })
-        
-        tickMixer = AKMixer.init(tickSound)
-        
-        
-        let markerFile = try! AKAudioFile(forReading: Bundle.main.url(forResource: "mapmarker", withExtension: ".wav")!)
-        markerSound = try! AKAudioPlayer(file: markerFile, looping: false, completionHandler: {
-            self.markerControl = 0.0
-        })
-        markerMixer = AKMixer.init(markerSound)
-        
-        masterMixer = AKMixer.init(markerMixer, tickMixer, envelopeMixer)
-        
-        AudioKit.output = masterMixer
-    }
-    
-    func stopRumbleSound() {
-        masterMixer.stop()
-        tickMixer.stop()
-        markerMixer.stop()
-        envelopeMixer.stop()
-        boomBox.stop()
-        envelope.stop()
-        tickSound.stop()
-        markerSound.stop()
-    }
-    
-    func setupView() {
-        
-        rightArrowBtn.setImage(#imageLiteral(resourceName: "Right_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
-        rightArrowBtn.tintColor = .white
-        
-        leftArrowBtn.setImage(#imageLiteral(resourceName: "Left_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
-        leftArrowBtn.tintColor = .white
-        
-        titleLabel.adjustsFontSizeToFitWidth = true
-    }
-    
-    func setAccessibleViews() {
-        
-        rightArrowBtn.accessibilityLabel = "Next".localized()
-        rightArrowBtn.accessibilityHint = "Shows the next Eclipse Image".localized()
-        rightArrowBtn.accessibilityTraits = UIAccessibilityTraitButton
-        
-        leftArrowBtn.accessibilityLabel = "Previous".localized()
-        leftArrowBtn.accessibilityHint = "Shows the previous Eclipse Image".localized()
-        leftArrowBtn.accessibilityTraits = UIAccessibilityTraitButton
-        
-        titleLabel.text = "Contact Point".localizedFormat(currentIndex+1)
-        titleLabel.accessibilityLabel = "Contact Point".localizedFormat(currentIndex+1)
-        titleLabel.accessibilityTraits = UIAccessibilityTraitHeader // TODO: Add description here
-        
-        scrollView.isAccessibilityElement = false
-        scrollView.accessibilityElements = [rumbleMap]
-        
-        rumbleMap.isAccessibilityElement = true
-        rumbleMap.accessibilityLabel = "Rumble Map"
-        rumbleMap.accessibilityHint = "Double Tap to Start"
-        rumbleMap.accessibilityTraits = UIAccessibilityTraitNone
-    }
-    
     func loadImages() {
-        var names = ["Eclipse_1", "Eclipse_2", "Eclipse_3", "Eclipse_4", "Tse2006l_1640_15"]
-        for i in 0...names.count-1 {
-            eclipseImages.append(UIImage(named: names[i])!)
-            markerContainers.append(MarkerContainer(frame: rumbleMap.frame).restore(forIndex: i))
-        }
-        rumbleMap.image = eclipseImages[currentIndex]
-        markerContainer = markerContainers[currentIndex]
-    }
-    
-    func setupZoom() {
+        currentIndex = 0
+        titleLabel.text = EventImages[currentIndex].name
+        descriptionTextView.attributedText = EventImages[currentIndex].description
+        previewImageView.image = EventImages[currentIndex].image
         
-        scrollView.delegate = self
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.alwaysBounceVertical = false
-        scrollView.alwaysBounceHorizontal = false
-        scrollView.showsVerticalScrollIndicator = true
-        scrollView.flashScrollIndicators()
-        scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 10.0
-        scrollView.canCancelContentTouches = false
-        scrollView.panGestureRecognizer.minimumNumberOfTouches = 2
-        scrollView.clipsToBounds = true
-    }
-    
-    func registerGestures() {
-        rumbleMap.isUserInteractionEnabled = true
-        
-        let stopGesture = UITapGestureRecognizer(target: self, action: #selector(self.stop))
-        stopGesture.numberOfTapsRequired = 2
-        stopGesture.numberOfTouchesRequired = 1
-        rumbleMap.addGestureRecognizer(stopGesture)
-        
-        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(self.zoomOut))
-        tapGesture2.numberOfTapsRequired = 1
-        tapGesture2.numberOfTouchesRequired = 2
-        rumbleMap.addGestureRecognizer(tapGesture2)
-        
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan(_:)))
-        panGesture.maximumNumberOfTouches = 1
-        panGesture.delegate = self
-        rumbleMap.addGestureRecognizer(panGesture)
-        
-        let touchDownGesture = UILongPressGestureRecognizer(target: self, action: #selector(touchDown(_:)))
-        touchDownGesture.minimumPressDuration = 0
-        touchDownGesture.delegate = self
-        rumbleMap.addGestureRecognizer(touchDownGesture)
-        
-        let markerGesture = UILongPressGestureRecognizer(target: self, action: #selector(saveMarkerPosition(_:)))
-        markerGesture.delegate = self
-        markerGesture.minimumPressDuration = 1.5
-        rumbleMap.addGestureRecognizer(markerGesture)
     }
     
     override func didReceiveMemoryWarning() {
@@ -290,40 +157,47 @@ class RumbleMapViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func openRumbleMap() {
+        if !rumbleMapShowing {
+            self.tabBarController?.setTabBarVisible(visible: false, animated: true)
+            self.updateStatusBar(hide: true)
+            
+            rumbleMap = RumbleMap()
+            rumbleMap?.closeCompletion = {
+                self.view.accessibilityElementsHidden = false
+                self.tabBarController?.tabBar.accessibilityElementsHidden = false
+                self.updateStatusBar(hide: false)
+                self.tabBarController?.setTabBarVisible(visible: true, animated: true)
+            }
+            
+            rumbleMap?.show(EventImages[currentIndex]){
+                self.view.accessibilityElementsHidden = true
+                self.tabBarController?.tabBar.accessibilityElementsHidden = true
+            }
+        }
+    }
+    
+    
     @IBAction func nextImage(_ sender: Any) {
         currentIndex += 1
         
-        if currentIndex > eclipseImages.count-1 {
+        if currentIndex > EventImages.count-1 {
             currentIndex = 0
         }
-        
-        markerContainer = markerContainers[currentIndex]
-        rumbleMap.image = eclipseImages[currentIndex]
-        titleLabel.text = "Contact Point".localizedFormat(currentIndex+1)
-        titleLabel.accessibilityLabel = "Contact Point".localizedFormat(currentIndex+1)
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, titleLabel)
-        zoomOut()
+        titleLabel.text = EventImages[currentIndex].name
+        descriptionTextView.attributedText = EventImages[currentIndex].description
+        previewImageView.image = EventImages[currentIndex].image
     }
     
     @IBAction func previousImage(_ sender: Any) {
         currentIndex -= 1
         
         if currentIndex < 0 {
-            currentIndex = eclipseImages.count-1
+            currentIndex = EventImages.count-1
         }
-        
-        markerContainer = markerContainers[currentIndex]
-        rumbleMap.image = eclipseImages[currentIndex]
-        titleLabel.text = "Contact Point".localizedFormat(currentIndex+1)
-        titleLabel.accessibilityLabel = "Contact Point".localizedFormat(currentIndex+1)
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.titleLabel)
-        zoomOut()
-    }
-    
-    func zoomOut() {
-        if self.scrollView.zoomScale != 1.0 {
-            self.scrollView.setZoomScale(1.0, animated: true)
-        }
+        titleLabel.text = EventImages[currentIndex].name
+        descriptionTextView.attributedText = EventImages[currentIndex].description
+        previewImageView.image = EventImages[currentIndex].image
     }
     
     func unregisterGesture(for view: UIView) {
@@ -333,132 +207,40 @@ class RumbleMapViewController: UIViewController {
             }
         }
     }
-    
-    func touchDown(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.numberOfTouches > 2 {
-            envelope.stop()
-            tickSound.stop()
-            return
-        }
-        if recognizer.state == .began && !isZooming {
-            let location = recognizer.location(in: recognizer.view)
-            if !(recognizer.view?.frame.contains(location))! {
-                envelope.stop()
-                tickSound.stop()
-                return
-            }
-            playSound(forLocation: location)
+    @IBAction func switchState(_ sender: UIButton) {
+        if sender == rumbleBtn {
+            descriptionTextView.isHidden = true
+            startRumbleBtn.isHidden = false
+            previewImageView.isHidden = false
+            descriptionBtn.tintColor = UIColor(r: 33, g: 33, b: 33)
+            descriptionBtn.accessibilityTraits ^= UIAccessibilityTraitSelected
             
-        } else if recognizer.state == .ended {
-            envelope.stop()
-            tickSound.stop()
-        }
-    }
-    
-    func handlePan(_ recognizer: UIPanGestureRecognizer) {
-        
-        if isZooming {
-            envelope.stop()
-            tickSound.stop()
-            return
+        } else if sender == descriptionBtn {
+            descriptionTextView.isHidden = false
+            startRumbleBtn.isHidden = true
+            previewImageView.isHidden = true
+            rumbleBtn.tintColor = UIColor(r: 33, g: 33, b: 33)
+            rumbleBtn.accessibilityHint = nil
+            rumbleBtn.accessibilityTraits ^= UIAccessibilityTraitSelected
         }
         
-        if recognizer.state == .began || recognizer.state == .changed {
-            let location = recognizer.location(in: recognizer.view)
-            if !(recognizer.view?.frame.contains(location))! {
-                envelope.stop()
-                tickSound.stop()
-                return
-            }
-            playSound(forLocation: location)
-        } else if recognizer.state == .ended {
-            envelope.stop()
-            tickSound.stop()
-        }
-    }
-    
-    func playSound(forLocation location : CGPoint) {
-        if markerContainer.contains(location) {
-            markerControl = 1.0
-            if !markerSound.isPlaying {
-                markerSound.play()
-            }
-        } else {
-            markerSound.stop()
-        }
-        
-        let grayScale = rumbleMap.grayScale(point: location)
-        
-        if grayScale == 0.0 {
-            dataGainControl = 0.0
-            modControl = 0.00
-            
-            tickControl = 0.8
-            if !tickSound.isPlaying {
-                tickSound.play()
-            }
-            
-        } else {
-            tickControl = 0.0
-            
-            dataGainControl = Double(grayScale)
-            modControl = Double(grayScale*modScale)
-            
-            if boomBox.isStopped || envelope.isStopped {
-                boomBox.play()
-                envelope.play()
-            }
-        }
-        
-    }
-    
-    func saveMarkerPosition(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == .began {
-            let location = recognizer.location(in: recognizer.view)
-            if !markerContainer.contains(location) {
-                markerContainer.insert(location)
-                
-                markerControl = 1.0
-                markerSound.play()
-                UserDefaults.standard.set(location.x, forKey: "\(currentIndex)rumblePoint-X")
-                UserDefaults.standard.set(location.y, forKey: "\(currentIndex)rumblePoint-Y")
-                
-            }
-        }
-    }
-    
-    func stop() {
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, rumbleMap)
-        rumbleMap.isActive = false
-    }
-    
-    func voiceOverStatuschaned() {
-        if UIAccessibilityIsVoiceOverRunning() {
-            stopGesture = UITapGestureRecognizer(target: self, action: #selector(self.stop))
-            stopGesture?.numberOfTapsRequired = 2
-            stopGesture?.numberOfTouchesRequired = 1
-            rumbleMap.addGestureRecognizer(stopGesture!)
-        } else {
-            if stopGesture != nil {
-                rumbleMap.removeGestureRecognizer(stopGesture!)
-                rumbleMap.isActive = false
-            }
-        }
+        sender.tintColor = UIColor.init(r: 227, g: 94, b: 5)
+        sender.accessibilityTraits |= UIAccessibilityTraitSelected
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
-    
     //MARK: Notification Handlers
     func leftApplication() {
-        setSession(active: false)//Left
+        rumbleMap?.setSession(active: false)//Left
     }
     
     func returnToApplication(){
-        setSession(active: true)//Returned
+        rumbleMap?.setSession(active: true)//Returned
     }
+    
     
     /// Notification handler for AVAudioSessionRouteChange to catch changes to device connection from the audio jack.
     ///
@@ -468,11 +250,12 @@ class RumbleMapViewController: UIViewController {
         let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
         switch audioRouteChangeReason {
         case AVAudioSessionRouteChangeReason.newDeviceAvailable.rawValue: ///device is connected
-            
+            rumbleMap?.setSession(active: true)
             break
             
         case AVAudioSessionRouteChangeReason.oldDeviceUnavailable.rawValue: ///device is not connected
             
+            rumbleMap?.setSession(active: true)
             break
             
         default:
@@ -496,30 +279,28 @@ class RumbleMapViewController: UIViewController {
             
         }
     }
-}
-
-extension RumbleMapViewController : UIScrollViewDelegate {
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return self.rumbleMap
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        //TODO: Stop RumbleMap
+        rumbleMap?.willRotate()
     }
     
-    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        isZooming = true
+    
+    var rumbleMapShowing = false
+    
+    func updateStatusBar(hide: Bool) {
+        rumbleMapShowing = hide
+        UIView.animate(withDuration: 0.2, animations: {
+            self.setNeedsStatusBarAppearanceUpdate()
+        })
     }
     
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        isZooming = false
-        
-        if scale > zoomScale + 0.1 || scale < zoomScale - 0.1 {
-            zoomScale = scale
-            let zoomString = "Zoom scale".localizedFormat(zoomScale)
-            rumbleMap.accessibilityValue = zoomString
-        }
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation{
+        return .fade
     }
-}
-
-extension RumbleMapViewController : UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+    
+    override var prefersStatusBarHidden: Bool {
+        return rumbleMapShowing
     }
 }

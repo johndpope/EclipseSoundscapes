@@ -41,48 +41,54 @@ class InfoView: UIView {
     
     
     
-    var eclipseTypeLabel : DynamicLabel = {
-        var label = DynamicLabel(fontName: Futura.bold, textStyle: UIFontTextStyle.headline, scale: 1.5)
+    var eclipseTypeLabel : UILabel = {
+        var label = UILabel()
+        label.font = UIFont.getDefautlFont(.bold, size: 22)
         label.textAlignment = .center
         label.textColor = .white
         label.accessibilityTraits |= UIAccessibilityTraitHeader | UIAccessibilityTraitStaticText
         return label
     }()
     
-    var locationlabel : DynamicLabel = {
-        var label = DynamicLabel(fontName: Futura.condensedMedium, textStyle: UIFontTextStyle.body)
+    var locationlabel : UILabel = {
+        var label = UILabel()
+        label.font = UIFont.getDefautlFont(.condensedMedium, size: 14)
         label.textAlignment = .center
         label.textColor = .white
         label.accessibilityTraits |= UIAccessibilityTraitStaticText
         return label
     }()
     
-    var durationLabel : DynamicLabel = {
-        var label = DynamicLabel(fontName: Futura.condensedMedium, textStyle: UIFontTextStyle.body)
+    var durationLabel : UILabel = {
+        var label = UILabel()
+        label.font = UIFont.getDefautlFont(.condensedMedium, size: 14)
         label.textAlignment = .center
         label.textColor = .white
         label.accessibilityTraits |= UIAccessibilityTraitStaticText
         return label
     }()
     
-    var magnitudeLabel : DynamicLabel = {
-        var label = DynamicLabel(fontName: Futura.condensedMedium, textStyle: UIFontTextStyle.body)
+    var magnitudeLabel : UILabel = {
+        var label = UILabel()
+        label.font = UIFont.getDefautlFont(.condensedMedium, size: 14)
         label.textAlignment = .center
         label.textColor = .white
         label.accessibilityTraits |= UIAccessibilityTraitStaticText
         return label
     }()
     
-    var coverageLabel : DynamicLabel = {
-        var label = DynamicLabel(fontName: Futura.condensedMedium, textStyle: UIFontTextStyle.body)
+    var coverageLabel : UILabel = {
+        var label = UILabel()
+        label.font = UIFont.getDefautlFont(.condensedMedium, size: 14)
         label.textAlignment = .center
         label.textColor = .white
         label.accessibilityTraits |= UIAccessibilityTraitStaticText
         return label
     }()
     
-    var dateLabel : DynamicLabel = {
-        var label = DynamicLabel(fontName: Futura.condensedMedium, textStyle: UIFontTextStyle.body)
+    var dateLabel : UILabel = {
+        var label = UILabel()
+        label.font = UIFont.getDefautlFont(.condensedMedium, size: 14)
         label.textAlignment = .center
         label.textColor = .white
         label.accessibilityTraits |= UIAccessibilityTraitStaticText
@@ -102,10 +108,8 @@ class InfoView: UIView {
     
     var eclipseInfo : [EclipseEvent]?
     
-    private var contentView = UIView()
-    
-    init() {
-        super.init(frame: .zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         configureContent()
     }
     
@@ -118,14 +122,6 @@ class InfoView: UIView {
         tableView.register(InfoTableViewCell.self, forCellReuseIdentifier: cellId)
         tableView.delegate = self
         tableView.dataSource = self
-        
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.addSubview(contentView)
-        contentView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        contentView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        contentView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        contentView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -140,24 +136,24 @@ class InfoView: UIView {
         stackView.addArrangedSubview(coverageLabel)
         stackView.addArrangedSubview(dateLabel)
         
-        contentView.addSubview(tableView)
-        contentView.addSubview(stackView)
-        stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-        stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
+        addSubview(tableView)
+        addSubview(stackView)
+        stackView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        stackView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        stackView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -10).isActive = true
-        stackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         
-        tableView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        tableView.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
-        tableView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+//        tableView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+        tableView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     }
     
     func setText() {
         
         var typeStr = ""
-        switch timeGenerator.type {
+        switch timeGenerator.eclipseType {
         case .none:
             eclipseTypeLabel.text = "No Solar Eclipse"
             tableView.isHidden = true
@@ -175,11 +171,11 @@ class InfoView: UIView {
             eclipseInfo = [timeGenerator.contact1, timeGenerator.contact2, timeGenerator.contactMid, timeGenerator.contact3, timeGenerator.contact4]
             self.magnitudeLabel.text = "Magnitude: " + timeGenerator.magnitude!
             self.durationLabel.text = "Duration of Totality: " + timeGenerator.duration!
-            self.coverageLabel.text =  "Obscuration: " + timeGenerator.coverage!
+            self.coverageLabel.text =  "Obscuration: " + timeGenerator.coverage
             break
         }
         eclipseTypeLabel.text = typeStr
-        locationlabel.text = "Latitude: \(timeGenerator.latString),\nLongitude: \(timeGenerator.lonString)"
+        locationlabel.text = "Latitude: \(timeGenerator.latString), Longitude: \(timeGenerator.lonString)"
         dateLabel.text = "Date: \(timeGenerator.contact1.date)"
     }
     
@@ -201,7 +197,7 @@ class InfoView: UIView {
         let header = UIView()
         header.isAccessibilityElement = false
         header.accessibilityElementsHidden = true
-        header.backgroundColor = UIColor(r: 0, g: 91, b: 52)
+        header.backgroundColor = UIColor.init(r: 214, g: 93, b: 18)
         header.layer.cornerRadius = 2.5
         
         let eventLabel = UILabel()
@@ -255,7 +251,7 @@ class InfoView: UIView {
 extension InfoView : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return 55
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

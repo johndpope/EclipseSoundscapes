@@ -42,10 +42,10 @@ class MarkerContainer : NSObject {
         }
     }
     
-    func restore(forIndex index: Int) -> Self {
+    func restore(_ event: Event) -> Self {
         
-        guard let x = UserDefaults.standard.object(forKey: "\(index)rumblePoint-X") as? CGFloat,
-            let y = UserDefaults.standard.object(forKey: "\(index)rumblePoint-Y") as? CGFloat else {
+        guard let x = UserDefaults.standard.object(forKey: "\(event.name)rumblePoint-X") as? CGFloat,
+            let y = UserDefaults.standard.object(forKey: "\(event.name)rumblePoint-Y") as? CGFloat else {
                 return self
         }
         
