@@ -46,14 +46,12 @@ class RumbleMapImageView : UIImageView {
                 self.accessibilityTraits |= UIAccessibilityTraitAllowsDirectInteraction
                 print("Became Active")
                 print(self.accessibilityTraits.description)
-                accessibilityLabel = "Rumble Map Running"
-                accessibilityHint = "Double Tap to turn off"
+                accessibilityLabel = "Rumble Map Running, Double Tap to turn off"
             } else {
                 self.accessibilityTraits = UIAccessibilityTraitNone
                 print("Not Active")
                 print(self.accessibilityTraits.description)
-                accessibilityLabel = "Rumble Map Inactive"
-                accessibilityHint = "Double Tap to turn on"
+                accessibilityLabel = "Rumble Map Inactive, Double Tap to turn on"
             }
         }
     }
@@ -70,18 +68,59 @@ class RumbleMapImageView : UIImageView {
     var target : (()->Void)?
 }
 
+protocol RumbleMapDelegate: class {
+    func openIntructions()
+}
+
 
 class RumbleMap : UIView {
     
-    var event : Event!
+    deinit {
+        print("Destroying Rumble Map")
+    }
+    
+    var event : Event?
+    weak var delegate: RumbleMapDelegate?
     
     var rumbleMapImageView: RumbleMapImageView!
-    var closeBtn: SqueezeButton!
     
-    let lineSeparatorView: UIView = {
+    var fillerView : UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    let closeBtn : SqueezeButton = {
+        var btn = SqueezeButton(type: .system)
+        btn.addTarget(self, action: #selector(hide), for: .touchUpInside)
+        btn.setTitle("Close", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: 22)
+        btn.backgroundColor = .black
+        return btn
+    }()
+    
+    let instructionBtn : SqueezeButton = {
+        var btn = SqueezeButton(type: .system)
+        btn.addTarget(self, action: #selector(openInstructions), for: .touchUpInside)
+        btn.setTitle("Instructions", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: 22)
+        btn.backgroundColor = .black
+        return btn
+    }()
+    
+    let lineSeparatorView1: UIView = {
         let view = UIView()
         view.isAccessibilityElement = false
-        view.backgroundColor = UIColor(white: 0.9, alpha: 1)
+        view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        return view
+    }()
+    
+    let lineSeparatorView2: UIView = {
+        let view = UIView()
+        view.isAccessibilityElement = false
+        view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
         return view
     }()
     
@@ -128,63 +167,54 @@ class RumbleMap : UIView {
     
     var modScale : CGFloat = 6
     
-    var markerContainer : MarkerContainer!
-    
-    var markerContainers = [MarkerContainer]()
-    
-    deinit {
-        setSession(active: false)
-    }
+    var markerContainer : MarkerContainer?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initializeView()
+        setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        initializeView()
+        setupView()
     }
     
-    
-    func initializeView() {
-
+    func setupView() {
         rumbleMapImageView = RumbleMapImageView()
-        rumbleMapImageView.target =  {
-            return self.fix()
+        rumbleMapImageView.target =  { [weak self] in
+            return self?.fix()
         }
-    
-        closeBtn = SqueezeButton(type: .system)
-        closeBtn.addTarget(self, action: #selector(hide), for: .touchUpInside)
-        closeBtn.setTitle("Close", for: .normal)
-        closeBtn.setTitleColor(.white, for: .normal)
-        closeBtn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: 22)
-        closeBtn.backgroundColor = .black
         
-        layoutViews()
-        addGestures()
-    }
-    
-    func layoutViews() {
         addSubview(rumbleMapImageView)
+        addSubview(fillerView)
         addSubview(closeBtn)
+        addSubview(instructionBtn)
+        addSubview(lineSeparatorView1)
+        addSubview(lineSeparatorView2)
+        
+        
         rumbleMapImageView.anchorToTop(topAnchor, left: leftAnchor, bottom: closeBtn.topAnchor, right: rightAnchor)
-        closeBtn.anchor(nil, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
         
+        fillerView.anchor(closeBtn.topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         
+        closeBtn.anchor(nil, left: leftAnchor, bottom: bottomAnchor, right: centerXAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0.5, widthConstant: 0, heightConstant: 50)
+        instructionBtn.anchor(nil, left: centerXAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0.5, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        
+        lineSeparatorView1.anchor(nil, left: leftAnchor, bottom: closeBtn.topAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 1)
+        lineSeparatorView2.anchor(closeBtn.topAnchor, left: closeBtn.rightAnchor, bottom: bottomAnchor, right: instructionBtn.leftAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+        
+        addGestures()
     }
     
     func setSession(active: Bool) {
         stopAudioUnits()
-        
         do {
             if active {
-                try AKSettings.setSession(category: .soloAmbient)
+                try AKSettings.setSession(category: .soloAmbient) //TODO: FIX for when audio from the media playing and the user comes here to use the rumble map... Make this take over
                 AKSettings.playbackWhileMuted = true
                 buildAudioUnits()
                 AudioKit.start()
             } else {
-                stopAudioUnits()
                 AudioKit.stop()
                 try AKSettings.session.setActive(false)
             }
@@ -201,7 +231,6 @@ class RumbleMap : UIView {
     func willRotate() {
         envelope?.stop()
         tickSound?.stop()
-        self.layoutViews()
     }
     
     private func stopAudioUnits() {
@@ -213,6 +242,19 @@ class RumbleMap : UIView {
         envelope?.stop()
         tickSound?.stop()
         markerSound?.stop()
+    }
+    
+    private func destroyElements() {
+        masterMixer = nil
+        tickMixer = nil
+        markerMixer = nil
+        envelopeMixer = nil
+        boomBox = nil
+        envelope = nil
+        tickSound = nil
+        markerSound = nil
+        
+        markerContainer = nil
     }
 
     
@@ -261,8 +303,9 @@ class RumbleMap : UIView {
         
         masterMixer = AKMixer.init(markerMixer, tickMixer, envelopeMixer)
         
-        
-        markerContainer = MarkerContainer(frame: frame).restore(self.event)
+        if let event = event {
+            markerContainer = MarkerContainer(frame: frame).restore(event)
+        }
         
         AudioKit.output = masterMixer
     }
@@ -303,7 +346,7 @@ class RumbleMap : UIView {
     }
     
     func playSound(forLocation location : CGPoint) {
-        if markerContainer.contains(location) {
+        if markerContainer?.contains(location) ?? false {
             markerControl = 1.0
             if !(markerSound?.isPlaying ?? true) {
                 markerSound?.play()
@@ -340,13 +383,15 @@ class RumbleMap : UIView {
     func saveMarkerPosition(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             let location = recognizer.location(in: recognizer.view)
-            if !markerContainer.contains(location) {
-                markerContainer.insert(location)
+            if !(markerContainer?.contains(location) ?? true) {
+                markerContainer?.insert(location)
                 
                 markerControl = 1.0
                 markerSound?.play()
-                UserDefaults.standard.set(location.x, forKey: "\(event.name)rumblePoint-X")
-                UserDefaults.standard.set(location.y, forKey: "\(event.name)rumblePoint-Y")
+                if let name = event?.name {
+                    UserDefaults.standard.set(location.x, forKey: "\(name)rumblePoint-X")
+                    UserDefaults.standard.set(location.y, forKey: "\(name)rumblePoint-Y")
+                }
                 
             }
         }
@@ -362,7 +407,7 @@ class RumbleMap : UIView {
             self.centerXAnchor.constraint(equalTo: window.centerXAnchor).isActive = true
             self.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
             
-            window.accessibilityElements = [rumbleMapImageView, closeBtn]
+            window.accessibilityElements = [rumbleMapImageView, closeBtn, instructionBtn]
         }
         
         self.transform = CGAffineTransform.init(scaleX: CGFloat.leastNormalMagnitude, y: CGFloat.leastNormalMagnitude)
@@ -388,8 +433,12 @@ class RumbleMap : UIView {
             }
             
             self.setSession(active: false)
-            self.removeFromSuperview()
+            self.destroyElements()
             self.closeCompletion?()
+            
+            self.event = nil
+            self.closeCompletion = nil
+            self.removeFromSuperview()
         }
     }
     
@@ -400,14 +449,48 @@ class RumbleMap : UIView {
     
     func fix() {
         rumbleMapImageView.isActive = false
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, closeBtn)
+        
+        if closeBtn.accessibilityElementIsFocused() {
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, closeBtn)
+        } else {
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, instructionBtn)
+        }
+        
     }
     
     func makeCancelFocus() {
         envelope?.stop()
         tickSound?.stop()
     }
+    
+    
+    func openInstructions() {
+        moveOut(show: false)
+        delegate?.openIntructions()
+    }
+    
+    func moveOut(show: Bool) {
+        if show {
+            self.isAccessibilityElement = true
+            UIView.animate(withDuration: 0.2, animations: {
+                self.alpha = 1
+                
+            })
+            if let window = UIApplication.shared.keyWindow {
+                window.accessibilityElements = [rumbleMapImageView, closeBtn, instructionBtn]
+            }
+            
+        } else {
+            if let window = UIApplication.shared.keyWindow {
+                window.accessibilityElements = nil
+            }
+            self.alpha = 0
+        }
+    }
+    
 }
+
+
 
 extension RumbleMap : UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {

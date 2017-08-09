@@ -172,13 +172,12 @@ public class AudioManager: NSObject {
 //        }
 //    }
     
-    //TODO: Find out if we are going to provide any information about the audio recording
-    func loadAudio(withName name: String, withExtension ext: String = FileType) -> TapePlayer? {
-        guard let url = Bundle.main.url(forResource: name, withExtension: ext) else {
+    class func loadAudio(withName name: String, withExtension ext: FileType?) -> Tape? {
+        guard let url = Bundle.main.url(forResource: name, withExtension: ext?.rawValue) else {
             return nil
         }
         
-        let tape = Tape(withAudio: url)
-        return TapePlayer(tape: tape)
+        let tape = Tape(audioUrl: url)
+        return tape
     }
 }

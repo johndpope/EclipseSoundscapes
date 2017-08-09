@@ -1,0 +1,82 @@
+[ 
+	{ "Date" : "2018, Feb 15",
+	"Time" : "20:52:33 UT",
+	"Type" : "Partial",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2018, Jul 15",
+	"Time" : "03:02:16 UT",
+	"Type" : "Partial",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2018, Aug 11",
+	"Time" : "09:47:28 UT",
+	"Type" : "Partial",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2019, Jan 06",
+	"Time" : "01:42:38 UT",
+	"Type" : "Partial",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2019, Jul 02",
+	"Time" : "19:24:07 UT",
+	"Type" : "Total",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2019, Dec 26",
+	"Time" : "05:18:53 UT",
+	"Type" : "Annular",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2020, Jun 21",
+	"Time" : "06:41:15 UT",
+	"Type" : "Annular",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2020, Dec 14",
+	"Time" : "16:14:39 UT",
+	"Type" : "Total",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2021, Jun 10",
+	"Time" : "10:43:07 UT",
+	"Type" : "Annular",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2021, Dec 04",
+	"Time" : "07:34:38 UT",
+	"Type" : "Total",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2022, Apr 30",
+	"Time" : "20:42:36 UT",
+	"Type" : "Partial",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2022, Oct 25",
+	"Time" : "11:01:20 UT",
+	"Type" : "Partial",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2023, Apr 20",
+	"Time" : "04:17:56 UT",
+	"Type" : "Hybrid",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2023, Oct 14",
+	"Time" : "18:00:41 UT",
+	"Type" : "Annular",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2024, Apr 08",
+	"Time" : "18:18:29 UT",
+	"Type" : "Total",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	},
+	{ "Date" : "2024, Oct 02",
+	"Time" : "18:46:13",
+	"Type" : "Annular",
+	"Features" : "Tracking, Rumble Maps, Narrations"
+	}			
+]

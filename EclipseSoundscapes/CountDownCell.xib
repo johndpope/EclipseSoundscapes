@@ -20,6 +20,9 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wVA-4s-Yy7" customClass="CountdownView" customModule="EclipseSoundscapes" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="363" height="108.5"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <accessibility key="accessibilityConfiguration">
+                            <accessibilityTraits key="traits" header="YES"/>
+                        </accessibility>
                     </view>
                 </subviews>
                 <constraints>

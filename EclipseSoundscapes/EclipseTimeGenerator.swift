@@ -45,6 +45,13 @@ struct EclipseEvent: Equatable {
         self.alt = alt
         self.azi = azi
     }
+    
+    func eventDate() -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss.S"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        return dateFormatter.date(from: "\(date) \(time)")
+    }
 }
 
 func ==(lhs: EclipseEvent, rhs: EclipseEvent) -> Bool {
@@ -645,44 +652,44 @@ class EclipseTimeGenerator {
         isPartial = false
         isEclipse = true
         
-        var c1Display = ""
-        var c2Display = ""
-        var c3Display = ""
-        var c4Display = ""
-        
-        let midDisplay = displaymid()
+//        var c1Display = ""
+//        var c2Display = ""
+//        var c3Display = ""
+//        var c4Display = ""
+//        
+//        let midDisplay = displaymid()
         if mid[36] > 0 {
             // There is an eclipse
-            c1Display = displayc1()
-            c4Display = displayc4()
+//            c1Display = displayc1()
+//            c4Display = displayc4()
             if mid[36] > 1 {
                 // Total/annular eclipse
-                c2Display = displayc2()
-                c3Display = displayc3()
+//                c2Display = displayc2()
+//                c3Display = displayc3()
                 if c1[31] <= 0.0 && c4[31] <= 0.0 {
                     // Sun below the horizon for the entire duration of the event
                     isEclipse = false
-                    print("No Solar Eclipse")
+//                    print("No Solar Eclipse")
                 } else {
                     // Sun above the horizon for at least some of the event
                     if c2[31] <= 0.0 && c3[31] <= 0.0 {
                         // Sun below the horizon for just the total/annular event
                         isPartial = true
-                        print("Partial Solar Eclipse")
+//                        print("Partial Solar Eclipse")
                     } else {
                         // Sun above the horizon for at least some of the total/annular event
                         if c2[31] > 0.0 && c3[31] > 0.0 {
                             // Sun above the horizon for the entire annular/total event
                             if mid[36] == 2 {
-                                print("Annular Solar Eclipse" )
-                                print("Duration of Annularity: \(getduration())")
+//                                print("Annular Solar Eclipse" )
+//                                print("Duration of Annularity: \(getduration())")
                             } else {
-                                print("Total Solar Eclipse" )
-                                print("Duration of Totality: \(getduration())")
+//                                print("Total Solar Eclipse" )
+//                                print("Duration of Totality: \(getduration())")
                             }
                         } else {
                             // Sun below the horizon for at least some of the annular/total event
-                            print("???")
+//                            print("???")
                         }
                     }
                 }
@@ -691,34 +698,34 @@ class EclipseTimeGenerator {
                 if c1[31] <= 0.0 && c4[31] <= 0.0 {
                     // Sun below the horizon
                     isEclipse = false
-                    print("No Solar Eclipse")
+//                    print("No Solar Eclipse")
                 } else {
                     isPartial = true
-                    print("Partial Solar Eclipse")
+//                    print("Partial Solar Eclipse")
                 }
             }
         } else {
             // No eclipse
             isEclipse = false
-            print("No Solar Eclipse")
+//            print("No Solar Eclipse")
         }
         
-        if isEclipse == true {
-            let maxmag = (mid[34] * 1000).rounded() / 1000.0
-            print("Magnitude: \(maxmag)")
-            print("Obscuration: \(getcoverage())")
-            print(c1Display)
-            if isPartial == false {
-                print(c2Display)
-            }
-            print(midDisplay)
-            if isPartial == false {
-                print(c3Display)
-                
-            }
-            print(c4Display)
-        }
-        
+//        if isEclipse == true {
+////            let maxmag = (mid[34] * 1000).rounded() / 1000.0
+////            print("Magnitude: \(maxmag)")
+////            print("Obscuration: \(getcoverage())")
+////            print(c1Display)
+//            if isPartial == false {
+////                print(c2Display)
+//            }
+//            print(midDisplay)
+//            if isPartial == false {
+//                print(c3Display)
+//                
+//            }
+////            print(c4Display)
+//        }
+//        
         if isEclipse {
             if isPartial {
                 eclipseType = .partial

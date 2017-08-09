@@ -21,6 +21,7 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
+import BRYXBanner
 
 class Utility {
     
@@ -32,6 +33,28 @@ class Utility {
         let minutes = Int(time) / 60
         let seconds = time - Double(minutes) * 60
         return String(format:"%2i:%02i", minutes, Int(seconds))
+    }
+    
+    /// Convert TimeInterval into a pretty string
+    ///
+    /// - Parameter time: TimeInterval
+    /// - Returns: Pretty Time String
+    static func timeAccessibilityString(time:TimeInterval) -> String {
+        
+        let minutes = Int(time) / 60
+        let multipleMinutes = minutes != 1
+        
+        let seconds = time - Double(minutes) * 60
+        let multipleSeconds = seconds != 1
+        
+        if minutes == 0 {
+            return String(format:"%i %@", Int(seconds), multipleSeconds ? "seconds" : "second")
+        } else if seconds == 0 {
+            return "0"
+        } else {
+    
+        return String(format:"%i %@ %i %@", minutes, multipleMinutes ? "minutes" : "minute", Int(seconds), multipleSeconds ? "seconds" : "second")
+        }
     }
     
     static func getFile(_ filename: String, type : String) -> String? {
@@ -83,6 +106,64 @@ class Utility {
         
         return dateFormator.string(from: dt!)
     }
+    
+    
+    private var banner : Banner?
+    private var countdown = 10
+    private var playerTimer : Timer?
+    func openPlayer(with media: Media) {
+        let title = "Eclipse Media Player is about to open in \(countdown) seconds"
+        let detail = "Get Ready to listen."
+        
+        banner = Banner(title: title, subtitle: detail, image: #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse"), backgroundColor: Color.eclipseOrange)
+        banner?.titleLabel.textColor = .black
+        
+        banner?.detailLabel.textColor = .black
+        banner?.dismissesOnTap = false
+        banner?.dismissesOnSwipe = false
+        
+        banner?.didDismissBlock = {
+            self.playerTimer?.invalidate()
+            self.playerTimer = nil
+            self.countdown = 10
+            let playbackVc = PlaybackViewController()
+            playbackVc.media = media
+            playbackVc.isRealtimeEvent = true
+            Utility.getTopViewController().present(playbackVc, animated: true, completion: nil)
+        }
+        
+        banner?.isAccessibilityElement = true
+        banner?.accessibilityElementsHidden = true
+        banner?.accessibilityLabel = title + detail
+        
+        banner?.show(duration: 10.0)
+        playerTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimeforBanner), userInfo: nil, repeats: true)
+        
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, banner)
+    }
+    
+    @objc private func updateTimeforBanner() {
+        if countdown > 0 {
+            countdown -= 1
+        }
+        self.banner?.titleLabel.text = "Eclipse Media Player is about to open in \(countdown) seconds"
+        banner?.accessibilityLabel = "\(self.banner?.titleLabel.text ?? "") \(self.banner?.detailLabel.text ?? "")"
+    }
+    
+    
+    func showReminderBanner(message: String) {
+        banner = Banner(title: message, image: #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse"), backgroundColor: Color.eclipseOrange)
+        banner?.titleLabel.textColor = .black
+        banner?.detailLabel.textColor = .black
+        
+        banner?.isAccessibilityElement = true
+        banner?.accessibilityElementsHidden = true
+        banner?.accessibilityLabel = message
+        
+        banner?.show(duration: 5.0)
+        
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, banner)
+    }
 }
 
 extension UIAlertController {
@@ -99,6 +180,10 @@ extension UIAlertController {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         return alert
     }
+}
+
+class Color {
+    static let eclipseOrange = UIColor.init(r: 227, g: 94, b: 5)
 }
 
 extension UIView {

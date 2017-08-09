@@ -50,5 +50,4 @@ class SqueezeButton : UIButton {
         }
         
     }
-    
 }

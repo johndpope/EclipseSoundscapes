@@ -24,123 +24,149 @@ import UIKit
 
 class PlaybackViewController: UIViewController {
     
-    var event: Event? {
+    let controlsContainerView: MediaControlView = {
+        let view = MediaControlView()
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    lazy var playerSlider: MediaSlider = {
+        let slider = MediaSlider()
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        slider.minimumTrackTintColor = Color.eclipseOrange
+        slider.setThumbImage(#imageLiteral(resourceName: "Eclipse-thumb"), for: UIControlState())
+        
+        slider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
+        slider.addTarget(self, action: #selector(sliderTouchDown), for: .touchDown)
+        slider.addTarget(self, action: #selector(sliderTouchUp), for: [.touchUpInside, .touchUpOutside])
+        
+        return slider
+    }()
+    
+    var titleLabel : UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.font = UIFont.getDefautlFont(.bold, size: 20)
+        label.accessibilityTraits = UIAccessibilityTraitHeader
+        return label
+    }()
+    
+    var infoTextView : UITextView = {
+        let tv = UITextView()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.textAlignment = .left
+        tv.font = UIFont.getDefautlFont(.meduium, size: 17)
+        tv.accessibilityTraits = UIAccessibilityTraitStaticText
+        tv.isEditable = false
+        tv.textContainerInset = UIEdgeInsetsMake(20, 20, 10, 20)
+        tv.backgroundColor = UIColor(r: 249, g: 249, b: 249)
+        return tv
+    }()
+    
+    let lineSeparatorView: UIView = {
+        let view = UIView()
+        view.isAccessibilityElement = false
+        view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        return view
+    }()
+    
+    var media : Media! {
         didSet {
-            self.soundscapesImageView.image = event?.image
-            self.captionsTextView.attributedText = event?.description
+            self.controlsContainerView.backgroundImageView.image = media.image
+            self.tape = AudioManager.loadAudio(withName: media.resourceName, withExtension: media.mediaType)
+            self.titleLabel.text = media.name
+            self.infoTextView.text = media.getInfo()
         }
     }
     
-    var closedCaptionOn = false {
+    private var tape: Tape?
+    
+    var isPlaying = false {
         didSet {
-            soundscapesImageView.isHidden = closedCaptionOn
-            captionsTextView.isHidden = !closedCaptionOn
+            controlsContainerView.isPlaying = isPlaying
         }
     }
     
-    @IBOutlet weak var captionsTextView: UITextView!
-    @IBOutlet weak var soundscapesImageView: UIImageView!
-    @IBOutlet weak var mediaControls: UIView!
-    @IBOutlet weak var totalTimeLabel: UILabel!
-    
-    @IBOutlet weak var progressBar: UIProgressView!
-    
-    @IBOutlet weak var currentTimeLabel: UILabel!
-    
-    @IBOutlet weak var playBtn: UIButton!
-    @IBOutlet weak var closeBtn: UIButton!
-    @IBOutlet weak var closedCaptionBtn: UIButton!
-    
-    let locator = Location()
-    let audioManager = AudioManager()
-    
-    var player : TapePlayer?
-    
-    enum State {
-        case idle, playing, paused
-    }
-    
-    var state = State.idle {
-        didSet {
-            self.updateUI()
-        }
-    }
-    
-    var totalDuration : Double = 0 {
-        didSet {
-            self.endDuration = totalDuration
-        }
-    }
-    
-    var endDuration : Double = 0 {
-        didSet {
-            self.totalTimeLabel.text = "-\(Utility.timeString(time: endDuration))"
-        }
-    }
+    fileprivate var player : TapePlayer!
     
     var progress : Double = 0 {
         didSet {
-            self.currentTimeLabel.text = Utility.timeString(time: progress)
-            self.endDuration -= 1
+            controlsContainerView.progress = progress
         }
     }
     
-    var didRequestRecording = false
+    var isRealtimeEvent : Bool = false {
+        didSet {
+            self.controlsContainerView.closeButton.isHidden = isRealtimeEvent
+            self.playerSlider.isUserInteractionEnabled = !isRealtimeEvent
+            
+            
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        playBtn.setImage(#imageLiteral(resourceName: "play").withRenderingMode(.alwaysTemplate), for: .normal)
-        closeBtn.setImage(#imageLiteral(resourceName: "cancel").withRenderingMode(.alwaysTemplate), for: .normal)
-
-        updateUI()
-    }
-    
-    @IBAction func play(_ sender: Any) {
-        if self.state == .playing {
-            self.state = .paused
-            self.player?.pause()
-            
-        } else {
-            self.state = .playing
-            self.player?.resume()
-        }
-    }
-    
-    func playRecording(tape: Tape) {
-        self.player = TapePlayer(tape: tape)
-        self.player?.delegate = self
-        do {
-            try player?.play()
-            totalDuration = tape.duration ?? 1.0
-            self.state = .playing
-            
-        } catch {
-            print("Error tring to play: \(error.localizedDescription)")
-        }
-    }
-    
-    fileprivate func updateUI() {
-        switch self.state {
-        case .idle:
-            break
-        case .playing:
-            self.playPauseBtn(isPlaying: true)
-            break
-        case .paused:
-            self.playPauseBtn(isPlaying: false)
-            break
-        }
-    }
-    
-    func playPauseBtn(isPlaying : Bool) {
-        if isPlaying {
-            self.playBtn.setImage(#imageLiteral(resourceName: "pause").withRenderingMode(.alwaysTemplate), for: .normal)
-        } else {
-            self.playBtn.setImage(#imageLiteral(resourceName: "play").withRenderingMode(.alwaysTemplate), for: .normal)
-        }
+        controlsContainerView.setCloseAction(self, action: #selector(close))
+        controlsContainerView.setPlayPauseAction(self, action: #selector(playPauseBtnTouched))
         
+        view.addSubview(controlsContainerView)
+        controlsContainerView.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: view.frame.width * 9 / 16)
+        
+        view.addSubview(playerSlider)
+        
+        playerSlider.anchor(nil, left: controlsContainerView.leftAnchor, bottom: controlsContainerView.bottomAnchor, right: controlsContainerView.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: -15, rightConstant: 0, widthConstant: 0, heightConstant: 30)
+        
+        view.addSubview(titleLabel)
+        view.addSubview(infoTextView)
+        view.addSubview(lineSeparatorView)
+        
+        titleLabel.anchorWithConstantsToTop(playerSlider.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 10, rightConstant: 0)
+        
+        lineSeparatorView.anchor(titleLabel.bottomAnchor, left: view.leftAnchor, bottom: infoTextView.topAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 10, rightConstant: 0, widthConstant: 0, heightConstant: 1)
+        
+        
+        infoTextView.anchorWithConstantsToTop(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
+        
+        view.backgroundColor = .white
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, titleLabel)
+        loadTape(tape: self.tape!)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.player.stop(.finished)
+    }
+    
+    func playPauseBtnTouched() {
+        handlePlay(play: !isPlaying)
+    }
+    
+    func handlePlay(play : Bool) {
+        isPlaying = play
+        if play {
+            controlsContainerView.showControls(false)
+            player.play()
+            controlsContainerView.pausePlayButton.setImage(#imageLiteral(resourceName: "pause").withRenderingMode(.alwaysTemplate), for: UIControlState())
+        } else {
+            controlsContainerView.showControls(true)
+            player.pause()
+            controlsContainerView.pausePlayButton.setImage(#imageLiteral(resourceName: "play").withRenderingMode(.alwaysTemplate), for: UIControlState())
+        }
+    }
+    
+    
+    func loadTape(tape: Tape) {
+        self.player = TapePlayer(tape: tape)
+        self.player.delegate = self
+        controlsContainerView.totalDuration = player.duration
+        playerSlider.maximumValue = Float(player.duration)
+        handlePlay(play: true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -148,25 +174,41 @@ class PlaybackViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func close(_ sender: Any) {
+    func close() {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func toggleCaptions(_ sender: Any) {
-        closedCaptionOn = !closedCaptionOn
+    func sliderTouchDown(){
+        handlePlay(play: false)
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+    func sliderTouchUp() {
+        handlePlay(play: false)
+    }
+    
+    func sliderChanged(_ sender: UISlider) {
+        self.progress = Double(sender.value)
+        self.player.changeTime(to: progress)
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
 }
 extension PlaybackViewController : PlayerDelegate {
     func progress(_ progress: Double) {
         self.progress = progress
-        self.progressBar.setProgress(Float(progress/totalDuration), animated: true)
+        self.playerSlider.setValue(Float(progress), animated: true)
     }
     func finished() {
         print("Player Finished")
+        self.handlePlay(play: false)
+        self.progress = 0.0
+        self.player.changeTime(to: progress)
+        self.playerSlider.setValue(Float(progress), animated: false)
+        if isRealtimeEvent {
+            isRealtimeEvent = false
+        }
     }
     func paused() {
         print("Player Paused")

@@ -22,8 +22,6 @@
 
 import Eureka
 
-import Eureka
-
 struct Partner : Equatable {
     var name: String
     var website: String
@@ -68,7 +66,7 @@ final class PartnerCell: Cell<Partner>, CellType {
         memberImageView.clipsToBounds = true
         height = { return 94 }
         
-        self.accessibilityTraits = UIAccessibilityTraitLink
+        self.accessibilityTraits = UIAccessibilityTraitLink | UIAccessibilityTraitHeader
     }
     
     override func update() {

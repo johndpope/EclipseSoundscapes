@@ -304,7 +304,7 @@ public class ResourceManager {
     /// - Parameter id: Recording's id
     /// - Returns: Recording URL
     static func recordingURL(id : String) -> URL {
-        return getDocumentsDirectory().appendingPathComponent(id.appending(FileType))
+        return getDocumentsDirectory().appendingPathComponent(id.appending(FileType.m4a.rawValue))
     }
     
     /// Delete a File at path

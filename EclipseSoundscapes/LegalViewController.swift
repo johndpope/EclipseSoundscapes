@@ -35,7 +35,7 @@ class LegalViewController : FormViewController {
         button.accessibilityLabel = "Back"
         self.navigationItem.leftBarButtonItem = button
     }
-
+    
     private func initializeForm() {
         
         self.automaticallyAdjustsScrollViewInsets = false
@@ -50,7 +50,12 @@ class LegalViewController : FormViewController {
             <<< ButtonRow("Open Source Libraries"){(row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.presentationMode = PresentationMode.segueName(segueName: "OpenSourceLibraries", onDismiss: nil)
-        }
+                
+            }
+            <<< ButtonRow("Photo Credits"){(row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.presentationMode = PresentationMode.segueName(segueName: "Photo Credits", onDismiss: nil)
+            }
         
     }
     

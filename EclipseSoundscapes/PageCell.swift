@@ -74,7 +74,7 @@ class PageCell: UICollectionViewCell {
         addSubview(lineSeparatorView)
         
         imageView.anchorToTop(topAnchor, left: leftAnchor, bottom: infoView.topAnchor, right: rightAnchor)
-        infoView.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, heightConstant: self.frame.height/4)
+        infoView.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, heightConstant: self.frame.height/3 + 15)
         
         lineSeparatorView.anchorToTop(nil, left: leftAnchor, bottom: infoView.topAnchor, right: rightAnchor)
         lineSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
@@ -99,7 +99,7 @@ class WalkthroughContentView: UIView {
         tv.textContainerInset = UIEdgeInsetsMake(10, 10, 5, 10)
         tv.isEditable = false
         tv.backgroundColor = UIColor(r: 249, g: 249, b: 249)
-        tv.accessibilityTraits = UIAccessibilityTraitStaticText
+        tv.accessibilityTraits = UIAccessibilityTraitStaticText | UIAccessibilityTraitHeader
         return tv
     }()
     

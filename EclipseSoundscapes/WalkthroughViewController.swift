@@ -21,8 +21,14 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
+import Eureka
 
-class WalkthroughViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class WalkthroughViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
+    
+    var isBegining = true
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -41,13 +47,15 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     let PermissionCellId = "permissionCellId"
     
     let pages: [Page] = {
-        let firstPage = Page(title: "Welcome", message: "Thank you for downloading the Eclipse Soundscapes app. We hope to create an engaging multi-sensory experience of the August 21, 2017 eclipse for all participants, including people who are blind or visually impaired. Inside, you will find a countdown to the eclipse in your area, with illustrative audio descriptions of the eclipse in real time, provided by the National Center for Accessible Media.", imageName: "artwork")
+        let firstPage = Page(title: "Welcome", message: "Thank you for downloading the Eclipse Soundscapes app, a multi-sensory experience for people of all learning styles to engage with astronomical events, including total solar eclipses. Inside this app, you will find countdowns to major astronomical events in your area, and real time narrations of those events with illustrative audio descriptions provided by the National Center for Accessible Media. You can also explore the cosmos with high quality photos, educational information, and accessible learning tools.", imageName: "artwork")
         
-        let secondPage = Page(title: "Rumble Map", message: "Our Rumble Map tool is designed for you to hear and feel the eclipse at various stages in its progression. The Rumble Map displays photos of the eclipse at its most engaging and educational moments. When you touch the image on the screen, the app will read the grayscale value of a pixel underneath your finger, and play an audio tone which will vibrate your phone with a strength relative to the brightness of that section. By paying close attention to the audio tones and the strength of your phone’s vibration, you can learn how much sunlight is visible at each stage of the eclipse, and explore some of the fascinating features of the sun’s corona.", imageName: "Soundscapes-RumbleMap")
+        let secondPage = Page(title: "Rumble Map", message: "Our Rumble Map tool is designed for you to hear and feel astronomical phenomena, such as eclipses, using the touchscreen and the speakers on your smartphone. For example: the Rumble Map will display photos of the Moon passing in front of the Sun during the most engaging and educational moments of an eclipse. When you touch the image on the screen, the app will read the grayscale value of a pixel underneath your finger, and play an audio tone which will vibrate your phone with a strength relative to the brightness of that section. As you move your finger onto the bright sections of the Sun, your phone will vibrate more. As you move your finger into the dark spaces blocked by the Moon’s disk, the vibration will diminish and disappear. By paying close attention to the audio tones and the strength of your phone’s vibration, you can learn how much sunlight is visible at each stage of the eclipse, and explore some of the fascinating features of the Sun’s corona.", imageName: "Soundscapes-RumbleMap")
         
-        let thirdPage = Page(title: "Eclipse Center", message: "The Eclipse Center is your go-to destination for learning about the eclipse in your area and discovering this exciting astronomical event as it happens. Once you accept a location permission, you will find a countdown to the eclipse, information on whether you will experience a total or a partial solar eclipse in your area, and the exact start time, peak time, and end time of the eclipse.", imageName: "Soundscapes-Eclipse Center")
+        let thirdPage = Page(title: "Eclipse Center", message: "The Eclipse Center is your go-to destination for learning about eclipses in your area so you can discover them as they happen. When you open the Eclipse Center, it will ask to pinpoint your geographic location. Once you accept, you will find a countdown to the next eclipse, information on whether you will experience a total or a partial solar eclipse in your area, and the exact start time, peak time, and end time of the eclipse.", imageName: "Soundscapes-Eclipse Center")
         
-        return [firstPage, secondPage, thirdPage]
+        let fourthPage = Page(title: "Audio Descriptions", message: "When it is time for the next eclipse to start, you will receive a notification to open Eclipse Soundscapes. The app will then guide you through the main event with illustrative audio descriptions of an eclipse’s most important moments. These audio descriptions, provided by the National Center for Accessible Media, are explanations of photos developed with specialized language to help people who are blind and visually impaired engage with an eclipse. After each audio description ends, you will have the option to either hear more educational information or explore that feature of an eclipse using the Rumble Map.", imageName: "Soundscapes-AudioRecordings")
+        
+        return [firstPage, secondPage, thirdPage, fourthPage]
     }()
     
     var pageCell : PageCell?
@@ -60,25 +68,52 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
             case 0:
                 pageLabel.textColor = .white
                 previousButton.isHidden = true
-                skipButton.accessibilityLabel = "Skip to end of Walk Through"
+                if isBegining {
+                    skipButton.accessibilityLabel = "Skip to end of Walk Through"
+                }
                 break
-            case 1,2:
+            case 1:
+                pageLabel.textColor = .black
+                previousButton.isHidden = false
+                nextButton.isHidden = false
+                self.previousButton.tintColor = UIColor.init(r: 227, g: 94, b: 5)
+                if isBegining {
+                    skipButton.accessibilityLabel = "Skip to end of Walk Through"
+                }
+                break
+                
+            case 2:
+                pageLabel.textColor = .black
+                previousButton.isHidden = false
+                nextButton.isHidden = false
+                self.previousButton.tintColor = UIColor.init(r: 227, g: 94, b: 5)
+                if isBegining {
+                    skipButton.accessibilityLabel = "Skip to end of Walk Through"
+                }
+                break
+            case 3:
                 pageLabel.textColor = .black
                 previousButton.isHidden = false
                 self.previousButton.tintColor = UIColor.init(r: 227, g: 94, b: 5)
-                skipButton.accessibilityLabel = "Skip to end of Walk Through"
+                if isBegining {
+                    skipButton.accessibilityLabel = "Skip to end of Walk Through"
+                } else {
+                    nextButton.isHidden = true
+                }
                 break
-            case 3:
+            case 4:
                 previousButton.isHidden = false
                 self.previousButton.tintColor = .black
-                skipButton.accessibilityLabel = "Can not Skip Anymore"
+                if isBegining {
+                    skipButton.accessibilityLabel = "Can not Skip Anymore"
+                }
                 break
             default:
                 break
             }
             
-            pageLabel.text = "Page \(currentPage+1) of 4"
-            pageLabel.accessibilityLabel = "Walk Through Page \(currentPage+1) of 4"
+            pageLabel.text = "Page \(currentPage+1) of \(isBegining ?  pages.count+1 : pages.count)"
+            pageLabel.accessibilityLabel = "Walk Through Page \(currentPage+1) of \(isBegining ?  pages.count+1 : pages.count)"
         }
     }
     
@@ -104,13 +139,28 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
                 view.accessibilityElements?.append(cellElements)
             }
             break
-        case 1, 2:
+        case 1:
             self.view.accessibilityElements = [previousButton, nextButton, skipButton, pageLabel]
             if let cellElements = pageCell?.accessibilityElements {
                 view.accessibilityElements?.append(cellElements)
             }
             break
+        case 2:
+            self.view.accessibilityElements = [previousButton, nextButton,skipButton, pageLabel]
+            if let cellElements = pageCell?.accessibilityElements {
+                view.accessibilityElements?.append(cellElements)
+            }
+            break
         case 3:
+            self.view.accessibilityElements = [previousButton, skipButton, pageLabel]
+            if isBegining {
+                view.accessibilityElements?.insert(nextButton, at: 1)
+            }
+            if let cellElements = pageCell?.accessibilityElements {
+                view.accessibilityElements?.append(cellElements)
+            }
+            break
+        case 4:
             self.view.accessibilityElements = [previousButton, pageLabel]
             if let cellElements = permissionCell?.accessibilityElements {
                 for i in 0..<cellElements.count {
@@ -129,15 +179,14 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         label.textColor = .white
         label.font = UIFont.getDefautlFont(.condensedMedium, size: 11)
         label.textAlignment = .right
-        label.text = "Page 1 of 4"
         return label
     }()
     
     lazy var skipButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Skip", for: .normal)
-        button.setTitleColor(UIColor.init(r: 227, g: 94, b: 5), for: .normal)
         button.addTarget(self, action: #selector(skip), for: .touchUpInside)
+        button.setTitleColor(UIColor.init(r: 227, g: 94, b: 5), for: .normal)
         button.accessibilityLabel = "Skip to end of Walk Through"
         return button
     }()
@@ -212,10 +261,22 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     var nextButtonTopAnchor: NSLayoutConstraint?
     var previousButtonTopAnchor : NSLayoutConstraint?
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    init(_ callback: ((UIViewController) -> ())? = nil) {
+        super.init(nibName: nil, bundle: nil)
+        onDismissCallback = callback
+        
+        if UserDefaults.standard.bool(forKey: "WalkThrough"){
+            changeViewForRegularUse()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         observeKeyboardNotifications()
-        
         self.view.accessibilityElements = [collectionView, nextButton, skipButton, pageLabel]
         
         view.addSubview(collectionView)
@@ -224,7 +285,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         view.addSubview(nextButton)
         view.addSubview(previousButton)
         
-        pageLabelbottomAnchor = pageLabel.anchor(nil, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: view.frame.height*1/4 + 10, rightConstant: 4, widthConstant: 0, heightConstant: 10).first
+        pageLabelbottomAnchor = pageLabel.anchor(nil, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: view.frame.height/3 + 15 + 10, rightConstant: 4, widthConstant: 0, heightConstant: 10).first
         
         skipButtonRightAnchor = skipButton.anchor(nextButton.bottomAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 0, rightConstant: 4, widthConstant: 60, heightConstant: 0)[1]
         
@@ -236,6 +297,24 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         collectionView.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
         
         registerCells()
+        
+        
+        pageLabel.text = "Page 1 of \(isBegining ? pages.count+1 : pages.count)"
+        pageLabel.accessibilityLabel = "Walk Through Page 1 of \(isBegining ? pages.count+1 : pages.count)"
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let cell = collectionView.cellForItem(at: IndexPath(item: currentPage, section: 0))
+        setAccessibleElements(for: currentPage, cell: cell)
+    }
+    
+    func changeViewForRegularUse() {
+        isBegining = false
+        skipButton.removeTarget(self, action: #selector(skip), for: .touchUpInside)
+        skipButton.setTitle("Close", for: .normal)
+        skipButton.accessibilityLabel = "Close Walk Through"
+        skipButton.addTarget(self, action: #selector(close), for: .touchUpInside)
     }
     
     fileprivate func observeKeyboardNotifications() {
@@ -291,7 +370,6 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        print("Finished Scrolling")
         
         let scrollOffset = scrollView.contentOffset.x
         let pageNumber = Int(scrollOffset / view.frame.width)
@@ -316,7 +394,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         skipButtonRightAnchor?.constant = -4
         nextButtonTopAnchor?.constant = 16
         previousButtonTopAnchor?.constant = 16
-        pageLabelbottomAnchor?.constant = -(view.frame.height*1/4 + 10)
+        pageLabelbottomAnchor?.constant = -(view.frame.height/3 + 15 + 10)
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -328,7 +406,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return pages.count + 1
+        return isBegining ? pages.count + 1 : pages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -370,6 +448,11 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
+    @objc private func close() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
 }
 extension WalkthroughViewController: PermissionCellDelegate {
     func didFinish() {

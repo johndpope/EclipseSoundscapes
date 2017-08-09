@@ -29,6 +29,15 @@ class MoreViewController : FormViewController {
         super.viewDidLoad()
         setDefaults()
         initializeForm()
+        
+        self.navigationController?.navigationBar.barTintColor = UIColor.init(r: 33, g: 33, b: 33)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        self.navigationItem.title = "About Us"
+        
+        
+        self.automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
+        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
     }
     
     private func initializeForm() {
@@ -45,41 +54,38 @@ class MoreViewController : FormViewController {
                         view?.layer.transform = CATransform3DIdentity
                     })
                 }
+                switch UIDevice.current.userInterfaceIdiom {
+                case .pad:
+                    header.height = {self.view.frame.width * 9 / 16}
+                default:
+                    break
+                }
+                
                 $0.header = header
             }
             
-            +++ Section("About Us") { section in
-                var header = HeaderFooterView<UIView>(HeaderFooterProvider.class)
-                header.onSetupView = { view, section in
-                    let label = InsetLabel()
-                    label.textColor = .white
-                    label.text = "About Us"
-                    label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                    label.font = UIFont.getDefautlFont(.condensedMedium, size: 14)
-                    view.addSubview(label)
-                }
-                
-                section.header = header
-            }
-            <<< TextAreaRow(){
+            +++ TextAreaRow(){
                 $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
                 $0.cell.layer.borderColor = UIColor.clear.cgColor
                 $0.cell.textView.isEditable = false
                 $0.cell.isUserInteractionEnabled = false
                 }.cellUpdate({ (cell, row) in
-                    cell.textView.text = "On August 21, 2017, millions of people will view a total solar eclipse as it passes through the United States. However, for the visually impaired, or others who are unable to see the eclipse with their own eyes, the Eclipse Soundscapes Project delivers a multisensory experience of this exciting celestial event. The project, from NASA’s Heliophysics Education Consortium, will include illustrated audio descriptions of the eclipse in real time, recordings of the changing environmental sounds during the eclipse, and an interactive “rumble map” app that will allow users to visualize the eclipse through touch."
+                    cell.textView.text = "From the Smithsonian Astrophysics Observatory and NASA’s Heliophysics Education Consortium, The Eclipse Soundscapes Project uses sound to create a multisensory experience of astronomical events such as eclipses. With this app, and an additional citizen science project to record changing environmental sounds during eclipses, Eclipse Soundscapes aims to engage all learners with astrophysics, including people who are blind or visually impaired. For more information, visit eclipsesoundscapes.org."
+                    cell.textView.textAlignment = .center
                     cell.accessibilityLabel = cell.textView.text
                     cell.accessibilityTraits = UIAccessibilityTraitStaticText
                     cell.textView.isAccessibilityElement = false
                     cell.textView.font = UIFont.getDefautlFont(.meduium, size: 13)
                 })
+            
             <<< ButtonRow("How to use the Rumble Map"){ (row: ButtonRow) -> Void in
                 row.title = row.tag
-                row.cell.imageView?.image = #imageLiteral(resourceName: "manual")
-                row.presentationMode = .show(controllerProvider: ControllerProvider.callback { return IntructionsViewController(){ _ in } }, onDismiss: nil)
+                row.cell.imageView?.image = #imageLiteral(resourceName: "rumbleTouch")
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return IntructionsViewController(){ _ in } }, onDismiss: nil)
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
+            
             <<< ButtonRow("Our team") { (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.cell.imageView?.image = #imageLiteral(resourceName: "team")
@@ -87,10 +93,32 @@ class MoreViewController : FormViewController {
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
+            
             <<< ButtonRow("Our Partners") { (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.cell.imageView?.image = #imageLiteral(resourceName: "partners")
                 row.presentationMode = .segueName(segueName: "Partners", onDismiss: nil)
+                }.cellUpdate({ (cell, _) in
+                    cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
+                })
+            
+            <<< ButtonRow("Future Eclipses Supported by this app"){ (row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.cell.imageView?.image = #imageLiteral(resourceName: "events_icon").withRenderingMode(.alwaysTemplate)
+                row.cell.imageView?.tintColor = Color.eclipseOrange
+                row.presentationMode = .segueName(segueName: "Future", onDismiss: nil)
+                }.cellUpdate({ (cell, _) in
+                    cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
+                    cell.textLabel?.adjustsFontSizeToFitWidth = true
+                })
+            
+            
+            
+            <<< ButtonRow("Open WalkThrough"){ (row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.cell.imageView?.image = #imageLiteral(resourceName: "manual")
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return WalkthroughViewController()
+                }, onDismiss: nil)
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
@@ -109,8 +137,8 @@ class MoreViewController : FormViewController {
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
-        
-        +++ Section()
+            
+            +++ Section()
     }
     
     func setDefaults() {
@@ -121,21 +149,6 @@ class MoreViewController : FormViewController {
         view.backgroundColor = .black
         URLRow.defaultCellUpdate = { cell, row in cell.textField.textColor = .blue }
     }
-    
-    
-    func showAlert(withTitle title: String, message: String?, actions: [UIAlertAction?]) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        if actions[0] == nil {
-            let defaultAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-            alert.addAction(defaultAction)
-        }else {
-            for action in actions {
-                alert.addAction(action!)
-            }
-        }
-        self.present(alert, animated: true, completion: nil)
-    }
-    
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

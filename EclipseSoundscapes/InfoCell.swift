@@ -73,18 +73,12 @@ final class InfoCell: Cell<EclipseEvent>, CellType {
         stackView.addArrangedSubview(localTimeLabel)
         stackView.addArrangedSubview(timeLabel)
     }
-    
-    override func update() {
-        super.update()
-        
-        if let event = row.value {
-            set(event)
+    func set(_ event: EclipseEvent? , atUserLocation : Bool = true) {
+        guard let event = event else {
+            return
         }
-    }
-    
-    func set(_ event: EclipseEvent) {
         eventLabel.text = event.name + ":"
-        eventLabel.accessibilityLabel = "Event from my location, \(event.name),"
+        eventLabel.accessibilityLabel = "Event from \(atUserLocation ? "your" : "closest") location, \(event.name),"
         
         let localTime = Utility.UTCToLocal(date: event.time)
         localTimeLabel.text = localTime
@@ -94,8 +88,11 @@ final class InfoCell: Cell<EclipseEvent>, CellType {
         timeLabel.accessibilityLabel = "Universal Time, \(event.time),"
     }
     
-    func toggleAccessibility(_ onOff : Bool) {
-        self.isAccessibilityElement = onOff
+    func toggleAccessibility(_ onOff : Bool, atUserLocation : Bool = true) {
+        if !onOff {
+            self.accessibilityLabel = "Events at \(atUserLocation ? "your" : "closest") location are below"
+            self.accessibilityHint = "Events inclues \(atUserLocation ? "your" : "closest location's") local time and Universal Time"
+        }
         eventLabel.isAccessibilityElement = onOff
         localTimeLabel.isAccessibilityElement = onOff
         timeLabel.isAccessibilityElement = onOff

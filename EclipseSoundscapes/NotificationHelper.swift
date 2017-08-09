@@ -50,47 +50,52 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
     
     @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        if let notificationName = notification.request.content.userInfo["NotificationName"] as? Notification.Name {
-            postNotification(for: notificationName)
+        if let reminderRawValue = notification.request.content.userInfo["Reminder"] as? Int {
+            NotificationHelper.postNotification(for: Reminder.init(rawValue: reminderRawValue))
         }
-        completionHandler([.sound, .alert])
+        completionHandler([.sound])
     }
     
     
     @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        if let notificationName = response.notification.request.content.userInfo["NotificationName"] as? Notification.Name {
-            postNotification(for: notificationName)
+        if let reminderRawValue = response.notification.request.content.userInfo["Reminder"] as? Int {
+            NotificationHelper.postNotification(for: Reminder.init(rawValue: reminderRawValue))
         }
         completionHandler()
     }
     
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UILocalNotification, completionHandler: @escaping () -> Void) {
-        if let notificationName = notification.userInfo?["NotificationName"] as? Notification.Name {
-            postNotification(for: notificationName)
+        if let reminderRawValue = notification.userInfo?["Reminder"] as? Int {
+            NotificationHelper.postNotification(for: Reminder.init(rawValue: reminderRawValue))
         }
         
         completionHandler()
     }
     
     func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
-        if let notificationName = notification.userInfo?["NotificationName"] as? Notification.Name {
-            postNotification(for: notificationName)
+        if let reminderRawValue = notification.userInfo?["Reminder"] as? Int {
+            NotificationHelper.postNotification(for: Reminder.init(rawValue: reminderRawValue))
         }
     }
     
-    func postNotification(for name: Notification.Name){
-        NotificationCenter.default.post(name: name, object: nil)
-    }
+    
+    
+}
 
+public struct Reminder: OptionSet {
+    public let rawValue: Int
+    public init(rawValue:Int){ self.rawValue = rawValue}
+    
+    static let firstReminder = Reminder(rawValue: 1)
+    static let contact1 = Reminder(rawValue: 2)
+    static let totaltyReminder = Reminder(rawValue: 4)
+    static let totality = Reminder(rawValue: 8)
+    static let allDone = Reminder(rawValue: 16)
 }
 
 class NotificationHelper {
-    
-    enum Reminder {
-        case firstReminder, contact1, totalityReminder, totality
-    }
     
     static func checkPermission() -> Bool {
         return SPRequestPermission.isAllowPermission(.notification)
@@ -107,6 +112,138 @@ class NotificationHelper {
         set {
             UserDefaults.standard.set(newValue, forKey: "NotificationGranted")
         }
+    }
+    
+    static var didSetReminderObservers : Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: "Reminders")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "Reminders")
+        }
+    }
+    
+    class func postNotification(for reminder: Reminder){
+        
+        var name : Notification.Name!
+        if reminder == .firstReminder {
+            if UserDefaults.standard.bool(forKey: "Contact1Reminder") {
+                return
+            }
+            name = Notification.Name.EclipseFirstReminder
+            UserDefaults.standard.set(true, forKey: "Contact1Reminder")
+            
+        } else if reminder == .contact1 {
+            if UserDefaults.standard.bool(forKey: "Contact1Done") {
+                return
+            }
+            name = Notification.Name.EclipseContact1
+            UserDefaults.standard.set(true, forKey: "Contact1Done")
+            UserDefaults.standard.set(true, forKey: "Contact1Reminder")
+            
+        } else if reminder == .totaltyReminder {
+            if UserDefaults.standard.bool(forKey: "TotalityReminder") {
+                return
+            }
+            name = Notification.Name.EclipseTotalityReminder
+            UserDefaults.standard.set(true, forKey: "TotalityReminder")
+            UserDefaults.standard.set(true, forKey: "Contact1Done")
+            UserDefaults.standard.set(true, forKey: "Contact1Reminder")
+            
+        } else if reminder == .totality {
+            if UserDefaults.standard.bool(forKey: "TotalityDone") {
+                return
+            }
+            name = Notification.Name.EclipseTotality
+            UserDefaults.standard.set(true, forKey: "TotalityDone")
+            UserDefaults.standard.set(true, forKey: "TotalityReminder")
+            UserDefaults.standard.set(true, forKey: "Contact1Done")
+            UserDefaults.standard.set(true, forKey: "Contact1Reminder")
+            
+        } else {
+            name = Notification.Name.EclipseAllDone
+            UserDefaults.standard.set(true, forKey: "EclipseAllDone")
+            UserDefaults.standard.set(true, forKey: "Contact1Reminder")
+            UserDefaults.standard.set(true, forKey: "Contact1Done")
+            UserDefaults.standard.set(true, forKey: "TotalityReminder")
+            UserDefaults.standard.set(true, forKey: "TotalityDone")
+        }
+        
+        NotificationCenter.default.post(name: name, object: nil, userInfo: ["Reminder": reminder])
+    }
+    
+    static func addObserver(_ observer : Any, reminders : Reminder, selector: Selector){
+        
+        if reminders.contains(.firstReminder) {
+            NotificationCenter.default.addObserver(observer, selector: selector, name: Notification.Name.EclipseFirstReminder, object: nil)
+        }
+        if reminders.contains(.contact1) {
+            NotificationCenter.default.addObserver(observer, selector: selector, name: Notification.Name.EclipseContact1, object: nil)
+        }
+        if reminders.contains(.totaltyReminder) {
+            NotificationCenter.default.addObserver(observer, selector: selector, name: Notification.Name.EclipseTotalityReminder, object: nil)
+        }
+        if reminders.contains(.totality) {
+            NotificationCenter.default.addObserver(observer, selector: selector, name: Notification.Name.EclipseTotality, object: nil)
+        }
+        if reminders.contains(.allDone) {
+            NotificationCenter.default.addObserver(observer, selector: selector, name: Notification.Name.EclipseAllDone, object: nil)
+        }
+    }
+    
+    static func removeObserver(_ observer: Any, reminders: Reminder) {
+        if reminders.contains(.firstReminder) {
+            cleanNotificationList(reminder: .firstReminder)
+            NotificationCenter.default.removeObserver(observer, name: Notification.Name.EclipseFirstReminder, object: nil)
+        }
+        if reminders.contains(.contact1) {
+            cleanNotificationList(reminder: .contact1)
+            NotificationCenter.default.removeObserver(observer, name: Notification.Name.EclipseContact1, object: nil)
+        }
+        if reminders.contains(.totaltyReminder) {
+            cleanNotificationList(reminder: .totaltyReminder)
+            NotificationCenter.default.removeObserver(observer, name: Notification.Name.EclipseTotalityReminder, object: nil)
+        }
+        if reminders.contains(.totality) {
+            cleanNotificationList(reminder: .totality)
+            NotificationCenter.default.removeObserver(observer, name: Notification.Name.EclipseTotality, object: nil)
+        }
+        if reminders.contains(.allDone) {
+            NotificationCenter.default.removeObserver(observer, name: Notification.Name.EclipseAllDone, object: nil)
+        }
+    }
+    
+    private static func cleanNotificationList(reminder: Reminder) {
+        if #available(iOS 10.0, *) {
+            var identifier : String!
+            
+            if reminder == .firstReminder {
+                identifier = "EclipseSoundscapes.EclipseFirstReminder"
+            } else if reminder == .contact1 {
+                identifier = "EclipseSoundscapes.EclipseContact1"
+            } else if reminder == .totaltyReminder {
+                identifier = "EclipseSoundscapes.EclipseTotalityReminder"
+            } else {
+                identifier = "EclipseSoundscapes.EclipseTotality"
+            }
+            UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [identifier])
+        } else {
+            // Fallback on earlier versions
+            let app = UIApplication.shared
+            if var scheduledNotifications = app.scheduledLocalNotifications {
+                for i in 0..<scheduledNotifications.count {
+                    if let nReminder = scheduledNotifications[i].userInfo?["Reminder"] as? Reminder {
+                        if reminder == nReminder {
+                            scheduledNotifications.remove(at: i)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    static func removeAllObservers(_ observer: Any) {
+        NotificationCenter.default.removeObserver(observer)
     }
     
     class func reminderNotification(for date: Date, reminder: Reminder) {
@@ -134,34 +271,25 @@ class NotificationHelper {
             UIApplication.shared.registerUserNotificationSettings(settings)
         }
         
-        var notificationName : Notification.Name!
         var message : String!
-        switch  reminder {
-        case .firstReminder:
-            notificationName = Notification.Name.EclipseFirstReminder
+        if reminder == .firstReminder {
             message = "The Solar Eclipse is going to being soon."
-            break
-        case .totalityReminder:
-            notificationName = Notification.Name.EclipseTotalityReminder
+        } else {
             message = "The Total Solar Eclipse is going to being soon."
-        default:
-            fatalError("The Correct Reminder was not set for Reminder Notification")
         }
-        
-        add(with: date, title: "Eclipse Soundscapes", body: message, categoryId: ReminderCategory, notificationName: notificationName)
+        add(with: date, title: "Eclipse Soundscapes", body: message, categoryId: ReminderCategory, reminder: reminder)
     }
     
-    class func listenNotification(for date: Date, message: String? = nil, reminder: Reminder) {
+    class func listenNotification(for date: Date, reminder: Reminder) {
         
         var body : String!
         
-        if let message = message {
-            body = message.appending(" Press to listen now.")
+        if reminder == .contact1 {
+            body = "The Solar Eclipse has begun! Press to listen now."
         } else {
-            body = "The Eclipse has begun! Press to listen now."
+            body = "The Total Eclipse has begun! Press to listen now."
         }
-        
-        
+    
         if #available(iOS 10.0, *) {
             let listenAction = UNNotificationAction(identifier: ListenAction, title: "Listen Now", options: [.authenticationRequired,.foreground])
             let listenCategory = UNNotificationCategory(identifier: ListenCategory,actions: [listenAction],intentIdentifiers: [], options: [])
@@ -185,29 +313,28 @@ class NotificationHelper {
             let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: categories)
             UIApplication.shared.registerUserNotificationSettings(settings)
         }
-        
-        var notificationName : Notification.Name!
-        switch  reminder {
-        case .firstReminder:
-            notificationName = Notification.Name.EclipseFirstReminder
-            break
-        case .totalityReminder:
-            notificationName = Notification.Name.EclipseTotalityReminder
-        default:
-            fatalError("The Correct Reminder was not set for Listen Notification")
-        }
-        
-        add(with: date, title: "Eclipse Soundscapes", body: body, categoryId: ListenCategory, notificationName: notificationName)
+        add(with: date, title: "Eclipse Soundscapes", body: body, categoryId: ListenCategory, reminder: reminder)
     }
     
-    private class func add(with date: Date, title: String, body: String, categoryId : String? , identifier : String = UUID.init().uuidString, notificationName : Notification.Name) {
+    private class func add(with date: Date, title: String, body: String, categoryId : String?, reminder: Reminder) {
         if #available(iOS 10.0, *) {
             let content = UNMutableNotificationContent()
             content.title = title
             content.body = body
             content.sound = UNNotificationSound.default()
-            content.userInfo = ["NotificationName" : notificationName]
+            content.userInfo = ["Reminder": reminder.rawValue]
             
+            var identifier : String!
+            
+            if reminder == .firstReminder {
+                identifier = "EclipseSoundscapes.EclipseFirstReminder"
+            } else if reminder == .contact1 {
+                identifier = "EclipseSoundscapes.EclipseContact1"
+            } else if reminder == .totaltyReminder {
+                identifier = "EclipseSoundscapes.EclipseTotalityReminder"
+            } else {
+                identifier = "EclipseSoundscapes.EclipseTotality"
+            }
             
             if let category = categoryId {
                 content.categoryIdentifier = category
@@ -227,7 +354,21 @@ class NotificationHelper {
                 }
             })
             
+            
+            
         } else {
+            
+            let app = UIApplication.shared
+            
+            if let scheduledNotifications = app.scheduledLocalNotifications {
+                for notification in scheduledNotifications {
+                    if let nReminder = notification.userInfo?["Reminder"] as? Reminder {
+                        if reminder == nReminder {
+                            app.cancelLocalNotification(notification)
+                        }
+                    }
+                }
+            }
             
             // ios 9
             let notification = UILocalNotification()
@@ -235,7 +376,7 @@ class NotificationHelper {
             notification.alertTitle = title
             notification.alertBody = body
             notification.soundName = UILocalNotificationDefaultSoundName
-            notification.userInfo = ["NotificationName" : notificationName]
+            notification.userInfo = ["Reminder": reminder.rawValue]
             
             if let category = categoryId {
                 notification.category = category
@@ -245,31 +386,6 @@ class NotificationHelper {
             print("\(categoryId ?? "") Notification Added")
         }
     }
-    
-    static func openPlayer() {
-        let title = "Eclipse Media Player is about to open in 10 seconds"
-        let detail = "Get Ready to listen. Tap to go immediately."
-        
-        let banner = Banner(title: title, subtitle: detail, image: #imageLiteral(resourceName: "Icon"), backgroundColor: UIColor.init(r: 75, g: 75, b: 75))
-        banner.alpha = 1.0
-        banner.titleLabel.textColor = .white
-        banner.detailLabel.textColor = .white
-        
-        banner.didDismissBlock = {
-            let playbackVC = PlaybackViewController()
-            let top = Utility.getTopViewController()
-            top.present(playbackVC, animated: true, completion: nil)
-        }
-        
-        banner.isAccessibilityElement = true
-        banner.accessibilityElementsHidden = true
-        banner.accessibilityLabel = title + detail
-    
-        banner.show(duration: 10.0)
-        
-        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, banner)
-    }
-    
 }
 
 extension Notification.Name {
@@ -277,4 +393,5 @@ extension Notification.Name {
     static let EclipseContact1 = Notification.Name("EclipseContact1")
     static let EclipseTotalityReminder = Notification.Name("EclipseTotalityReminder")
     static let EclipseTotality = Notification.Name("EclipseTotality")
+    static let EclipseAllDone = Notification.Name("EclipseAllDone")
 }

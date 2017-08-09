@@ -26,6 +26,7 @@ class PermissionCell: UICollectionViewCell {
         label.text = "Please Allow Access"
         label.accessibilityLabel = "Please Allow Access to the permissions below"
         label.textColor = .black
+        label.accessibilityTraits = UIAccessibilityTraitHeader
         label.textAlignment = .center
         label.font = UIFont.getDefautlFont(.bold, size: 20)
         return label
@@ -144,7 +145,6 @@ class PermissionCell: UICollectionViewCell {
         if permission is SPLocationPermission {
             if permission.isAuthorized() {
                 Location.appGrated = true
-                LocationManager.getLocation()
                 sender.accessibilityValue = "Allowed"
             } else {
                 Location.appGrated = false

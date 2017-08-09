@@ -22,6 +22,7 @@
 
 import UIKit
 import RevealingSplashView
+import BRYXBanner
 
 class TabViewController: UITabBarController {
     
@@ -29,27 +30,12 @@ class TabViewController: UITabBarController {
         super.viewDidLoad()
         
         customizeTabBar()
-        
-        if Location.isGranted {
-            LocationManager.getLocation()
-        }
+        registerEclipseNotifications()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-//        guard let _ = UserDefaults.standard.object(forKey: "PermissionOnce") as? Bool else {
-//            
-//            SPRequestPermission.dialog.interactive.present(on: self, with: [.notification, .locationWhenInUse],dataSource: AllPermissionDataSource(), delegate: self)
-//            
-//            UserDefaults.standard.set(true, forKey: "PermissionOnce")
-//            return
-//        }
     }
     
     func customizeTabBar() {
@@ -61,7 +47,6 @@ class TabViewController: UITabBarController {
         
         self.tabBar.isOpaque = false
         self.tabBar.isTranslucent = false
-        self.tabBar.accessibilityTraits = UIAccessibilityTraitNone
         
         self.tabBar.selectionIndicatorImage = UIImage.selectionIndiciatorImage(color: UIColor.init(r: 227, g: 94, b: 5), size: CGSize.init(width: width, height: height), lineWidth: 5.0)
         
@@ -70,28 +55,69 @@ class TabViewController: UITabBarController {
             
         }
         
-        self.tabBar.items?[0].accessibilityLabel = "My Eclipse Info"
-        
-        
+        self.tabBar.items?[0].accessibilityLabel = "My Eclipse Center"
     }
     
-    func splash() {
-        let revealingSplashView = RevealingSplashView(iconImage: #imageLiteral(resourceName: "Icon") ,iconInitialSize: CGSize(width: 70, height: 70), backgroundColor: UIColor(r: 248, g: 78, b: 0))
+    func registerEclipseNotifications() {
         
-        self.view.addSubview(revealingSplashView)
-        
-        revealingSplashView.duration = 0.5
-        
-        revealingSplashView.animationType = SplashAnimationType.swingAndZoomOut
-        
-        revealingSplashView.startAnimation(){
-            self.revealingLoaded = true
-            self.setNeedsStatusBarAppearanceUpdate()
-            print("Completed")
+        var reminders : Reminder = .allDone
+        if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
+            reminders.insert(.firstReminder)
         }
-
+        if !UserDefaults.standard.bool(forKey: "Contact1Done") {
+            reminders.insert(.contact1)
+        }
+        if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
+            reminders.insert(.totaltyReminder)
+        }
+        if !UserDefaults.standard.bool(forKey: "TotalityDone") {
+            reminders.insert(.totality)
+            
+        }
+        
+        NotificationHelper.addObserver(self, reminders: reminders, selector: #selector(catchEclipseNotification(notification:)))
     }
     
+    func catchEclipseNotification(notification: Notification){
+        switch notification.name {
+        case Notification.Name.EclipseFirstReminder:
+            
+            print("1!")
+            NotificationHelper.removeObserver(self, reminders: .firstReminder)
+            showReminderBanner(message: "The Solar Eclipse is going to being soon.")
+            
+        case Notification.Name.EclipseContact1:
+            
+            print("2!")
+            NotificationHelper.removeObserver(self, reminders: .contact1)
+            
+            let media = Media.init(name: "Helmet Streamers", resourceName: "helmetstrmrs", infoRecourceName: "Helmet Streamers" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Helmet Streamers"))
+            openPlayer(with: media)
+            break
+            
+        case Notification.Name.EclipseTotalityReminder:
+            print("3!")
+            NotificationHelper.removeObserver(self, reminders: .totaltyReminder)
+            
+            showReminderBanner(message: "The Total Solar Eclipse is going to being soon.")
+            break
+            
+        case Notification.Name.EclipseTotality:
+            print("4!")
+            NotificationHelper.removeObserver(self, reminders: .totality)
+            
+            let media = Media.init(name: "Helmet Streamers", resourceName: "helmetstrmrs", infoRecourceName: "Helmet Streamers" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Helmet Streamers"))
+            openPlayer(with: media)
+            break
+            
+        case Notification.Name.EclipseAllDone:
+            print("Eclipse All Done")
+            break
+        default:
+            break
+        }
+    }
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
@@ -109,73 +135,63 @@ class TabViewController: UITabBarController {
     override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         return UIStatusBarAnimation.fade
     }
-    
-}
-
-class AllPermissionDataSource : SPRequestPermissionDialogInteractiveDataSource {
-    
-    override func headerTitle() -> String {
-        return "Hello!"
-    }
-    
-    override func headerSubtitle() -> String {
-        return "Don't miss the Eclipse. We need your permission to use your location and notify you about Eclipse Events."
-    }
-    
-    override func topAdviceTitle() -> String {
-        return "Allow all permissions please. This helps to keep you informed with the Eclipse"
-    }
-    
-    
-}
-
-extension TabViewController: SPRequestPermissionEventsDelegate {
-    
-    func didHide() {
-        if  NotificationHelper.checkPermission() {
-            NotificationHelper.appGrated = true
-        } else  {
-            print("Notifications Not Granted")
-            NotificationHelper.appGrated = false
+    var banner : Banner?
+    var countdown = 10
+    var timer : Timer?
+    func openPlayer(with media: Media) {
+        let title = "Eclipse Media Player is about to open in \(countdown) seconds"
+        let detail = "Get Ready to listen."
+        
+        banner = Banner(title: title, subtitle: detail, image: #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse"), backgroundColor: Color.eclipseOrange)
+        banner?.titleLabel.textColor = .black
+        
+        banner?.detailLabel.textColor = .black
+        banner?.dismissesOnTap = false
+        banner?.dismissesOnSwipe = false
+        
+        banner?.didDismissBlock = {
+            self.timer?.invalidate()
+            self.timer = nil
+            self.countdown = 10
+            let playbackVc = PlaybackViewController()
+            playbackVc.media = media
+            playbackVc.isRealtimeEvent = true
+            Utility.getTopViewController().present(playbackVc, animated: true, completion: nil)
         }
         
-        if  Location.checkPermission() {
-            Location.appGrated = true
-        } else  {
-            print("Location Not Granted")
-            Location.appGrated = false
-        }
-    }
-    
-    func didAllowPermission(permission: SPRequestPermissionType) {
-        switch permission {
-        case .notification:
-            NotificationHelper.appGrated = true
-            break
-        case .locationWhenInUse :
-            Location.appGrated = true
-            break
-        default:
-            break
-        }
-    }
-    
-    func didDeniedPermission(permission: SPRequestPermissionType) {
-        switch permission {
-        case .notification:
-            NotificationHelper.appGrated = false
-            break
-        case .locationWhenInUse :
-            Location.appGrated = false
-            break
-        default:
-            break
-        }
-    }
-    
-    func didSelectedPermission(permission: SPRequestPermissionType) {
+        banner?.isAccessibilityElement = true
+        banner?.accessibilityElementsHidden = true
+        banner?.accessibilityLabel = title + detail
         
+        banner?.show(duration: 10.0)
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimeforBanner), userInfo: nil, repeats: true)
+        
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, banner)
     }
+    
+    func updateTimeforBanner() {
+        if countdown > 0 {
+            countdown -= 1
+        }
+        self.banner?.titleLabel.text = "Eclipse Media Player is about to open in \(countdown) seconds"
+        banner?.accessibilityLabel = "\(self.banner?.titleLabel.text ?? "") \(self.banner?.detailLabel.text ?? "")"
+    }
+    
+    
+    func showReminderBanner(message: String) {
+        banner = Banner(title: message, subtitle: "", image: #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse"), backgroundColor: Color.eclipseOrange)
+        banner?.titleLabel.textColor = .black
+        banner?.detailLabel.textColor = .black
+        
+        banner?.isAccessibilityElement = true
+        banner?.accessibilityElementsHidden = true
+        banner?.accessibilityLabel = title
+        
+        banner?.show(duration: 5.0)
+        
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, banner)
+    }
+    
 }
 
 extension UITabBarController {

@@ -58,7 +58,7 @@ public enum AudioStatus {
 /// - cancel: Playback was cancelled
 /// - skip: Plyabck was skipped
 public enum PlaybackStatus {
-    case finished, cancel, skip
+    case finished, cancel, interrupted
 }
 
 /// Error involved during an Audio operation
@@ -98,7 +98,11 @@ let LocationDirectory = "Locations"
 //let AllRecordings = "Recordings"
 
 /// Audio File Type
-let FileType = ".m4a"
+enum FileType : String {
+    case m4a = "m4a"
+    case mp3 = "mp3"
+    case wav = "wav"
+}
 
 /// 5 minute maximum
 let RecordingDurationMax :Double = 300

@@ -24,15 +24,15 @@ import UIKit
 import AudioKit
 import BRYXBanner
 
-struct Event {
+class Event: NSObject {
     var name: String
-    var description : NSAttributedString?
+    var info : NSAttributedString?
     var image : UIImage?
     
     init(name: String) {
         self.name = name
         let text = Utility.getFile(name, type: "txt")
-        self.description = NSAttributedString(string: text ?? "", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont.getDefautlFont(.meduium, size: 18)])
+        self.info = NSAttributedString(string: text ?? "", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont.getDefautlFont(.meduium, size: 18)])
         
         self.image = UIImage(named: name)
     }
@@ -41,20 +41,7 @@ struct Event {
 
 class RumbleMapViewController: UIViewController {
     
-    //    var EventImages = [Event(name: "First Contact"),
-    //                       Event(name: "Baily's Beads"),
-    //                       Event(name: "Corona"),
-    //                       Event(name: "Diamond Ring"),
-    //                       Event(name: "Helmet Streamers"),
-    //                       Event(name: "Prominence"),
-    //                       Event(name: "Sun as a Star"),
-    //                       Event(name: "Totality")]
-    
-    var EventImages = [Event(name: "Baily's Beads"),
-                       Event(name: "Corona"),
-                       Event(name: "Diamond Ring"),
-                       Event(name: "Helmet Streamers"),
-                       Event(name: "Prominence")]
+    var EventImages : [Event]!
     
     
     
@@ -84,23 +71,56 @@ class RumbleMapViewController: UIViewController {
     
     var stopGesture : UITapGestureRecognizer?
     
-    var isSessionActive = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        
+        
+        controlView.isAccessibilityElement = false
+        controlView.accessibilityElements = [previousBtn, titleLabel, nextBtn]
+        
         configureView()
         loadImages()
         setText()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(setText), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        addObservers()
+    }
+    
+    func addObservers() {
+        NotificationHelper.addObserver(self, reminders: [.allDone,.totality,.contact1], selector: #selector(catchReminderNotification(notification:)))
         
-        NotificationCenter.default.addObserver(self, selector: #selector(leftApplication), name: .UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(returnToApplication), name: .UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(deviceConnectedNotification), name: Notification.Name.AVAudioSessionRouteChange, object: nil)
-        // add interruption handler
-        NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(setText), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+    }
+    
+    func catchReminderNotification(notification: Notification) {
+        guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
+            return
+        }
+        reloadViews(for: reminder)
+        
+    }
+    
+    func reloadViews(for reminder : Reminder) {
+        if reminder.contains(.allDone) || reminder.contains(.totality) {
+            EventImages = [Event(name: "First Contact"),
+                                   Event(name: "Baily's Beads"),
+                                   Event(name: "Corona"),
+                                   Event(name: "Diamond Ring"),
+                                   Event(name: "Helmet Streamers"),
+                                   Event(name: "Prominence"),
+                                   Event(name: "Totality")]
+            
+        } else if reminder.contains(.contact1) {
+            EventImages = [Event(name: "First Contact"),
+                           Event(name: "Baily's Beads"),
+                           Event(name: "Corona"),
+                           Event(name: "Diamond Ring"),
+                           Event(name: "Helmet Streamers"),
+                           Event(name: "Prominence")]
+            currentIndex += 1
+        }
     }
     
     func configureView() {
@@ -123,17 +143,18 @@ class RumbleMapViewController: UIViewController {
         previousBtn.accessibilityHint = "Shows the previous Eclipse Image"
         
         titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.accessibilityTraits = UIAccessibilityTraitHeader
         
         let height = rumbleBtn.frame.height
         let rWidth = rumbleBtn.frame.width
         let bWidth = descriptionBtn.frame.width
         
-        rumbleBtn.setBackgroundImage(UIImage.selectionIndiciatorImage(color: UIColor.init(r: 227, g: 94, b: 5), size: CGSize.init(width: rWidth, height: height), lineWidth: 2, position: .bottom)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        descriptionBtn.setBackgroundImage(UIImage.selectionIndiciatorImage(color: UIColor.init(r: 227, g: 94, b: 5), size: CGSize.init(width: rWidth, height: height), lineWidth: 2, position: .bottom)?.withRenderingMode(.alwaysTemplate), for: .normal)
         
-        rumbleBtn.tintColor = UIColor.init(r: 227, g: 94, b: 5)
-        rumbleBtn.accessibilityTraits |= UIAccessibilityTraitSelected
+        descriptionBtn.tintColor = UIColor.init(r: 227, g: 94, b: 5)
+        descriptionBtn.accessibilityTraits |= UIAccessibilityTraitSelected
         
-        descriptionBtn.setBackgroundImage(UIImage.selectionIndiciatorImage(color: .white, size: CGSize.init(width: bWidth, height: height), lineWidth: 2, position: .bottom)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        rumbleBtn.setBackgroundImage(UIImage.selectionIndiciatorImage(color: .white, size: CGSize.init(width: bWidth, height: height), lineWidth: 2, position: .bottom)?.withRenderingMode(.alwaysTemplate), for: .normal)
         
         descriptionTextView.textContainerInset = UIEdgeInsetsMake(20, 20, 10, 20)
         descriptionTextView.accessibilityTraits = UIAccessibilityTraitStaticText
@@ -145,9 +166,24 @@ class RumbleMapViewController: UIViewController {
     }
     
     func loadImages() {
-        currentIndex = 0
+        EventImages = [Event(name: "Baily's Beads"),
+        Event(name: "Corona"),
+        Event(name: "Diamond Ring"),
+        Event(name: "Helmet Streamers"),
+        Event(name: "Prominence")]
+        
+        
+        if UserDefaults.standard.bool(forKey: "Contact1Done") {
+            reloadViews(for: .contact1)
+        }
+        
+        if UserDefaults.standard.bool(forKey: "TotalityDone") {
+            reloadViews(for: .totality)
+        }
+        
+        
         titleLabel.text = EventImages[currentIndex].name
-        descriptionTextView.attributedText = EventImages[currentIndex].description
+        descriptionTextView.attributedText = EventImages[currentIndex].info
         previewImageView.image = EventImages[currentIndex].image
         
     }
@@ -158,23 +194,9 @@ class RumbleMapViewController: UIViewController {
     }
     
     func openRumbleMap() {
-        if !rumbleMapShowing {
-            self.tabBarController?.setTabBarVisible(visible: false, animated: true)
-            self.updateStatusBar(hide: true)
-            
-            rumbleMap = RumbleMap()
-            rumbleMap?.closeCompletion = {
-                self.view.accessibilityElementsHidden = false
-                self.tabBarController?.tabBar.accessibilityElementsHidden = false
-                self.updateStatusBar(hide: false)
-                self.tabBarController?.setTabBarVisible(visible: true, animated: true)
-            }
-            
-            rumbleMap?.show(EventImages[currentIndex]){
-                self.view.accessibilityElementsHidden = true
-                self.tabBarController?.tabBar.accessibilityElementsHidden = true
-            }
-        }
+        let interactiveVC = RumbleMapInteractiveViewController()
+        interactiveVC.event = EventImages[currentIndex]
+        self.present(interactiveVC, animated: true, completion: nil)
     }
     
     
@@ -185,7 +207,7 @@ class RumbleMapViewController: UIViewController {
             currentIndex = 0
         }
         titleLabel.text = EventImages[currentIndex].name
-        descriptionTextView.attributedText = EventImages[currentIndex].description
+        descriptionTextView.attributedText = EventImages[currentIndex].info
         previewImageView.image = EventImages[currentIndex].image
     }
     
@@ -196,7 +218,7 @@ class RumbleMapViewController: UIViewController {
             currentIndex = EventImages.count-1
         }
         titleLabel.text = EventImages[currentIndex].name
-        descriptionTextView.attributedText = EventImages[currentIndex].description
+        descriptionTextView.attributedText = EventImages[currentIndex].info
         previewImageView.image = EventImages[currentIndex].image
     }
     
@@ -231,76 +253,10 @@ class RumbleMapViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-    
-    //MARK: Notification Handlers
-    func leftApplication() {
-        rumbleMap?.setSession(active: false)//Left
-    }
-    
-    func returnToApplication(){
-        rumbleMap?.setSession(active: true)//Returned
-    }
-    
-    
-    /// Notification handler for AVAudioSessionRouteChange to catch changes to device connection from the audio jack.
-    ///
-    /// - Parameter notification: Notification object cointaing AVAudioSessionRouteChange data
-    func deviceConnectedNotification(notification: Notification){
-        
-        let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
-        switch audioRouteChangeReason {
-        case AVAudioSessionRouteChangeReason.newDeviceAvailable.rawValue: ///device is connected
-            rumbleMap?.setSession(active: true)
-            break
-            
-        case AVAudioSessionRouteChangeReason.oldDeviceUnavailable.rawValue: ///device is not connected
-            
-            rumbleMap?.setSession(active: true)
-            break
-            
-        default:
-            break
-        }
-    }
-    
-    //TODO: Implement the recording to pause while interruption is in prpogress and restart after interruption is stoped
-    /// Interruption Handler
-    ///
-    /// - Parameter notification: Device generated notification about interruption
-    func handleInterruption(_ notification: Notification) {
-        let theInterruptionType = (notification as NSNotification).userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
-        NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSessionInterruptionType.began.rawValue ? "Begin Interruption" : "End Interruption")
-        
-        if theInterruptionType == AVAudioSessionInterruptionType.began.rawValue {
-            
-        }
-        
-        if theInterruptionType == AVAudioSessionInterruptionType.ended.rawValue {
-            
-        }
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        //TODO: Stop RumbleMap
-        rumbleMap?.willRotate()
-    }
-    
-    
-    var rumbleMapShowing = false
-    
-    func updateStatusBar(hide: Bool) {
-        rumbleMapShowing = hide
-        UIView.animate(withDuration: 0.2, animations: {
-            self.setNeedsStatusBarAppearanceUpdate()
-        })
-    }
-    
-    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation{
-        return .fade
-    }
-    
-    override var prefersStatusBarHidden: Bool {
-        return rumbleMapShowing
+}
+
+extension RumbleMapViewController : RumbleMapDelegate {
+    func openIntructions() {
+        self.present(IntructionsViewController(), animated: true, completion: nil)
     }
 }

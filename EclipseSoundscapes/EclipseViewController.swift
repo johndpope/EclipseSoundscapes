@@ -38,8 +38,10 @@ class EclipseViewController : FormViewController {
     
     var LocationKey : String?
     
+    var noEclipseView : NoEclipseView?
+    
     deinit {
-        LocationManager.removeObserver(key: LocationKey)
+        LocationManager.removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -47,7 +49,11 @@ class EclipseViewController : FormViewController {
         
         initializeForm()
         configureContent()
-        LocationKey = LocationManager.addObserver(self)
+        LocationManager.addObserver(self)
+        if Location.isGranted {
+            getlocation(animated: !foundLocationOnce)
+        }
+        
     }
     
     private func initializeForm() {
@@ -58,7 +64,6 @@ class EclipseViewController : FormViewController {
         
         tableView.isHidden = true
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
-//        tableView.backgroundView = UIView.rombusPattern()
         tableView.backgroundColor = .clear
         
         LabelRow.defaultCellUpdate = { cell, row in
@@ -79,20 +84,16 @@ class EclipseViewController : FormViewController {
                 })
             <<< LabelRow ("Type") { row in
                 row.title = "Eclipse Type: "
-                row.value = "Partial Solar Eclipse"
             }
             <<< LabelRow ("Date") { row in
                 row.title = "Date: "
-                row.value = "8-21-2017"
             }
             
             <<< LabelRow ("Latitude") { row in
-                row.title = "My Latitude: "
-                row.value = "42.09"
+                row.title = "Your Latitude: "
             }
             <<< LabelRow ("Longitude") { row in
-                row.title = "My Longitude: "
-                row.value = "83.08"
+                row.title = "Your Longitude: "
             }
             <<< LabelRow ("Coverage") { row in
                 row.title = "% Eclipse: "
@@ -149,12 +150,10 @@ class EclipseViewController : FormViewController {
     func showSpinner() {
         isSpinnerShowing = true
         SwiftSpinner.setTitleFont(UIFont.getDefautlFont(.bold, size: 22))
+        SwiftSpinner.useContainerView(self.view)
         let spinner = SwiftSpinner.show("Finding Your location", animated: true)
         spinner.addTapHandler({
-            self.hideSpinner()
-            self.showError({
-                LocationManager.stopLocating()
-            })
+            self.showError()
         }, subtitle: "Tap To Stop")
         
         spinner.accessibilityElements = [spinner.titleLabel]
@@ -162,16 +161,13 @@ class EclipseViewController : FormViewController {
         if let hint = spinner.subtitleLabel?.text {
             spinner.titleLabel.accessibilityHint = "Double \(hint)"
         }
-        
-        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, spinner.titleLabel)
-        view.accessibilityElementsHidden = true
-        self.tabBarController?.tabBar.accessibilityElementsHidden = true
+        errorBtn.isAccessibilityElement = false
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, spinner)
     }
     
     func hideSpinner() {
         SwiftSpinner.hide()
-        view.accessibilityElementsHidden = false
-        self.tabBarController?.tabBar.accessibilityElementsHidden = false
+        errorBtn.isAccessibilityElement = true
     }
     
     func showError(_ completion: (()->Void)? = nil ) {
@@ -200,37 +196,38 @@ class EclipseViewController : FormViewController {
         })
     }
     
-    func setCountdown(_ dateString: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss.S"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-        guard let eclipseDate = dateFormatter.date(from: dateString) else {
+    func setCountdown(_ date: Date?, atUserLocation: Bool = true) {
+        guard let eclipseDate = date else {
             print("Not Valid Format")
             return
         }
         
         if let countdownRow = form.rowBy(tag: "Countdown") as? CountDownRow {
             countdownRow.set(date: eclipseDate)
+            if atUserLocation {
+                countdownRow.cell.countdownView.accessibilityLabel = "Countdown Until Eclipse from your location"
+            } else {
+                countdownRow.cell.countdownView.accessibilityLabel = "Countdown Until Eclipse from Closest location"
+            }
+            
         }
         
         
     }
     
-    func addContent(timeGenerator : EclipseTimeGenerator) {
+    func addContent(timeGenerator : EclipseTimeGenerator, atUserLocation : Bool = true) {
         
         var eclipseInfo : [EclipseEvent]!
         
         switch timeGenerator.eclipseType {
         case .none:
-            //            eclipseTypeLabel.text = "No Solar Eclipse"
-            //            tableView.isHidden = true
-            ////            layoutIfNeeded()
+            toggleNoEclipse(show: true)
             return
         case .partial:
             eclipseInfo = [timeGenerator.contact1, timeGenerator.contactMid, timeGenerator.contact4]
             
             if let typeRow = form.rowBy(tag: "Type") as? LabelRow{
-                typeRow.value = "Partial Solar Eclipse"
+                typeRow.cell.detailTextLabel?.text = "Partial Solar Eclipse"
             }
             
             break
@@ -257,6 +254,14 @@ class EclipseViewController : FormViewController {
             break
         }
         
+    
+        
+        updatelocation(lat: timeGenerator.latString, long: timeGenerator.lonString, atUserLocation: atUserLocation)
+        setCountdown(timeGenerator.contact1.eventDate(), atUserLocation: atUserLocation)
+        
+        if let dateRow = form.rowBy(tag: "Date") as? LabelRow{
+            dateRow.cell.detailTextLabel?.text = timeGenerator.contact1.date
+        }
         
         if let coverageRow = form.rowBy(tag: "Coverage") as? LabelRow {
             coverageRow.cell.detailTextLabel?.text = timeGenerator.coverage
@@ -266,8 +271,6 @@ class EclipseViewController : FormViewController {
         if let infoSection = form.sectionBy(tag: "EventTimes") {
             form.remove(at: infoSection.index!)
         }
-        
-        
         
         let infoSection = Section(){section in
             section.tag = "EventTimes"
@@ -288,8 +291,9 @@ class EclipseViewController : FormViewController {
             cell.eventLabel.font = UIFont.getDefautlFont(.meduium, size: 18)
             cell.localTimeLabel.font = UIFont.getDefautlFont(.meduium, size: 18)
             cell.timeLabel.font = UIFont.getDefautlFont(.meduium, size: 18)
-            cell.toggleAccessibility(false)
+            cell.toggleAccessibility(false, atUserLocation: atUserLocation)
         })
+        
         
         form
             +++ infoSection
@@ -302,18 +306,61 @@ class EclipseViewController : FormViewController {
                     }.cellSetup({ (cell, row) in
                         cell.backgroundColor = .clear
                         cell.height = {50}
+                        
+                    }).cellUpdate({ (cell, row) in
+                        cell.set(row.value, atUserLocation: atUserLocation)
                     })
             
         }
     }
     
-    func updatelocation(lat : String, long: String){
+    func updatelocation(lat : String, long: String, atUserLocation : Bool = true){
         guard let latRow = form.rowBy(tag: "Latitude") as? LabelRow, let longRow = form.rowBy(tag: "Longitude") as? LabelRow else {
             return
         }
         
+        if atUserLocation {
+            latRow.cell.textLabel?.text = "Your Latitude: "
+            longRow.cell.textLabel?.text = "Your Longitude: "
+        } else {
+            latRow.cell.textLabel?.text = "Location's Latitude: "
+            longRow.cell.textLabel?.text = "Location's Longitude: "
+        }
+        
         latRow.cell.detailTextLabel?.text = lat
         longRow.cell.detailTextLabel?.text = long
+    }
+    
+    func getClosesLocation() {
+        LocationManager.getClosestLocation()
+        toggleNoEclipse(show: false)
+    }
+    
+    var currentAccessibleElements : [Any]?
+    
+    func toggleNoEclipse(show: Bool){
+        
+        if show {
+            self.tableView.isAccessibilityElement = false
+            noEclipseView = NoEclipseView()
+            view.addSubview(noEclipseView!)
+            noEclipseView?.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+            noEclipseView?.setAction(self, action: #selector(getClosesLocation))
+            
+            view.accessibilityElements = [noEclipseView!]
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.noEclipseView)
+        } else {
+            self.tableView.isAccessibilityElement = true
+            view.accessibilityElements = [tableView]
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.tableView)
+            
+            UIView.animate(withDuration: 0.3, animations: { 
+                self.noEclipseView?.alpha = 0
+            }, completion: { (_) in
+                self.noEclipseView?.removeFromSuperview()
+                self.noEclipseView = nil
+            })
+        }
     }
     
     override func insertAnimation(forRows rows: [BaseRow]) -> UITableViewRowAnimation {
@@ -338,12 +385,15 @@ class EclipseViewController : FormViewController {
 }
 
 extension EclipseViewController : LocationDelegate {
+    /// Ask the User if they would like to be put on the path of Totality at the closest point from them
+    func notOnToaltiyPath() {
+        toggleNoEclipse(show: true)
+    }
+
     
     func locator(didUpdateBestLocation location: CLLocation) {
         let timeGenerator = EclipseTimeGenerator(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        updatelocation(lat: timeGenerator.latString, long: timeGenerator.lonString)
-        setCountdown("\(timeGenerator.contact1.date) \(timeGenerator.contact1.time)")
-        addContent(timeGenerator: timeGenerator)
+        addContent(timeGenerator: timeGenerator, atUserLocation: LocationManager.isUsersLocation)
         hideError {
             if self.isSpinnerShowing {
                 self.hideSpinner()
@@ -361,10 +411,7 @@ extension EclipseViewController : LocationDelegate {
         switch code {
         case CLError.locationUnknown:
             let spinner = SwiftSpinner.sharedInstance
-            spinner.addTapHandler({
-                self.showError()
-            }, subtitle: Location.string.locationUnknown + "\nTap to Stop.")
-            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, spinner.subtitleLabel)
+            spinner.title = Location.string.locationUnknown
             return
         case CLError.denied:
             errorBtn.setTitle(Location.string.denied, for: .normal)
@@ -376,16 +423,12 @@ extension EclipseViewController : LocationDelegate {
             errorBtn.setTitle(Location.string.unkown, for: .normal)
             break
         }
-        showError {
-            LocationManager.stopLocating()
-        }
+        showError()
         
     }
     
     func notGranted() {
-        showError {
-            LocationManager.stopLocating()
-        }
+        showError()
         
         if !Location.isGranted {
             banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.") {

@@ -122,7 +122,3 @@ class PartnersViewController : FormViewController {
     }
 }
 
-class WebtouchGesture : UITapGestureRecognizer {
-    var website : String?
-}
-

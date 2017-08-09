@@ -63,6 +63,7 @@ final class TeamMemberCell: Cell<TeamMember>, CellType {
         memberImageView.clipsToBounds = true
         height = { return 94 }
         
+        self.accessibilityTraits = UIAccessibilityTraitHeader
         self.accessibilityHint = "Touch below for information"
     }
     

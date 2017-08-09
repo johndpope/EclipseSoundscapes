@@ -25,6 +25,14 @@
 		B7372E151F27B56000A71396 /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7372E141F27B56000A71396 /* InfoCell.swift */; };
 		B73AE7341EE8332300BDBCE8 /* TapePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73AE7331EE8332300BDBCE8 /* TapePlayer.swift */; };
 		B73AE7361EE860A900BDBCE8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73AE7351EE860A900BDBCE8 /* Constants.swift */; };
+		B73B20931F34600F003B8D8E /* FutureEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B20921F34600F003B8D8E /* FutureEventsViewController.swift */; };
+		B73B20951F346294003B8D8E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B20941F346294003B8D8E /* EventCell.swift */; };
+		B73B20971F3464FE003B8D8E /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B73B20961F3464FE003B8D8E /* EventCell.xib */; };
+		B73B20991F346736003B8D8E /* Future_Eclipses.json in Resources */ = {isa = PBXBuildFile; fileRef = B73B20981F346736003B8D8E /* Future_Eclipses.json */; };
+		B73B209C1F350845003B8D8E /* helmetstrmrs.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B73B209B1F350845003B8D8E /* helmetstrmrs.mp3 */; };
+		B73B20A01F375569003B8D8E /* MediaControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B209F1F375569003B8D8E /* MediaControlView.swift */; };
+		B73B20A21F388EE4003B8D8E /* MainEclipsePolyline.json in Resources */ = {isa = PBXBuildFile; fileRef = B73B20A11F388EE4003B8D8E /* MainEclipsePolyline.json */; };
+		B73B20A41F38A8DA003B8D8E /* NoEclipseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B20A31F38A8DA003B8D8E /* NoEclipseView.swift */; };
 		B7447A801F141EEF0077F1F7 /* SectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7447A7F1F141EEF0077F1F7 /* SectionHeader.xib */; };
 		B745AE191F1E3BB20025946C /* PartnersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE181F1E3BB20025946C /* PartnersViewController.swift */; };
 		B745AE1D1F1E65570025946C /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B745AE1C1F1E65570025946C /* InstructionsViewController.swift */; };
@@ -60,6 +68,11 @@
 		B7806E5F1F0D5B580052A7CD /* CountdownViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806E581F0D5B580052A7CD /* CountdownViewModel.swift */; };
 		B7806E601F0D5B580052A7CD /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806E591F0D5B580052A7CD /* StringExtensions.swift */; };
 		B7806E611F0D5B580052A7CD /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806E5A1F0D5B580052A7CD /* UIViewExtensions.swift */; };
+		B781E6E91F3124C60038C3F1 /* PhotoCredits.txt in Resources */ = {isa = PBXBuildFile; fileRef = B781E6E81F3124C60038C3F1 /* PhotoCredits.txt */; };
+		B781E6EB1F3144D60038C3F1 /* Sun as a Start.txt in Resources */ = {isa = PBXBuildFile; fileRef = B781E6EA1F3144D60038C3F1 /* Sun as a Start.txt */; };
+		B781E6ED1F31528E0038C3F1 /* PhotoCreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B781E6EC1F31528E0038C3F1 /* PhotoCreditsViewController.swift */; };
+		B781E6EF1F3153560038C3F1 /* PhotoCreditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B781E6EE1F3153560038C3F1 /* PhotoCreditCell.swift */; };
+		B781E6F11F3153670038C3F1 /* PhotoCreditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B781E6F01F3153670038C3F1 /* PhotoCreditCell.xib */; };
 		B79263101F0D740500062B8D /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B792630F1F0D740500062B8D /* InfoTableViewCell.swift */; };
 		B792639E1F0D7B8200062B8D /* SPAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79263141F0D7B8200062B8D /* SPAnimation.swift */; };
 		B792639F1F0D7B8200062B8D /* SPAnimationAlpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79263151F0D7B8200062B8D /* SPAnimationAlpha.swift */; };
@@ -139,7 +152,6 @@
 		B79263F01F0D7B8200062B8D /* SPBezierPathFigurePatterns.swift in Sources */ = {isa = PBXBuildFile; fileRef = B792639A1F0D7B8200062B8D /* SPBezierPathFigurePatterns.swift */; };
 		B79263F11F0D7B8200062B8D /* SPBezierPathFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = B792639B1F0D7B8200062B8D /* SPBezierPathFigure.swift */; };
 		B79263F41F0D828100062B8D /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79263F31F0D828100062B8D /* Location.swift */; };
-		B79263F61F0D9A1900062B8D /* PlaybackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B79263F51F0D9A1900062B8D /* PlaybackViewController.xib */; };
 		B7964C341EF9B76400000CF8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B7964C361EF9B76400000CF8 /* Localizable.strings */; };
 		B79ED4121EDF5C37001D5745 /* TapeRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */; };
 		B7A3B7801F2B941F0003C2C9 /* Baily's Beads.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7A3B77F1F2B941F0003C2C9 /* Baily's Beads.txt */; };
@@ -149,6 +161,7 @@
 		B7A3B7891F2B94380003C2C9 /* First Contact.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7A3B7841F2B94380003C2C9 /* First Contact.txt */; };
 		B7A3B78A1F2B94380003C2C9 /* Diamond Ring.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7A3B7851F2B94380003C2C9 /* Diamond Ring.txt */; };
 		B7A3B78C1F2B943F0003C2C9 /* Corona.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7A3B78B1F2B943F0003C2C9 /* Corona.txt */; };
+		B7B16F3B1F3A63620036E396 /* RumbleMapInteractiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B16F3A1F3A63620036E396 /* RumbleMapInteractiveViewController.swift */; };
 		B7B19F801F2E901100EDE056 /* WalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B19F7F1F2E901100EDE056 /* WalkthroughViewController.swift */; };
 		B7B19F851F2E909500EDE056 /* PermissionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B19F821F2E909500EDE056 /* PermissionCell.swift */; };
 		B7B19F861F2E909500EDE056 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B19F831F2E909500EDE056 /* Page.swift */; };
@@ -162,6 +175,8 @@
 		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
 		B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */; };
 		B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */; };
+		B7F7559E1F3344700029DB4D /* MediaCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */; };
+		B7F755A01F3344F30029DB4D /* MediaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F7559F1F3344F30029DB4D /* MediaCell.swift */; };
 		D77B9349CAD58F1DB4B335FF /* Pods_EclipseSoundscapes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */; };
 		EB7C715CF5F62E86B98ABEDD /* Pods_EclipseSoundscapesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A506BF43909D29D3B1E7AEE /* Pods_EclipseSoundscapesUITests.framework */; };
 /* End PBXBuildFile section */
@@ -215,6 +230,14 @@
 		B7372E141F27B56000A71396 /* InfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		B73AE7331EE8332300BDBCE8 /* TapePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapePlayer.swift; sourceTree = "<group>"; };
 		B73AE7351EE860A900BDBCE8 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		B73B20921F34600F003B8D8E /* FutureEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FutureEventsViewController.swift; sourceTree = "<group>"; };
+		B73B20941F346294003B8D8E /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
+		B73B20961F3464FE003B8D8E /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
+		B73B20981F346736003B8D8E /* Future_Eclipses.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Future_Eclipses.json; sourceTree = "<group>"; };
+		B73B209B1F350845003B8D8E /* helmetstrmrs.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = helmetstrmrs.mp3; sourceTree = "<group>"; };
+		B73B209F1F375569003B8D8E /* MediaControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaControlView.swift; sourceTree = "<group>"; };
+		B73B20A11F388EE4003B8D8E /* MainEclipsePolyline.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MainEclipsePolyline.json; sourceTree = "<group>"; };
+		B73B20A31F38A8DA003B8D8E /* NoEclipseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoEclipseView.swift; sourceTree = "<group>"; };
 		B7447A7F1F141EEF0077F1F7 /* SectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SectionHeader.xib; sourceTree = "<group>"; };
 		B745AE181F1E3BB20025946C /* PartnersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartnersViewController.swift; sourceTree = "<group>"; };
 		B745AE1C1F1E65570025946C /* InstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsViewController.swift; sourceTree = "<group>"; };
@@ -250,6 +273,11 @@
 		B7806E581F0D5B580052A7CD /* CountdownViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountdownViewModel.swift; sourceTree = "<group>"; };
 		B7806E591F0D5B580052A7CD /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		B7806E5A1F0D5B580052A7CD /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
+		B781E6E81F3124C60038C3F1 /* PhotoCredits.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PhotoCredits.txt; sourceTree = "<group>"; };
+		B781E6EA1F3144D60038C3F1 /* Sun as a Start.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Sun as a Start.txt"; sourceTree = "<group>"; };
+		B781E6EC1F31528E0038C3F1 /* PhotoCreditsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCreditsViewController.swift; sourceTree = "<group>"; };
+		B781E6EE1F3153560038C3F1 /* PhotoCreditCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCreditCell.swift; sourceTree = "<group>"; };
+		B781E6F01F3153670038C3F1 /* PhotoCreditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoCreditCell.xib; sourceTree = "<group>"; };
 		B792630F1F0D740500062B8D /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
 		B79263141F0D7B8200062B8D /* SPAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPAnimation.swift; sourceTree = "<group>"; };
 		B79263151F0D7B8200062B8D /* SPAnimationAlpha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPAnimationAlpha.swift; sourceTree = "<group>"; };
@@ -329,7 +357,6 @@
 		B792639A1F0D7B8200062B8D /* SPBezierPathFigurePatterns.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPBezierPathFigurePatterns.swift; sourceTree = "<group>"; };
 		B792639B1F0D7B8200062B8D /* SPBezierPathFigure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPBezierPathFigure.swift; sourceTree = "<group>"; };
 		B79263F31F0D828100062B8D /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
-		B79263F51F0D9A1900062B8D /* PlaybackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaybackViewController.xib; sourceTree = "<group>"; };
 		B7964C301EF9B6BB00000CF8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		B7964C311EF9B6BB00000CF8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B7964C351EF9B76400000CF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -342,6 +369,7 @@
 		B7A3B7841F2B94380003C2C9 /* First Contact.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "First Contact.txt"; sourceTree = "<group>"; };
 		B7A3B7851F2B94380003C2C9 /* Diamond Ring.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Diamond Ring.txt"; sourceTree = "<group>"; };
 		B7A3B78B1F2B943F0003C2C9 /* Corona.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Corona.txt; sourceTree = "<group>"; };
+		B7B16F3A1F3A63620036E396 /* RumbleMapInteractiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RumbleMapInteractiveViewController.swift; sourceTree = "<group>"; };
 		B7B19F7F1F2E901100EDE056 /* WalkthroughViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughViewController.swift; sourceTree = "<group>"; };
 		B7B19F821F2E909500EDE056 /* PermissionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionCell.swift; sourceTree = "<group>"; };
 		B7B19F831F2E909500EDE056 /* Page.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
@@ -355,6 +383,8 @@
 		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
+		B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCenterViewController.swift; sourceTree = "<group>"; };
+		B7F7559F1F3344F30029DB4D /* MediaCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCell.swift; sourceTree = "<group>"; };
 		EC9068B8CBBFDE24E65A9DBE /* Pods-EclipseSoundscapes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapes/Pods-EclipseSoundscapes.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -471,9 +501,21 @@
 			path = EclipseSoundscapesUITests;
 			sourceTree = "<group>";
 		};
+		B73B209A1F35083A003B8D8E /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				B73B209B1F350845003B8D8E /* helmetstrmrs.mp3 */,
+			);
+			name = Audio;
+			sourceTree = "<group>";
+		};
 		B75632B71F04038D00106B46 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B73B20A11F388EE4003B8D8E /* MainEclipsePolyline.json */,
+				B73B20981F346736003B8D8E /* Future_Eclipses.json */,
+				B73B209A1F35083A003B8D8E /* Audio */,
+				B781E6E81F3124C60038C3F1 /* PhotoCredits.txt */,
 				B7A3B78D1F2B94540003C2C9 /* Descriptions */,
 				B7A3B78E1F2B94630003C2C9 /* Licenses */,
 				B7A3B78F1F2B94730003C2C9 /* Sounds */,
@@ -1018,6 +1060,7 @@
 				B7A3B7841F2B94380003C2C9 /* First Contact.txt */,
 				B7A3B7851F2B94380003C2C9 /* Diamond Ring.txt */,
 				B7A3B78B1F2B943F0003C2C9 /* Corona.txt */,
+				B781E6EA1F3144D60038C3F1 /* Sun as a Start.txt */,
 			);
 			name = Descriptions;
 			sourceTree = "<group>";
@@ -1058,7 +1101,9 @@
 		B7F522F31EEC588500A53A4A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				B79263F51F0D9A1900062B8D /* PlaybackViewController.xib */,
+				B73B20A31F38A8DA003B8D8E /* NoEclipseView.swift */,
+				B73B209F1F375569003B8D8E /* MediaControlView.swift */,
+				B7F7559F1F3344F30029DB4D /* MediaCell.swift */,
 				B7447A7F1F141EEF0077F1F7 /* SectionHeader.xib */,
 				B7E7A9891F12A59600B239B8 /* LogoView.swift */,
 				B7806E531F0D5B400052A7CD /* CountDown */,
@@ -1068,8 +1113,12 @@
 				B7372E0F1F27A18C00A71396 /* CountDownCell.xib */,
 				B76282941F266B4200430319 /* PartnerCell.swift */,
 				B76282961F266C2800430319 /* PartnerCell.xib */,
+				B781E6EE1F3153560038C3F1 /* PhotoCreditCell.swift */,
+				B781E6F01F3153670038C3F1 /* PhotoCreditCell.xib */,
 				B7372E121F27B4EB00A71396 /* InfoCell.xib */,
 				B7372E141F27B56000A71396 /* InfoCell.swift */,
+				B73B20941F346294003B8D8E /* EventCell.swift */,
+				B73B20961F3464FE003B8D8E /* EventCell.xib */,
 				B7806DB81F0D58CA0052A7CD /* RumbleMap.swift */,
 				B71751011F0DB789002EBE90 /* InfoView.swift */,
 				B792630F1F0D740500062B8D /* InfoTableViewCell.swift */,
@@ -1081,10 +1130,12 @@
 			isa = PBXGroup;
 			children = (
 				B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */,
+				B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */,
 				B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */,
 				B7372E0B1F27A0CA00A71396 /* EclipseViewController.swift */,
 				B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */,
 				B77417F01F0361EC00663C2E /* RumbleMapViewController.swift */,
+				B7B16F3A1F3A63620036E396 /* RumbleMapInteractiveViewController.swift */,
 				B7E7A9871F12A40200B239B8 /* MoreViewController.swift */,
 				B745AE181F1E3BB20025946C /* PartnersViewController.swift */,
 				B745AE3A1F1E8D260025946C /* TeamViewController.swift */,
@@ -1093,6 +1144,8 @@
 				B745AE201F1E65B50025946C /* LegalViewController.swift */,
 				B745AE241F1E6A190025946C /* OpenSourceViewController.swift */,
 				B745AE361F1E8A230025946C /* LicenseViewController.swift */,
+				B73B20921F34600F003B8D8E /* FutureEventsViewController.swift */,
+				B781E6EC1F31528E0038C3F1 /* PhotoCreditsViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1223,8 +1276,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B73B209C1F350845003B8D8E /* helmetstrmrs.mp3 in Resources */,
 				B745AE331F1E79820025946C /* Eureka-License.txt in Resources */,
-				B79263F61F0D9A1900062B8D /* PlaybackViewController.xib in Resources */,
+				B73B20991F346736003B8D8E /* Future_Eclipses.json in Resources */,
 				B7964C341EF9B76400000CF8 /* Localizable.strings in Resources */,
 				B7A3B7871F2B94380003C2C9 /* Prominence.txt in Resources */,
 				B76282971F266C2800430319 /* PartnerCell.xib in Resources */,
@@ -1240,12 +1294,17 @@
 				B7A3B7881F2B94380003C2C9 /* Helmet Streamers.txt in Resources */,
 				B745AE351F1E79820025946C /* SwiftSpinner-License.txt in Resources */,
 				B7A3B78A1F2B94380003C2C9 /* Diamond Ring.txt in Resources */,
+				B781E6F11F3153670038C3F1 /* PhotoCreditCell.xib in Resources */,
+				B73B20971F3464FE003B8D8E /* EventCell.xib in Resources */,
 				B7A3B78C1F2B943F0003C2C9 /* Corona.txt in Resources */,
 				B745AE301F1E79820025946C /* AudioKit-License.txt in Resources */,
 				B7DE878F1F20FBE6001F69D8 /* LICENSE.txt in Resources */,
 				B76282901F26667C00430319 /* TeamMemberCell.xib in Resources */,
 				B7A3B7861F2B94380003C2C9 /* Totality.txt in Resources */,
+				B781E6E91F3124C60038C3F1 /* PhotoCredits.txt in Resources */,
 				B7447A801F141EEF0077F1F7 /* SectionHeader.xib in Resources */,
+				B73B20A21F388EE4003B8D8E /* MainEclipsePolyline.json in Resources */,
+				B781E6EB1F3144D60038C3F1 /* Sun as a Start.txt in Resources */,
 				B7806E5B1F0D5B580052A7CD /* CountdownView.xib in Resources */,
 				B75632B41F04037D00106B46 /* mapmarker.wav in Resources */,
 			);
@@ -1439,6 +1498,7 @@
 				B79263CB1F0D7B8200062B8D /* plist_flags.swift in Sources */,
 				B79263C41F0D7B8200062B8D /* SPRequestPermissionDialogInteractivePresenterInterface.swift in Sources */,
 				B79263101F0D740500062B8D /* InfoTableViewCell.swift in Sources */,
+				B73B20931F34600F003B8D8E /* FutureEventsViewController.swift in Sources */,
 				B763FA011ED864F400EEFB27 /* Tape.swift in Sources */,
 				B745AE371F1E8A230025946C /* LicenseViewController.swift in Sources */,
 				B7BBB4FC1EE8690A00C0D855 /* AudioManager.swift in Sources */,
@@ -1449,6 +1509,7 @@
 				B79263C61F0D7B8200062B8D /* SPRequestPermissionDialogInteractiveView.swift in Sources */,
 				B79263DD1F0D7B8200062B8D /* SPCollectionView.swift in Sources */,
 				B745AE1F1F1E65900025946C /* SettingsViewController.swift in Sources */,
+				B73B20951F346294003B8D8E /* EventCell.swift in Sources */,
 				B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */,
 				B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */,
 				B79263EF1F0D7B8200062B8D /* SPBezierPathFigureLogos.swift in Sources */,
@@ -1459,6 +1520,7 @@
 				B7806E5D1F0D5B580052A7CD /* CountdownTimeLeft.swift in Sources */,
 				B79263CF1F0D7B8200062B8D /* SPDialogSwipeController.swift in Sources */,
 				B7806DB51F0D43880052A7CD /* Extensions.swift in Sources */,
+				B781E6ED1F31528E0038C3F1 /* PhotoCreditsViewController.swift in Sources */,
 				B77417F41F03628700663C2E /* EclipseTimeGenerator.swift in Sources */,
 				B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */,
 				B792639F1F0D7B8200062B8D /* SPAnimationAlpha.swift in Sources */,
@@ -1481,6 +1543,7 @@
 				B79263B21F0D7B8200062B8D /* SPUIViewControllerExtenshion.swift in Sources */,
 				B79263C21F0D7B8200062B8D /* SPRequestPermissionDialogInteractivePresenter.swift in Sources */,
 				B79263EA1F0D7B8200062B8D /* SPShadowWithMaskView.swift in Sources */,
+				B781E6EF1F3153560038C3F1 /* PhotoCreditCell.swift in Sources */,
 				B79263A51F0D7B8200062B8D /* SPDelay.swift in Sources */,
 				B7806E611F0D5B580052A7CD /* UIViewExtensions.swift in Sources */,
 				B79263C51F0D7B8200062B8D /* SPRequestPermissionDialogInteractiveViewControllerInterface.swift in Sources */,
@@ -1498,10 +1561,13 @@
 				B79263C01F0D7B8200062B8D /* SPRequestPermissionDialogInteractiveViewController.swift in Sources */,
 				B79263AF1F0D7B8200062B8D /* SPUIColorExtension.swift in Sources */,
 				B79263AA1F0D7B8200062B8D /* SPBezierPathExtension.swift in Sources */,
+				B7F755A01F3344F30029DB4D /* MediaCell.swift in Sources */,
 				B7806E5C1F0D5B580052A7CD /* CountdownNumberView.swift in Sources */,
 				B79263E91F0D7B8200062B8D /* SPPatternView.swift in Sources */,
 				B745AE231F1E697F0025946C /* OpenSourceLibrary.swift in Sources */,
+				B7F7559E1F3344700029DB4D /* MediaCenterViewController.swift in Sources */,
 				B758D8741ED78E120033EE45 /* Downloader.swift in Sources */,
+				B73B20A01F375569003B8D8E /* MediaControlView.swift in Sources */,
 				B7372E0C1F27A0CA00A71396 /* EclipseViewController.swift in Sources */,
 				B745AE1D1F1E65570025946C /* InstructionsViewController.swift in Sources */,
 				B79263EB1F0D7B8200062B8D /* SPTitleWithSubtitleView.swift in Sources */,
@@ -1509,6 +1575,7 @@
 				B79263D31F0D7B8200062B8D /* SPParalaxTableViewController.swift in Sources */,
 				B7806DB71F0D58AD0052A7CD /* MarkerContainer.swift in Sources */,
 				B79263D11F0D7B8200062B8D /* SPGradientViewController.swift in Sources */,
+				B7B16F3B1F3A63620036E396 /* RumbleMapInteractiveViewController.swift in Sources */,
 				B79263E31F0D7B8200062B8D /* SPAligmentView.swift in Sources */,
 				B71751021F0DB789002EBE90 /* InfoView.swift in Sources */,
 				B79263A01F0D7B8200062B8D /* SPAnimationSpring.swift in Sources */,
@@ -1544,6 +1611,7 @@
 				B745AE191F1E3BB20025946C /* PartnersViewController.swift in Sources */,
 				B79263C31F0D7B8200062B8D /* SPRequestPermissionDialogInteractiveDataSourceInterface.swift in Sources */,
 				B79263A31F0D7B8200062B8D /* NSLayoutConstraintExtenshion.swift in Sources */,
+				B73B20A41F38A8DA003B8D8E /* NoEclipseView.swift in Sources */,
 				B79263B61F0D7B8200062B8D /* SPLaunchAnimationSlideExtenshion.swift in Sources */,
 				B79263DA1F0D7B8200062B8D /* SPSegmentControlStyleProtocol.swift in Sources */,
 				B79263AB1F0D7B8200062B8D /* SPCGRectExtension.swift in Sources */,

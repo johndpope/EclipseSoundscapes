@@ -14,7 +14,7 @@
             <rect key="frame" x="0.0" y="0.0" width="403" height="180"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Banner" translatesAutoresizingMaskIntoConstraints="NO" id="Bjs-Pe-yeM">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Banner" translatesAutoresizingMaskIntoConstraints="NO" id="Bjs-Pe-yeM">
                     <rect key="frame" x="0.0" y="0.0" width="403" height="180"/>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </imageView>
@@ -36,6 +36,6 @@
         </view>
     </objects>
     <resources>
-        <image name="Banner" width="1596" height="882"/>
+        <image name="Banner" width="682" height="318"/>
     </resources>
 </document>

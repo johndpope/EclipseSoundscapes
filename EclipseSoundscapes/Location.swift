@@ -22,6 +22,7 @@
 
 import UIKit
 import CoreLocation
+import MapKit
 
 /// Delegate for Locator class
 public protocol LocationDelegate: NSObjectProtocol {
@@ -38,11 +39,15 @@ public protocol LocationDelegate: NSObjectProtocol {
     ///   - error: Error trying to get user's last location
     func locator(didFailWithError error: Error)
     
+    /// Ask the User if they would like to be put on the path of Totality at the closest point from them
+    func notOnToaltiyPath()
+    
     /// If User has diabled location updates
     func notGranted()
     
     /// If User has granted location updates
     func didGrant()
+    
 }
 
 /// Handles Obtaining the User's Location
@@ -54,7 +59,7 @@ class Location {
     
     static var appGrated : Bool{
         get {
-           return UserDefaults.standard.bool(forKey: "LocationGranted")
+            return UserDefaults.standard.bool(forKey: "LocationGranted")
         }
         set {
             UserDefaults.standard.set(newValue, forKey: "LocationGranted")
@@ -65,10 +70,10 @@ class Location {
         static let general = " You don’t want to miss this amazing astronomical event! We’ll need your location to continue. Press to Continue."
         static let denied = "Location Services is Denied. Press to Continue"
         static let network = "Nertork Error Occured. Press to Retry"
-        static let locationUnknown = "Locating taking longer than Normal."
+        static let locationUnknown = "Locating taking longer than Normal"
         static let unkown = "Error Occured. Press to Retry"
     }
-
+    
     /// Check if Location Services are enabled
     ///
     /// - Returns: Current Status of Location Services
@@ -103,41 +108,60 @@ typealias PermissionClosedCompletion = ()->Void
 
 class LocationManager : NSObject {
     
-    private static let manager = LocationManager()
+    fileprivate var MainLocation: CLLocation? {
+        didSet {
+            UserDefaults.standard.set(MainLocation?.coordinate.latitude, forKey: "LastLat")
+            UserDefaults.standard.set(MainLocation?.coordinate.longitude, forKey: "LastLon")
+        }
+    }
+    
+    fileprivate static var _isUsersLocation = true
+    
+    static var isUsersLocation : Bool {
+        return _isUsersLocation
+    }
+    
+    fileprivate static var shouldCheckEclipseTimes  = false
+    
+    fileprivate static let manager = LocationManager()
     
     private var cLManager = CLLocationManager()
     
     /// Delegate for Location Updates/Errors/Alerts
     
-    private var observers = [String:LocationDelegate?]()
+    private var observers = [Int:LocationDelegate?]()
     
     private var timer : Timer?
     
     fileprivate var isReoccuring = false
     
-    private var interval : TimeInterval = 30//15*60 // 15 minutes
+    private var interval : TimeInterval = 60*5//15*60 // 15 minutes
+    private static var preNotificationOffset : Double = 60*2 // 2 Mintues for reinder notifications
     
     
     enum DelegateAction {
-        case notGranted, granted, location, error
+        case notGranted, granted, location, error, notOnPath
     }
     
     override init() {
         super.init()
         cLManager.delegate = self
     }
-
-    static func addObserver(_ delegate : LocationDelegate) -> String{
-        let key = UUID.init().uuidString
-        manager.observers.updateValue(delegate, forKey: key)
-        return key
+    
+    static func addObserver(_ delegate : LocationDelegate){
+        print("Delegate hash value: \(delegate.hash)")
+        manager.observers.updateValue(delegate, forKey: delegate.hash)
     }
     
-    static func removeObserver(key: String?) {
-        guard let delegateKey = key else {
+    static func removeObserver(_ delegate: LocationDelegate?) {
+        guard let delegateKey = delegate?.hash else {
             return
         }
         manager.observers.removeValue(forKey: delegateKey)
+    }
+    
+    static func removeAll() {
+        manager.observers.removeAll()
     }
     
     static func getLocation(withAccuracy accuracy: CLLocationAccuracy = kCLLocationAccuracyBest, reocurring: Bool = true) {
@@ -170,7 +194,7 @@ class LocationManager : NSObject {
         }
     }
     
-    static func stopLocating() {
+    fileprivate static func stopLocating() {
         manager.cLManager.stopUpdatingLocation()
         manager.timer?.invalidate()
         manager.timer = nil
@@ -192,6 +216,8 @@ class LocationManager : NSObject {
                 case .notGranted:
                     delegate.notGranted()
                     break
+                case .notOnPath:
+                    delegate.notOnToaltiyPath()
                 }
                 
             }
@@ -201,22 +227,296 @@ class LocationManager : NSObject {
     static func permission(on controller: UIViewController) {
         SPRequestPermission.dialog.interactive.present(on: controller, with: [.locationWhenInUse], dataSource: LocationDataSource(), delegate: manager)
     }
+    
+    static func getClosestLocation() {
+        stopLocating()
+        guard let lat = UserDefaults.standard.object(forKey: "LastLat") as? Double, let lon = UserDefaults.standard.object(forKey: "LastLon") as? Double else {
+            return
+        }
+        let location = closesPointOnPath(from: CLLocation(latitude: lat, longitude: lon))
+        LocationManager.manager.MainLocation = location
+        LocationManager.manager.post(action: .location, value: location)
+        LocationManager._isUsersLocation = false
+    }
+    
+    @discardableResult
+    private static func closesPointOnPath(from location : CLLocation) -> CLLocation {
+        
+        let eclipseJson = loadPolylines()
+        
+        var shortest : CLLocation!
+        var shortestDistance = Double.infinity
+        
+        for latlng in eclipseJson! {
+            let point = CLLocation(latitude: latlng["lat"]!, longitude: latlng["lon"]!)
+            let distance = location.distance(from: point)
+            
+            if distance < shortestDistance {
+                shortestDistance = distance
+                shortest = point
+            }
+        }
+        
+        return shortest
+    }
+    
+    private static func loadPolylines() -> [Dictionary<String, Double>]? {
+        guard let file = Bundle.main.url(forResource: "MainEclipsePolyline", withExtension: ".json") else {
+            return nil
+        }
+        do {
+            let data = try Data(contentsOf: file)
+            let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? [Dictionary<String, Double>]
+            
+            return json
+            
+        } catch {
+            return nil
+        }
+    }
+    
+    fileprivate static func buildNotificationTimes() {
+        if UserDefaults.standard.bool(forKey: "EclipseAllDone") {
+            return
+        }
+        
+        guard let location = LocationManager.manager.MainLocation else {
+            return
+        }
+        var notificationLocation : CLLocation!
+        var isValid = true
+        
+        var timeGenerator = EclipseTimeGenerator(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        switch timeGenerator.eclipseType {
+        case .none:
+            LocationManager.manager.post(action: .notOnPath, value: nil)
+            notificationLocation = closesPointOnPath(from: location)
+            isValid = false
+            break
+        case .partial :
+            notificationLocation = closesPointOnPath(from: location)
+            isValid = false
+            break
+        case .full :
+            break
+        }
+        
+        if !isValid {
+            timeGenerator = EclipseTimeGenerator(latitude: notificationLocation.coordinate.latitude, longitude: notificationLocation.coordinate.longitude)
+        }
+        
+        
+        setNotification(generator: timeGenerator, debug: true)
+        
+    }
+    
+    static var tempDate : Date!
+    
+    private static func setNotification(generator: EclipseTimeGenerator, debug : Bool) {
+        
+        if UserDefaults.standard.bool(forKey: "EclipseAllDone") {
+            return
+        }
+        
+        guard let c1 = generator.contact1.eventDate(), let totality = generator.contact2.eventDate() else {
+            return
+        }
+        
+        if debug {
+            tempDate = Date()
+            let future1 = tempDate.addingTimeInterval(0.5*60)
+            let future2 = tempDate.addingTimeInterval(1*60)
+            let future3 = tempDate.addingTimeInterval(3*60)
+            let future4 = tempDate.addingTimeInterval(3.5*60)
+            
+            if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
+                //            NotificationHelper.reminderNotification(for: c1.addingTimeInterval(-LocationManager.preNotificationOffset), reminder: .firstReminder)
+                NotificationHelper.reminderNotification(for: future1, reminder: .firstReminder)
+            }
+            
+            if !UserDefaults.standard.bool(forKey: "Contact1Done") {
+                //            NotificationHelper.listenNotification(for: c1, reminder: .contact1)
+                NotificationHelper.listenNotification(for: future2, reminder: .contact1)
+            }
+            
+            if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
+                //            NotificationHelper.reminderNotification(for: totality.addingTimeInterval(-LocationManager.preNotificationOffset), reminder: .totaltyReminder)
+                NotificationHelper.reminderNotification(for: future3, reminder: .totaltyReminder)
+            }
+            
+            if !UserDefaults.standard.bool(forKey: "TotalityDone") {
+                //            NotificationHelper.listenNotification(for: totality, reminder: .totality)
+                NotificationHelper.listenNotification(for: future4, reminder: .totality)
+            }
+
+        } else {
+            if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
+                NotificationHelper.reminderNotification(for: c1.addingTimeInterval(-LocationManager.preNotificationOffset), reminder: .firstReminder)
+            }
+            
+            if !UserDefaults.standard.bool(forKey: "Contact1Done") {
+                            NotificationHelper.listenNotification(for: c1, reminder: .contact1)
+            }
+            
+            if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
+                            NotificationHelper.reminderNotification(for: totality.addingTimeInterval(-LocationManager.preNotificationOffset), reminder: .totaltyReminder)
+            }
+            
+            if !UserDefaults.standard.bool(forKey: "TotalityDone") {
+                            NotificationHelper.listenNotification(for: totality, reminder: .totality)
+            }
+
+        }
+        
+        print("Notifications Scheduled")
+    }
+    static func checkEclipseDates(debug : Bool) {
+        
+        if UserDefaults.standard.bool(forKey: "EclipseAllDone") {
+            NotificationHelper.postNotification(for: .allDone)
+            return
+        }
+        
+        
+        let eclipseAfterDateString = "2017-08-22"
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        if let eclipseAfterDate = dateFormatter.date(from: eclipseAfterDateString) {
+            if Date() >= eclipseAfterDate {
+                NotificationHelper.postNotification(for: .allDone)
+                return
+            }
+        }
+        
+        
+        guard let lat = UserDefaults.standard.object(forKey: "LastLat") as? Double, let lon = UserDefaults.standard.object(forKey: "LastLon") as? Double else {
+            LocationManager.shouldCheckEclipseTimes = true
+            return
+        }
+        let location = CLLocation.init(latitude: lat, longitude: lon)
+        
+        var isValid = true
+        
+        var timeGenerator = EclipseTimeGenerator(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        
+        var fullEclipseLocation : CLLocation!
+        switch timeGenerator.eclipseType {
+        case .none, .partial:
+            fullEclipseLocation = closesPointOnPath(from: location)
+            isValid = false
+            break
+        default :
+            break
+        }
+        
+        if !isValid {
+            timeGenerator = EclipseTimeGenerator(latitude: fullEclipseLocation.coordinate.latitude, longitude: fullEclipseLocation.coordinate.longitude)
+        }
+        
+        guard let c1 = timeGenerator.contact1.eventDate(), let totality = timeGenerator.contact2.eventDate(), let done = timeGenerator.contact3.eventDate() else {
+            return
+        }
+        
+        let currentDate = Date()
+        
+        if currentDate >= done {
+            NotificationHelper.postNotification(for: .allDone)
+            return
+        }
+        
+        if debug {
+            
+            if let tempDate = LocationManager.tempDate {
+                if currentDate >= LocationManager.tempDate.addingTimeInterval(3.5*60) {
+                    if !UserDefaults.standard.bool(forKey: "TotalityDone") {
+                        NotificationHelper.postNotification(for: .totality)
+                        return
+                    }
+                }
+                
+                if currentDate >= LocationManager.tempDate.addingTimeInterval(3*60) {
+                    if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
+                        NotificationHelper.postNotification(for: .totaltyReminder)
+                        return
+                    }
+                }
+                
+                if currentDate >= LocationManager.tempDate.addingTimeInterval(1*60) {
+                    if !UserDefaults.standard.bool(forKey: "Contact1Done") {
+                        NotificationHelper.postNotification(for: .contact1)
+                        return
+                    }
+                }
+                
+                
+                if currentDate >= LocationManager.tempDate.addingTimeInterval(0.5*60){
+                    if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
+                        NotificationHelper.postNotification(for: .firstReminder)
+                        return
+                    }
+                }
+            }
+        } else {
+            
+            if currentDate >= totality {
+                if !UserDefaults.standard.bool(forKey: "TotalityDone") {
+                    NotificationHelper.postNotification(for: .totality)
+                    return
+                }
+            }
+            
+            if currentDate >= totality.addingTimeInterval(3*60) {
+                if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
+                    NotificationHelper.postNotification(for: .totaltyReminder)
+                    return
+                }
+            }
+            
+            if currentDate >= c1 {
+                if !UserDefaults.standard.bool(forKey: "Contact1Done") {
+                    NotificationHelper.postNotification(for: .contact1)
+                    return
+                }
+            }
+            
+            
+            if currentDate >= c1.addingTimeInterval(-LocationManager.preNotificationOffset) {
+                if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
+                    NotificationHelper.postNotification(for: .firstReminder)
+                    return
+                }
+            }
+        }
+        
+    }
 }
 
 extension LocationManager : CLLocationManagerDelegate {
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations.last!
+        
+        let location = locations.last
         self.post(action: .location, value: location)
+        LocationManager._isUsersLocation = true
+        LocationManager.manager.MainLocation = location
+        LocationManager.buildNotificationTimes()
         
         if isReoccuring {
             reoccuringRequests()
         }
         
+        
+        if LocationManager.shouldCheckEclipseTimes {
+            LocationManager.checkEclipseDates(debug:  true)
+            LocationManager.shouldCheckEclipseTimes = false
+        }
+        
     }
-
+    
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         self.post(action: .error, value: error)
+        LocationManager.stopLocating()
     }
 }
 
