@@ -91,7 +91,7 @@ class TabViewController: UITabBarController {
             print("2!")
             NotificationHelper.removeObserver(self, reminders: .contact1)
             
-            let media = Media.init(name: "Helmet Streamers", resourceName: "helmetstrmrs", infoRecourceName: "Helmet Streamers" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Helmet Streamers"))
+            let media = Media.init(name: "First Contact", resourceName: "First_Contact_Short", infoRecourceName: "First Contact-Short" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "First Contact"))
             openPlayer(with: media)
             break
             
@@ -106,8 +106,13 @@ class TabViewController: UITabBarController {
             print("4!")
             NotificationHelper.removeObserver(self, reminders: .totality)
             
-            let media = Media.init(name: "Helmet Streamers", resourceName: "helmetstrmrs", infoRecourceName: "Helmet Streamers" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Helmet Streamers"))
-            openPlayer(with: media)
+            let full = RealtimeEvent(name: "Totality Experience", resourceName: "Realtime_Eclipse_Shorts", mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Totality"), media:
+                RealtimeMedia(name: "Baily's Beads", infoRecourceName: "Baily's Beads-Short", image: #imageLiteral(resourceName: "Baily's Beads"), startTime: 0, endTime: 24),
+                RealtimeMedia(name: "Totality", infoRecourceName: "Totality-Short", image: #imageLiteral(resourceName: "Totality"), startTime: 120, endTime: 145),
+                RealtimeMedia(name: "Diamond Ring", infoRecourceName: "Diamond Ring-Short", image: #imageLiteral(resourceName: "Diamond Ring"), startTime: 200, endTime: 213),
+                RealtimeMedia(name: "Sun as a Star", infoRecourceName: "Sun as a Star", image: #imageLiteral(resourceName: "Sun as a Star"), startTime: 320, endTime: 344))
+            
+            openPlayer(with: full)
             break
             
         case Notification.Name.EclipseAllDone:

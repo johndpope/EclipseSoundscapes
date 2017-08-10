@@ -51,6 +51,7 @@ class MediaControlView : UIView {
         let button = SqueezeButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "pause"), for: UIControlState())
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor.init(white: 0.3, alpha: 0.5)
         button.tintColor = .white
         button.accessibilityLabel = "Pause"
         return button
@@ -66,7 +67,7 @@ class MediaControlView : UIView {
     }()
     
     let backgroundImageView : UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "Totality"))
+        let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFit
         return iv
@@ -96,11 +97,6 @@ class MediaControlView : UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-//        self.accessibilityLabel = "Double Tap to Pause"
-//        closeButton.isAccessibilityElement = true
-//        pausePlayButton.isAccessibilityElement = true
-//        currentTimeLabel.isAccessibilityElement = true
-//        totalLengthLabel.isAccessibilityElement = true
         
         self.isAccessibilityElement = false
         self.accessibilityElements = [closeButton, pausePlayButton, currentTimeLabel, totalLengthLabel]
@@ -126,6 +122,7 @@ class MediaControlView : UIView {
         pausePlayButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         pausePlayButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         pausePlayButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        pausePlayButton.layer.cornerRadius = 25
         
         
         totalLengthLabel.anchor(nil, left: nil, bottom: self.bottomAnchor, right: self.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 2, rightConstant: 15, widthConstant: 50, heightConstant: 24)
@@ -176,7 +173,7 @@ class MediaControlView : UIView {
             showControls(false, delay: 0.0)
         } else {
             showControls(true, delay: 0.0)
-            timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(automaticHide), userInfo: nil, repeats: false)
+            timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(automaticHide), userInfo: nil, repeats: false)
         }
     }
     
@@ -194,7 +191,7 @@ class MediaControlView : UIView {
         gradientLayer.frame = self.frame
         gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
         gradientLayer.locations = [0.7, 1.2]
-        self.layer.addSublayer(gradientLayer)
+        self.layer.insertSublayer(gradientLayer, at: 0)
     }
 }
 

@@ -34,7 +34,8 @@ class MediaCell : UITableViewCell {
     
     var eventImageView : UIImageView = {
         let iv = UIImageView()
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = true
         return iv
     }()
     
@@ -64,7 +65,7 @@ class MediaCell : UITableViewCell {
         self.addSubview(eventImageView)
         self.addSubview(titleLabel)
         
-        eventImageView.anchorWithConstantsToTop(topAnchor, left: leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 0)
+        eventImageView.anchorWithConstantsToTop(topAnchor, left: leftAnchor, bottom: nil, right: nil, topConstant: 8, leftConstant: 8, bottomConstant: 8, rightConstant: 0)
         eventImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         eventImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         

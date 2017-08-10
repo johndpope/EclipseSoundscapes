@@ -22,28 +22,6 @@
 
 import UIKit
 
-public class Media : NSObject {
-    var name: String!
-    var resourceName : String!
-    var infoRecourceName : String!
-    var audioUrl : URL?
-    var image: UIImage?
-    var mediaType : FileType?
-    
-    init(name: String, resourceName : String, infoRecourceName: String , mediaType: FileType? = nil, image: UIImage? = nil) {
-        self.name = name
-        self.resourceName = resourceName
-        self.image = image
-        self.mediaType = mediaType
-        self.infoRecourceName = infoRecourceName
-    }
-    
-    func getInfo() -> String {
-        return Utility.getFile(infoRecourceName, type: "txt") ?? "No Info Provided"
-    }
-    
-}
-
 class MediaCenterViewController : UIViewController {
     
     let cellId = "cellId"
@@ -85,8 +63,8 @@ class MediaCenterViewController : UIViewController {
     
     var comingSoonLabel : UILabel = {
         var label = UILabel()
-        label.text = "More content coming soon..."
-        label.font = UIFont.getDefautlFont(.bold, size: 25)
+        label.text = "More audio descriptions coming soon..."
+        label.font = UIFont.getDefautlFont(.bold, size: 18)
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -101,10 +79,45 @@ class MediaCenterViewController : UIViewController {
         setupView()
         comingSoonLabel.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 100)
         tableView.tableFooterView = comingSoonLabel
+        
+        NotificationHelper.addObserver(self, reminders: [.allDone,.totality,.contact1], selector: #selector(catchReminderNotification(notification:)))
     }
     
     func registerCell() {
         self.tableView.register(MediaCell.self, forCellReuseIdentifier: cellId)
+    }
+    
+    func catchReminderNotification(notification: Notification) {
+        guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
+            return
+        }
+        reloadMedia(for: reminder)
+        
+    }
+    
+    func reloadMedia(for reminder: Reminder) {
+        if reminder.contains(.allDone) || reminder.contains(.totality) {
+            
+            self.mediaContainer?.append(Media.init(name: "Totality", resourceName: "Totality_full", infoRecourceName: "Totality", mediaType: .mp3, image: #imageLiteral(resourceName: "Totality")))
+            
+            self.mediaContainer?.append(Media.init(name: "Sun as a Star", resourceName: "Sun_as_a_Star_full", infoRecourceName: "Sun as a Star", mediaType: .mp3, image: #imageLiteral(resourceName: "Sun as a Star")))
+            
+    
+            self.mediaContainer?.append(RealtimeEvent(name: "Totality Experience", resourceName: "Realtime_Eclipse_Shorts", mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Totality"), media:
+                RealtimeMedia(name: "Baily's Beads", infoRecourceName: "Baily's Beads-Short", image: #imageLiteral(resourceName: "Baily's Beads"), startTime: 0, endTime: 24),
+                RealtimeMedia(name: "Totality", infoRecourceName: "Totality-Short", image: #imageLiteral(resourceName: "Totality"), startTime: 120, endTime: 145),
+                RealtimeMedia(name: "Diamond Ring", infoRecourceName: "Diamond Ring-Short", image: #imageLiteral(resourceName: "Diamond Ring"), startTime: 200, endTime: 213),
+                RealtimeMedia(name: "Sun as a Star", infoRecourceName: "Sun as a Star", image: #imageLiteral(resourceName: "Sun as a Star"), startTime: 320, endTime: 344)))
+            
+            comingSoonLabel.isHidden = true
+            
+        } else if reminder.contains(.contact1) {
+            self.mediaContainer?.insert(Media.init(name: "First Contact", resourceName: "First_Contact_full_with_date", infoRecourceName: "First Contact", mediaType: .mp3, image: #imageLiteral(resourceName: "First Contact")), at: 0)
+        }
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     
@@ -126,7 +139,20 @@ class MediaCenterViewController : UIViewController {
     
     func loadDataSource() {
         self.mediaContainer = [
-            Media.init(name: "Helmet Streamers", resourceName: "helmetstrmrs", infoRecourceName: "Helmet Streamers" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Helmet Streamers"))]
+            Media.init(name: "Baily's Beads", resourceName: "Bailys_Beads_full", infoRecourceName: "Baily's Beads" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Baily's Beads")),
+            Media.init(name: "Prominence", resourceName: "Prominence_full", infoRecourceName: "Prominence" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Prominence")),
+            Media.init(name: "Corona", resourceName: "Corona_full", infoRecourceName: "Corona" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Corona")),
+            Media.init(name: "Helmet Streamers", resourceName: "Helmet_Streamers_full", infoRecourceName: "Helmet Streamers" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Helmet Streamers")),
+            Media.init(name: "Diamond Ring", resourceName: "Diamond_Ring_full", infoRecourceName: "Diamond Ring" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Diamond Ring")),
+        ]
+        
+        if UserDefaults.standard.bool(forKey: "Contact1Done") {
+            reloadMedia(for: .contact1)
+        }
+        
+        if UserDefaults.standard.bool(forKey: "TotalityDone") {
+            reloadMedia(for: .totality)
+        }
         
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -144,7 +170,8 @@ extension MediaCenterViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let playbackVc = PlaybackViewController()
-        playbackVc.media = mediaContainer?[indexPath.row]
+        
+        playbackVc.media = (mediaContainer?[indexPath.row])!
         self.present(playbackVc, animated: true, completion: nil)
     }
     

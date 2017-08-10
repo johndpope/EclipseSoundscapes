@@ -49,6 +49,7 @@ class PlaybackViewController: UIViewController {
         label.textAlignment = .center
         label.font = UIFont.getDefautlFont(.bold, size: 20)
         label.accessibilityTraits = UIAccessibilityTraitHeader
+        label.numberOfLines = 0
         return label
     }()
     
@@ -71,16 +72,7 @@ class PlaybackViewController: UIViewController {
         return view
     }()
     
-    var media : Media! {
-        didSet {
-            self.controlsContainerView.backgroundImageView.image = media.image
-            self.tape = AudioManager.loadAudio(withName: media.resourceName, withExtension: media.mediaType)
-            self.titleLabel.text = media.name
-            self.infoTextView.text = media.getInfo()
-        }
-    }
-    
-    private var tape: Tape?
+    var media : Media!
     
     var isPlaying = false {
         didSet {
@@ -93,15 +85,27 @@ class PlaybackViewController: UIViewController {
     var progress : Double = 0 {
         didSet {
             controlsContainerView.progress = progress
+            
+            if media is RealtimeEvent {
+                
+                let realtimeMedia = media as! RealtimeEvent
+                if realtimeMedia.shouldChangeMedia(for: progress) {
+                    realtimeMedia.loadNextMedia(for: progress)
+                    DispatchQueue.main.async {
+                        self.controlsContainerView.backgroundImageView.image = realtimeMedia.image
+                        self.titleLabel.text = realtimeMedia.name
+                        self.infoTextView.text = realtimeMedia.getInfo()
+                    }
+                }
+            }
         }
     }
     
     var isRealtimeEvent : Bool = false {
         didSet {
-            self.controlsContainerView.closeButton.isHidden = isRealtimeEvent
+            self.controlsContainerView.pausePlayButton.isHidden = isRealtimeEvent
             self.playerSlider.isUserInteractionEnabled = !isRealtimeEvent
-            
-            
+            self.infoTextView.isAccessibilityElement = !isRealtimeEvent
         }
     }
     
@@ -131,16 +135,19 @@ class PlaybackViewController: UIViewController {
         infoTextView.anchorWithConstantsToTop(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
         
         view.backgroundColor = .white
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(checkViewFocus(notification:)), name: Notification.Name.UIAccessibilityElementFocused, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, titleLabel)
-        loadTape(tape: self.tape!)
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, controlsContainerView)
+        loadMedia()
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.player.stop(.finished)
+        NotificationCenter.default.removeObserver(self)
     }
     
     func playPauseBtnTouched() {
@@ -160,6 +167,17 @@ class PlaybackViewController: UIViewController {
         }
     }
     
+    func loadMedia() {
+        
+        self.controlsContainerView.backgroundImageView.image = media.image
+        self.titleLabel.text = media.name
+        self.infoTextView.text = media.getInfo()
+        
+        if let tape = AudioManager.loadAudio(withName: media.resourceName, withExtension: media.mediaType){
+            loadTape(tape: tape)
+        }
+    }
+    
     
     func loadTape(tape: Tape) {
         self.player = TapePlayer(tape: tape)
@@ -167,6 +185,19 @@ class PlaybackViewController: UIViewController {
         controlsContainerView.totalDuration = player.duration
         playerSlider.maximumValue = Float(player.duration)
         handlePlay(play: true)
+    }
+    
+    func checkViewFocus(notification : Notification) {
+        if let view = notification.userInfo?[UIAccessibilityFocusedElementKey] as? UIView {
+            if view == infoTextView {
+                handlePlay(play: false)
+            }
+        }
+        if let view = notification.userInfo?[UIAccessibilityUnfocusedElementKey] as? UIView {
+            if view == infoTextView {
+                handlePlay(play: true)
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -196,6 +227,10 @@ class PlaybackViewController: UIViewController {
     }
 }
 extension PlaybackViewController : PlayerDelegate {
+    func canceled() {
+        print("Player Closed")
+    }
+
     func progress(_ progress: Double) {
         self.progress = progress
         self.playerSlider.setValue(Float(progress), animated: true)
@@ -208,6 +243,7 @@ extension PlaybackViewController : PlayerDelegate {
         self.playerSlider.setValue(Float(progress), animated: false)
         if isRealtimeEvent {
             isRealtimeEvent = false
+            close()
         }
     }
     func paused() {

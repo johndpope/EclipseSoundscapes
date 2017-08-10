@@ -133,6 +133,7 @@ class RumbleMapInteractiveViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         setSession(active: false)
+        NotificationCenter.default.removeObserver(self)
     }
     
     func setupView() {

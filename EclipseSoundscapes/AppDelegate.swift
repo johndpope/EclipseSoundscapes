@@ -36,6 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AKSettings.enableLogging = false
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = notificationDelegate
+        } else {
+//            print(application.scheduledLocalNotifications?.count)
+//            print(application.scheduledLocalNotifications?.debugDescription)
         }
         
         if !UserDefaults.standard.bool(forKey: "WalkThrough") {
@@ -48,7 +51,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        LocationManager.checkEclipseDates(debug: true)
+        LocationManager.checkEclipseDates()
+        if Location.isGranted {
+            LocationManager.getLocation()
+        }
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

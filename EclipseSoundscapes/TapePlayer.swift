@@ -26,6 +26,7 @@ import AudioKit
 protocol PlayerDelegate : NSObjectProtocol {
     func progress(_ progress: Double)
     func finished()
+    func canceled()
     func paused()
     func resumed()
 }
@@ -60,6 +61,7 @@ public class TapePlayer : NSObject {
     deinit {
         //Remove from Recieving Notification when dealloc'd
         NotificationCenter.default.removeObserver(self)
+        delegate = nil
         player = nil
         timer = nil
         print("Destroyed Player")
@@ -95,6 +97,9 @@ public class TapePlayer : NSObject {
             try? AKSettings.session.setActive(false)
             break
         case .cancel: //TODO: Audio Playback was ended by user
+            self.delegate?.canceled()
+            self.player.stop()
+            try? AKSettings.session.setActive(false)
             break
         case .interrupted:
             self.pause()

@@ -227,6 +227,7 @@ class EclipseViewController : FormViewController {
             eclipseInfo = [timeGenerator.contact1, timeGenerator.contactMid, timeGenerator.contact4]
             
             if let typeRow = form.rowBy(tag: "Type") as? LabelRow{
+                typeRow.value = "Partial Solar Eclipse"
                 typeRow.cell.detailTextLabel?.text = "Partial Solar Eclipse"
             }
             
@@ -235,10 +236,12 @@ class EclipseViewController : FormViewController {
             eclipseInfo = [timeGenerator.contact1, timeGenerator.contact2, timeGenerator.contactMid, timeGenerator.contact3, timeGenerator.contact4]
             
             if let typeRow = form.rowBy(tag: "Type") as? LabelRow {
+                typeRow.value = "Total Solar Eclipse"
                 typeRow.cell.detailTextLabel?.text = "Total Solar Eclipse"
                 
                 
                 if let durationRow = form.rowBy(tag: "Duration") as? LabelRow{
+                    durationRow.value = timeGenerator.duration!
                     durationRow.cell.detailTextLabel?.text = timeGenerator.duration!
                 } else {
                     if let section = typeRow.section {
@@ -260,10 +263,12 @@ class EclipseViewController : FormViewController {
         setCountdown(timeGenerator.contact1.eventDate(), atUserLocation: atUserLocation)
         
         if let dateRow = form.rowBy(tag: "Date") as? LabelRow{
+            dateRow.value = timeGenerator.contact1.date
             dateRow.cell.detailTextLabel?.text = timeGenerator.contact1.date
         }
         
         if let coverageRow = form.rowBy(tag: "Coverage") as? LabelRow {
+            coverageRow.value = timeGenerator.coverage
             coverageRow.cell.detailTextLabel?.text = timeGenerator.coverage
         }
         
@@ -320,12 +325,21 @@ class EclipseViewController : FormViewController {
         }
         
         if atUserLocation {
+            latRow.title = "Your Latitude: "
+            longRow.title = "Your Longitude: "
+            
             latRow.cell.textLabel?.text = "Your Latitude: "
             longRow.cell.textLabel?.text = "Your Longitude: "
         } else {
+            latRow.title = "Location's Latitude: "
+            longRow.title = "Location's Longitude: "
+            
             latRow.cell.textLabel?.text = "Location's Latitude: "
             longRow.cell.textLabel?.text = "Location's Longitude: "
         }
+        
+        latRow.value = lat
+        longRow.value = long
         
         latRow.cell.detailTextLabel?.text = lat
         longRow.cell.detailTextLabel?.text = long
@@ -341,6 +355,10 @@ class EclipseViewController : FormViewController {
     func toggleNoEclipse(show: Bool){
         
         if show {
+            
+            if noEclipseView != nil {
+                return
+            }
             self.tableView.isAccessibilityElement = false
             noEclipseView = NoEclipseView()
             view.addSubview(noEclipseView!)

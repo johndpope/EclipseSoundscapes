@@ -29,7 +29,6 @@
 		B73B20951F346294003B8D8E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B20941F346294003B8D8E /* EventCell.swift */; };
 		B73B20971F3464FE003B8D8E /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B73B20961F3464FE003B8D8E /* EventCell.xib */; };
 		B73B20991F346736003B8D8E /* Future_Eclipses.json in Resources */ = {isa = PBXBuildFile; fileRef = B73B20981F346736003B8D8E /* Future_Eclipses.json */; };
-		B73B209C1F350845003B8D8E /* helmetstrmrs.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B73B209B1F350845003B8D8E /* helmetstrmrs.mp3 */; };
 		B73B20A01F375569003B8D8E /* MediaControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B209F1F375569003B8D8E /* MediaControlView.swift */; };
 		B73B20A21F388EE4003B8D8E /* MainEclipsePolyline.json in Resources */ = {isa = PBXBuildFile; fileRef = B73B20A11F388EE4003B8D8E /* MainEclipsePolyline.json */; };
 		B73B20A41F38A8DA003B8D8E /* NoEclipseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B20A31F38A8DA003B8D8E /* NoEclipseView.swift */; };
@@ -60,7 +59,7 @@
 		B77417F41F03628700663C2E /* EclipseTimeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77417F31F03628700663C2E /* EclipseTimeGenerator.swift */; };
 		B7806DB51F0D43880052A7CD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806DB41F0D43880052A7CD /* Extensions.swift */; };
 		B7806DB71F0D58AD0052A7CD /* MarkerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806DB61F0D58AD0052A7CD /* MarkerContainer.swift */; };
-		B7806DB91F0D58CA0052A7CD /* RumbleMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806DB81F0D58CA0052A7CD /* RumbleMap.swift */; };
+		B7806DB91F0D58CA0052A7CD /* RumbleMapImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806DB81F0D58CA0052A7CD /* RumbleMapImageView.swift */; };
 		B7806E5B1F0D5B580052A7CD /* CountdownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7806E541F0D5B580052A7CD /* CountdownView.xib */; };
 		B7806E5C1F0D5B580052A7CD /* CountdownNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806E551F0D5B580052A7CD /* CountdownNumberView.swift */; };
 		B7806E5D1F0D5B580052A7CD /* CountdownTimeLeft.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806E561F0D5B580052A7CD /* CountdownTimeLeft.swift */; };
@@ -69,7 +68,7 @@
 		B7806E601F0D5B580052A7CD /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806E591F0D5B580052A7CD /* StringExtensions.swift */; };
 		B7806E611F0D5B580052A7CD /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806E5A1F0D5B580052A7CD /* UIViewExtensions.swift */; };
 		B781E6E91F3124C60038C3F1 /* PhotoCredits.txt in Resources */ = {isa = PBXBuildFile; fileRef = B781E6E81F3124C60038C3F1 /* PhotoCredits.txt */; };
-		B781E6EB1F3144D60038C3F1 /* Sun as a Start.txt in Resources */ = {isa = PBXBuildFile; fileRef = B781E6EA1F3144D60038C3F1 /* Sun as a Start.txt */; };
+		B781E6EB1F3144D60038C3F1 /* Sun as a Star.txt in Resources */ = {isa = PBXBuildFile; fileRef = B781E6EA1F3144D60038C3F1 /* Sun as a Star.txt */; };
 		B781E6ED1F31528E0038C3F1 /* PhotoCreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B781E6EC1F31528E0038C3F1 /* PhotoCreditsViewController.swift */; };
 		B781E6EF1F3153560038C3F1 /* PhotoCreditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B781E6EE1F3153560038C3F1 /* PhotoCreditCell.swift */; };
 		B781E6F11F3153670038C3F1 /* PhotoCreditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B781E6F01F3153670038C3F1 /* PhotoCreditCell.xib */; };
@@ -161,7 +160,25 @@
 		B7A3B7891F2B94380003C2C9 /* First Contact.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7A3B7841F2B94380003C2C9 /* First Contact.txt */; };
 		B7A3B78A1F2B94380003C2C9 /* Diamond Ring.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7A3B7851F2B94380003C2C9 /* Diamond Ring.txt */; };
 		B7A3B78C1F2B943F0003C2C9 /* Corona.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7A3B78B1F2B943F0003C2C9 /* Corona.txt */; };
+		B7A600B21F3B7C10005870BE /* Bailys_Beads_full.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7A600A91F3B7C10005870BE /* Bailys_Beads_full.mp3 */; };
+		B7A600B31F3B7C10005870BE /* Corona_full.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7A600AA1F3B7C10005870BE /* Corona_full.mp3 */; };
+		B7A600B41F3B7C10005870BE /* Diamond_Ring_full.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7A600AB1F3B7C10005870BE /* Diamond_Ring_full.mp3 */; };
+		B7A600B51F3B7C10005870BE /* First_Contact_full_with_date.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7A600AC1F3B7C10005870BE /* First_Contact_full_with_date.mp3 */; };
+		B7A600B61F3B7C10005870BE /* First_Contact_full_without_date.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7A600AD1F3B7C10005870BE /* First_Contact_full_without_date.mp3 */; };
+		B7A600B71F3B7C10005870BE /* Helmet_Streamers_full.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7A600AE1F3B7C10005870BE /* Helmet_Streamers_full.mp3 */; };
+		B7A600B81F3B7C10005870BE /* Prominence_full.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7A600AF1F3B7C10005870BE /* Prominence_full.mp3 */; };
+		B7A600B91F3B7C10005870BE /* Sun_as_a_Star_full.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7A600B01F3B7C10005870BE /* Sun_as_a_Star_full.mp3 */; };
+		B7A600BA1F3B7C10005870BE /* Totality_full.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7A600B11F3B7C10005870BE /* Totality_full.mp3 */; };
 		B7B16F3B1F3A63620036E396 /* RumbleMapInteractiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B16F3A1F3A63620036E396 /* RumbleMapInteractiveViewController.swift */; };
+		B7B16F3D1F3AB9870036E396 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B16F3C1F3AB9870036E396 /* Media.swift */; };
+		B7B16F421F3B3F4D0036E396 /* Bailys_Beads_Short.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7B16F3E1F3B3F4D0036E396 /* Bailys_Beads_Short.mp3 */; };
+		B7B16F431F3B3F4D0036E396 /* Diamond_Ring_short.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7B16F3F1F3B3F4D0036E396 /* Diamond_Ring_short.mp3 */; };
+		B7B16F441F3B3F4D0036E396 /* First_Contact_Short.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7B16F401F3B3F4D0036E396 /* First_Contact_Short.mp3 */; };
+		B7B16F451F3B3F4D0036E396 /* Totality_Short.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7B16F411F3B3F4D0036E396 /* Totality_Short.mp3 */; };
+		B7B16F471F3B40250036E396 /* First Contact-Short.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7B16F461F3B40250036E396 /* First Contact-Short.txt */; };
+		B7B16F491F3B40490036E396 /* Totality-Short.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7B16F481F3B40490036E396 /* Totality-Short.txt */; };
+		B7B16F4B1F3B407E0036E396 /* Diamond Ring-Short.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7B16F4A1F3B407E0036E396 /* Diamond Ring-Short.txt */; };
+		B7B16F4D1F3B409F0036E396 /* Baily's Beads-Short.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7B16F4C1F3B409F0036E396 /* Baily's Beads-Short.txt */; };
 		B7B19F801F2E901100EDE056 /* WalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B19F7F1F2E901100EDE056 /* WalkthroughViewController.swift */; };
 		B7B19F851F2E909500EDE056 /* PermissionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B19F821F2E909500EDE056 /* PermissionCell.swift */; };
 		B7B19F861F2E909500EDE056 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B19F831F2E909500EDE056 /* Page.swift */; };
@@ -173,6 +190,9 @@
 		B7DE878F1F20FBE6001F69D8 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */; };
 		B7E7A9881F12A40200B239B8 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9871F12A40200B239B8 /* MoreViewController.swift */; };
 		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
+		B7EF1A401F3BAAED004540C2 /* Realtime_Eclipse_Shorts.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A3F1F3BAAED004540C2 /* Realtime_Eclipse_Shorts.mp3 */; };
+		B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A411F3C0A6A004540C2 /* Intermission.txt */; };
+		B7EF1A441F3C0F7A004540C2 /* ThankYou.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */; };
 		B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */; };
 		B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */; };
 		B7F7559E1F3344700029DB4D /* MediaCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */; };
@@ -234,7 +254,6 @@
 		B73B20941F346294003B8D8E /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		B73B20961F3464FE003B8D8E /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		B73B20981F346736003B8D8E /* Future_Eclipses.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Future_Eclipses.json; sourceTree = "<group>"; };
-		B73B209B1F350845003B8D8E /* helmetstrmrs.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = helmetstrmrs.mp3; sourceTree = "<group>"; };
 		B73B209F1F375569003B8D8E /* MediaControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaControlView.swift; sourceTree = "<group>"; };
 		B73B20A11F388EE4003B8D8E /* MainEclipsePolyline.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MainEclipsePolyline.json; sourceTree = "<group>"; };
 		B73B20A31F38A8DA003B8D8E /* NoEclipseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoEclipseView.swift; sourceTree = "<group>"; };
@@ -265,7 +284,7 @@
 		B77417F31F03628700663C2E /* EclipseTimeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EclipseTimeGenerator.swift; sourceTree = "<group>"; };
 		B7806DB41F0D43880052A7CD /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		B7806DB61F0D58AD0052A7CD /* MarkerContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerContainer.swift; sourceTree = "<group>"; };
-		B7806DB81F0D58CA0052A7CD /* RumbleMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RumbleMap.swift; sourceTree = "<group>"; };
+		B7806DB81F0D58CA0052A7CD /* RumbleMapImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RumbleMapImageView.swift; sourceTree = "<group>"; };
 		B7806E541F0D5B580052A7CD /* CountdownView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CountdownView.xib; sourceTree = "<group>"; };
 		B7806E551F0D5B580052A7CD /* CountdownNumberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountdownNumberView.swift; sourceTree = "<group>"; };
 		B7806E561F0D5B580052A7CD /* CountdownTimeLeft.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountdownTimeLeft.swift; sourceTree = "<group>"; };
@@ -274,7 +293,7 @@
 		B7806E591F0D5B580052A7CD /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		B7806E5A1F0D5B580052A7CD /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		B781E6E81F3124C60038C3F1 /* PhotoCredits.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PhotoCredits.txt; sourceTree = "<group>"; };
-		B781E6EA1F3144D60038C3F1 /* Sun as a Start.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Sun as a Start.txt"; sourceTree = "<group>"; };
+		B781E6EA1F3144D60038C3F1 /* Sun as a Star.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Sun as a Star.txt"; sourceTree = "<group>"; };
 		B781E6EC1F31528E0038C3F1 /* PhotoCreditsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCreditsViewController.swift; sourceTree = "<group>"; };
 		B781E6EE1F3153560038C3F1 /* PhotoCreditCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCreditCell.swift; sourceTree = "<group>"; };
 		B781E6F01F3153670038C3F1 /* PhotoCreditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoCreditCell.xib; sourceTree = "<group>"; };
@@ -369,7 +388,25 @@
 		B7A3B7841F2B94380003C2C9 /* First Contact.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "First Contact.txt"; sourceTree = "<group>"; };
 		B7A3B7851F2B94380003C2C9 /* Diamond Ring.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Diamond Ring.txt"; sourceTree = "<group>"; };
 		B7A3B78B1F2B943F0003C2C9 /* Corona.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Corona.txt; sourceTree = "<group>"; };
+		B7A600A91F3B7C10005870BE /* Bailys_Beads_full.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Bailys_Beads_full.mp3; sourceTree = "<group>"; };
+		B7A600AA1F3B7C10005870BE /* Corona_full.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Corona_full.mp3; sourceTree = "<group>"; };
+		B7A600AB1F3B7C10005870BE /* Diamond_Ring_full.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Diamond_Ring_full.mp3; sourceTree = "<group>"; };
+		B7A600AC1F3B7C10005870BE /* First_Contact_full_with_date.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = First_Contact_full_with_date.mp3; sourceTree = "<group>"; };
+		B7A600AD1F3B7C10005870BE /* First_Contact_full_without_date.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = First_Contact_full_without_date.mp3; sourceTree = "<group>"; };
+		B7A600AE1F3B7C10005870BE /* Helmet_Streamers_full.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Helmet_Streamers_full.mp3; sourceTree = "<group>"; };
+		B7A600AF1F3B7C10005870BE /* Prominence_full.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Prominence_full.mp3; sourceTree = "<group>"; };
+		B7A600B01F3B7C10005870BE /* Sun_as_a_Star_full.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Sun_as_a_Star_full.mp3; sourceTree = "<group>"; };
+		B7A600B11F3B7C10005870BE /* Totality_full.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Totality_full.mp3; sourceTree = "<group>"; };
 		B7B16F3A1F3A63620036E396 /* RumbleMapInteractiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RumbleMapInteractiveViewController.swift; sourceTree = "<group>"; };
+		B7B16F3C1F3AB9870036E396 /* Media.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		B7B16F3E1F3B3F4D0036E396 /* Bailys_Beads_Short.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Bailys_Beads_Short.mp3; sourceTree = "<group>"; };
+		B7B16F3F1F3B3F4D0036E396 /* Diamond_Ring_short.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Diamond_Ring_short.mp3; sourceTree = "<group>"; };
+		B7B16F401F3B3F4D0036E396 /* First_Contact_Short.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = First_Contact_Short.mp3; sourceTree = "<group>"; };
+		B7B16F411F3B3F4D0036E396 /* Totality_Short.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Totality_Short.mp3; sourceTree = "<group>"; };
+		B7B16F461F3B40250036E396 /* First Contact-Short.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "First Contact-Short.txt"; sourceTree = "<group>"; };
+		B7B16F481F3B40490036E396 /* Totality-Short.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Totality-Short.txt"; sourceTree = "<group>"; };
+		B7B16F4A1F3B407E0036E396 /* Diamond Ring-Short.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Diamond Ring-Short.txt"; sourceTree = "<group>"; };
+		B7B16F4C1F3B409F0036E396 /* Baily's Beads-Short.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Baily's Beads-Short.txt"; sourceTree = "<group>"; };
 		B7B19F7F1F2E901100EDE056 /* WalkthroughViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughViewController.swift; sourceTree = "<group>"; };
 		B7B19F821F2E909500EDE056 /* PermissionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionCell.swift; sourceTree = "<group>"; };
 		B7B19F831F2E909500EDE056 /* Page.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
@@ -381,6 +418,9 @@
 		B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		B7E7A9871F12A40200B239B8 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
+		B7EF1A3F1F3BAAED004540C2 /* Realtime_Eclipse_Shorts.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Realtime_Eclipse_Shorts.mp3; sourceTree = "<group>"; };
+		B7EF1A411F3C0A6A004540C2 /* Intermission.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Intermission.txt; sourceTree = "<group>"; };
+		B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ThankYou.txt; sourceTree = "<group>"; };
 		B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCenterViewController.swift; sourceTree = "<group>"; };
@@ -504,7 +544,8 @@
 		B73B209A1F35083A003B8D8E /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				B73B209B1F350845003B8D8E /* helmetstrmrs.mp3 */,
+				B7A600A81F3B7C06005870BE /* Full */,
+				B7A600A71F3B7BE4005870BE /* Short */,
 			);
 			name = Audio;
 			sourceTree = "<group>";
@@ -526,6 +567,7 @@
 		B76F344D1EDE1DDE006E76D2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B7B16F3C1F3AB9870036E396 /* Media.swift */,
 				B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */,
 				B745AE221F1E697F0025946C /* OpenSourceLibrary.swift */,
 				B763FA001ED864F400EEFB27 /* Tape.swift */,
@@ -1058,9 +1100,15 @@
 				B7A3B7821F2B94380003C2C9 /* Prominence.txt */,
 				B7A3B7831F2B94380003C2C9 /* Helmet Streamers.txt */,
 				B7A3B7841F2B94380003C2C9 /* First Contact.txt */,
+				B7B16F461F3B40250036E396 /* First Contact-Short.txt */,
+				B7B16F481F3B40490036E396 /* Totality-Short.txt */,
+				B7B16F4A1F3B407E0036E396 /* Diamond Ring-Short.txt */,
+				B7B16F4C1F3B409F0036E396 /* Baily's Beads-Short.txt */,
 				B7A3B7851F2B94380003C2C9 /* Diamond Ring.txt */,
 				B7A3B78B1F2B943F0003C2C9 /* Corona.txt */,
-				B781E6EA1F3144D60038C3F1 /* Sun as a Start.txt */,
+				B781E6EA1F3144D60038C3F1 /* Sun as a Star.txt */,
+				B7EF1A411F3C0A6A004540C2 /* Intermission.txt */,
+				B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */,
 			);
 			name = Descriptions;
 			sourceTree = "<group>";
@@ -1084,6 +1132,34 @@
 				B75632B51F04038500106B46 /* xytick.wav */,
 			);
 			name = Sounds;
+			sourceTree = "<group>";
+		};
+		B7A600A71F3B7BE4005870BE /* Short */ = {
+			isa = PBXGroup;
+			children = (
+				B7EF1A3F1F3BAAED004540C2 /* Realtime_Eclipse_Shorts.mp3 */,
+				B7B16F3E1F3B3F4D0036E396 /* Bailys_Beads_Short.mp3 */,
+				B7B16F3F1F3B3F4D0036E396 /* Diamond_Ring_short.mp3 */,
+				B7B16F401F3B3F4D0036E396 /* First_Contact_Short.mp3 */,
+				B7B16F411F3B3F4D0036E396 /* Totality_Short.mp3 */,
+			);
+			name = Short;
+			sourceTree = "<group>";
+		};
+		B7A600A81F3B7C06005870BE /* Full */ = {
+			isa = PBXGroup;
+			children = (
+				B7A600A91F3B7C10005870BE /* Bailys_Beads_full.mp3 */,
+				B7A600AA1F3B7C10005870BE /* Corona_full.mp3 */,
+				B7A600AB1F3B7C10005870BE /* Diamond_Ring_full.mp3 */,
+				B7A600AC1F3B7C10005870BE /* First_Contact_full_with_date.mp3 */,
+				B7A600AD1F3B7C10005870BE /* First_Contact_full_without_date.mp3 */,
+				B7A600AE1F3B7C10005870BE /* Helmet_Streamers_full.mp3 */,
+				B7A600AF1F3B7C10005870BE /* Prominence_full.mp3 */,
+				B7A600B01F3B7C10005870BE /* Sun_as_a_Star_full.mp3 */,
+				B7A600B11F3B7C10005870BE /* Totality_full.mp3 */,
+			);
+			name = Full;
 			sourceTree = "<group>";
 		};
 		B7B19F811F2E903800EDE056 /* Walkthrough */ = {
@@ -1119,7 +1195,7 @@
 				B7372E141F27B56000A71396 /* InfoCell.swift */,
 				B73B20941F346294003B8D8E /* EventCell.swift */,
 				B73B20961F3464FE003B8D8E /* EventCell.xib */,
-				B7806DB81F0D58CA0052A7CD /* RumbleMap.swift */,
+				B7806DB81F0D58CA0052A7CD /* RumbleMapImageView.swift */,
 				B71751011F0DB789002EBE90 /* InfoView.swift */,
 				B792630F1F0D740500062B8D /* InfoTableViewCell.swift */,
 			);
@@ -1276,36 +1352,55 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B73B209C1F350845003B8D8E /* helmetstrmrs.mp3 in Resources */,
+				B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */,
+				B7B16F431F3B3F4D0036E396 /* Diamond_Ring_short.mp3 in Resources */,
+				B7B16F441F3B3F4D0036E396 /* First_Contact_Short.mp3 in Resources */,
 				B745AE331F1E79820025946C /* Eureka-License.txt in Resources */,
 				B73B20991F346736003B8D8E /* Future_Eclipses.json in Resources */,
 				B7964C341EF9B76400000CF8 /* Localizable.strings in Resources */,
 				B7A3B7871F2B94380003C2C9 /* Prominence.txt in Resources */,
+				B7B16F421F3B3F4D0036E396 /* Bailys_Beads_Short.mp3 in Resources */,
 				B76282971F266C2800430319 /* PartnerCell.xib in Resources */,
 				B75632B61F04038500106B46 /* xytick.wav in Resources */,
+				B7B16F451F3B3F4D0036E396 /* Totality_Short.mp3 in Resources */,
 				B7A3B7891F2B94380003C2C9 /* First Contact.txt in Resources */,
 				B7372E131F27B4EB00A71396 /* InfoCell.xib in Resources */,
+				B7A600B31F3B7C10005870BE /* Corona_full.mp3 in Resources */,
 				B745AE311F1E79820025946C /* BRYXBanner-License.txt in Resources */,
 				B72DF5521ED724F300F9E4F3 /* LaunchScreen.storyboard in Resources */,
+				B7B16F4B1F3B407E0036E396 /* Diamond Ring-Short.txt in Resources */,
 				B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */,
 				B7372E101F27A18C00A71396 /* CountDownCell.xib in Resources */,
+				B7EF1A401F3BAAED004540C2 /* Realtime_Eclipse_Shorts.mp3 in Resources */,
+				B7B16F4D1F3B409F0036E396 /* Baily's Beads-Short.txt in Resources */,
 				B7A3B7801F2B941F0003C2C9 /* Baily's Beads.txt in Resources */,
 				B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */,
+				B7EF1A441F3C0F7A004540C2 /* ThankYou.txt in Resources */,
 				B7A3B7881F2B94380003C2C9 /* Helmet Streamers.txt in Resources */,
 				B745AE351F1E79820025946C /* SwiftSpinner-License.txt in Resources */,
 				B7A3B78A1F2B94380003C2C9 /* Diamond Ring.txt in Resources */,
 				B781E6F11F3153670038C3F1 /* PhotoCreditCell.xib in Resources */,
 				B73B20971F3464FE003B8D8E /* EventCell.xib in Resources */,
+				B7A600B41F3B7C10005870BE /* Diamond_Ring_full.mp3 in Resources */,
+				B7A600B61F3B7C10005870BE /* First_Contact_full_without_date.mp3 in Resources */,
 				B7A3B78C1F2B943F0003C2C9 /* Corona.txt in Resources */,
 				B745AE301F1E79820025946C /* AudioKit-License.txt in Resources */,
 				B7DE878F1F20FBE6001F69D8 /* LICENSE.txt in Resources */,
+				B7A600B21F3B7C10005870BE /* Bailys_Beads_full.mp3 in Resources */,
+				B7A600B71F3B7C10005870BE /* Helmet_Streamers_full.mp3 in Resources */,
+				B7A600B81F3B7C10005870BE /* Prominence_full.mp3 in Resources */,
+				B7A600BA1F3B7C10005870BE /* Totality_full.mp3 in Resources */,
 				B76282901F26667C00430319 /* TeamMemberCell.xib in Resources */,
+				B7B16F491F3B40490036E396 /* Totality-Short.txt in Resources */,
 				B7A3B7861F2B94380003C2C9 /* Totality.txt in Resources */,
 				B781E6E91F3124C60038C3F1 /* PhotoCredits.txt in Resources */,
+				B7B16F471F3B40250036E396 /* First Contact-Short.txt in Resources */,
+				B7A600B91F3B7C10005870BE /* Sun_as_a_Star_full.mp3 in Resources */,
 				B7447A801F141EEF0077F1F7 /* SectionHeader.xib in Resources */,
 				B73B20A21F388EE4003B8D8E /* MainEclipsePolyline.json in Resources */,
-				B781E6EB1F3144D60038C3F1 /* Sun as a Start.txt in Resources */,
+				B781E6EB1F3144D60038C3F1 /* Sun as a Star.txt in Resources */,
 				B7806E5B1F0D5B580052A7CD /* CountdownView.xib in Resources */,
+				B7A600B51F3B7C10005870BE /* First_Contact_full_with_date.mp3 in Resources */,
 				B75632B41F04037D00106B46 /* mapmarker.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1528,10 +1623,11 @@
 				B79263BB1F0D7B8200062B8D /* SPRequestPermissionDataTexts.swift in Sources */,
 				B792639E1F0D7B8200062B8D /* SPAnimation.swift in Sources */,
 				B79263D21F0D7B8200062B8D /* SPPageItemsScallingViewController.swift in Sources */,
+				B7B16F3D1F3AB9870036E396 /* Media.swift in Sources */,
 				B79263EE1F0D7B8200062B8D /* SPBezierPathFigureIcons.swift in Sources */,
 				B79263DB1F0D7B8200062B8D /* SPSegmentedControl.swift in Sources */,
 				B7806E601F0D5B580052A7CD /* StringExtensions.swift in Sources */,
-				B7806DB91F0D58CA0052A7CD /* RumbleMap.swift in Sources */,
+				B7806DB91F0D58CA0052A7CD /* RumbleMapImageView.swift in Sources */,
 				B79263E11F0D7B8200062B8D /* SPRhombusPatternView.swift in Sources */,
 				B79263D91F0D7B8200062B8D /* SPSegmentControlProtocol.swift in Sources */,
 				B76282951F266B4200430319 /* PartnerCell.swift in Sources */,

@@ -62,8 +62,6 @@ class RumbleMapViewController: UIViewController {
     @IBOutlet weak var startRumbleBtn: UIButton!
     @IBOutlet weak var previewImageView: UIImageView!
     
-    var rumbleMap: RumbleMap?
-    
     var currentIndex = 0
     
     var modScale : CGFloat = 6
@@ -252,11 +250,5 @@ class RumbleMapViewController: UIViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
-    }
-}
-
-extension RumbleMapViewController : RumbleMapDelegate {
-    func openIntructions() {
-        self.present(IntructionsViewController(), animated: true, completion: nil)
     }
 }
