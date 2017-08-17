@@ -13,71 +13,24 @@
         <!--Tab View Controller-->
         <scene sceneID="wMC-ER-RnP">
             <objects>
-                <tabBarController id="8LN-dz-cJY" customClass="TabViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="Tab" id="8LN-dz-cJY" customClass="TabViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="35a-a3-dqM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
+                        <segue destination="IpG-AQ-tAq" kind="relationship" relationship="viewControllers" id="fKG-l2-QdV"/>
                         <segue destination="JAF-hQ-7vb" kind="relationship" relationship="viewControllers" id="Nu3-f7-qpq"/>
-                        <segue destination="hWy-ky-sm3" kind="relationship" relationship="viewControllers" id="bfS-B4-4l5"/>
-                        <segue destination="OQB-C3-73u" kind="relationship" relationship="viewControllers" id="Irh-OA-Kcd"/>
+                        <segue destination="0Ry-BS-4h6" kind="relationship" relationship="viewControllers" id="j2P-BR-YyG"/>
+                        <segue destination="rph-Jh-fPG" kind="relationship" relationship="viewControllers" id="Irh-OA-Kcd"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8OZ-TT-Keg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="247" y="-359"/>
         </scene>
-        <!--Eclipse Center-->
-        <scene sceneID="Go6-t8-qYx">
-            <objects>
-                <viewController id="hWy-ky-sm3" customClass="EventsViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ALR-Qk-hdp"/>
-                        <viewControllerLayoutGuide type="bottom" id="n2c-MB-Y0i"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="F3W-H1-4dG" customClass="UIScrollView">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ycx-us-oyM">
-                                <rect key="frame" x="16" y="20" width="343" height="598"/>
-                                <state key="normal" title="Button">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rdw-JG-7Rd" customClass="CountdownView" customModule="EclipseSoundscapes" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="30" width="375" height="70"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="70" id="vgP-81-KBf"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.50196078431372548" blue="0.25098039215686274" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="rdw-JG-7Rd" secondAttribute="trailing" id="1On-dH-1LO"/>
-                            <constraint firstItem="Ycx-us-oyM" firstAttribute="leading" secondItem="F3W-H1-4dG" secondAttribute="leadingMargin" id="CEa-f2-gYF"/>
-                            <constraint firstItem="Ycx-us-oyM" firstAttribute="bottom" secondItem="n2c-MB-Y0i" secondAttribute="top" id="JOH-to-Az6"/>
-                            <constraint firstItem="rdw-JG-7Rd" firstAttribute="leading" secondItem="F3W-H1-4dG" secondAttribute="leading" id="OhK-Tz-1dq"/>
-                            <constraint firstItem="rdw-JG-7Rd" firstAttribute="centerX" secondItem="F3W-H1-4dG" secondAttribute="centerX" id="X0c-wQ-lLz"/>
-                            <constraint firstItem="Ycx-us-oyM" firstAttribute="centerX" secondItem="rdw-JG-7Rd" secondAttribute="centerX" id="f2L-A8-Npp"/>
-                            <constraint firstItem="Ycx-us-oyM" firstAttribute="top" secondItem="ALR-Qk-hdp" secondAttribute="bottom" id="uuM-7x-DRv"/>
-                            <constraint firstItem="rdw-JG-7Rd" firstAttribute="top" secondItem="ALR-Qk-hdp" secondAttribute="bottom" constant="10" id="xWS-22-N7c"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Eclipse Center" image="events_icon" id="SC2-ax-O1T"/>
-                    <connections>
-                        <outlet property="countDownView" destination="rdw-JG-7Rd" id="xh7-ig-9BI"/>
-                        <outlet property="errorBtn" destination="Ycx-us-oyM" id="QDX-Fb-2K5"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="yHV-kF-bis" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1013.6" y="456.52173913043481"/>
-        </scene>
-        <!--More-->
+        <!--More View Controller-->
         <scene sceneID="uyY-FX-8C8">
             <objects>
                 <viewController id="OQB-C3-73u" customClass="MoreViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
@@ -90,19 +43,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="More" image="More" id="E7l-HQ-HUK"/>
                     <navigationItem key="navigationItem" id="HG9-9u-i94"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <segue destination="c5i-11-RKf" kind="presentation" identifier="Partners" id="gOA-5o-iXa"/>
                         <segue destination="yHa-rY-yr4" kind="presentation" identifier="Settings" id="Aak-4J-Wwv"/>
-                        <segue destination="tzn-hc-P3f" kind="presentation" identifier="Instructions" id="7st-bT-jo4"/>
                         <segue destination="qhE-pO-hqL" kind="show" identifier="Legal" id="LXM-TZ-BEe"/>
                         <segue destination="UOA-dm-sWl" kind="show" identifier="Team" id="sr0-47-6ak"/>
+                        <segue destination="DvM-4Q-fKj" kind="presentation" identifier="Future" id="xXk-AQ-2ef"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYI-MY-Wj5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1735" y="457"/>
+            <point key="canvasLocation" x="2540" y="457"/>
         </scene>
         <!--Partners View Controller-->
         <scene sceneID="4qC-wJ-B56">
@@ -121,7 +74,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f0d-js-pdj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4640.8000000000002" y="633.73313343328346"/>
+            <point key="canvasLocation" x="5580" y="633.73313343328346"/>
         </scene>
         <!--Legal View Controller-->
         <scene sceneID="yhg-9v-gKE">
@@ -141,6 +94,8 @@
                     <connections>
                         <segue destination="M1M-BW-pFD" kind="show" identifier="OpenSourceLibraries" id="9ZE-Hv-g3h"/>
                         <segue destination="a6l-Qq-XbO" kind="show" identifier="License" id="nZb-8B-Fzv"/>
+                        <segue destination="erH-zE-hxk" kind="show" identifier="Photo Credits" id="Pq0-hb-VBy"/>
+                        <segue destination="rNi-4B-zot" kind="show" identifier="PrivacyPolicy" id="zNU-SN-Bop"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fRM-Pg-jkR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -158,12 +113,12 @@
                     <view key="view" contentMode="scaleToFill" id="xWC-39-H7p">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.29411764705882354" green="0.29411764705882354" blue="0.29411764705882354" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R9C-5C-6xd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5516" y="-931"/>
+            <point key="canvasLocation" x="6385" y="-1276"/>
         </scene>
         <!--License View Controller-->
         <scene sceneID="2sR-hD-CT0">
@@ -181,53 +136,43 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0dx-Jw-aS8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6455.1999999999998" y="-285.60719640179911"/>
+            <point key="canvasLocation" x="6385" y="-622"/>
         </scene>
-        <!--Intructions View Controller-->
-        <scene sceneID="otF-5o-fui">
+        <!--Privacy Policy View Controller-->
+        <scene sceneID="iMY-Jx-iiu">
             <objects>
-                <viewController id="tzn-hc-P3f" customClass="IntructionsViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="rNi-4B-zot" customClass="PrivacyPolicyViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ddE-iA-WSg"/>
-                        <viewControllerLayoutGuide type="bottom" id="cPk-P7-TcG"/>
+                        <viewControllerLayoutGuide type="top" id="Yap-yR-9IS"/>
+                        <viewControllerLayoutGuide type="bottom" id="9zu-K3-vF8"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="DxN-qQ-tDa">
+                    <view key="view" contentMode="scaleToFill" id="5ya-yy-Y47">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zbi-0D-ZiL">
-                                <rect key="frame" x="16" y="28" width="46" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="Pkr-mp-nIe"/>
-                                    <constraint firstAttribute="width" constant="46" id="eAi-hV-z4f"/>
-                                </constraints>
-                                <state key="normal" title="Close"/>
-                                <connections>
-                                    <action selector="close:" destination="tzn-hc-P3f" eventType="touchUpInside" id="dwM-Ke-4at"/>
-                                    <action selector="close:" destination="hEN-5q-AW7" eventType="touchUpInside" id="jTA-GT-Jhk"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Under Construction Coming Soon..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKS-zp-2QX">
-                                <rect key="frame" x="20" y="66" width="335" height="497"/>
-                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="31"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="cKS-zp-2QX" firstAttribute="top" secondItem="zbi-0D-ZiL" secondAttribute="bottom" constant="8" symbolic="YES" id="BtP-bE-ZQr"/>
-                            <constraint firstItem="zbi-0D-ZiL" firstAttribute="leading" secondItem="DxN-qQ-tDa" secondAttribute="leadingMargin" id="L5L-pk-gBY"/>
-                            <constraint firstItem="zbi-0D-ZiL" firstAttribute="top" secondItem="ddE-iA-WSg" secondAttribute="bottom" constant="8" symbolic="YES" id="Shp-EB-2Vb"/>
-                            <constraint firstItem="cKS-zp-2QX" firstAttribute="centerX" secondItem="DxN-qQ-tDa" secondAttribute="centerX" id="ZKp-w0-oMx"/>
-                            <constraint firstItem="cKS-zp-2QX" firstAttribute="leading" secondItem="DxN-qQ-tDa" secondAttribute="leadingMargin" constant="4" id="dFU-qR-SC1"/>
-                            <constraint firstItem="cPk-P7-TcG" firstAttribute="top" secondItem="cKS-zp-2QX" secondAttribute="bottom" constant="104" id="xV6-o7-8Um"/>
-                        </constraints>
                     </view>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hIb-MI-EyC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nTv-hX-2Fv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1733.5999999999999" y="1339.8800599700151"/>
+            <point key="canvasLocation" x="6385" y="-2591"/>
+        </scene>
+        <!--Photo Credits View Controller-->
+        <scene sceneID="gyq-hf-4GY">
+            <objects>
+                <viewController id="erH-zE-hxk" customClass="PhotoCreditsViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="W9Z-83-vPG"/>
+                        <viewControllerLayoutGuide type="bottom" id="poX-ZC-Wki"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="grf-1v-nnx">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xTM-9a-DWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6385" y="-1915"/>
         </scene>
         <!--Team View Controller-->
         <scene sceneID="sh2-Ye-KnZ">
@@ -246,7 +191,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cS4-Dh-rm7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3824.8000000000002" y="1329.9850074962519"/>
+            <point key="canvasLocation" x="6519.1999999999998" y="1356.9715142428786"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="Qhu-uc-HZa">
@@ -267,9 +212,42 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fqA-Lj-w7O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4640.8000000000002" y="-86.806596701649184"/>
+            <point key="canvasLocation" x="5580" y="-86.806596701649184"/>
         </scene>
-        <!--RumbleMap-->
+        <!--Eclipse Center-->
+        <scene sceneID="Usk-Wk-Ftc">
+            <objects>
+                <viewController id="IpG-AQ-tAq" customClass="EclipseViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="YJA-BD-DTq"/>
+                        <viewControllerLayoutGuide type="bottom" id="YqU-I7-P7G"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="erX-q0-3Ub">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ka-MH-Imi">
+                                <rect key="frame" x="5" y="0.0" width="363" height="618"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7ka-MH-Imi" firstAttribute="bottom" secondItem="YqU-I7-P7G" secondAttribute="top" id="0IV-sD-x1P"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="7ka-MH-Imi" secondAttribute="trailing" constant="-9" id="DX2-fr-v3S"/>
+                            <constraint firstItem="7ka-MH-Imi" firstAttribute="leading" secondItem="erX-q0-3Ub" secondAttribute="leadingMargin" constant="-11" id="W1C-pw-svD"/>
+                            <constraint firstItem="7ka-MH-Imi" firstAttribute="top" secondItem="erX-q0-3Ub" secondAttribute="top" id="WFe-qR-rrU"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Eclipse Center" image="events_icon" id="rp4-S2-pww"/>
+                    <connections>
+                        <outlet property="errorBtn" destination="7ka-MH-Imi" id="5BU-Kf-gWR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZIw-Q3-IRR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-484" y="457"/>
+        </scene>
+        <!--Eclipse Features-->
         <scene sceneID="LO3-6C-uaJ">
             <objects>
                 <viewController id="JAF-hQ-7vb" customClass="RumbleMapViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
@@ -281,37 +259,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IPt-yH-tON">
-                                <rect key="frame" x="0.0" y="85" width="375" height="533"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fQc-0q-zG1" customClass="RumbleMap" customModule="EclipseSoundscapes" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="533"/>
-                                    </imageView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="fQc-0q-zG1" firstAttribute="centerX" secondItem="IPt-yH-tON" secondAttribute="centerX" id="0xK-uV-B5Z"/>
-                                    <constraint firstItem="fQc-0q-zG1" firstAttribute="top" secondItem="IPt-yH-tON" secondAttribute="top" id="Cag-Fb-tFD"/>
-                                    <constraint firstItem="fQc-0q-zG1" firstAttribute="centerY" secondItem="IPt-yH-tON" secondAttribute="centerY" id="H0p-GR-kFC"/>
-                                    <constraint firstAttribute="bottom" secondItem="fQc-0q-zG1" secondAttribute="bottom" id="YKx-wk-8RK"/>
-                                    <constraint firstAttribute="trailing" secondItem="fQc-0q-zG1" secondAttribute="trailing" id="j7l-zW-kAz"/>
-                                    <constraint firstItem="fQc-0q-zG1" firstAttribute="leading" secondItem="IPt-yH-tON" secondAttribute="leading" id="ojx-xa-UmF"/>
-                                </constraints>
-                            </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4dv-XL-xxk">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="85"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VTO-bW-Oae">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VTO-bW-Oae" customClass="SqueezeButton" customModule="EclipseSoundscapes" customModuleProvider="target">
                                         <rect key="frame" x="337" y="31" width="30" height="34"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="30" id="bsc-Sp-E7W"/>
-                                        </constraints>
+                                        <accessibility key="accessibilityConfiguration" hint="Shows the next Eclipse Image" label="Next Image"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="nextImage:" destination="JAF-hQ-7vb" eventType="touchUpInside" id="QZC-oq-wFu"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="43n-eJ-SS3">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="43n-eJ-SS3" customClass="SqueezeButton" customModule="EclipseSoundscapes" customModuleProvider="target">
                                         <rect key="frame" x="8" y="31" width="30" height="34"/>
+                                        <accessibility key="accessibilityConfiguration" hint="Shows the Previous Eclipse Image" label="Previous Image"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="irf-MB-MV9"/>
+                                        </constraints>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="previousImage:" destination="JAF-hQ-7vb" eventType="touchUpInside" id="Ywy-0w-kyj"/>
@@ -324,47 +288,109 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="top" secondItem="VTO-bW-Oae" secondAttribute="top" id="37l-dk-LY7"/>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="baseline" secondItem="VTO-bW-Oae" secondAttribute="baseline" id="CB2-Vn-LsE"/>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="leading" secondItem="4dv-XL-xxk" secondAttribute="leadingMargin" id="DBd-zM-0r6"/>
-                                    <constraint firstItem="ZpM-4V-6LY" firstAttribute="leading" secondItem="43n-eJ-SS3" secondAttribute="trailing" constant="41" id="Ixq-EV-beG"/>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="top" secondItem="4dv-XL-xxk" secondAttribute="top" constant="31" id="K0p-gO-0SB"/>
-                                    <constraint firstItem="VTO-bW-Oae" firstAttribute="trailing" secondItem="4dv-XL-xxk" secondAttribute="trailingMargin" id="NIs-Yx-MIJ"/>
-                                    <constraint firstItem="VTO-bW-Oae" firstAttribute="leading" secondItem="ZpM-4V-6LY" secondAttribute="trailing" constant="42" id="SVe-BO-f6f"/>
-                                    <constraint firstItem="ZpM-4V-6LY" firstAttribute="top" secondItem="4dv-XL-xxk" secondAttribute="top" constant="16" id="aPl-Ss-g1k"/>
-                                    <constraint firstItem="ZpM-4V-6LY" firstAttribute="centerX" secondItem="4dv-XL-xxk" secondAttribute="centerX" id="bRj-OP-JTb"/>
-                                    <constraint firstItem="VTO-bW-Oae" firstAttribute="firstBaseline" secondItem="43n-eJ-SS3" secondAttribute="firstBaseline" id="e39-va-4Zd"/>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="centerY" secondItem="4dv-XL-xxk" secondAttribute="centerY" constant="5.5" id="mCS-g2-Jlq"/>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="centerY" secondItem="ZpM-4V-6LY" secondAttribute="centerY" id="ucc-fL-HT5"/>
+                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="centerY" secondItem="ZpM-4V-6LY" secondAttribute="centerY" id="1UK-YS-yGB"/>
+                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="baseline" secondItem="VTO-bW-Oae" secondAttribute="baseline" id="2AA-1C-aYB"/>
+                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="leading" secondItem="4dv-XL-xxk" secondAttribute="leadingMargin" id="2KZ-YQ-oEl"/>
+                                    <constraint firstAttribute="height" constant="80" id="APK-xg-hxJ"/>
+                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="top" secondItem="4dv-XL-xxk" secondAttribute="top" constant="31" id="Gyk-Ya-hhz"/>
+                                    <constraint firstItem="ZpM-4V-6LY" firstAttribute="leading" secondItem="43n-eJ-SS3" secondAttribute="trailing" constant="41" id="Jvw-9w-mlU"/>
+                                    <constraint firstItem="VTO-bW-Oae" firstAttribute="trailing" secondItem="4dv-XL-xxk" secondAttribute="trailingMargin" id="M6A-DE-yxW"/>
+                                    <constraint firstItem="VTO-bW-Oae" firstAttribute="firstBaseline" secondItem="43n-eJ-SS3" secondAttribute="firstBaseline" id="S2G-JB-Wzg"/>
+                                    <constraint firstItem="ZpM-4V-6LY" firstAttribute="top" secondItem="4dv-XL-xxk" secondAttribute="top" constant="16" id="ZNm-CN-mNf"/>
+                                    <constraint firstItem="ZpM-4V-6LY" firstAttribute="centerX" secondItem="4dv-XL-xxk" secondAttribute="centerX" id="eIo-YG-UyH"/>
+                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="top" secondItem="VTO-bW-Oae" secondAttribute="top" id="usu-l2-yXz"/>
                                 </constraints>
                             </view>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="white" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uG5-k2-LTz">
+                                <rect key="frame" x="0.0" y="125" width="375" height="493"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Totality" translatesAutoresizingMaskIntoConstraints="NO" id="obB-lR-1Zi">
+                                <rect key="frame" x="0.0" y="125" width="375" height="493"/>
+                            </imageView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R3m-8g-YBb">
+                                <rect key="frame" x="0.0" y="125" width="375" height="493"/>
+                                <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="0.6985477377300614" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="28"/>
+                                <state key="normal" title="Press to Interact with Rumble Map">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="vVN-42-Xb2">
+                                <rect key="frame" x="0.0" y="80" width="375" height="45"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Py-nu-i4Q">
+                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="45"/>
+                                        <color key="backgroundColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
+                                        <color key="tintColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Description">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="switchState:" destination="JAF-hQ-7vb" eventType="touchUpInside" id="Zyp-SF-ScY"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JrP-TQ-iWw">
+                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="45"/>
+                                        <color key="backgroundColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
+                                        <color key="tintColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Rumble Map">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="switchState:" destination="JAF-hQ-7vb" eventType="touchUpInside" id="tu3-cd-qH4"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="vbE-CV-Ina"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="IPt-yH-tON" firstAttribute="width" secondItem="ioW-fg-s3b" secondAttribute="width" id="Cat-nF-g1e"/>
-                            <constraint firstItem="4dv-XL-xxk" firstAttribute="top" secondItem="ioW-fg-s3b" secondAttribute="top" id="Xoh-TH-haa"/>
-                            <constraint firstItem="V7E-o8-Wwf" firstAttribute="top" secondItem="IPt-yH-tON" secondAttribute="bottom" id="XzR-a0-I5a"/>
-                            <constraint firstItem="4dv-XL-xxk" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="dQ3-qV-GDX"/>
-                            <constraint firstItem="IPt-yH-tON" firstAttribute="leading" secondItem="4dv-XL-xxk" secondAttribute="leading" id="jdN-dq-feh"/>
-                            <constraint firstAttribute="trailing" secondItem="4dv-XL-xxk" secondAttribute="trailing" id="x9E-S2-Vro"/>
-                            <constraint firstItem="IPt-yH-tON" firstAttribute="top" secondItem="4dv-XL-xxk" secondAttribute="bottom" id="xjd-5M-L0a"/>
+                            <constraint firstItem="R3m-8g-YBb" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="8Xq-kL-g0V"/>
+                            <constraint firstItem="V7E-o8-Wwf" firstAttribute="top" secondItem="obB-lR-1Zi" secondAttribute="bottom" id="AN5-EY-vR0"/>
+                            <constraint firstItem="4dv-XL-xxk" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="FRD-ev-cNR"/>
+                            <constraint firstItem="obB-lR-1Zi" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="NN1-gc-Cna"/>
+                            <constraint firstItem="4dv-XL-xxk" firstAttribute="top" secondItem="ioW-fg-s3b" secondAttribute="top" id="QvW-yx-KGO"/>
+                            <constraint firstItem="obB-lR-1Zi" firstAttribute="top" secondItem="vVN-42-Xb2" secondAttribute="bottom" id="RHa-8s-9Co"/>
+                            <constraint firstItem="vVN-42-Xb2" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="Rif-Ia-eCD"/>
+                            <constraint firstItem="R3m-8g-YBb" firstAttribute="top" secondItem="vVN-42-Xb2" secondAttribute="bottom" id="YxV-mj-Spf"/>
+                            <constraint firstItem="uG5-k2-LTz" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="bl5-bn-yN6"/>
+                            <constraint firstAttribute="trailing" secondItem="R3m-8g-YBb" secondAttribute="trailing" id="bsA-Bc-bEQ"/>
+                            <constraint firstAttribute="trailing" secondItem="obB-lR-1Zi" secondAttribute="trailing" id="cSa-zN-Mrg"/>
+                            <constraint firstItem="V7E-o8-Wwf" firstAttribute="top" secondItem="uG5-k2-LTz" secondAttribute="bottom" id="e39-wE-2KK"/>
+                            <constraint firstItem="V7E-o8-Wwf" firstAttribute="top" secondItem="R3m-8g-YBb" secondAttribute="bottom" id="fLE-s1-sIJ"/>
+                            <constraint firstAttribute="trailing" secondItem="vVN-42-Xb2" secondAttribute="trailing" id="kKc-H8-rVw"/>
+                            <constraint firstAttribute="trailing" secondItem="uG5-k2-LTz" secondAttribute="trailing" id="lF4-sc-GGz"/>
+                            <constraint firstItem="vVN-42-Xb2" firstAttribute="top" secondItem="4dv-XL-xxk" secondAttribute="bottom" id="q4j-Sc-KlD"/>
+                            <constraint firstAttribute="trailing" secondItem="4dv-XL-xxk" secondAttribute="trailing" id="x0R-Gd-NHO"/>
+                            <constraint firstItem="uG5-k2-LTz" firstAttribute="top" secondItem="vVN-42-Xb2" secondAttribute="bottom" id="zQa-iN-bS8"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="RumbleMap" image="rumbleTouch" selectedImage="rumbleTouch" id="Sis-96-fKs"/>
+                    <tabBarItem key="tabBarItem" title="Eclipse Features" image="rumbleTouch" selectedImage="rumbleTouch" id="Sis-96-fKs"/>
                     <connections>
                         <outlet property="controlView" destination="4dv-XL-xxk" id="Xln-gN-TYy"/>
-                        <outlet property="leftArrowBtn" destination="43n-eJ-SS3" id="jTf-PY-0Qw"/>
-                        <outlet property="rightArrowBtn" destination="VTO-bW-Oae" id="dW4-km-hwC"/>
-                        <outlet property="rumbleMap" destination="fQc-0q-zG1" id="rpp-Qo-hHu"/>
-                        <outlet property="scrollView" destination="IPt-yH-tON" id="593-AA-GQE"/>
+                        <outlet property="descriptionBtn" destination="5Py-nu-i4Q" id="EcC-CK-zUN"/>
+                        <outlet property="descriptionTextView" destination="uG5-k2-LTz" id="lLE-ta-QQS"/>
+                        <outlet property="nextBtn" destination="VTO-bW-Oae" id="akv-vO-hcp"/>
+                        <outlet property="previewImageView" destination="obB-lR-1Zi" id="jg5-Bg-K1H"/>
+                        <outlet property="previousBtn" destination="43n-eJ-SS3" id="43C-I0-Et5"/>
+                        <outlet property="rumbleBtn" destination="JrP-TQ-iWw" id="Ak6-YK-hte"/>
+                        <outlet property="startRumbleBtn" destination="R3m-8g-YBb" id="OcH-WD-ZRU"/>
                         <outlet property="titleLabel" destination="ZpM-4V-6LY" id="7Ta-Xb-xKl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="85p-XH-9xa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="245.59999999999999" y="457.42128935532236"/>
+            <point key="canvasLocation" x="233" y="457"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4Fw-3A-gE6">
@@ -384,6 +410,25 @@
             </objects>
             <point key="canvasLocation" x="3701.5999999999999" y="-820.83958020989508"/>
         </scene>
+        <!--Fu Future Events View Controller-->
+        <scene sceneID="U9r-Al-7gc">
+            <objects>
+                <viewController id="y2F-YI-9ug" customClass="FuFutureEventsViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="f2k-Y7-7UH"/>
+                        <viewControllerLayoutGuide type="bottom" id="2DG-Of-EWW"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Asg-G8-9E8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="m7c-qz-jXt"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5uc-65-8Ou" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4311.1999999999998" y="1785.1574212893554"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="T0b-dZ-Efy">
             <objects>
@@ -400,7 +445,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h73-zg-FQR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2885.5999999999999" y="1329.9850074962519"/>
+            <point key="canvasLocation" x="5396" y="1409"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="nda-Vh-mDN">
@@ -418,7 +463,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qBi-VT-SrH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3701.5999999999999" y="633.73313343328346"/>
+            <point key="canvasLocation" x="4640.8000000000002" y="633.73313343328346"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="rVE-Qe-Asv">
@@ -436,12 +481,70 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CgF-SN-0Ad" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3701.5999999999999" y="-86.806596701649184"/>
+            <point key="canvasLocation" x="4640.8000000000002" y="-86.806596701649184"/>
+        </scene>
+        <!--Media-->
+        <scene sceneID="yDg-0C-ivO">
+            <objects>
+                <viewController id="0Ry-BS-4h6" customClass="MediaCenterViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7Mo-rG-I9Z"/>
+                        <viewControllerLayoutGuide type="bottom" id="4PZ-eB-8FM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Wre-PY-nqF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Media" image="play-main" id="noA-y9-6UA"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LDc-k7-JYD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="967" y="457"/>
+        </scene>
+        <!--About-->
+        <scene sceneID="IPe-vK-Ox8">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rph-Jh-fPG" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="About" image="More" id="E7l-HQ-HUK"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="pJt-aq-z4a">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="OQB-C3-73u" kind="relationship" relationship="rootViewController" id="lqC-s8-Y2W"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Q7g-98-KUk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1796" y="457"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Dg9-oZ-lnr">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DvM-4Q-fKj" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cSr-Yh-Bof">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="y2F-YI-9ug" kind="relationship" relationship="rootViewController" id="hnB-jn-8Nz"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wbq-Cu-OZh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3372" y="1785.1574212893554"/>
         </scene>
     </scenes>
     <resources>
         <image name="More" width="16" height="16"/>
+        <image name="Totality" width="1537" height="1078"/>
         <image name="events_icon" width="16" height="16"/>
+        <image name="play-main" width="20" height="20"/>
         <image name="rumbleTouch" width="21" height="21"/>
     </resources>
 </document>

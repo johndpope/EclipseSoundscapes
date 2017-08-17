@@ -30,9 +30,9 @@ class LegalViewController : FormViewController {
         initializeForm()
         
         self.navigationItem.title = "Legal"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
+        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
     }
-
+    
     private func initializeForm() {
         
         self.automaticallyAdjustsScrollViewInsets = false
@@ -47,6 +47,15 @@ class LegalViewController : FormViewController {
             <<< ButtonRow("Open Source Libraries"){(row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.presentationMode = PresentationMode.segueName(segueName: "OpenSourceLibraries", onDismiss: nil)
+                
+            }
+            <<< ButtonRow("Photo Credits"){(row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.presentationMode = PresentationMode.segueName(segueName: "Photo Credits", onDismiss: nil)
+            }
+            <<< ButtonRow("Privacy Policy"){(row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.presentationMode = PresentationMode.segueName(segueName: "PrivacyPolicy", onDismiss: nil)
         }
         
     }

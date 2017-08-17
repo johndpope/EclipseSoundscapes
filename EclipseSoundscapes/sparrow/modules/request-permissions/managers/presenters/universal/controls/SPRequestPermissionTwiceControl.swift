@@ -48,11 +48,11 @@ class SPRequestPermissionTwiceControl: UIButton, SPRequestPermissionTwiceControl
                 break
             case .denied:
                 self.accessibilityValue = "Permission Denied"
-                self.layer.borderColor = UIColor.red.cgColor
-                self.iconView.backgroundColor = .red
-                self.backgroundColor = .red
-                self.setTitleColor(normalColor, for: .normal)
-                self.iconView.setSelectedState(with: .white, cancelIcon)
+                self.layer.borderColor = UIColor.init(r: 227, g: 94, b: 5).cgColor
+                self.iconView.backgroundColor = UIColor.init(r: 227, g: 94, b: 5)
+                self.backgroundColor = UIColor.init(r: 227, g: 94, b: 5)
+                self.setTitleColor(.black, for: .normal)
+                self.iconView.setSelectedState(with: .black, cancelIcon)
                 break
             case .untouched:
                 self.accessibilityValue = "Permission not accepted yet"

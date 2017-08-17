@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="109" id="F3A-7h-wYa" customClass="CountDownCell" customModule="EclipseSoundscapes" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="363" height="109"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="F3A-7h-wYa" id="8AS-RZ-QNN">
+                <rect key="frame" x="0.0" y="0.0" width="363" height="108.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wVA-4s-Yy7" customClass="CountdownView" customModule="EclipseSoundscapes" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="363" height="108.5"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <accessibility key="accessibilityConfiguration">
+                            <accessibilityTraits key="traits" header="YES"/>
+                        </accessibility>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="wVA-4s-Yy7" firstAttribute="centerY" secondItem="8AS-RZ-QNN" secondAttribute="centerY" id="24s-np-UCF"/>
+                    <constraint firstItem="wVA-4s-Yy7" firstAttribute="height" secondItem="8AS-RZ-QNN" secondAttribute="height" id="3z6-47-YAX"/>
+                    <constraint firstItem="wVA-4s-Yy7" firstAttribute="centerX" secondItem="8AS-RZ-QNN" secondAttribute="centerX" id="Tmg-30-kb6"/>
+                    <constraint firstItem="wVA-4s-Yy7" firstAttribute="width" secondItem="8AS-RZ-QNN" secondAttribute="width" id="uDW-F9-jWj"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="countdownView" destination="wVA-4s-Yy7" id="PZ5-Tf-fY1"/>
+            </connections>
+            <point key="canvasLocation" x="127.5" y="-325.5"/>
+        </tableViewCell>
+    </objects>
+</document>

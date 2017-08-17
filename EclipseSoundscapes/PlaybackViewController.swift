@@ -1,306 +1,424 @@
-////
-////  PlaybackViewController.swift
-////  EclipseSoundscapes
-////
-////  Created by Arlindo Goncalves on 6/13/17.
-////
-////  Copyright © 2017 Arlindo Goncalves.
-////  This program is free software: you can redistribute it and/or modify
-////  it under the terms of the GNU General Public License as published by
-////  the Free Software Foundation, either version 3 of the License, or
-////  (at your option) any later version.
-////
-////  This program is distributed in the hope that it will be useful,
-////  but WITHOUT ANY WARRANTY; without even the implied warranty of
-////  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-////  GNU General Public License for more details.
-////
-////  You should have received a copy of the GNU General Public License
-////  along with this program.  If not, see [http://www.gnu.org/licenses/].
-////
-////  For Contact email: arlindo@eclipsesoundscapes.org
 //
-//import UIKit
-//import CoreLocation
-//import FirebaseStorage
+//  PlaybackViewController.swift
+//  EclipseSoundscapes
 //
-//class PlaybackViewController: UIViewController {
-//    
-//    @IBOutlet weak var soundscapesImageView: UIImageView!
-//    @IBOutlet weak var mediaControls: UIView!
-//    @IBOutlet weak var startBtn: UIButton!
-//    @IBOutlet weak var totalTimeLabel: UILabel!
-//    
-//    @IBOutlet weak var progressBar: UIProgressView!
-//    
-//    @IBOutlet weak var currentTimeLabel: UILabel!
-//    
-//    @IBOutlet weak var acitivtyMonitor: UIActivityIndicatorView!
-//    @IBOutlet weak var stopBtn: UIButton!
-//    @IBOutlet weak var skipBtn: UIButton!
-//    @IBOutlet weak var playBtn: UIButton!
-//    
-//    let locator = Location()
-//    let audioManager = AudioManager()
-//    
-//    var downloadTask : StorageDownloadTask?
-//    
-//    var player : TapePlayer?
-//    
-//    enum State {
-//        case idle, playing, paused, downloading, downloadingPaused
-//    }
-//    
-//    var state = State.idle {
-//        didSet {
-//            self.updateUI()
-//        }
-//    }
-//    
-//    var totalDuration : Double = 0 {
-//        didSet {
-//            self.endDuration = totalDuration
-//        }
-//    }
-//    
-//    var endDuration : Double = 0 {
-//        didSet {
-//            self.totalTimeLabel.text = "-\(Utility.timeString(time: endDuration))"
-//        }
-//    }
-//    
-//    var progress : Double = 0 {
-//        didSet {
-//            self.currentTimeLabel.text = Utility.timeString(time: progress)
-//            self.endDuration -= 1
-//        }
-//    }
-//    
-//    var didRequestRecording = false
-//    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        
-//        // Do any additional setup after loading the view.
-//        locator.delegate = self
-//        audioManager.delegate = self
-//        
-//        stopBtn.setImage(#imageLiteral(resourceName: "stop").withRenderingMode(.alwaysTemplate), for: .normal)
-//        playBtn.setImage(#imageLiteral(resourceName: "play").withRenderingMode(.alwaysTemplate), for: .normal)
-//        skipBtn.setImage(#imageLiteral(resourceName: "skip").withRenderingMode(.alwaysTemplate), for: .normal)
-//        
-//        startBtn.layer.cornerRadius = 5
-//        
-//        setText()
-//        updateUI()
-//    }
-//    
-//    func setText() {
-//        self.startBtn.setTitle("Listen Now".localized().appending("!!"), for: .normal)
-//    }
-//    
-//    @IBAction func play(_ sender: Any) {
-//        if self.state == .downloadingPaused {
-//            downloadTask?.resume()
-//            
-//        } else if self.state == .downloading {
-//            downloadTask?.pause()
-//            
-//        } else if self.state == .playing {
-//            self.state = .paused
-//            self.player?.pause()
-//            
-//        } else {
-//            self.state = .playing
-//            self.player?.resume()
-//        }
-//    }
-//    
-//    @IBAction func stop(_ sender: Any) {
-//        if self.state == .downloading || self.state == .downloadingPaused {
-//            locator.stopLocating()
-//            downloadTask?.cancel()
-//            
-//        } else {
-//            self.player?.stop(.cancel)
-//            player = nil
-//        }
-//        self.state = .idle
-//    }
-//    
-//    @IBAction func next(_ sender: Any) {
-//        if self.state == .playing || self.state == .paused {
-//            self.player?.stop(.skip)
-//            player = nil
-//        }
-//        getNextRecording()
-//    }
-//    
-//    func getNextRecording() {
-//        didRequestRecording = true
-//        if !self.audioManager.nextTape() {
-//            
-//            guard let latitude = UserDefaults.standard.object(forKey: "Latitude") as? Double,
-//                  let longitude = UserDefaults.standard.object(forKey: "Longitutde") as? Double else {
-//                self.locator.getLocation(withAccuracy: kCLLocationAccuracyThreeKilometers)
-//                return
-//            }
-//            print(latitude, longitude)
-//            
-////            audioManager.getTapedBasedOn(location: CLLocation(latitude: latitude, longitude: longitude))
-//            self.state = .downloading
-//        }
-//        
-//    }
-//    
-//    func playRecording(tape: Tape) {
-//        self.player = TapePlayer(tape: tape)
-//        self.player?.delegate = self
-//        do {
-//            try player?.play()
-//            totalDuration = tape.duration ?? 1.0
-//            self.state = .playing
-//            
-//        } catch {
-//            print("Error tring to play: \(error.localizedDescription)")
-//        }
-//    }
-//    
-//    fileprivate func updateUI() {
-//        switch self.state {
-//        case .idle:
-//            soundscapesImageView.isHidden = true
-//            totalTimeLabel.isHidden = true
-//            currentTimeLabel.isHidden = true
-//            acitivtyMonitor.isHidden = true
-//            self.progressBar.setProgress(0.0, animated: false)
-//            UIView.animate(withDuration: 1.0, animations: {
-//                self.mediaControls.isHidden = true
-//                self.startBtn.isHidden = false
-//            })
-//            break
-//            
-//        case .downloading:
-//            self.acitivtyMonitor.isHidden = false
-//            self.acitivtyMonitor.startAnimating()
-//            
-//            self.playPauseBtn(isPlaying: true)
-//            totalTimeLabel.isHidden = true
-//            currentTimeLabel.isHidden = true
-//            self.skipBtn.isEnabled = false
-//            self.skipBtn.tintColor = .lightGray
-//            UIView.animate(withDuration: 1.0, animations: {
-//                self.mediaControls.isHidden = false
-//                self.startBtn.isHidden = true
-//            })
-//            break
-//            
-//        case .downloadingPaused:
-//            self.acitivtyMonitor.isHidden = true
-//            self.acitivtyMonitor.stopAnimating()
-//            
-//            self.playPauseBtn(isPlaying: false)
-//            break
-//            
-//        case .playing:
-//            soundscapesImageView.isHidden = false
-//            self.acitivtyMonitor.isHidden = true
-//            self.acitivtyMonitor.stopAnimating()
-//            
-//            totalTimeLabel.isHidden = false
-//            currentTimeLabel.isHidden = false
-//            self.playPauseBtn(isPlaying: true)
-//            self.skipBtn.isEnabled = true
-//            self.skipBtn.tintColor = .white
-//            break
-//            
-//        case .paused:
-//            
-//            self.playPauseBtn(isPlaying: false)
-//            
-//            break
-//        }
-//    }
-//    
-//    func playPauseBtn(isPlaying : Bool) {
-//        if isPlaying {
-//            self.playBtn.setImage(#imageLiteral(resourceName: "pause").withRenderingMode(.alwaysTemplate), for: .normal)
-//        } else {
-//            self.playBtn.setImage(#imageLiteral(resourceName: "play").withRenderingMode(.alwaysTemplate), for: .normal)
-//        }
-//        
-//    }
-//    
-//    override func didReceiveMemoryWarning() {
-//        super.didReceiveMemoryWarning()
-//        // Dispose of any resources that can be recreated.
-//    }
-//    
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
-//    }
-//}
-//extension PlaybackViewController : PlayerDelegate {
-//    func progress(_ progress: Double) {
-//        self.progress = progress
-//        self.progressBar.setProgress(Float(progress/totalDuration), animated: true)
-//    }
-//    func finished() {
-//        print("Player Finished")
-//        getNextRecording()
-//    }
-//    func paused() {
-//        print("Player Paused")
-//    }
-//    func resumed() {
-//        print("Player Resumed")
-//    }
-//}
+//  Created by Arlindo Goncalves on 6/13/17.
 //
-//extension PlaybackViewController : LocationDelegate {
-//    
-//    func presentFailureAlert(_ alert : UIViewController) {
-//        self.state = .idle
-//        self.present(alert, animated: true, completion: nil)
-//    }
-//    
-//    func locator(didUpdateBestLocation location: CLLocation) {
-////        self.audioManager.getTapedBasedOn(location: location)
-//    }
-//    
-//    func locator(didFailWithError error: Error) {
-//        print(error.localizedDescription)
-//    }
-//}
-//extension PlaybackViewController : AudioManagerDelegate {
-//    
-//    func playbackError(error: Error?) {
-//        print("Audio Playback Error \(error?.localizedDescription ?? "")")
-//        self.state = .idle
-//    }
-//    
-//    func playback(tape: Tape) {
-//        playRecording(tape: tape)
-//    }
-//    
-//    func recievedRecordings() {
-//        if didRequestRecording {
-//            self.next(self)
-//            didRequestRecording = false
-//        }
-//    }
-//    
-//    func emptyRecordingQueue() {
-//        print("No Recording in Queue =(")
-//        self.state = .idle
-//        //TODO: Handle Error to user staing that there is no recordings in their current radius
-//    }
-//    
-//    func downloading() {
-//        self.state = .downloading
-//    }
-//    
-//    func stopDownloading() {
-//        self.state = .downloadingPaused
-//    }
-//}
+//  Copyright © 2017 Arlindo Goncalves.
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see [http://www.gnu.org/licenses/].
+//
+//  For Contact email: arlindo@eclipsesoundscapes.org
+
+import UIKit
+import MediaPlayer
+
+class PlaybackViewController: UIViewController {
+    
+    let controlsContainerView: MediaControlView = {
+        let view = MediaControlView()
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    lazy var playerSlider: MediaSlider = {
+        let slider = MediaSlider()
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        slider.minimumTrackTintColor = Color.eclipseOrange
+        slider.setThumbImage(#imageLiteral(resourceName: "Eclipse-thumb"), for: UIControlState())
+        
+        slider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
+        slider.addTarget(self, action: #selector(sliderTouchDown), for: .touchDown)
+        slider.addTarget(self, action: #selector(sliderTouchUp), for: [.touchUpInside, .touchUpOutside])
+        
+        return slider
+    }()
+    
+    var titleLabel : UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.font = UIFont.getDefautlFont(.bold, size: 20)
+        label.accessibilityTraits = UIAccessibilityTraitHeader
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    var infoTextView : UITextView = {
+        let tv = UITextView()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.textAlignment = .left
+        tv.font = UIFont.getDefautlFont(.meduium, size: 17)
+        tv.accessibilityTraits = UIAccessibilityTraitStaticText
+        tv.isEditable = false
+        tv.textContainerInset = UIEdgeInsetsMake(20, 20, 10, 20)
+        tv.backgroundColor = UIColor(r: 249, g: 249, b: 249)
+        return tv
+    }()
+    
+    let lineSeparatorView: UIView = {
+        let view = UIView()
+        view.isAccessibilityElement = false
+        view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        return view
+    }()
+    
+    var media : Media!
+    
+    fileprivate var player : TapePlayer!
+    
+    var progress : Double = 0 {
+        didSet {
+            controlsContainerView.progress = progress
+            
+            if media is RealtimeEvent {
+                let realtimeMedia = media as! RealtimeEvent
+                if realtimeMedia.shouldChangeMedia(for: progress) {
+                    realtimeMedia.loadNextMedia(for: progress)
+                    DispatchQueue.main.async { [weak self] in
+                        if let strongSelf = self {
+                            strongSelf.reloadUI()
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    var totalDuration : Double = 0 {
+        didSet {
+            controlsContainerView.totalDuration = totalDuration
+        }
+    }
+    
+    var isRealtimeEvent : Bool = false {
+        didSet {
+            self.controlsContainerView.pausePlayButton.isHidden = isRealtimeEvent
+            self.playerSlider.isUserInteractionEnabled = !isRealtimeEvent
+            self.infoTextView.isAccessibilityElement = !isRealtimeEvent
+        }
+    }
+    
+    
+    var infoControlInfo = [String: Any]()
+    
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    func reloadUI() {
+        controlsContainerView.backgroundImageView.image = media.image
+        titleLabel.text = media.name
+        infoTextView.text = media.getInfo()
+        update(artwork: media.image!)
+        update(title: media.name)
+        update(progress: self.progress)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view.
+        
+        controlsContainerView.setCloseAction(self, action: #selector(close))
+        controlsContainerView.setPlayPauseAction(self, action: #selector(playPauseBtnTouched))
+        
+        view.addSubview(controlsContainerView)
+        controlsContainerView.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: view.frame.width * 9 / 16)
+        
+        view.addSubview(playerSlider)
+        
+        playerSlider.anchor(nil, left: controlsContainerView.leftAnchor, bottom: controlsContainerView.bottomAnchor, right: controlsContainerView.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: -15, rightConstant: 0, widthConstant: 0, heightConstant: 30)
+        
+        view.addSubview(titleLabel)
+        view.addSubview(infoTextView)
+        view.addSubview(lineSeparatorView)
+        
+        titleLabel.anchorWithConstantsToTop(playerSlider.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 10, rightConstant: 0)
+        
+        lineSeparatorView.anchor(titleLabel.bottomAnchor, left: view.leftAnchor, bottom: infoTextView.topAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 10, rightConstant: 0, widthConstant: 0, heightConstant: 1)
+        
+        
+        infoTextView.anchorWithConstantsToTop(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
+        
+        view.backgroundColor = .white
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(checkViewFocus(notification:)), name: Notification.Name.UIAccessibilityElementFocused, object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        setupNowPlayingInfoCenter()
+        loadMedia()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        player.stop(.finished)
+    }
+    
+    func playPauseBtnTouched() {
+        handlePlay(play: !player.isPlaying)
+    }
+    
+    func handlePlay(play : Bool) {
+        self.update(progress: self.progress)
+        self.update(rate: play ? 1 : 0)
+        
+        if play {
+            player.play()
+        } else {
+            player.pause()
+        }
+        updatePlayControl(play: play)
+    }
+    
+    func updatePlayControl(play: Bool){
+        controlsContainerView.isPlaying = play
+    }
+    
+    func loadMedia() {
+        
+        self.titleLabel.text = media.name
+        self.infoTextView.text = media.getInfo()
+        
+        infoControlInfo.updateValue(media.name, forKey: MPMediaItemPropertyTitle)
+        
+        if let mediaImage = media.image {
+            self.controlsContainerView.backgroundImageView.image = mediaImage
+            infoControlInfo.updateValue(getNowPlayingInfoCenterArtwork(with: mediaImage), forKey: MPMediaItemPropertyArtwork)
+        }
+        
+        if let tape = AudioManager.loadAudio(withName: media.resourceName, withExtension: media.mediaType){
+            self.player = TapePlayer(tape: tape)
+            self.player.delegate = self
+            self.totalDuration = player.duration
+            playerSlider.maximumValue = Float(player.duration)
+            
+            
+            infoControlInfo.updateValue(player.duration, forKey: MPMediaItemPropertyPlaybackDuration)
+            infoControlInfo.updateValue(Double(0), forKey: MPNowPlayingInfoPropertyElapsedPlaybackTime)
+            infoControlInfo.updateValue(Double(1), forKey: MPNowPlayingInfoPropertyPlaybackRate)
+            
+            self.setupNowPlayingInfoCenter(with: infoControlInfo)
+            
+            handlePlay(play: true)
+        }
+    }
+    
+    func checkViewFocus(notification : Notification) {
+        if let view = notification.userInfo?[UIAccessibilityFocusedElementKey] as? UIView {
+            if view == infoTextView {
+                if player != nil { // Checking if nil if the user focuses on the infoTextview before the player is initalized
+                    if player.isPlaying {
+                        handlePlay(play: false)
+                        shouldPlayAgain = true
+                    }
+                }
+            }
+        }
+        if let view = notification.userInfo?[UIAccessibilityUnfocusedElementKey] as? UIView {
+            if view == infoTextView {
+                if player != nil {
+                    if !player.isPlaying && shouldPlayAgain {
+                        handlePlay(play: true)
+                        shouldPlayAgain = false
+                    }
+                }
+            }
+        }
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func close() {
+        self.dismiss(animated: true) {
+            self.resignRemoteCommandCenter()
+            self.resignInfoCenter()
+            NotificationCenter.default.removeObserver(self)
+        }
+    }
+    
+    var shouldPlayAgain : Bool = false
+    
+    func sliderTouchDown(){
+        self.playerSlider.expand()
+        if self.player.isPlaying {
+            handlePlay(play: false)
+            shouldPlayAgain = true
+        }
+    }
+    
+    func sliderChanged(_ sender: UISlider) {
+        skipTo(Double(sender.value))
+    }
+    
+    func sliderTouchUp() {
+        self.playerSlider.compress()
+        if !self.player.isPlaying && shouldPlayAgain  {
+            handlePlay(play: true)
+            shouldPlayAgain = false
+        }
+    }
+    
+    func skipTo(_ time: Double){
+        self.progress = time
+        self.player.changeTime(to: self.progress)
+        self.update(progress: time)
+    }
+    
+    func remoteSliderSkip(_ time: Double){
+        self.update(rate: 0)
+        skipTo(time)
+        self.update(rate: 1)
+    }
+    
+    
+    fileprivate func setupNowPlayingInfoCenter() {
+        
+        if !isRealtimeEvent {
+            
+            MPRemoteCommandCenter.shared().playCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus  in
+                if let strongSelf = self {
+                    strongSelf.handlePlay(play: true)
+                    return MPRemoteCommandHandlerStatus.success
+                }
+                return MPRemoteCommandHandlerStatus.noSuchContent
+            }
+            MPRemoteCommandCenter.shared().pauseCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus  in
+                if let strongSelf = self {
+                    strongSelf.handlePlay(play: false)
+                    return MPRemoteCommandHandlerStatus.success
+                }
+                return MPRemoteCommandHandlerStatus.noSuchContent
+            }
+            
+            MPRemoteCommandCenter.shared().togglePlayPauseCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
+                if let strongSelf = self {
+                    strongSelf.handlePlay(play: !strongSelf.player.isPlaying)
+                    return MPRemoteCommandHandlerStatus.success
+                }
+                return MPRemoteCommandHandlerStatus.noSuchContent
+            }
+            
+            
+            if #available(iOS 9.1, *) {
+                MPRemoteCommandCenter.shared().changePlaybackPositionCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus  in
+                    if let strongSelf = self {
+                        if let positionEvent = event as? MPChangePlaybackPositionCommandEvent {
+                            strongSelf.remoteSliderSkip(positionEvent.positionTime)
+                        }
+                        return MPRemoteCommandHandlerStatus.success
+                    }
+                    return MPRemoteCommandHandlerStatus.noSuchContent
+                }
+            }
+        }
+        
+    }
+    
+    private func resignRemoteCommandCenter() {
+        let center = MPRemoteCommandCenter.shared()
+        center.playCommand.removeTarget(self)
+        center.pauseCommand.removeTarget(self)
+        center.togglePlayPauseCommand.removeTarget(self)
+        if #available(iOS 9.1, *) {
+            center.changePlaybackPositionCommand.removeTarget(self)
+        }
+    }
+    
+    func setupNowPlayingInfoCenter(with info: [String: Any]) {
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+    }
+    
+    func update(title: String){
+        self.updateNowPlayingInfoCenter(key: MPMediaItemPropertyTitle, value: title)
+    }
+    
+    func update(rate: Double) {
+        self.updateNowPlayingInfoCenter(key: MPNowPlayingInfoPropertyPlaybackRate, value: rate)
+    }
+    
+    func update(progress: Double){
+        self.updateNowPlayingInfoCenter(key: MPNowPlayingInfoPropertyElapsedPlaybackTime, value: progress)
+    }
+    
+    func update(artwork: UIImage) {
+        self.updateNowPlayingInfoCenter(key: MPMediaItemPropertyArtwork, value: getNowPlayingInfoCenterArtwork(with: artwork))
+    }
+    
+    private func updateNowPlayingInfoCenter(key: String, value: Any) {
+        infoControlInfo.updateValue(value, forKey: key)
+        DispatchQueue.main.async { [weak self] in
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = self?.infoControlInfo
+        }
+    }
+    
+    private func resignInfoCenter() {
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+    }
+    
+    private func getNowPlayingInfoCenterArtwork(with image : UIImage) -> MPMediaItemArtwork {
+        
+        let mediaArt : MPMediaItemArtwork!
+        if #available(iOS 10.0, *) {
+            let mySize = CGSize(width: 400, height: 400)
+            mediaArt = MPMediaItemArtwork(boundsSize:mySize) { sz in
+                return image.resize(to: sz)
+            }
+        } else {
+            mediaArt = MPMediaItemArtwork.init(image: image)
+        }
+        
+        return mediaArt
+    }
+    
+    
+}
+
+extension PlaybackViewController : PlayerDelegate {
+    
+    func progress(_ progress: Double) {
+        self.progress = progress
+        self.playerSlider.setValue(Float(progress), animated: true)
+    }
+    
+    func finished() {
+        print("Player Finished")
+        updatePlayControl(play: false)
+        self.skipTo(0.0)
+        self.playerSlider.setValue(0.0, animated: true)
+        self.update(progress: 0)
+        if isRealtimeEvent {
+            isRealtimeEvent = false
+            close()
+        }
+    }
+    func interrupted() {
+        print("Player Interrupted")
+        controlsContainerView.showControls(true)
+        controlsContainerView.pausePlayButton.setImage(#imageLiteral(resourceName: "play").withRenderingMode(.alwaysTemplate), for: UIControlState())
+    }
+    func resumed() {
+        print("Player Resumed")
+        if player.isPlaying {
+            controlsContainerView.showControls(false)
+            controlsContainerView.pausePlayButton.setImage(#imageLiteral(resourceName: "pause").withRenderingMode(.alwaysTemplate), for: UIControlState())
+        }
+    }
+}

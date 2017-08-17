@@ -286,8 +286,6 @@ import UIKit
         self.isAccessibilityElement = true
         contentView.isAccessibilityElement = true
         contentView.accessibilityElementsHidden = true
-        self.accessibilityLabel = "Countdown Until Eclipse"
-//        self.accessibilityTraits = UIAccessibilityTraitUpdatesFrequently
     }
     
     /**

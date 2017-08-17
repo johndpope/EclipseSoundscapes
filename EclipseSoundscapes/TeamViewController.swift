@@ -1,6 +1,6 @@
 //
 //  TeamViewController.swift
-//  
+//
 //
 //  Created by Arlindo Goncalves on 7/18/17.
 //
@@ -22,20 +22,6 @@
 
 import Eureka
 
-struct TeamMember {
-    var name: String
-    var jobTitle: String
-    var bio : String
-    var photo: UIImage?
-    
-    init(name: String, jobTitle: String, bio: String, photo: UIImage?) {
-        self.name = name
-        self.jobTitle = jobTitle
-        self.bio = bio
-        self.photo = photo
-    }
-}
-
 class TeamViewController : FormViewController {
     
     
@@ -47,16 +33,16 @@ class TeamViewController : FormViewController {
         TeamMember(name: "Christina Migliore", jobTitle: "Image Analysis Intern", bio: "Originally from a small town in New Jersey, Christina is an undergraduate student studying physics and math at Northeastern University. She works on image and video analysis for the Eclipse Soundscapes project and numerically modeling solar flares at the Harvard-Smithsonian Center for Astrophysics. She became involved with Eclipse Soundscapes because she enjoys scientific outreach and is interested in conveying numerical information in new ways. Christina hopes to continue studying in the field of plasma physics as a graduate student.", photo: #imageLiteral(resourceName: "Christina Migliore")),
         TeamMember(name: "Kristin DiVona", jobTitle: "Graphic Designer", bio: "Kristin DiVona is the Visual Information Specialist for NASA's Chandra X-Ray Observatory. An award-winning designer and illustrator, she is responsible for the creation of printed materials, exhibits, and interactive educational tools that visually interpret concepts related to astrophysics and x-ray astronomy— connecting everyday life to science exploration and technology. (Yes, it's as cool as it sounds.) She is a graduate of Rhode Island School of Design. Kristin is waiting not-so-patiently for this amazing astronomical event, and is excited to work with the Eclipse Soundscapes team on this inclusive design project", photo: #imageLiteral(resourceName: "Kristin Divona")),
         TeamMember(name: "Kelsey Perrett", jobTitle: "Social Media Coordinator and Content Writer", bio: "Kelsey Perrett is a Massachusetts-based freelance writer, editor, web producer, and social media specialist. She enjoys writing about travel, health and fitness, and the environment. When she isn’t writing, she can be found outside exploring trails, at the gym/yoga studio, or attempting to conquer an ever-expanding reading list. Kelsey got involved in the Eclipse Soundscapes Project due to her interest in environmental reporting, and is thrilled to work with a talented group to make the wonders of space accessible to everyone.", photo: #imageLiteral(resourceName: "Kelsey Perrett")),
-        TeamMember(name: "Dr. Wanda Diaz Merced", jobTitle: "Consultant", bio: "Development in South Africa. When Dr. Winter invited Wanda to join the Eclipse Soundscapes team as a blind person and an astrophysicist, she accepted, saying she hoped the project could bring an innovative experience to the blind and visually impaired, to people who are not visually oriented, and to people who have never experienced an eclipse.", photo: nil)
+        TeamMember(name: "Dr. Wanda Diaz Merced", jobTitle: "Consultant", bio: "Development in South Africa. When Dr. Winter invited Wanda to join the Eclipse Soundscapes team as a blind person and an astrophysicist, she accepted, saying she hoped the project could bring an innovative experience to the blind and visually impaired, to people who are not visually oriented, and to people who have never experienced an eclipse.", photo: #imageLiteral(resourceName: "Wanda"))
         
-        ]
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
         
         self.navigationItem.title = "Our Team"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(close))
+        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
     }
     
     private func initializeForm() {
@@ -64,66 +50,66 @@ class TeamViewController : FormViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
         tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-            
+        
+        
         for member in members {
-            form
-                +++ Section() {
-                    var header = HeaderFooterView<BioView>(.nibFile(name: "BioView", bundle: nil))
-                    header.onSetupView = { (view, section) -> () in
-                        if let photo = member.photo {
-                            view.imageView.image = photo
-                        }
-                        view.nameLabel.text = member.name
-                        view.jobTitleLabel.text = member.jobTitle
-                        
-                        view.imageView.alpha = 0
-                        view.nameLabel.alpha = 0
-                        view.jobTitleLabel.alpha = 0
-                        UIView.animate(withDuration: 2.0, animations: { [weak view] in
-                            view?.imageView.alpha = 1
-                            view?.nameLabel.alpha = 1
-                            view?.jobTitleLabel.alpha = 1
-                        })
-                        view.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
-                        UIView.animate(withDuration: 1.0, animations: { [weak view] in
-                            view?.layer.transform = CATransform3DIdentity
-                        })
-                    }
-                    $0.header = header
-                    
-                }
-                <<< TextAreaRow(){
-                    $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
-                    let cell = $0.cell
-                    cell?.layer.borderColor = UIColor.clear.cgColor
-                    cell?.textView.isEditable = false
-                    cell?.isUserInteractionEnabled = false
-                    
-                    cell?.textView.alpha = 0
-                    UIView.animate(withDuration: 2.0, animations: { [weak view = cell?.textView] in
-                        view?.alpha = 1
-                    })
-                    cell?.textView.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
-                    UIView.animate(withDuration: 1.0, animations: { [weak view = cell?.textView] in
-                        view?.layer.transform = CATransform3DIdentity
-                    })
-                    }.cellUpdate({ (cell, row) in
-                        cell.textView.text = member.bio
-                        cell.accessibilityLabel = cell.textView.text
-                        cell.accessibilityTraits = UIAccessibilityTraitStaticText
-                        cell.textView.isAccessibilityElement = false
-                        cell.textView.font = UIFont.getDefautlFont(.meduium, size: 13)
-                        
-                    })
-
+            addMember(member)
         }
-
+        
+        let section = form.allSections[0]
+        section.header = HeaderFooterView<UIView>(HeaderFooterProvider.class)
+        section.header?.height = {CGFloat.leastNormalMagnitude}
+    }
+    
+    func addMember(_ member: TeamMember) {
+        form
+            +++ TeamMemberRow { row in
+                row.value = member
+                if let cell = row.cell {
+                    cell.memberImageView.alpha = 0
+                    cell.nameLabel.alpha = 0
+                    cell.jobTitleLabel.alpha = 0
+                    UIView.animate(withDuration: 2.0, animations: { [weak cell = cell] in
+                        cell?.memberImageView.alpha = 1
+                        cell?.nameLabel.alpha = 1
+                        cell?.jobTitleLabel.alpha = 1
+                    })
+                    cell.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
+                    UIView.animate(withDuration: 1.0, animations: { [weak cell = cell] in
+                        cell?.layer.transform = CATransform3DIdentity
+                    })
+                }
+            }
+            <<< TextAreaRow(){
+                $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
+                let cell = $0.cell
+                cell?.layer.borderColor = UIColor.clear.cgColor
+                cell?.textView.isEditable = false
+                cell?.isUserInteractionEnabled = false
+                
+                cell?.textView.alpha = 0
+                UIView.animate(withDuration: 2.0, animations: { [weak view = cell?.textView] in
+                    view?.alpha = 1
+                })
+                cell?.textView.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
+                UIView.animate(withDuration: 1.0, animations: { [weak view = cell?.textView] in
+                    view?.layer.transform = CATransform3DIdentity
+                })
+                }.cellUpdate({ (cell, row) in
+                    cell.textView.text = member.bio
+                    cell.accessibilityLabel = cell.textView.text
+                    cell.accessibilityTraits = UIAccessibilityTraitStaticText
+                    cell.textView.isAccessibilityElement = false
+                    cell.textView.font = UIFont.getDefautlFont(.meduium, size: 13)
+                    
+                })
+        
+        
         
     }
     
     @objc private func close() {
         self.dismiss(animated: true, completion: nil)
     }
-    
     
 }

@@ -37,7 +37,7 @@ extension UIView {
         }
         
         slideInFromTopTransition.type = kCATransitionPush
-        slideInFromTopTransition.subtype = kCATransitionFromTop
+        slideInFromTopTransition.subtype = kCATransitionFromBottom
         slideInFromTopTransition.duration = duration
         slideInFromTopTransition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         slideInFromTopTransition.fillMode = kCAFillModeRemoved

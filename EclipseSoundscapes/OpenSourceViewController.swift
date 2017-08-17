@@ -30,15 +30,14 @@ class OpenSourceViewController : FormViewController {
     var libraries : [OpenSourceLibrary] = [OpenSourceLibrary.init(title: "AudioKit", license: "AudioKit-License"),
                                            OpenSourceLibrary.init(title: "BRYXBanner", license: "BRYXBanner-License"),
                                            OpenSourceLibrary.init(title: "Eureka", license: "Eureka-License"),
-                                           OpenSourceLibrary.init(title: "SwiftSpinner", license: "SwiftSpinner-License"),
-                                           OpenSourceLibrary.init(title: "Localize-Swift", license: "Localize-Swift-License"),
-                                           OpenSourceLibrary.init(title: "Eclipse Soundscapes", license: "LICENSE")]
+                                           OpenSourceLibrary.init(title: "SwiftSpinner", license: "SwiftSpinner-License")]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
         
-        self.navigationItem.title = "Eclipse Soundscapes v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] ?? "")"
+        self.navigationItem.title = "Open Source Libraries"
+        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
     }
     
     private func initializeForm() {
@@ -48,7 +47,19 @@ class OpenSourceViewController : FormViewController {
         tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
         
         form
-            +++ Section("Libraries We Use")
+            +++ Section() { section in
+                var header = HeaderFooterView<UIView>(HeaderFooterProvider.class)
+                header.onSetupView = { view, section in
+                    let label = InsetLabel()
+                    label.textColor = .black
+                    label.text = "Libraries We Use"
+                    label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    label.font = UIFont.getDefautlFont(.condensedMedium, size: 16)
+                    view.addSubview(label)
+                }
+                header.height = {20}
+                section.header = header
+            }
             <<< TextAreaRow(){
                 $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
                 $0.cell.layer.borderColor = UIColor.clear.cgColor
@@ -65,7 +76,19 @@ class OpenSourceViewController : FormViewController {
         
         for lib in libraries {
             form
-                +++ Section(lib.title)
+                +++ Section() { section in
+                    var header = HeaderFooterView<UIView>(HeaderFooterProvider.class)
+                    header.onSetupView = { view, section in
+                        let label = InsetLabel()
+                        label.textColor = .black
+                        label.text = lib.title
+                        label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                        label.font = UIFont.getDefautlFont(.condensedMedium, size: 16)
+                        view.addSubview(label)
+                    }
+                    
+                    section.header = header
+                }
                 <<< TextAreaRow(){
                     $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
                     $0.cell.layer.borderColor = UIColor.clear.cgColor
@@ -84,5 +107,9 @@ class OpenSourceViewController : FormViewController {
                     })
         }
         
+    }
+    
+    func close() {
+       _ = self.navigationController?.popViewController(animated: true)
     }
 }

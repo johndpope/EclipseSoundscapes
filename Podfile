@@ -8,10 +8,12 @@ target 'EclipseSoundscapes' do
   # Pods for EclipseSoundscapes
 
 pod 'AudioKit'
-pod 'Localize-Swift'
 pod 'BRYXBanner'
 pod 'SwiftSpinner'
 pod 'Eureka'
+pod 'RevealingSplashView'
+pod 'Fabric'
+pod 'Crashlytics'
 
   target 'EclipseSoundscapesTests' do
     inherit! :search_paths

@@ -32,6 +32,7 @@ class LicenseViewController : FormViewController {
         initializeForm()
         
         self.navigationItem.title = "Eclipse Soundscapes v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] ?? "")"
+        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
     }
     
     private func initializeForm() {
@@ -42,7 +43,19 @@ class LicenseViewController : FormViewController {
         
         for lib in libraries {
             form
-                +++ Section(lib.title)
+                +++ Section() { section in
+                    var header = HeaderFooterView<UIView>(HeaderFooterProvider.class)
+                    header.onSetupView = { view, section in
+                        let label = InsetLabel()
+                        label.textColor = .black
+                        label.text = lib.title
+                        label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                        label.font = UIFont.getDefautlFont(.condensedMedium, size: 16)
+                        view.addSubview(label)
+                    }
+                    header.height = {20}
+                    section.header = header
+                }
                 <<< TextAreaRow(){
                     $0.textAreaHeight = TextAreaHeight.dynamic(initialTextViewHeight: 65)
                     $0.cell.layer.borderColor = UIColor.clear.cgColor
@@ -61,6 +74,10 @@ class LicenseViewController : FormViewController {
                     })
         }
         
+    }
+    
+    func close() {
+        _ = self.navigationController?.popViewController(animated: true)
     }
 }
 
