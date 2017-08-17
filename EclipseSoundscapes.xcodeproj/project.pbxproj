@@ -194,6 +194,7 @@
 		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
 		B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A411F3C0A6A004540C2 /* Intermission.txt */; };
 		B7EF1A441F3C0F7A004540C2 /* ThankYou.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */; };
+		B7F4BF161F45DBE9008A8B0E /* fabric.apikey in Resources */ = {isa = PBXBuildFile; fileRef = B7F4BF151F45DBE9008A8B0E /* fabric.apikey */; };
 		B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */; };
 		B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */; };
 		B7F7559E1F3344700029DB4D /* MediaCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */; };
@@ -420,6 +421,7 @@
 		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		B7EF1A411F3C0A6A004540C2 /* Intermission.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Intermission.txt; sourceTree = "<group>"; };
 		B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ThankYou.txt; sourceTree = "<group>"; };
+		B7F4BF151F45DBE9008A8B0E /* fabric.apikey */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fabric.apikey; sourceTree = "<group>"; };
 		B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCenterViewController.swift; sourceTree = "<group>"; };
@@ -517,6 +519,7 @@
 				B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */,
 				B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */,
 				B7964C361EF9B76400000CF8 /* Localizable.strings */,
+				B7F4BF151F45DBE9008A8B0E /* fabric.apikey */,
 				B72DF5531ED724F300F9E4F3 /* Info.plist */,
 			);
 			path = EclipseSoundscapes;
@@ -1240,6 +1243,7 @@
 				539B9E763E0706F1C28AC4F6 /* [CP] Embed Pods Frameworks */,
 				E0E0399903E491D908D1ED49 /* [CP] Copy Pods Resources */,
 				B7447A821F145AE80077F1F7 /* ShellScript */,
+				B7F4BF171F45DD39008A8B0E /* Submit dSYM files to Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -1351,6 +1355,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7F4BF161F45DBE9008A8B0E /* fabric.apikey in Resources */,
 				B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */,
 				B7B16F431F3B3F4D0036E396 /* Diamond_Ring_short.mp3 in Resources */,
 				B7B16F441F3B3F4D0036E396 /* First_Contact_Short.mp3 in Resources */,
@@ -1537,7 +1542,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/AudioKit.framework/fix-framework.sh\"\n\"${PODS_ROOT}/Fabric/run\" ***REPLACE*** ***REPLACE***";
+			shellScript = "\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/AudioKit.framework/fix-framework.sh\"";
+		};
+		B7F4BF171F45DD39008A8B0E /* Submit dSYM files to Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Submit dSYM files to Crashlytics";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "APPSTORE_CONFIGURATION=\"Distribute_AppStore\"\nFABRIC_APIKEY_FILE=\"${SRCROOT}/fabric.apikey\"\nFABRIC_BUILDSECRET_FILE=\"${SRCROOT}/fabric.buildsecret\"\n\nif test \"$APPSTORE_CONFIGURATION\" = \"${CONFIGURATION}\"; then\nif test ! -f \"$FABRIC_APIKEY_FILE\" -o ! -f \"$FABRIC_BUILDSECRET_FILE\"; then\necho \"This is an App Store build that wants to uploaddSYM files to Crashlytics.\"\necho \"Uploading is possible only if a Fabric API key and a Fabric build secret are\"\necho \"available. This build is failing because at least one of these pieces of\"\necho \"information is missing.\"\necho \"\"\necho \"To fix the problem, create the following files and store the API key and\"\necho \"build secret, respectively, within those files:\"\necho \"\"\necho \"  $FABRIC_APIKEY_FILE\"\necho \"  $FABRIC_BUILDSECRET_FILE\"\necho \"\"\necho \"If you forked the project to create your own App Store build then you must\"\necho \"register with Crashlytics and get your own API key and build secret.\"\n\n# Let the build fail\nexit 1\nfi\n\nFABRIC_APIKEY=$(cat \"$FABRIC_APIKEY_FILE\")\nif test $? -ne 0; then\necho \"Cannot read $FABRIC_APIKEY_FILE\"\nexit 1\nfi\n\nFABRIC_BUILDSECRET=$(cat \"$FABRIC_BUILDSECRET_FILE\")\nif test $? -ne 0; then\necho \"Cannot read $FABRIC_BUILDSECRET_FILE\"\nexit 1\nfi\n\necho \"Uploading dSYM files to Crashlytics\"\n\"${PODS_ROOT}/Fabric.framework/run\" \"$FABRIC_APIKEY\" \"$FABRIC_BUILDSECRET\"\nfi";
 		};
 		DF7F64DDA0C572E8FEBD8F1D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

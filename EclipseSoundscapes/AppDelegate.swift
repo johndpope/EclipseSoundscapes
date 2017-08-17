@@ -36,7 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        Fabric.with([Crashlytics.self])
+        Crashlytics.start(withAPIKey: Utility.getFile("fabric.apikey", type: "")!)
+        
         AKSettings.enableLogging = false
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = notificationDelegate

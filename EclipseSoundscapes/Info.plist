@@ -33,8 +33,6 @@
 	<string>1.2.3</string>
 	<key>Fabric</key>
 	<dict>
-		<key>APIKey</key>
-		<string>***REPLACE***</string>
 		<key>Kits</key>
 		<array>
 			<dict>
