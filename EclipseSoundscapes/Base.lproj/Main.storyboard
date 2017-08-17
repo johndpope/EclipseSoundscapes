@@ -20,8 +20,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="JAF-hQ-7vb" kind="relationship" relationship="viewControllers" id="Nu3-f7-qpq"/>
                         <segue destination="IpG-AQ-tAq" kind="relationship" relationship="viewControllers" id="fKG-l2-QdV"/>
+                        <segue destination="JAF-hQ-7vb" kind="relationship" relationship="viewControllers" id="Nu3-f7-qpq"/>
                         <segue destination="0Ry-BS-4h6" kind="relationship" relationship="viewControllers" id="j2P-BR-YyG"/>
                         <segue destination="rph-Jh-fPG" kind="relationship" relationship="viewControllers" id="Irh-OA-Kcd"/>
                     </connections>
@@ -95,6 +95,7 @@
                         <segue destination="M1M-BW-pFD" kind="show" identifier="OpenSourceLibraries" id="9ZE-Hv-g3h"/>
                         <segue destination="a6l-Qq-XbO" kind="show" identifier="License" id="nZb-8B-Fzv"/>
                         <segue destination="erH-zE-hxk" kind="show" identifier="Photo Credits" id="Pq0-hb-VBy"/>
+                        <segue destination="rNi-4B-zot" kind="show" identifier="PrivacyPolicy" id="zNU-SN-Bop"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fRM-Pg-jkR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -136,6 +137,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0dx-Jw-aS8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6385" y="-622"/>
+        </scene>
+        <!--Privacy Policy View Controller-->
+        <scene sceneID="iMY-Jx-iiu">
+            <objects>
+                <viewController id="rNi-4B-zot" customClass="PrivacyPolicyViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Yap-yR-9IS"/>
+                        <viewControllerLayoutGuide type="bottom" id="9zu-K3-vF8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5ya-yy-Y47">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nTv-hX-2Fv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6385" y="-2591"/>
         </scene>
         <!--Photo Credits View Controller-->
         <scene sceneID="gyq-hf-4GY">
@@ -226,7 +245,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZIw-Q3-IRR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="246" y="457"/>
+            <point key="canvasLocation" x="-484" y="457"/>
         </scene>
         <!--Eclipse Features-->
         <scene sceneID="LO3-6C-uaJ">
@@ -243,7 +262,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4dv-XL-xxk">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VTO-bW-Oae">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VTO-bW-Oae" customClass="SqueezeButton" customModule="EclipseSoundscapes" customModuleProvider="target">
                                         <rect key="frame" x="337" y="31" width="30" height="34"/>
                                         <accessibility key="accessibilityConfiguration" hint="Shows the next Eclipse Image" label="Next Image"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -251,7 +270,7 @@
                                             <action selector="nextImage:" destination="JAF-hQ-7vb" eventType="touchUpInside" id="QZC-oq-wFu"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="43n-eJ-SS3">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="43n-eJ-SS3" customClass="SqueezeButton" customModule="EclipseSoundscapes" customModuleProvider="target">
                                         <rect key="frame" x="8" y="31" width="30" height="34"/>
                                         <accessibility key="accessibilityConfiguration" hint="Shows the Previous Eclipse Image" label="Previous Image"/>
                                         <constraints>
@@ -371,7 +390,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="85p-XH-9xa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-513" y="457"/>
+            <point key="canvasLocation" x="233" y="457"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4Fw-3A-gE6">
@@ -426,7 +445,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h73-zg-FQR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5580" y="1356.9715142428786"/>
+            <point key="canvasLocation" x="5396" y="1409"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="nda-Vh-mDN">

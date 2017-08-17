@@ -123,7 +123,7 @@ class NotificationHelper {
         }
     }
     
-    class func postNotification(for reminder: Reminder){
+    class func postNotification(for reminder: Reminder, notify: Bool = true){
         
         var name : Notification.Name!
         if reminder == .firstReminder {
@@ -169,7 +169,9 @@ class NotificationHelper {
             UserDefaults.standard.set(true, forKey: "TotalityDone")
         }
         
-        NotificationCenter.default.post(name: name, object: nil, userInfo: ["Reminder": reminder])
+        if notify {
+            NotificationCenter.default.post(name: name, object: nil, userInfo: ["Reminder": reminder])
+        }
     }
     
     static func addObserver(_ observer : Any, reminders : Reminder, selector: Selector){
@@ -273,9 +275,9 @@ class NotificationHelper {
         
         var message : String!
         if reminder == .firstReminder {
-            message = "The Solar Eclipse is going to being soon."
+            message = "The Solar Eclipse is going to begin soon."
         } else {
-            message = "The Total Solar Eclipse is going to being soon."
+            message = "The Total Solar Eclipse is going to begin soon."
         }
         add(with: date, title: "Eclipse Soundscapes", body: message, categoryId: ReminderCategory, reminder: reminder)
     }
@@ -287,7 +289,7 @@ class NotificationHelper {
         if reminder == .contact1 {
             body = "The Solar Eclipse has begun! Press to listen now."
         } else {
-            body = "The Total Eclipse has begun! Press to listen now."
+            body = "The Total Solar Eclipse has begun! Press to listen now."
         }
     
         if #available(iOS 10.0, *) {

@@ -40,7 +40,7 @@ class PartnersViewController : FormViewController {
         
         Partner(name: "National Girls Collaborative", website: "https://ngcproject.org/", bio: "The National Girls Collaborative Project (NGC) brings together United States organizations that are committed to informing and encouraging girls to pursue careers in science, technology, engineering, and mathematics. NGC is partnering with Eclipse Soundscapes to organize listening parties where young women can experience the total solar eclipse complete with audio information.", photo: #imageLiteral(resourceName: "ngcp_theme_logo")),
         
-        Partner(name: "Citizen CATE", website: "http://eclipse2017.nso.edu/citizen-cate/", bio: "The Citizen CATE (Continental-America Telescopic Eclipse) Experiment is an effort to document the 2017 Eclipse by capturing images of the inner solar corona using a network of more than 60 telescopes. CATE is working with high schools, universities, education groups, astronomy clubs, national science research labs, and corporate sponsors to produce 90 minutes of continuous, high-resolution, and rapid-cadence images detailing the Sun’s inner corona...More TBD", photo: #imageLiteral(resourceName: "nso_logo_200_a")),
+        Partner(name: "Citizen CATE", website: "http://eclipse2017.nso.edu/citizen-cate/", bio: "The Citizen CATE (Continental-America Telescopic Eclipse) Experiment is an effort to document the 2017 Eclipse by capturing images of the inner solar corona using a network of more than 60 telescopes. CATE is working with high schools, universities, education groups, astronomy clubs, national science research labs, and corporate sponsors to produce 90 minutes of continuous, high-resolution, and rapid-cadence images detailing the Sun’s inner corona. Citizen CATE is partnering with Eclipse Soundscapes to provide high quality images for the Eclipse Soundscapes app.", photo: #imageLiteral(resourceName: "nso_logo_200_a")),
         
         Partner(name: "Brigham Young University, Idaho", website: "http://www.byui.edu/eclipse-2017", bio: "Brigham Young University (BYU) is a private research university with three locations, including Rexburg, Idaho. They are partnering with Eclipse Soundscapes to provide a series of field recordings of the 2017 Eclipse, including audio of an active beehive. Because Rexburg lies in the path of totality, BYU is hosting a number of viewing and educational events with the City of Rexburg.", photo: #imageLiteral(resourceName: "byu"))
     ]
@@ -50,10 +50,8 @@ class PartnersViewController : FormViewController {
         initializeForm()
         
         self.navigationItem.title = "Our Partners"
-        let button = UIBarButtonItem(image: #imageLiteral(resourceName: "left-small"), style: .plain, target: self, action: #selector(close))
-        button.tintColor = .black
-        button.accessibilityLabel = "Back"
-        self.navigationItem.leftBarButtonItem = button
+        
+        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
     }
     
     private func initializeForm() {

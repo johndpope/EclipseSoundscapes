@@ -24,6 +24,10 @@ import UIKit
 
 class MediaControlView : UIView {
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     var totalDuration : Double = 0 {
         didSet {
             self.totalLengthLabel.text = Utility.timeString(time: totalDuration)
@@ -41,8 +45,13 @@ class MediaControlView : UIView {
     var controlsShowing = true
     var isPlaying = true {
         didSet {
-//            self.accessibilityLabel = "Double Tap to \(isPlaying ? "Pause" : "Play")"
             pausePlayButton.accessibilityLabel = isPlaying ? "Pause" : "Play"
+            showControls(!isPlaying)
+            if isPlaying {
+                pausePlayButton.setImage(#imageLiteral(resourceName: "pause").withRenderingMode(.alwaysTemplate), for: UIControlState())
+            } else {
+                pausePlayButton.setImage(#imageLiteral(resourceName: "play").withRenderingMode(.alwaysTemplate), for: UIControlState())
+            }
         }
     }
     
@@ -100,6 +109,8 @@ class MediaControlView : UIView {
         
         self.isAccessibilityElement = false
         self.accessibilityElements = [closeButton, pausePlayButton, currentTimeLabel, totalLengthLabel]
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(voiceOverNotification(notification:)), name: NSNotification.Name(rawValue: UIAccessibilityVoiceOverStatusChanged), object: nil)
     }
     
     override func layoutSubviews() {
@@ -116,7 +127,7 @@ class MediaControlView : UIView {
         
         backgroundImageView.anchorToTop(self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor)
         
-        closeButton.anchorWithConstantsToTop(self.topAnchor, left: self.leftAnchor, bottom: nil, right: nil, topConstant: 10, leftConstant: 10, bottomConstant: 0, rightConstant: 0)
+        closeButton.anchor(topAnchor, left: leftAnchor, bottom: nil, right: nil, topConstant: 10, leftConstant: 10, bottomConstant: 0, rightConstant: 0, widthConstant: 50, heightConstant: 50)
         
         pausePlayButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         pausePlayButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
@@ -185,6 +196,10 @@ class MediaControlView : UIView {
         timer = nil
     }
     
+    func voiceOverNotification(notification: Notification) {
+        showControls(UIAccessibilityIsVoiceOverRunning())
+    }
+    
     var gradientLayer : CAGradientLayer!
     fileprivate func setupGradientLayer() {
         gradientLayer = CAGradientLayer()
@@ -196,6 +211,21 @@ class MediaControlView : UIView {
 }
 
 class MediaSlider : UISlider {
+    
+    private var thumbImageView : UIImageView?
+    
+    func expand() {
+        self.thumbImageView = self.subviews.last as? UIImageView
+        UIView.animate(withDuration: 0.2) {
+            self.thumbImageView?.transform = CGAffineTransform.init(scaleX: 1.5, y: 1.5)
+        }
+    }
+    
+    func compress() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.thumbImageView?.transform = .identity
+        })
+    }
     
     private var maxValueLabel : String!
     
@@ -221,7 +251,7 @@ class MediaSlider : UISlider {
     }
     
     func setAccessibilityLabel(){
-        self.accessibilityValue = Utility.timeAccessibilityString(time: TimeInterval(self.value)) + " of " + maxValueLabel
+        self.accessibilityValue = "Track Position " + Utility.timeAccessibilityString(time: TimeInterval(self.value)) + " of " + maxValueLabel
     }
 }
 

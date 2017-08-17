@@ -30,7 +30,7 @@ class NoEclipseView : UIView {
     
     var titleLabel : UILabel = {
         var label = UILabel()
-        label.text = "Unfortuntely there is no visable Eclipse at your location"
+        label.text = "Unfortuntely there is no visible Eclipse at your location"
         label.textColor = .black
         label.accessibilityTraits = UIAccessibilityTraitHeader
         label.textAlignment = .center

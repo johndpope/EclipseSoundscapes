@@ -10,6 +10,7 @@
 		70E439A017019D60659857BF /* Pods_EclipseSoundscapesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 219BB4393901E45FBC7BD829 /* Pods_EclipseSoundscapesTests.framework */; };
 		B70F0E021F2161FE00B9F3BA /* NotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70F0E011F2161FE00B9F3BA /* NotificationHelper.swift */; };
 		B71751021F0DB789002EBE90 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71751011F0DB789002EBE90 /* InfoView.swift */; };
+		B71E206D1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B71E206C1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 */; };
 		B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */; };
 		B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5481ED724F300F9E4F3 /* Main.storyboard */; };
 		B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */; };
@@ -50,6 +51,7 @@
 		B758D8741ED78E120033EE45 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8731ED78E120033EE45 /* Downloader.swift */; };
 		B758D8761ED78E310033EE45 /* Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8751ED78E310033EE45 /* Uploader.swift */; };
 		B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */; };
+		B75A137D1F43914000F5C27A /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75A137C1F43914000F5C27A /* PrivacyPolicyViewController.swift */; };
 		B76282901F26667C00430319 /* TeamMemberCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B762828E1F26667C00430319 /* TeamMemberCell.xib */; };
 		B76282931F2667AB00430319 /* TeamMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76282921F2667AB00430319 /* TeamMemberCell.swift */; };
 		B76282951F266B4200430319 /* PartnerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76282941F266B4200430319 /* PartnerCell.swift */; };
@@ -190,7 +192,6 @@
 		B7DE878F1F20FBE6001F69D8 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */; };
 		B7E7A9881F12A40200B239B8 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9871F12A40200B239B8 /* MoreViewController.swift */; };
 		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
-		B7EF1A401F3BAAED004540C2 /* Realtime_Eclipse_Shorts.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A3F1F3BAAED004540C2 /* Realtime_Eclipse_Shorts.mp3 */; };
 		B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A411F3C0A6A004540C2 /* Intermission.txt */; };
 		B7EF1A441F3C0F7A004540C2 /* ThankYou.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */; };
 		B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */; };
@@ -229,6 +230,7 @@
 		B03672B260885DC3EA96D077 /* Pods-EclipseSoundscapesUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesUITests/Pods-EclipseSoundscapesUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B70F0E011F2161FE00B9F3BA /* NotificationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationHelper.swift; sourceTree = "<group>"; };
 		B71751011F0DB789002EBE90 /* InfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		B71E206C1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Realtime_Eclipse_Shorts.mp3; sourceTree = "<group>"; };
 		B72DF5411ED724F300F9E4F3 /* EclipseSoundscapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EclipseSoundscapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B72DF5491ED724F300F9E4F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 		B758D8731ED78E120033EE45 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		B758D8751ED78E310033EE45 /* Uploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Uploader.swift; sourceTree = "<group>"; };
 		B758D8781ED794790033EE45 /* Recordings.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Recordings.xcdatamodel; sourceTree = "<group>"; };
+		B75A137C1F43914000F5C27A /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		B762828E1F26667C00430319 /* TeamMemberCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamMemberCell.xib; sourceTree = "<group>"; };
 		B76282921F2667AB00430319 /* TeamMemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamMemberCell.swift; sourceTree = "<group>"; };
 		B76282941F266B4200430319 /* PartnerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartnerCell.swift; sourceTree = "<group>"; };
@@ -376,10 +379,7 @@
 		B792639A1F0D7B8200062B8D /* SPBezierPathFigurePatterns.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPBezierPathFigurePatterns.swift; sourceTree = "<group>"; };
 		B792639B1F0D7B8200062B8D /* SPBezierPathFigure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPBezierPathFigure.swift; sourceTree = "<group>"; };
 		B79263F31F0D828100062B8D /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
-		B7964C301EF9B6BB00000CF8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
-		B7964C311EF9B6BB00000CF8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B7964C351EF9B76400000CF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
-		B7964C381EF9B76800000CF8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeRecorder.swift; sourceTree = "<group>"; };
 		B7A3B77F1F2B941F0003C2C9 /* Baily's Beads.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Baily's Beads.txt"; sourceTree = "<group>"; };
 		B7A3B7811F2B94380003C2C9 /* Totality.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Totality.txt; sourceTree = "<group>"; };
@@ -418,7 +418,6 @@
 		B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		B7E7A9871F12A40200B239B8 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
-		B7EF1A3F1F3BAAED004540C2 /* Realtime_Eclipse_Shorts.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Realtime_Eclipse_Shorts.mp3; sourceTree = "<group>"; };
 		B7EF1A411F3C0A6A004540C2 /* Intermission.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Intermission.txt; sourceTree = "<group>"; };
 		B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ThankYou.txt; sourceTree = "<group>"; };
 		B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
@@ -1137,7 +1136,7 @@
 		B7A600A71F3B7BE4005870BE /* Short */ = {
 			isa = PBXGroup;
 			children = (
-				B7EF1A3F1F3BAAED004540C2 /* Realtime_Eclipse_Shorts.mp3 */,
+				B71E206C1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 */,
 				B7B16F3E1F3B3F4D0036E396 /* Bailys_Beads_Short.mp3 */,
 				B7B16F3F1F3B3F4D0036E396 /* Diamond_Ring_short.mp3 */,
 				B7B16F401F3B3F4D0036E396 /* First_Contact_Short.mp3 */,
@@ -1218,6 +1217,7 @@
 				B745AE1C1F1E65570025946C /* InstructionsViewController.swift */,
 				B745AE1E1F1E65900025946C /* SettingsViewController.swift */,
 				B745AE201F1E65B50025946C /* LegalViewController.swift */,
+				B75A137C1F43914000F5C27A /* PrivacyPolicyViewController.swift */,
 				B745AE241F1E6A190025946C /* OpenSourceViewController.swift */,
 				B745AE361F1E8A230025946C /* LicenseViewController.swift */,
 				B73B20921F34600F003B8D8E /* FutureEventsViewController.swift */,
@@ -1333,7 +1333,6 @@
 			knownRegions = (
 				en,
 				Base,
-				es,
 			);
 			mainGroup = B72DF5381ED724F300F9E4F3;
 			productRefGroup = B72DF5421ED724F300F9E4F3 /* Products */;
@@ -1370,8 +1369,8 @@
 				B72DF5521ED724F300F9E4F3 /* LaunchScreen.storyboard in Resources */,
 				B7B16F4B1F3B407E0036E396 /* Diamond Ring-Short.txt in Resources */,
 				B72DF54F1ED724F300F9E4F3 /* Assets.xcassets in Resources */,
+				B71E206D1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 in Resources */,
 				B7372E101F27A18C00A71396 /* CountDownCell.xib in Resources */,
-				B7EF1A401F3BAAED004540C2 /* Realtime_Eclipse_Shorts.mp3 in Resources */,
 				B7B16F4D1F3B409F0036E396 /* Baily's Beads-Short.txt in Resources */,
 				B7A3B7801F2B941F0003C2C9 /* Baily's Beads.txt in Resources */,
 				B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */,
@@ -1538,7 +1537,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/AudioKit.framework/fix-framework.sh\"";
+			shellScript = "\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/AudioKit.framework/fix-framework.sh\"\n\"${PODS_ROOT}/Fabric/run\" ***REPLACE*** ***REPLACE***";
 		};
 		DF7F64DDA0C572E8FEBD8F1D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1712,6 +1711,7 @@
 				B79263DA1F0D7B8200062B8D /* SPSegmentControlStyleProtocol.swift in Sources */,
 				B79263AB1F0D7B8200062B8D /* SPCGRectExtension.swift in Sources */,
 				B79263BA1F0D7B8200062B8D /* SPRequestPermissionDataFonts.swift in Sources */,
+				B75A137D1F43914000F5C27A /* PrivacyPolicyViewController.swift in Sources */,
 				B79263F01F0D7B8200062B8D /* SPBezierPathFigurePatterns.swift in Sources */,
 				B73AE7361EE860A900BDBCE8 /* Constants.swift in Sources */,
 			);
@@ -1753,7 +1753,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				B72DF5491ED724F300F9E4F3 /* Base */,
-				B7964C301EF9B6BB00000CF8 /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -1762,7 +1761,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				B72DF5511ED724F300F9E4F3 /* Base */,
-				B7964C311EF9B6BB00000CF8 /* es */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1771,7 +1769,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				B7964C351EF9B76400000CF8 /* Base */,
-				B7964C381EF9B76800000CF8 /* es */,
 			);
 			name = Localizable.strings;
 			path = ..;
@@ -1883,6 +1880,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = T9DKCYAS8J;
 				INFOPLIST_FILE = EclipseSoundscapes/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1901,6 +1899,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = T9DKCYAS8J;
 				INFOPLIST_FILE = EclipseSoundscapes/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

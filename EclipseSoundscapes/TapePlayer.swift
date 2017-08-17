@@ -26,8 +26,7 @@ import AudioKit
 protocol PlayerDelegate : NSObjectProtocol {
     func progress(_ progress: Double)
     func finished()
-    func canceled()
-    func paused()
+    func interrupted()
     func resumed()
 }
 
@@ -43,18 +42,34 @@ public class TapePlayer : NSObject {
         return player.duration
     }
     
+    private var wasPlaying = false
+    private var playing = false
+    private var isFinished = false
+    
+    var isPlaying : Bool {
+        return player.isPlaying
+    }
+    
+    var rate : Double {
+        return Double(player.rate)
+    }
+    
     //Audio player
-    var player : AVAudioPlayer!
+    private var player : AVAudioPlayer!
     
     /// Local Timer to update duration
     fileprivate weak var timer : Timer?
     
     var progress : Double = 0.0
     
+    
+    
     init(tape: Tape) {
         super.init()
         self.tape = tape
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(systemStop), name: NSNotification.Name.AVAudioSessionMediaServicesWereLost, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(systemRestart), name: NSNotification.Name.AVAudioSessionMediaServicesWereReset, object: nil)
         try? prepareSession()
     }
     
@@ -70,17 +85,13 @@ public class TapePlayer : NSObject {
     func prepareSession() throws {
         do {
             try AKSettings.setSession(category: .playAndRecord, with: .defaultToSpeaker)
-            try AKSettings.session.setActive(true)
-            player  = try AVAudioPlayer(contentsOf: (tape?.audioUrl)!)
-            player.delegate = self
+            if player == nil {
+                player = try AVAudioPlayer(contentsOf: (tape?.audioUrl)!)
+                player.delegate = self
+            }
         } catch {
             throw error
         }
-    }
-    
-    func play() {
-        self.player.play()
-        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
     }
     
     /// Stop the monitor and the player with a status
@@ -88,40 +99,48 @@ public class TapePlayer : NSObject {
     /// - Parameters:
     ///   - status: Reason why the monitor was stopped
     public func stop(_ status: PlaybackStatus) {
-        timer?.invalidate()
-        timer = nil
-        switch status {
-        case .finished: //TODO: Tape has ended
-            self.delegate?.finished()
-            self.player.stop()
-            try? AKSettings.session.setActive(false)
-            break
-        case .cancel: //TODO: Audio Playback was ended by user
-            self.delegate?.canceled()
-            self.player.stop()
-            try? AKSettings.session.setActive(false)
-            break
-        case .interrupted:
-            self.pause()
-            break
+        if !isFinished {
+            timer?.invalidate()
+            timer = nil
+            switch status {
+            case .finished:
+                isFinished = true
+                playing = false
+                self.delegate?.finished()
+                self.player.stop()
+                try? AKSettings.session.setActive(false)
+                break
+            case .interrupted:
+                wasPlaying = playing
+                self.pause()
+                break
+            }
         }
+    }
+    
+    func play() {
+        if isFinished {
+            try? prepareSession()
+            isFinished = false
+        }
+        
+        playing = true
+        self.player.play()
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
     }
     
     /// Pause the Player
     public func pause() {
+        playing = false
         timer?.invalidate()
         player.pause()
-        self.delegate?.paused()
     }
     
     /// Resume the Player
-    ///
-    /// - Parameter flag: Flag to resume the current Audio session
-    public func resume(startSesstion flag : Bool = true) {
-        if flag {
-            try? AKSettings.session.setActive(true)
+    public func resume() {
+        if wasPlaying {
+            self.play()
         }
-        self.play()
         self.delegate?.resumed()
     }
     
@@ -133,12 +152,9 @@ public class TapePlayer : NSObject {
     @objc private func updateProgress() {
         
         self.progress = player.currentTime
-        print(String.init(format: "Player progress: %.2f", progress))
         self.delegate?.progress(self.progress)
     }
-}
-
-extension TapePlayer : AVAudioPlayerDelegate {
+    
     /// Interruption Handler
     ///
     /// - Parameter notification: Device generated notification about interruption
@@ -153,9 +169,28 @@ extension TapePlayer : AVAudioPlayerDelegate {
         
         if theInterruptionType == AVAudioSessionInterruptionType.ended.rawValue {
             //Interruption Ended
-            self.resume(startSesstion: false)
+            self.resume()
         }
     }
+    
+    func systemStop() {
+        self.stop(.interrupted)
+    }
+    
+    func systemRestart() {
+        do {
+            try prepareSession()
+            self.changeTime(to: self.progress)
+            if wasPlaying {
+                self.play()
+            }
+        } catch  {
+            print("Error trying to restart the player: \(error.localizedDescription)")
+        }
+    }
+}
+
+extension TapePlayer : AVAudioPlayerDelegate {
     
     public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         self.stop(.finished)

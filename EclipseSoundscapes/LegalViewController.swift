@@ -30,10 +30,7 @@ class LegalViewController : FormViewController {
         initializeForm()
         
         self.navigationItem.title = "Legal"
-        let button = UIBarButtonItem(image: #imageLiteral(resourceName: "left-small"), style: .plain, target: self, action: #selector(close))
-        button.tintColor = .black
-        button.accessibilityLabel = "Back"
-        self.navigationItem.leftBarButtonItem = button
+        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
     }
     
     private func initializeForm() {
@@ -56,6 +53,10 @@ class LegalViewController : FormViewController {
                 row.title = row.tag
                 row.presentationMode = PresentationMode.segueName(segueName: "Photo Credits", onDismiss: nil)
             }
+            <<< ButtonRow("Privacy Policy"){(row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.presentationMode = PresentationMode.segueName(segueName: "PrivacyPolicy", onDismiss: nil)
+        }
         
     }
     

@@ -31,6 +31,10 @@ class TabViewController: UITabBarController {
         
         customizeTabBar()
         registerEclipseNotifications()
+        
+        if Location.isGranted {
+            LocationManager.getLocation()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -110,7 +114,7 @@ class TabViewController: UITabBarController {
                 RealtimeMedia(name: "Baily's Beads", infoRecourceName: "Baily's Beads-Short", image: #imageLiteral(resourceName: "Baily's Beads"), startTime: 0, endTime: 24),
                 RealtimeMedia(name: "Totality", infoRecourceName: "Totality-Short", image: #imageLiteral(resourceName: "Totality"), startTime: 120, endTime: 145),
                 RealtimeMedia(name: "Diamond Ring", infoRecourceName: "Diamond Ring-Short", image: #imageLiteral(resourceName: "Diamond Ring"), startTime: 200, endTime: 213),
-                RealtimeMedia(name: "Sun as a Star", infoRecourceName: "Sun as a Star", image: #imageLiteral(resourceName: "Sun as a Star"), startTime: 320, endTime: 344))
+                RealtimeMedia(name: "Sun as a Star", infoRecourceName: "Sun as a Star", image: #imageLiteral(resourceName: "Sun as a Star"), startTime: 320, endTime: 356))
             
             openPlayer(with: full)
             break

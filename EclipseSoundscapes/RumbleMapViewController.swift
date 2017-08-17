@@ -36,6 +36,14 @@ class Event: NSObject {
         
         self.image = UIImage(named: name)
     }
+    
+    init(name: String, resourceName: String, image: UIImage){
+        self.name = name
+        let text = Utility.getFile(resourceName, type: "txt")
+        self.info = NSAttributedString(string: text ?? "", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont.getDefautlFont(.meduium, size: 18)])
+        
+        self.image = image
+    }
 }
 
 
@@ -55,8 +63,8 @@ class RumbleMapViewController: UIViewController {
     @IBOutlet weak var controlView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     
-    @IBOutlet weak var nextBtn: UIButton!
-    @IBOutlet weak var previousBtn: UIButton!
+    @IBOutlet weak var nextBtn: SqueezeButton!
+    @IBOutlet weak var previousBtn: SqueezeButton!
     @IBOutlet weak var descriptionTextView: UITextView!
     
     @IBOutlet weak var startRumbleBtn: UIButton!
@@ -102,23 +110,54 @@ class RumbleMapViewController: UIViewController {
     
     func reloadViews(for reminder : Reminder) {
         if reminder.contains(.allDone) || reminder.contains(.totality) {
-            EventImages = [Event(name: "First Contact"),
-                                   Event(name: "Baily's Beads"),
-                                   Event(name: "Corona"),
-                                   Event(name: "Diamond Ring"),
-                                   Event(name: "Helmet Streamers"),
-                                   Event(name: "Prominence"),
-                                   Event(name: "Totality")]
-            
-        } else if reminder.contains(.contact1) {
-            EventImages = [Event(name: "First Contact"),
-                           Event(name: "Baily's Beads"),
+            EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
+                           Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
                            Event(name: "Corona"),
                            Event(name: "Diamond Ring"),
                            Event(name: "Helmet Streamers"),
-                           Event(name: "Prominence")]
+                           Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
+                           Event(name: "Prominence"),
+                           Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed")),
+                           Event(name: "Totality")]
+            
+        } else if reminder.contains(.contact1) {
+            EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
+                           Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
+                           Event(name: "Corona"),
+                           Event(name: "Diamond Ring"),
+                           Event(name: "Helmet Streamers"),
+                           Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
+                           Event(name: "Prominence"),
+                           Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed"))]
             currentIndex += 1
         }
+    }
+    
+    func loadImages() {
+        EventImages = [Event(name: "Baily's Beads"),
+                       Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
+                       Event(name: "Corona"),
+                       Event(name: "Diamond Ring"),
+                       Event(name: "Helmet Streamers"),
+                       Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
+                       Event(name: "Prominence"),
+                       Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed"))
+        ]
+        
+        
+        if UserDefaults.standard.bool(forKey: "Contact1Done") {
+            reloadViews(for: .contact1)
+        }
+        
+        if UserDefaults.standard.bool(forKey: "TotalityDone") {
+            reloadViews(for: .totality)
+        }
+        
+        
+        titleLabel.text = EventImages[currentIndex].name
+        descriptionTextView.attributedText = EventImages[currentIndex].info
+        previewImageView.image = EventImages[currentIndex].image
+        
     }
     
     func configureView() {
@@ -163,28 +202,7 @@ class RumbleMapViewController: UIViewController {
         titleLabel.font = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(fontName: .bold, textStyle: .headline), size: 0)
     }
     
-    func loadImages() {
-        EventImages = [Event(name: "Baily's Beads"),
-        Event(name: "Corona"),
-        Event(name: "Diamond Ring"),
-        Event(name: "Helmet Streamers"),
-        Event(name: "Prominence")]
-        
-        
-        if UserDefaults.standard.bool(forKey: "Contact1Done") {
-            reloadViews(for: .contact1)
-        }
-        
-        if UserDefaults.standard.bool(forKey: "TotalityDone") {
-            reloadViews(for: .totality)
-        }
-        
-        
-        titleLabel.text = EventImages[currentIndex].name
-        descriptionTextView.attributedText = EventImages[currentIndex].info
-        previewImageView.image = EventImages[currentIndex].image
-        
-    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -233,7 +251,7 @@ class RumbleMapViewController: UIViewController {
             startRumbleBtn.isHidden = false
             previewImageView.isHidden = false
             descriptionBtn.tintColor = UIColor(r: 33, g: 33, b: 33)
-            descriptionBtn.accessibilityTraits ^= UIAccessibilityTraitSelected
+            descriptionBtn.accessibilityTraits &= ~UIAccessibilityTraitSelected
             
         } else if sender == descriptionBtn {
             descriptionTextView.isHidden = false
@@ -241,11 +259,11 @@ class RumbleMapViewController: UIViewController {
             previewImageView.isHidden = true
             rumbleBtn.tintColor = UIColor(r: 33, g: 33, b: 33)
             rumbleBtn.accessibilityHint = nil
-            rumbleBtn.accessibilityTraits ^= UIAccessibilityTraitSelected
+            rumbleBtn.accessibilityTraits &= ~UIAccessibilityTraitSelected
         }
         
         sender.tintColor = UIColor.init(r: 227, g: 94, b: 5)
-        sender.accessibilityTraits |= UIAccessibilityTraitSelected
+        sender.accessibilityTraits ^= UIAccessibilityTraitSelected
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

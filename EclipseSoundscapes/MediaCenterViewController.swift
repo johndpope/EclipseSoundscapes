@@ -98,16 +98,31 @@ class MediaCenterViewController : UIViewController {
     func reloadMedia(for reminder: Reminder) {
         if reminder.contains(.allDone) || reminder.contains(.totality) {
             
-            self.mediaContainer?.append(Media.init(name: "Totality", resourceName: "Totality_full", infoRecourceName: "Totality", mediaType: .mp3, image: #imageLiteral(resourceName: "Totality")))
+            let totality = Media.init(name: "Totality", resourceName: "Totality_full", infoRecourceName: "Totality", mediaType: .mp3, image: #imageLiteral(resourceName: "Totality"))
             
-            self.mediaContainer?.append(Media.init(name: "Sun as a Star", resourceName: "Sun_as_a_Star_full", infoRecourceName: "Sun as a Star", mediaType: .mp3, image: #imageLiteral(resourceName: "Sun as a Star")))
+            let sunAsAStar = Media.init(name: "Sun as a Star", resourceName: "Sun_as_a_Star_full", infoRecourceName: "Sun as a Star", mediaType: .mp3, image: #imageLiteral(resourceName: "Sun as a Star"))
             
-    
-            self.mediaContainer?.append(RealtimeEvent(name: "Totality Experience", resourceName: "Realtime_Eclipse_Shorts", mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Totality"), media:
+            let totalityExperience = RealtimeEvent(name: "Totality Experience", resourceName: "Realtime_Eclipse_Shorts", mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Totality"), media:
                 RealtimeMedia(name: "Baily's Beads", infoRecourceName: "Baily's Beads-Short", image: #imageLiteral(resourceName: "Baily's Beads"), startTime: 0, endTime: 24),
-                RealtimeMedia(name: "Totality", infoRecourceName: "Totality-Short", image: #imageLiteral(resourceName: "Totality"), startTime: 120, endTime: 145),
-                RealtimeMedia(name: "Diamond Ring", infoRecourceName: "Diamond Ring-Short", image: #imageLiteral(resourceName: "Diamond Ring"), startTime: 200, endTime: 213),
-                RealtimeMedia(name: "Sun as a Star", infoRecourceName: "Sun as a Star", image: #imageLiteral(resourceName: "Sun as a Star"), startTime: 320, endTime: 344)))
+                                                   RealtimeMedia(name: "Totality", infoRecourceName: "Totality-Short", image: #imageLiteral(resourceName: "Totality"), startTime: 120, endTime: 145),
+                                                   RealtimeMedia(name: "Diamond Ring", infoRecourceName: "Diamond Ring-Short", image: #imageLiteral(resourceName: "Diamond Ring"), startTime: 200, endTime: 213),
+                                                   RealtimeMedia(name: "Sun as a Star", infoRecourceName: "Sun as a Star", image: #imageLiteral(resourceName: "Sun as a Star"), startTime: 320, endTime: 355))
+            
+            if !(mediaContainer?.contains(where: { (media) -> Bool in
+                return media.name == totality.name
+            }))! {
+                mediaContainer?.append(totality)
+            }
+            if !(mediaContainer?.contains(where: { (media) -> Bool in
+                return media.name == sunAsAStar.name
+            }))! {
+                mediaContainer?.append(sunAsAStar)
+            }
+            if !(mediaContainer?.contains(where: { (media) -> Bool in
+                return media.name == totalityExperience.name
+            }))! {
+                mediaContainer?.append(totalityExperience)
+            }
             
             comingSoonLabel.isHidden = true
             
@@ -119,7 +134,6 @@ class MediaCenterViewController : UIViewController {
             self.tableView.reloadData()
         }
     }
-    
     
     func setupView() {
         
@@ -169,9 +183,19 @@ extension MediaCenterViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard let media = mediaContainer?[indexPath.row] else {
+            return
+        }
+        
         let playbackVc = PlaybackViewController()
         
-        playbackVc.media = (mediaContainer?[indexPath.row])!
+        playbackVc.media = media
+        
+        //        if media is RealtimeEvent {
+        //            playbackVc.isRealtimeEvent = true
+        //        }
+        
         self.present(playbackVc, animated: true, completion: nil)
     }
     

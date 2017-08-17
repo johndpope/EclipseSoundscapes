@@ -53,7 +53,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         
         let thirdPage = Page(title: "Eclipse Center", message: "The Eclipse Center is your go-to destination for learning about eclipses in your area so you can discover them as they happen. When you open the Eclipse Center, it will ask to pinpoint your geographic location. Once you accept, you will find a countdown to the next eclipse, information on whether you will experience a total or a partial solar eclipse in your area, and the exact start time, peak time, and end time of the eclipse.", imageName: "Soundscapes-Eclipse Center")
         
-        let fourthPage = Page(title: "Audio Descriptions", message: "When it is time for the next eclipse to start, you will receive a notification to open Eclipse Soundscapes. The app will then guide you through the main event with illustrative audio descriptions of an eclipse’s most important moments. These audio descriptions, provided by the National Center for Accessible Media, are explanations of photos developed with specialized language to help people who are blind and visually impaired engage with an eclipse. After each audio description ends, you will have the option to either hear more educational information or explore that feature of an eclipse using the Rumble Map. If VoiceOver is active during one of these audio descriptions and if the text that provided with the audio description is selected, the audio will stop playing and VoiceOver will begin to read the provided text. During a Realtime event, text that is provided with the audio descriptions will not be avaiable to VoiceOver users.", imageName: "Soundscapes-AudioRecordings")
+        let fourthPage = Page(title: "Audio Descriptions", message: "When it is time for the next eclipse to start, you will receive a notification to open Eclipse Soundscapes. The app will then guide you through the main event with illustrative audio descriptions of an eclipse’s most important moments. These audio descriptions, provided by the National Center for Accessible Media, are explanations of photos developed with specialized language to help people who are blind and visually impaired engage with an eclipse. After each audio description ends, you will have the option to either hear more educational information or explore that feature of an eclipse using the Rumble Map. If VoiceOver is active during one of these audio descriptions and if the text that provided with the audio description is selected, the audio will stop playing and VoiceOver will begin to read the provided text. During a Realtime event, text that is provided with the audio descriptions will not be available to VoiceOver users.", imageName: "Soundscapes-AudioRecordings")
         
         return [firstPage, secondPage, thirdPage, fourthPage]
     }()
@@ -235,6 +235,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         }
         
         let indexPath = IndexPath(item: currentPage+1, section: 0)
+        
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         currentPage += 1
     }
@@ -276,7 +277,6 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        observeKeyboardNotifications()
         self.view.accessibilityElements = [collectionView, nextButton, skipButton, pageLabel]
         
         view.addSubview(collectionView)
@@ -315,35 +315,6 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         skipButton.setTitle("Close", for: .normal)
         skipButton.accessibilityLabel = "Close Walk Through"
         skipButton.addTarget(self, action: #selector(close), for: .touchUpInside)
-    }
-    
-    fileprivate func observeKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardShow), name: .UIKeyboardWillShow, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardHide), name: .UIKeyboardWillHide, object: nil)
-    }
-    
-    func keyboardHide() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            
-            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-            
-        }, completion: nil)
-    }
-    
-    func keyboardShow() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            
-            let y: CGFloat = UIDevice.current.orientation.isLandscape ? -100 : -50
-            self.view.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height)
-            
-        }, completion: nil)
-    }
-    
-    var lastOffset : CGFloat = 0
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        view.endEditing(true)
     }
     
     var pageControlRightConstant : CGFloat = 0

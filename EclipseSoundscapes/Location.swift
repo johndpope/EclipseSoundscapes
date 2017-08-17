@@ -108,6 +108,8 @@ typealias PermissionClosedCompletion = ()->Void
 
 class LocationManager : NSObject {
     
+    private static var DEBUG = false
+    
     static var eclispeDate : Date? {
         get {
             let eclipseAfterDateString = "2017-08-22"
@@ -147,7 +149,8 @@ class LocationManager : NSObject {
     fileprivate var isReoccuring = false
     
     private var interval : TimeInterval = 15*60 // 15 minutes
-    private static var preNotificationOffset : Double = 60*2 // 2 Mintues for reinder notifications
+    private static var preNotificationOffset : Double = 60*2 // 2 Mintues for reminder notifications
+    private static var WINDOW_OF_NOTIFICATION : Double = 60*7 // 7 minute window for giving notifications
     
     
     enum DelegateAction {
@@ -324,7 +327,6 @@ class LocationManager : NSObject {
     static var tempDate : Date!
     
     private static func setNotification(generator: EclipseTimeGenerator) {
-        let debug = false
         
         if UserDefaults.standard.bool(forKey: "EclipseAllDone") {
             return
@@ -334,7 +336,7 @@ class LocationManager : NSObject {
             return
         }
         
-        if debug {
+        if LocationManager.DEBUG {
             tempDate = Date()
             
             if tempDate >= end {
@@ -376,7 +378,7 @@ class LocationManager : NSObject {
             }
             
             let totalityOffsetDate = totality.addingTimeInterval(-(10 + 120)) // 2 Minutes and 10 seconds before the eclipse totality
-            
+            let totalityReminderDate = totality.addingTimeInterval(-LocationManager.preNotificationOffset * 2)
             
             if !UserDefaults.standard.bool(forKey: "TotalityDone") {
                 NotificationHelper.listenNotification(for: totalityOffsetDate, reminder: .totality)
@@ -384,7 +386,7 @@ class LocationManager : NSObject {
                 print("Totality Notification Scheduled")
             }
             
-            let toalityPreDate = totalityOffsetDate.addingTimeInterval(-LocationManager.preNotificationOffset)
+            let toalityPreDate = totalityReminderDate
             if today >= toalityPreDate {
                 return
             }
@@ -399,13 +401,14 @@ class LocationManager : NSObject {
             }
             
             let c1OffsetDate = c1.addingTimeInterval(-10) // 10 seconds before the contact 1
+            let c1ReminderDate = c1.addingTimeInterval(-LocationManager.preNotificationOffset)
             
             if !UserDefaults.standard.bool(forKey: "Contact1Done") {
                 NotificationHelper.listenNotification(for: c1OffsetDate, reminder: .contact1)
                 print("Contact 1 Notification Scheduled")
             }
         
-            let contact1PreDate = c1OffsetDate.addingTimeInterval(-LocationManager.preNotificationOffset)
+            let contact1PreDate = c1ReminderDate
             if today >= contact1PreDate {
                 return
             }
@@ -419,7 +422,6 @@ class LocationManager : NSObject {
     }
     
     static func checkEclipseDates() {
-        let debug = false
         if UserDefaults.standard.bool(forKey: "EclipseAllDone") {
             NotificationHelper.postNotification(for: .allDone)
             return
@@ -467,7 +469,7 @@ class LocationManager : NSObject {
             return
         }
         
-        if debug {
+        if LocationManager.DEBUG {
             
             if let tempDate = LocationManager.tempDate {
                 if currentDate >= tempDate.addingTimeInterval(3.5*60) {
@@ -502,30 +504,35 @@ class LocationManager : NSObject {
         } else {
             
             let totalityOffsetDate = totality.addingTimeInterval(-(10 + 120)) // 2 Minutes and 10 seconds before the eclipse totality
+            let totalityReminderDate = totality.addingTimeInterval(-LocationManager.preNotificationOffset * 2)
             
             if currentDate >= totalityOffsetDate {
                 if !UserDefaults.standard.bool(forKey: "TotalityDone") {
-                    NotificationHelper.postNotification(for: .totality)
+                    NotificationHelper.postNotification(for: .totality, notify: currentDate >= totalityOffsetDate.WINDOW_OF_NOTIFICATION)
                     return
                 }
             }
             
-            if currentDate >= totalityOffsetDate.addingTimeInterval(-LocationManager.preNotificationOffset) {
+            if currentDate >= totalityReminderDate {
                 if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
                     NotificationHelper.postNotification(for: .totaltyReminder)
                     return
                 }
             }
             
-            if currentDate >= c1 {
+            let c1OffsetDate = c1.addingTimeInterval(-10) // 10 seconds before the contact 1
+            let c1ReminderDate = c1.addingTimeInterval(-LocationManager.preNotificationOffset)
+            
+            if currentDate >= c1OffsetDate {
+                
                 if !UserDefaults.standard.bool(forKey: "Contact1Done") {
-                    NotificationHelper.postNotification(for: .contact1)
+                    NotificationHelper.postNotification(for: .contact1, notify: currentDate >= c1OffsetDate.WINDOW_OF_NOTIFICATION)
                     return
                 }
             }
             
             
-            if currentDate >= c1.addingTimeInterval(-LocationManager.preNotificationOffset) {
+            if currentDate >= c1ReminderDate {
                 if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
                     NotificationHelper.postNotification(for: .firstReminder)
                     return
@@ -586,5 +593,10 @@ extension LocationManager : SPRequestPermissionEventsDelegate {
     }
 }
 
+extension Date {
+    var WINDOW_OF_NOTIFICATION: Date {
+        return self.addingTimeInterval(60*1.5) // 7 Minute window to give notification to user
+    }
+}
 
 

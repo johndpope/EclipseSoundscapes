@@ -91,7 +91,7 @@ final class InfoCell: Cell<EclipseEvent>, CellType {
     func toggleAccessibility(_ onOff : Bool, atUserLocation : Bool = true) {
         if !onOff {
             self.accessibilityLabel = "Events at \(atUserLocation ? "your" : "closest") location are below"
-            self.accessibilityHint = "Events inclues \(atUserLocation ? "your" : "closest location's") local time and Universal Time"
+            self.accessibilityHint = "Events include \(atUserLocation ? "your" : "closest location's") local time and Universal Time"
         }
         eventLabel.isAccessibilityElement = onOff
         localTimeLabel.isAccessibilityElement = onOff

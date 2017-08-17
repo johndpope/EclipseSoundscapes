@@ -80,7 +80,17 @@ public class RealtimeEvent: Media {
     }
     
     func shouldChangeMedia(for time: Double) -> Bool {
-        return self.index != getIndex(for: time)
+        
+        let index = getIndex(for: time)
+        
+        switch index {
+        case END:
+            return true
+        case INTERMISSION:
+            return true
+        default:
+            return self.index != index
+        }
     }
     
     private func getIndex(for time: Double) -> Int{
@@ -99,27 +109,45 @@ public class RealtimeEvent: Media {
         return INTERMISSION
     }
     
+    private func getNextMedia(after time: Double) -> RealtimeMedia {
+        var targetMedia : RealtimeMedia!
+        for i in 0 ..< media.count {
+            let tempMedia = self.media[i]
+            if time < tempMedia.endTime {
+                targetMedia =  tempMedia
+                break
+            }
+        }
+        if targetMedia == nil {
+            targetMedia = media[media.count-1]
+        }
+        
+        return targetMedia
+    }
+    
     func loadNextMedia(for time : Double) {
         
         let index = getIndex(for: time)
         
-        if index == END {
+        switch index {
+        case END :
             self.name = "All Done!"
             self.infoRecourceName = "ThankYou"
             self.image = #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse")
-        } else if index == INTERMISSION {
-            if self.index == media.count-1 {
-                self.index -= 1
-            }
-            self.name = "\(media[self.index + 1].name!) Up Next"
+            break
+        case INTERMISSION:
+            self.name = "\(getNextMedia(after: time).name!) Up Next"
             self.infoRecourceName = "Intermission"
             self.image = #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse")
-        }else {
+            break
+        default:
             self.index = index
             let media = self.media[self.index]
             self.name = media.name
             self.infoRecourceName = media.infoRecourceName
             self.image = media.image
         }
+        
     }
+    
 }

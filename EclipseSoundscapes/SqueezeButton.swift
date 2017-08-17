@@ -25,13 +25,18 @@ import UIKit
 class SqueezeButton : UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addTarget(self, action: #selector(squeeze), for: [.touchDown, .touchDragInside])
-        self.addTarget(self, action: #selector(unSqueeze), for: [.touchDragExit])
-        self.addTarget(self, action: #selector(unSqueeze), for: .touchUpInside)
+        addSqueez()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        addSqueez()
+    }
+    
+    func addSqueez() {
+        self.addTarget(self, action: #selector(squeeze), for: [.touchDown, .touchDragInside])
+        self.addTarget(self, action: #selector(unSqueeze), for: [.touchDragExit])
+        self.addTarget(self, action: #selector(unSqueeze), for: .touchUpInside)
     }
     
     @objc private func squeeze() {
@@ -49,5 +54,17 @@ class SqueezeButton : UIButton {
             })
         }
         
+    }
+}
+
+extension  UINavigationItem  {
+    func addSqeuuzeBackBtn(_ target : Any, action: Selector, for events: UIControlEvents) {
+        let button = SqueezeButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = .black
+        button.accessibilityLabel = "Back"
+        button.addTarget(target, action: action, for: events)
+        button.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        self.leftBarButtonItem = UIBarButtonItem(customView: button)
     }
 }

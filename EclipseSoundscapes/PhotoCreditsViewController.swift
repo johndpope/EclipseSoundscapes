@@ -50,10 +50,7 @@ class PhotoCreditsViewController : FormViewController {
         initializeForm()
         
         self.navigationItem.title = "Photo Credits"
-        let button = UIBarButtonItem(image: #imageLiteral(resourceName: "left-small"), style: .plain, target: self, action: #selector(close))
-        button.tintColor = .black
-        button.accessibilityLabel = "Back"
-        self.navigationItem.leftBarButtonItem = button
+        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
     }
     private func initializeForm() {
         
@@ -88,7 +85,9 @@ class PhotoCreditsViewController : FormViewController {
                         cell?.layer.transform = CATransform3DIdentity
                     })
                 }
-            }
+            }.onCellSelection({ (cell, row) in
+                cell.openWebsite()
+            })
     }
     
     

@@ -64,7 +64,7 @@ final class PartnerCell: Cell<Partner>, CellType {
         websiteBtn.isAccessibilityElement = false
         memberImageView.contentMode = .scaleAspectFit
         memberImageView.clipsToBounds = true
-        height = { return 94 }
+        height = { return UITableViewAutomaticDimension }
         
         self.accessibilityTraits = UIAccessibilityTraitLink | UIAccessibilityTraitHeader
     }
@@ -92,7 +92,7 @@ final class PartnerCell: Cell<Partner>, CellType {
             return
         }
         let alert = UIAlertController(title: "Open in Safari", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Sure", style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Sure", style: .default, handler: { _ in
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {

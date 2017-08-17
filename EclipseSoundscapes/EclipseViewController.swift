@@ -54,6 +54,7 @@ class EclipseViewController : FormViewController {
             getlocation(animated: !foundLocationOnce)
         }
         
+        NotificationHelper.addObserver(self, reminders: .contact1, selector: #selector(hideCountdown))
     }
     
     private func initializeForm() {
@@ -75,12 +76,42 @@ class EclipseViewController : FormViewController {
             cell.detailTextLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
             cell.detailTextLabel?.textColor = .white
             
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+             cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
+            
             cell.height = {30}
         }
         form
-            +++ CountDownRow("Countdown")
+            
+            +++ Section() {
+                var header = HeaderFooterView<LogoView>(.nibFile(name: "SectionHeader", bundle: nil))
+                header.onSetupView = { (view, section) -> () in
+                    view.imageView.alpha = 0;
+                    UIView.animate(withDuration: 2.0, animations: { [weak view] in
+                        view?.imageView.alpha = 1
+                    })
+                    view.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
+                    UIView.animate(withDuration: 1.0, animations: { [weak view] in
+                        view?.layer.transform = CATransform3DIdentity
+                    })
+                }
+                switch UIDevice.current.userInterfaceIdiom {
+                case .pad:
+                    header.height = {self.view.frame.width * 9 / 16}
+                default:
+                    break
+                }
+                
+                $0.header = header
+            }
+
+            +++ CountDownRow("Countdown"){
+                    $0.hidden = Condition.init(booleanLiteral: UserDefaults.standard.bool(forKey: "Contact1Done"))
+                }
                 .cellSetup({ (cell, row) in
                     cell.backgroundColor = .clear
+                }).cellUpdate({ (cell, row) in
+                    row.evaluateHidden()
                 })
             <<< LabelRow ("Type") { row in
                 row.title = "Eclipse Type: "
@@ -101,7 +132,7 @@ class EclipseViewController : FormViewController {
         
         
         
-        let section = form.allSections[0]
+        let section = form.allSections[1]
         section.header = HeaderFooterView<UIView>(HeaderFooterProvider.class)
         section.header?.height = {CGFloat.leastNormalMagnitude}
     }
@@ -121,6 +152,14 @@ class EclipseViewController : FormViewController {
         errorBtn.titleLabel?.textAlignment = .center
         errorBtn.setTitle(Location.string.general, for: .normal)
         
+    }
+    
+    func hideCountdown() {
+        if let row = form.rowBy(tag: "Countdown") as? CountDownRow {
+            row.hidden = true
+            row.evaluateHidden()
+        }
+        NotificationHelper.removeObserver(self, reminders: .contact1)
     }
     
     func didTapErrorBtn() {

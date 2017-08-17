@@ -23,6 +23,9 @@
 import UIKit
 import AudioKit
 import UserNotifications
+import Fabric
+import Crashlytics
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -33,12 +36,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        Fabric.with([Crashlytics.self])
         AKSettings.enableLogging = false
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = notificationDelegate
+            UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { (requests) in
+                print(requests.count)
+                print(requests.debugDescription)
+            })
         } else {
-//            print(application.scheduledLocalNotifications?.count)
-//            print(application.scheduledLocalNotifications?.debugDescription)
+            print(application.scheduledLocalNotifications?.count ?? "No Notification scheduled")
+            print(application.scheduledLocalNotifications?.debugDescription ?? "")
         }
         
         if !UserDefaults.standard.bool(forKey: "WalkThrough") {
@@ -52,9 +60,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         LocationManager.checkEclipseDates()
-        if Location.isGranted {
-            LocationManager.getLocation()
-        }
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

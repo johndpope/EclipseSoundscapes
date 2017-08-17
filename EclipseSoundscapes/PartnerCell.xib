@@ -15,13 +15,14 @@
             <rect key="frame" x="0.0" y="0.0" width="381" height="115"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BSB-8o-X92" id="pa5-jj-Xq5">
-                <rect key="frame" x="0.0" y="0.0" width="381" height="115"/>
+                <rect key="frame" x="0.0" y="0.0" width="381" height="114.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default" translatesAutoresizingMaskIntoConstraints="NO" id="lJK-ZP-Ghv">
                         <rect key="frame" x="8" y="8" width="100" height="100"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="100" id="ZL9-sx-8xi"/>
+                            <constraint firstAttribute="height" constant="100" id="rKY-ya-zKf"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbg-WB-iki">

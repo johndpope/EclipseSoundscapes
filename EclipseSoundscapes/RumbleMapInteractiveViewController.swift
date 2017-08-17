@@ -123,6 +123,8 @@ class RumbleMapInteractiveViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceConnectedNotification), name: Notification.Name.AVAudioSessionRouteChange, object: nil)
         // add interruption handler
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(systemRestart), name: NSNotification.Name.AVAudioSessionMediaServicesWereReset, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -419,12 +421,17 @@ class RumbleMapInteractiveViewController: UIViewController {
         NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSessionInterruptionType.began.rawValue ? "Begin Interruption" : "End Interruption")
         
         if theInterruptionType == AVAudioSessionInterruptionType.began.rawValue {
-            
+            self.setSession(active: false)
         }
         
         if theInterruptionType == AVAudioSessionInterruptionType.ended.rawValue {
-            
+            self.setSession(active: true)
         }
+    }
+    
+    func systemRestart() {
+        self.setSession(active: false)
+        self.setSession(active: true)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

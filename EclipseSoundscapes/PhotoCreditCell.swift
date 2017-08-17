@@ -84,7 +84,7 @@ final class PhotoCreditCell: Cell<PhotoCredit>, CellType {
                 photoImageView.image = photo
             }
             
-            self.accessibilityLabel = credit.name
+            self.accessibilityLabel = credit.name + " " + credit.makers
         }
     }
     
@@ -94,11 +94,11 @@ final class PhotoCreditCell: Cell<PhotoCredit>, CellType {
     }
     
     func openWebsite() {
-        guard let partner = row.value, let url = URL.init(string: partner.website) else {
+        guard let photo = row.value, let url = URL.init(string: photo.website) else {
             return
         }
         let alert = UIAlertController(title: "Open in Safari", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Sure", style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Sure", style: .default, handler: { _ in
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {

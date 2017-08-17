@@ -258,6 +258,38 @@ extension UIView {
         
         return anchors
     }
+        
+        /// Get Rombus Pattern View
+        ///
+        /// - Returns: Rombus Pattern View
+        class func rombusPattern() -> UIView {
+            let patternView = SPRequestPermissionData.views.patternView()
+            let gradientView = SPGradientWithPictureView.init()
+            gradientView.startColor = SPRequestPermissionData.colors.gradient.dark.lightColor()
+            gradientView.endColor = SPRequestPermissionData.colors.gradient.dark.darkColor()
+            gradientView.startColorPoint = CGPoint.init(x: 0.5, y: 0)
+            gradientView.endColorPoint = CGPoint.init(x: 0.5, y: 1)
+            gradientView.pictureView = patternView
+            
+            return gradientView
+        }
+        
+        func grayScale(point:CGPoint) -> CGFloat {
+            let pixel = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: 4)
+            let colorSpace = CGColorSpaceCreateDeviceRGB()
+            let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+            let context = CGContext(data: pixel, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
+            
+            context!.translateBy(x: -point.x, y: -point.y)
+            layer.render(in: context!)
+            
+            let scale = (CGFloat(pixel[0])/255.0 + CGFloat(pixel[1])/255.0 + CGFloat(pixel[2])/255.0)/3
+            
+            return scale
+            
+        }
+    
+
     
 }
 
@@ -313,6 +345,45 @@ extension UIImage {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
+    }
+}
+
+
+extension CGPoint : Hashable {
+    public var hashValue: Int {
+        return Int(x).hashValue << 32 ^ Int(y).hashValue
+    }
+    
+    func strideUpY(to limit : CGFloat = 7) -> StrideTo<CGFloat> {
+        return stride(from: y.rounded(), to: y.rounded() + limit, by: 1)
+    }
+    
+    func strideDownY(to limit : CGFloat = 7) -> StrideTo<CGFloat> {
+        return stride(from: y.rounded(), to: y.rounded() - limit, by: -1)
+    }
+    
+    func strideUpX(to limit : CGFloat = 7) -> StrideTo<CGFloat> {
+        return stride(from: x.rounded(), to: x.rounded() + limit, by: 1)
+    }
+    
+    func strideDownX(to limit : CGFloat = 7) -> StrideTo<CGFloat> {
+        return stride(from: x.rounded(), to: x.rounded() - limit, by: -1)
+    }
+}
+
+extension UIAlertController {
+    class func appSettingsAlert(title: String, message: String) -> UIAlertController {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { _ in
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(URL.init(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
+            } else {
+                // Fallback on earlier versions
+                UIApplication.shared.openURL(URL.init(string: UIApplicationOpenSettingsURLString)!)
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        return alert
     }
 }
 

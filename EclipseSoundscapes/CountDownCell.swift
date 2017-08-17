@@ -42,7 +42,7 @@ final class CountDownCell: Cell<Date>, CellType {
         super.update()
         if let date = row.value {
             countdownView.startCountdown(date, onCompleted: {
-                self.countdownView.isHidden = true
+                print("Contact 1 occured")
             })
         }
     }

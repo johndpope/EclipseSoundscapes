@@ -54,11 +54,10 @@ public enum AudioStatus {
 
 /// Status of Playback operation
 ///
-/// - finished: Sucessful audio playback
-/// - cancel: Playback was cancelled
+/// - finished: Audio playback completed
 /// - skip: Plyabck was skipped
 public enum PlaybackStatus {
-    case finished, cancel, interrupted
+    case finished, interrupted
 }
 
 /// Error involved during an Audio operation

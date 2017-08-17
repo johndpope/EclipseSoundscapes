@@ -33,10 +33,7 @@ class FuFutureEventsViewController : FormViewController {
         initializeForm()
         
         self.navigationItem.title = "Eclipses We Support"
-        let button = UIBarButtonItem(image: #imageLiteral(resourceName: "left-small"), style: .plain, target: self, action: #selector(close))
-        button.tintColor = .black
-        button.accessibilityLabel = "Back"
-        self.navigationItem.leftBarButtonItem = button
+        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
     }
     
     private func initializeForm() {
