@@ -27,11 +27,7 @@ import SwiftSpinner
 
 class RumbleMapInteractiveViewController: UIViewController {
     
-    var event : Event? {
-        didSet {
-            self.rumbleMap.event = event
-        }
-    }
+    var event : Event?
     
     var rumbleMap :  RumbleMap!
     
@@ -69,12 +65,10 @@ class RumbleMapInteractiveViewController: UIViewController {
         return view
     }()
     
-    var closeCompletion : (()->Void)?
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         rumbleMap = RumbleMap()
+        rumbleMap.event = event
         setupView()
     }
     
@@ -90,7 +84,7 @@ class RumbleMapInteractiveViewController: UIViewController {
     
     func setupView() {
         rumbleMap.target =  { [weak self] in
-            return self?.fix()
+            return self?.switchFocus()
         }
         
         view.addSubview(rumbleMap)
@@ -109,7 +103,7 @@ class RumbleMapInteractiveViewController: UIViewController {
     }
     
     
-    func fix() {
+    func switchFocus() {
         rumbleMap.isActive = false
         
         if closeBtn.accessibilityElementIsFocused() {

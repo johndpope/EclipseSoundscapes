@@ -181,15 +181,19 @@ class PlaybackViewController: UIViewController {
     }
     
     func handlePlay(play : Bool) {
-        self.update(progress: self.progress)
-        self.update(rate: play ? 1 : 0)
-        
-        if play {
-            player.play()
-        } else {
-            player.pause()
+        DispatchQueue.main.async { [weak self] in
+            if let strongSelf = self {
+                strongSelf.update(progress: strongSelf.progress)
+                strongSelf.update(rate: play ? 1 : 0)
+                
+                if play {
+                    strongSelf.player.play()
+                } else {
+                    strongSelf.player.pause()
+                }
+                strongSelf.updatePlayControl(play: play)
+            }
         }
-        updatePlayControl(play: play)
     }
     
     func updatePlayControl(play: Bool){
@@ -395,8 +399,6 @@ class PlaybackViewController: UIViewController {
         
         return mediaArt
     }
-    
-    
 }
 
 extension PlaybackViewController : PlayerDelegate {
