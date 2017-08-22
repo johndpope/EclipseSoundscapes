@@ -38,7 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         Crashlytics.start(withAPIKey: Utility.getFile("fabric.apikey", type: "")!)
         
-        AKSettings.enableLogging = false
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = notificationDelegate
             UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { (requests) in

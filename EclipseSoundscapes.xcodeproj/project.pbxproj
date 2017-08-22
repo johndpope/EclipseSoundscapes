@@ -61,7 +61,7 @@
 		B77417F41F03628700663C2E /* EclipseTimeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77417F31F03628700663C2E /* EclipseTimeGenerator.swift */; };
 		B7806DB51F0D43880052A7CD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806DB41F0D43880052A7CD /* Extensions.swift */; };
 		B7806DB71F0D58AD0052A7CD /* MarkerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806DB61F0D58AD0052A7CD /* MarkerContainer.swift */; };
-		B7806DB91F0D58CA0052A7CD /* RumbleMapImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806DB81F0D58CA0052A7CD /* RumbleMapImageView.swift */; };
+		B7806DB91F0D58CA0052A7CD /* RumbleMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806DB81F0D58CA0052A7CD /* RumbleMap.swift */; };
 		B7806E5B1F0D5B580052A7CD /* CountdownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7806E541F0D5B580052A7CD /* CountdownView.xib */; };
 		B7806E5C1F0D5B580052A7CD /* CountdownNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806E551F0D5B580052A7CD /* CountdownNumberView.swift */; };
 		B7806E5D1F0D5B580052A7CD /* CountdownTimeLeft.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7806E561F0D5B580052A7CD /* CountdownTimeLeft.swift */; };
@@ -288,7 +288,7 @@
 		B77417F31F03628700663C2E /* EclipseTimeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EclipseTimeGenerator.swift; sourceTree = "<group>"; };
 		B7806DB41F0D43880052A7CD /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		B7806DB61F0D58AD0052A7CD /* MarkerContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerContainer.swift; sourceTree = "<group>"; };
-		B7806DB81F0D58CA0052A7CD /* RumbleMapImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RumbleMapImageView.swift; sourceTree = "<group>"; };
+		B7806DB81F0D58CA0052A7CD /* RumbleMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RumbleMap.swift; sourceTree = "<group>"; };
 		B7806E541F0D5B580052A7CD /* CountdownView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CountdownView.xib; sourceTree = "<group>"; };
 		B7806E551F0D5B580052A7CD /* CountdownNumberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountdownNumberView.swift; sourceTree = "<group>"; };
 		B7806E561F0D5B580052A7CD /* CountdownTimeLeft.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountdownTimeLeft.swift; sourceTree = "<group>"; };
@@ -1197,7 +1197,7 @@
 				B7372E141F27B56000A71396 /* InfoCell.swift */,
 				B73B20941F346294003B8D8E /* EventCell.swift */,
 				B73B20961F3464FE003B8D8E /* EventCell.xib */,
-				B7806DB81F0D58CA0052A7CD /* RumbleMapImageView.swift */,
+				B7806DB81F0D58CA0052A7CD /* RumbleMap.swift */,
 				B71751011F0DB789002EBE90 /* InfoView.swift */,
 				B792630F1F0D740500062B8D /* InfoTableViewCell.swift */,
 			);
@@ -1645,7 +1645,7 @@
 				B79263EE1F0D7B8200062B8D /* SPBezierPathFigureIcons.swift in Sources */,
 				B79263DB1F0D7B8200062B8D /* SPSegmentedControl.swift in Sources */,
 				B7806E601F0D5B580052A7CD /* StringExtensions.swift in Sources */,
-				B7806DB91F0D58CA0052A7CD /* RumbleMapImageView.swift in Sources */,
+				B7806DB91F0D58CA0052A7CD /* RumbleMap.swift in Sources */,
 				B79263E11F0D7B8200062B8D /* SPRhombusPatternView.swift in Sources */,
 				B79263D91F0D7B8200062B8D /* SPSegmentControlProtocol.swift in Sources */,
 				B76282951F266B4200430319 /* PartnerCell.swift in Sources */,

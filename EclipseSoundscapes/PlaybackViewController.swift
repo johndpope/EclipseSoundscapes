@@ -111,7 +111,7 @@ class PlaybackViewController: UIViewController {
     }
     
     
-    var infoControlInfo = [String: Any]()
+    var infoControlInfo : [String: Any]!
     
     
     override var prefersStatusBarHidden: Bool {
@@ -131,7 +131,10 @@ class PlaybackViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        
+        setupView()
+    }
+    
+    func setupView() {
         controlsContainerView.setCloseAction(self, action: #selector(close))
         controlsContainerView.setPlayPauseAction(self, action: #selector(playPauseBtnTouched))
         
@@ -154,19 +157,23 @@ class PlaybackViewController: UIViewController {
         infoTextView.anchorWithConstantsToTop(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
         
         view.backgroundColor = .white
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(checkViewFocus(notification:)), name: Notification.Name.UIAccessibilityElementFocused, object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(checkViewFocus(notification:)), name: .UIAccessibilityElementFocused, object: nil)
+        setupNowPlayingInfoCenter()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        setupNowPlayingInfoCenter()
         loadMedia()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         player.stop(.finished)
+        NotificationCenter.default.removeObserver(self, name: .UIAccessibilityElementFocused, object: nil)
     }
     
     func playPauseBtnTouched() {
@@ -193,6 +200,8 @@ class PlaybackViewController: UIViewController {
         
         self.titleLabel.text = media.name
         self.infoTextView.text = media.getInfo()
+        
+        infoControlInfo = [String: Any]()
         
         infoControlInfo.updateValue(media.name, forKey: MPMediaItemPropertyTitle)
         
@@ -221,21 +230,20 @@ class PlaybackViewController: UIViewController {
     func checkViewFocus(notification : Notification) {
         if let view = notification.userInfo?[UIAccessibilityFocusedElementKey] as? UIView {
             if view == infoTextView {
-                if player != nil { // Checking if nil if the user focuses on the infoTextview before the player is initalized
-                    if player.isPlaying {
-                        handlePlay(play: false)
-                        shouldPlayAgain = true
-                    }
+                if player != nil && player.isPlaying { // Checking if nil if the user focuses on the infoTextview before the player is initalized
+                    
+                    handlePlay(play: false)
+                    shouldPlayAgain = true
+                    
                 }
             }
         }
         if let view = notification.userInfo?[UIAccessibilityUnfocusedElementKey] as? UIView {
             if view == infoTextView {
-                if player != nil {
-                    if !player.isPlaying && shouldPlayAgain {
-                        handlePlay(play: true)
-                        shouldPlayAgain = false
-                    }
+                if player != nil && !player.isPlaying && shouldPlayAgain { // Checking if nil if the user focuses on the infoTextview before the player is initalized
+                    handlePlay(play: true)
+                    shouldPlayAgain = false
+                    
                 }
             }
         }

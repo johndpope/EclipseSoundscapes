@@ -62,13 +62,10 @@ public class TapePlayer : NSObject {
     
     var progress : Double = 0.0
     
-    
-    
     init(tape: Tape) {
         super.init()
         self.tape = tape
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(systemStop), name: NSNotification.Name.AVAudioSessionMediaServicesWereLost, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(systemRestart), name: NSNotification.Name.AVAudioSessionMediaServicesWereReset, object: nil)
         try? prepareSession()
     }
@@ -85,8 +82,8 @@ public class TapePlayer : NSObject {
     func prepareSession() throws {
         do {
             try AKSettings.setSession(category: .playAndRecord, with: .defaultToSpeaker)
-            if player == nil {
-                player = try AVAudioPlayer(contentsOf: (tape?.audioUrl)!)
+            if let url = tape?.audioUrl {
+                player = try AVAudioPlayer(contentsOf: url)
                 player.delegate = self
             }
         } catch {
@@ -173,19 +170,16 @@ public class TapePlayer : NSObject {
         }
     }
     
-    func systemStop() {
-        self.stop(.interrupted)
-    }
-    
     func systemRestart() {
-        do {
-            try prepareSession()
-            self.changeTime(to: self.progress)
-            if wasPlaying {
-                self.play()
+        DispatchQueue.main.async {
+            let engine = AudioKit.engine
+            if self.wasPlaying && !engine.isRunning {
+                do {
+                    try engine.start()
+                } catch {
+                    AKLog("couldn't start engine after configuration change \(error)")
+                }
             }
-        } catch  {
-            print("Error trying to restart the player: \(error.localizedDescription)")
         }
     }
 }
