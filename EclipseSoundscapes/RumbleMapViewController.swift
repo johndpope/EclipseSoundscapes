@@ -63,8 +63,8 @@ class RumbleMapViewController: UIViewController {
     @IBOutlet weak var controlView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     
-    @IBOutlet weak var nextBtn: SqueezeButton!
-    @IBOutlet weak var previousBtn: SqueezeButton!
+    @IBOutlet weak var nextBtn: UIButton!
+    @IBOutlet weak var previousBtn: UIButton!
     @IBOutlet weak var descriptionTextView: UITextView!
     
     @IBOutlet weak var startRumbleBtn: UIButton!

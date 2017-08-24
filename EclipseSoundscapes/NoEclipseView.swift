@@ -47,8 +47,9 @@ class NoEclipseView : UIView {
         return iv
     }()
     
-    lazy var locationBtn : SqueezeButton = {
-        var btn = SqueezeButton(type: .system)
+    lazy var locationBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
         btn.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         btn.setTitleColor(.white, for: .normal)
         btn.setTitle("Get Closest Location From Me", for: .normal)

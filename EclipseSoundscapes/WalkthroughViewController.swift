@@ -23,13 +23,19 @@
 import UIKit
 import Eureka
 
+
+/// Walkthrough Controller
 class WalkthroughViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, TypedRowControllerType {
     
+
     var row: RowOf<String>!
     var onDismissCallback: ((UIViewController) -> ())?
     
-    var isBegining = true
     
+    /// Bool if the walktrhough is showing for the first time ever
+    private var isBegining = true
+    
+    /// CollectionView that manages each page of the WalkThrough
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -43,9 +49,20 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         return cv
     }()
     
+    
+    /// Cell reuse id
     let cellId = "cellId"
+    
+    /// Permission cell reuse id
     let PermissionCellId = "permissionCellId"
     
+    //MARK: Constraints to animate controls on and off screen
+    var pageLabelbottomAnchor: NSLayoutConstraint?
+    var skipButtonRightAnchor: NSLayoutConstraint?
+    var nextButtonTopAnchor: NSLayoutConstraint?
+    var previousButtonTopAnchor : NSLayoutConstraint?
+    
+    /// Each page of the walkthrough
     let pages: [Page] = {
         let firstPage = Page(title: "Welcome", message: "Thank you for downloading the Eclipse Soundscapes app, a multi-sensory experience for people of all learning styles to engage with astronomical events, including total solar eclipses. Inside this app, you will find countdowns to major astronomical events in your area, and real time narrations of those events with illustrative audio descriptions provided by the National Center for Accessible Media. You can also explore the cosmos with high quality photos, educational information, and accessible learning tools.", imageName: "artwork")
         
@@ -58,10 +75,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         return [firstPage, secondPage, thirdPage, fourthPage]
     }()
     
-    var pageCell : PageCell?
-    var permissionCell : PermissionCell?
-    
-    
+    /// Current Page in WalkThrough
     var currentPage = 0 {
         didSet {
             switch currentPage {
@@ -117,6 +131,12 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         }
     }
     
+    
+    /// Sets the accessible elements for each page
+    ///
+    /// - Parameters:
+    ///   - page: current page
+    ///   - cell: page cell
     func setAccessibleElements(for page: Int, cell: UICollectionViewCell?){
         guard let cell = cell else {
             return
@@ -174,6 +194,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     }
     
     
+    /// Page # Tracker
     var pageLabel : UILabel = {
         var label = UILabel()
         label.textColor = .white
@@ -182,6 +203,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         return label
     }()
     
+    
+    /// Skip WalkThrough Button
     lazy var skipButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Skip", for: .normal)
@@ -191,6 +214,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         return button
     }()
     
+    
+    /// Skips the WalkThrough
     func skip() {
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.previousButton)
         currentPage = pages.count
@@ -202,6 +227,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         
     }
     
+    
+    /// Next Page Button
     lazy var nextButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "Right_Arrow"), for: .normal)
@@ -212,6 +239,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         return button
     }()
     
+    
+    /// Previous Page Button
     lazy var previousButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "Left_Arrow"), for: .normal)
@@ -223,6 +252,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         return button
     }()
     
+    
+    /// Performs Paging to Next Page Cell
     func nextPage() {
         //we are on the last page
         if currentPage == pages.count {
@@ -240,6 +271,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         currentPage += 1
     }
     
+    /// Performs Paging to Previous Page Cell
     func previousPage() {
         //on the first page
         if currentPage == 0 {
@@ -257,10 +289,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         
     }
     
-    var pageLabelbottomAnchor: NSLayoutConstraint?
-    var skipButtonRightAnchor: NSLayoutConstraint?
-    var nextButtonTopAnchor: NSLayoutConstraint?
-    var previousButtonTopAnchor : NSLayoutConstraint?
+    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -309,6 +338,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         setAccessibleElements(for: currentPage, cell: cell)
     }
     
+    
+    /// Change the WalkThrough for use after the first use
     func changeViewForRegularUse() {
         isBegining = false
         skipButton.removeTarget(self, action: #selector(skip), for: .touchUpInside)
@@ -322,6 +353,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     var nextButtonTopConstant : CGFloat = 0
     var previousButtonTopConstant : CGFloat = 0
     
+    
+    /// Track the Current Page after a scroll drag is perfomed
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let scrollOffset = targetContentOffset.pointee.x
         let pageNumber = Int(scrollOffset / view.frame.width)
@@ -340,6 +373,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         setAccessibleElements(for: pageNumber, cell: cell)
     }
     
+    /// Track the Current Page after a scroll is perfomed from next/previous button press
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         
         let scrollOffset = scrollView.contentOffset.x
@@ -350,6 +384,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         setAccessibleElements(for: pageNumber, cell: cell)
     }
     
+    
+    /// Moves the walkThrough control buttons and page label off screen
     fileprivate func moveControlConstraintsOffScreen() {
         
         skipButtonRightAnchor?.constant = 80
@@ -360,6 +396,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         }, completion: nil)
     }
     
+    /// Moves the walkThrough control buttons and page label on screen
     fileprivate func moveControlConstraintsOnScreen() {
         
         skipButtonRightAnchor?.constant = -4
@@ -371,10 +408,14 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         }, completion: nil)
     }
     
+    
+    /// Register collectionView cells for programmatic use
     fileprivate func registerCells() {
         collectionView.register(PageCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.register(PermissionCell.self, forCellWithReuseIdentifier: PermissionCellId)
     }
+    
+    //MARK: CollectionView datasource and delegate methods
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return isBegining ? pages.count + 1 : pages.count
@@ -403,6 +444,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         return CGSize(width: view.frame.width, height: view.frame.height)
     }
     
+    ///Manages the change in orientation
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         
         collectionView.collectionViewLayout.invalidateLayout()
@@ -420,6 +462,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         return true
     }
     
+    
+    /// Closes the walkthrough
     @objc private func close() {
         self.dismiss(animated: true, completion: nil)
     }

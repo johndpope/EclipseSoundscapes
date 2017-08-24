@@ -56,23 +56,25 @@ class MediaControlView : UIView {
     }
     
     
-    lazy var pausePlayButton: SqueezeButton = {
-        let button = SqueezeButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "pause"), for: UIControlState())
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor.init(white: 0.3, alpha: 0.5)
-        button.tintColor = .white
-        button.accessibilityLabel = "Pause"
-        return button
+    lazy var pausePlayButton: UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "pause"), for: UIControlState())
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.backgroundColor = UIColor.init(white: 0.3, alpha: 0.5)
+        btn.tintColor = .white
+        btn.accessibilityLabel = "Pause"
+        return btn
     }()
     
-    lazy var closeButton: SqueezeButton = {
-        let button = SqueezeButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "left-small"), for: UIControlState())
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.tintColor = .white
-        button.accessibilityLabel = "Close"
-        return button
+    lazy var closeButton: UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "left-small"), for: UIControlState())
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.tintColor = .white
+        btn.accessibilityLabel = "Close"
+        return btn
     }()
     
     let backgroundImageView : UIImageView = {

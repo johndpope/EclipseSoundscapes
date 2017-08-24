@@ -28,8 +28,9 @@ class IntructionsViewController : UIViewController, TypedRowControllerType {
     var row: RowOf<String>!
     var onDismissCallback: ((UIViewController) -> ())?
     
-    lazy var backBtn: SqueezeButton = {
-        var btn = SqueezeButton(type: .system)
+    lazy var backBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
         btn.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
         btn.tintColor = .black
         btn.addTarget(self, action: #selector(close), for: .touchUpInside)

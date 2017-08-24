@@ -31,8 +31,9 @@ class RumbleMapInteractiveViewController: UIViewController {
     
     var rumbleMap :  RumbleMap!
     
-    let closeBtn : SqueezeButton = {
-        var btn = SqueezeButton(type: .system)
+    let closeBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
         btn.addTarget(self, action: #selector(close), for: .touchUpInside)
         btn.setTitle("Close", for: .normal)
         btn.setTitleColor(.white, for: .normal)
@@ -41,8 +42,9 @@ class RumbleMapInteractiveViewController: UIViewController {
         return btn
     }()
     
-    let instructionBtn : SqueezeButton = {
-        var btn = SqueezeButton(type: .system)
+    let instructionBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
         btn.addTarget(self, action: #selector(openInstructions), for: .touchUpInside)
         btn.setTitle("Instructions", for: .normal)
         btn.setTitleColor(.white, for: .normal)

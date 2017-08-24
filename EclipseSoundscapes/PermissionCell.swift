@@ -8,18 +8,25 @@
 
 import UIKit
 
+/// Inform the permission's have been accepted or skipped
 protocol PermissionCellDelegate: class {
+    
+    /// Send notice that permission's cell has completed
     func didFinish()
 }
 
 
+/// Hanldes Permissions for the app
 class PermissionCell: UICollectionViewCell {
     
-    weak var collectionView: WalkthroughViewController?
     weak var delegate: PermissionCellDelegate?
     
-    var didPressLocation = false
-    var didPressNotification = false
+    
+    /// Tracker for Location Permission button touch
+    private var didPressLocation = false
+    
+    /// Tracker for Notification Permission button touch
+    private var didPressNotification = false
     
     var titleLabel : UILabel = {
         var label = UILabel()
@@ -40,8 +47,9 @@ class PermissionCell: UICollectionViewCell {
         return iv
     }()
     
-    lazy var notificationBtn : SqueezeButton = {
-        var btn = SqueezeButton(type: .system)
+    lazy var notificationBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
         btn.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         btn.setTitleColor(.white, for: .normal)
         btn.setTitle("Notifications", for: .normal)
@@ -51,8 +59,9 @@ class PermissionCell: UICollectionViewCell {
         return btn
     }()
     
-    lazy var locationBtn : SqueezeButton = {
-        var btn = SqueezeButton(type: .system)
+    lazy var locationBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
         btn.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         btn.setTitleColor(.white, for: .normal)
         btn.setTitle("Location", for: .normal)
@@ -62,8 +71,9 @@ class PermissionCell: UICollectionViewCell {
         return btn
     }()
     
-    lazy var laterBtn : SqueezeButton = {
-        var btn = SqueezeButton(type: .system)
+    lazy var laterBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
         btn.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         btn.setTitleColor(.white, for: .normal)
         btn.setTitle("Ask Later", for: .normal)
@@ -125,22 +135,27 @@ class PermissionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func locationPermission(sender: SqueezeButton) {
+    //TODO: Hanldle Location Persmission for turning on and off and is Location Serivces is turned off
+    /// Setup and request Location Permission
+    func locationPermission(sender: UIButton) {
         let permission = SPLocationPermission.init(type: .WhenInUse)
         permission.request { () -> ()? in
-            
             return self.handleButtonTouch(sender: sender, permission: permission)
         }
     }
     
-    func notificationPermission(sender: SqueezeButton) {
+    //TODO: Hanldle Location Persmission for turning on and off and is Location Serivces is turned off
+    /// Setup and request Notification Permission
+    func notificationPermission(sender: UIButton) {
         let permission = SPNotificationPermission.init()
         permission.request { () -> ()? in
             return self.handleButtonTouch(sender: sender, permission: permission)
         }
     }
     
-    func handleButtonTouch(sender: SqueezeButton, permission: SPPermissionInterface){
+    
+    /// Hanle the update to the Permission Buttons after the permission has showed
+    func handleButtonTouch(sender: UIButton, permission: SPPermissionInterface){
         
         if permission is SPLocationPermission {
             if permission.isAuthorized() {
@@ -166,11 +181,13 @@ class PermissionCell: UICollectionViewCell {
         sender.backgroundColor = .white
         sender.setTitleColor(.black, for: .normal)
         
-        if didPressLocation && didPressNotification {
+        if didPressLocation && didPressNotification { // If both permissions buttons have been pressed, finish
             later()
         }
     }
     
+    
+    /// Tell the delegate that permission cell's job has been completed
     func later() {
         delegate?.didFinish()
     }

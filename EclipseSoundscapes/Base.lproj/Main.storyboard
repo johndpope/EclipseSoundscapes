@@ -262,7 +262,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4dv-XL-xxk">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VTO-bW-Oae" customClass="SqueezeButton" customModule="EclipseSoundscapes" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VTO-bW-Oae">
                                         <rect key="frame" x="337" y="31" width="30" height="34"/>
                                         <accessibility key="accessibilityConfiguration" hint="Shows the next Eclipse Image" label="Next Image"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -270,7 +270,7 @@
                                             <action selector="nextImage:" destination="JAF-hQ-7vb" eventType="touchUpInside" id="QZC-oq-wFu"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="43n-eJ-SS3" customClass="SqueezeButton" customModule="EclipseSoundscapes" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="43n-eJ-SS3">
                                         <rect key="frame" x="8" y="31" width="30" height="34"/>
                                         <accessibility key="accessibilityConfiguration" hint="Shows the Previous Eclipse Image" label="Previous Image"/>
                                         <constraints>

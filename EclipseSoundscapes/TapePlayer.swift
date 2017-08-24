@@ -33,29 +33,30 @@ protocol PlayerDelegate : NSObjectProtocol {
 /// Handles operations for Audio Playback
 public class TapePlayer : NSObject {
     
+    private var session = AVAudioSession.sharedInstance()
+    
     weak var delegate : PlayerDelegate?
     
     /// Tape to play audio from
-    weak var tape: Tape?
+    var tape: Tape?
     
     var duration : TimeInterval {
-        return player.duration
+        return player?.duration ?? 0
     }
     
     private var wasPlaying = false
     private var playing = false
     private var isFinished = false
     
-    var isPlaying : Bool {
-        return player.isPlaying
-    }
+    /// Checks if headphones were plugged
+    private var headPhonesPlugged: Bool!
     
-    var rate : Double {
-        return Double(player.rate)
+    var isPlaying : Bool {
+        return player?.isPlaying ?? false
     }
     
     //Audio player
-    private var player : AVAudioPlayer!
+    private var player : AVAudioPlayer?
     
     /// Local Timer to update duration
     fileprivate weak var timer : Timer?
@@ -67,6 +68,10 @@ public class TapePlayer : NSObject {
         self.tape = tape
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(systemRestart), name: NSNotification.Name.AVAudioSessionMediaServicesWereReset, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceConnectedNotification), name: Notification.Name.AVAudioSessionRouteChange, object: nil)
+        
+        NotificationCenter.default.addObserver(forName: .AVAudioSessionRouteChange, object: nil, queue: OperationQueue.main, using: deviceConnectedNotification(notification:))
+        
         try? prepareSession()
     }
     
@@ -81,10 +86,15 @@ public class TapePlayer : NSObject {
     
     func prepareSession() throws {
         do {
-            try AKSettings.setSession(category: .playAndRecord, with: .defaultToSpeaker)
+            try session.setCategory(AVAudioSessionCategoryPlayAndRecord, with: .defaultToSpeaker)
+            try session.setActive(true)
+            
+            headPhonesPlugged = session.currentRoute.outputs.contains {
+                $0.portType == AVAudioSessionPortHeadphones
+            }
             if let url = tape?.audioUrl {
                 player = try AVAudioPlayer(contentsOf: url)
-                player.delegate = self
+                player?.delegate = self
             }
         } catch {
             throw error
@@ -95,23 +105,16 @@ public class TapePlayer : NSObject {
     ///
     /// - Parameters:
     ///   - status: Reason why the monitor was stopped
-    public func stop(_ status: PlaybackStatus) {
+    public func stop() {
         if !isFinished {
             timer?.invalidate()
             timer = nil
-            switch status {
-            case .finished:
-                isFinished = true
-                playing = false
-                self.delegate?.finished()
-                self.player.stop()
-                try? AKSettings.session.setActive(false)
-                break
-            case .interrupted:
-                wasPlaying = playing
-                self.pause()
-                break
-            }
+            isFinished = true
+            playing = false
+            self.delegate?.finished()
+            self.player?.stop()
+            self.player = nil
+            try? session.setActive(false)
         }
     }
     
@@ -122,7 +125,7 @@ public class TapePlayer : NSObject {
         }
         
         playing = true
-        self.player.play()
+        self.player?.play()
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
     }
     
@@ -130,63 +133,134 @@ public class TapePlayer : NSObject {
     public func pause() {
         playing = false
         timer?.invalidate()
-        player.pause()
+        player?.pause()
     }
     
     /// Resume the Player
-    public func resume() {
+    private func resume() {
         if wasPlaying {
             self.play()
         }
-        self.delegate?.resumed()
+        self.post(.resumed)
     }
     
+    /// Interruption Occured while the Player was non-nil
+    private func interrupt() {
+        self.post(.interrupted)
+        wasPlaying = playing
+        self.pause()
+    }
+    
+    
     public func changeTime(to time: TimeInterval){
-        self.player.currentTime = time
+        self.player?.currentTime = time
     }
     
     /// Update the duration of the current monitor session to the tapeRecorder's duration and fire progress events
     @objc private func updateProgress() {
+        guard let currentTime = player?.currentTime else {
+            return
+        }
         
-        self.progress = player.currentTime
+        self.progress = currentTime
         self.delegate?.progress(self.progress)
     }
     
     /// Interruption Handler
     ///
     /// - Parameter notification: Device generated notification about interruption
-    @objc fileprivate func handleInterruption(_ notification: Notification) {
-        let theInterruptionType = (notification as NSNotification).userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
-        NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSessionInterruptionType.began.rawValue ? "Begin Interruption" : "End Interruption")
-        
-        if theInterruptionType == AVAudioSessionInterruptionType.began.rawValue {
-            //Interruption Started
-            self.stop(.interrupted)
+    @objc private func handleInterruption(_ notification: Notification) {
+        guard let info = notification.userInfo,
+            let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let type = AVAudioSessionInterruptionType(rawValue: typeValue) else {
+                return
+        }
+        if type == .began {
+            // Interruption began, take appropriate actions (save state, update user interface)
+            self.interrupt()
+            
+        }
+        else if type == .ended {
+            guard let optionsValue =
+                info[AVAudioSessionInterruptionOptionKey] as? UInt else {
+                    return
+            }
+            let options = AVAudioSessionInterruptionOptions(rawValue: optionsValue)
+            if options.contains(.shouldResume) {
+                // Interruption Ended - playback should resume
+                self.resume()
+            }
         }
         
-        if theInterruptionType == AVAudioSessionInterruptionType.ended.rawValue {
-            //Interruption Ended
+        
+    }
+    
+    
+    /// Notification handler for AVAudioSessionRouteChange to catch changes to device connection from the audio jack.
+    ///
+    /// - Parameter notification: Notification object cointaing AVAudioSessionRouteChange data
+    @objc private func deviceConnectedNotification(notification: Notification){
+        guard let info = notification.userInfo,
+            let typeValue = info[AVAudioSessionRouteChangeReasonKey] as? UInt,
+            let type = AVAudioSessionRouteChangeReason(rawValue: typeValue) else {
+                return
+        }
+        switch type {
+        case AVAudioSessionRouteChangeReason.newDeviceAvailable: ///device is connected
+            headPhonesPlugged = true
             self.resume()
+            break
+            
+        case AVAudioSessionRouteChangeReason.oldDeviceUnavailable: ///device is not connected
+            if headPhonesPlugged {
+                self.interrupt()
+            }
+            headPhonesPlugged = false
+            break
+        default:
+            break
         }
     }
     
     func systemRestart() {
+        self.interrupt()
+        if let url = tape?.audioUrl {
+            do {
+                try session.setCategory(AVAudioSessionCategoryPlayAndRecord, with: .defaultToSpeaker)
+                player = try AVAudioPlayer(contentsOf: url)
+                player?.delegate = self
+                player?.currentTime = self.progress
+            } catch  {
+                print("Problem Reinit for Player During System Restart\nError: \(error.localizedDescription)")
+            }
+            
+        }
+    }
+    
+    private func post(_ status : PlaybackStatus, _ object: Any? = nil){
         DispatchQueue.main.async {
-            let engine = AudioKit.engine
-            if self.wasPlaying && !engine.isRunning {
-                do {
-                    try engine.start()
-                } catch {
-                    AKLog("couldn't start engine after configuration change \(error)")
-                }
+            switch status {
+            case .finished:
+                self.delegate?.finished()
+                break
+            case .interrupted :
+                self.delegate?.interrupted()
+                break
+            case .resumed :
+                self.delegate?.resumed()
+                break
+            case .progress :
+                self.delegate?.progress(object as! Double)
+                break
+                
             }
         }
+        
     }
 }
 
 extension TapePlayer : AVAudioPlayerDelegate {
-    
     public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        self.stop(.finished)
+        self.stop()
     }
 }

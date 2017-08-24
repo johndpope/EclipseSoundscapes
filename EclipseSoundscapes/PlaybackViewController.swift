@@ -172,7 +172,7 @@ class PlaybackViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        player.stop(.finished)
+        player.stop()
         NotificationCenter.default.removeObserver(self, name: .UIAccessibilityElementFocused, object: nil)
     }
     
@@ -260,6 +260,7 @@ class PlaybackViewController: UIViewController {
     
     func close() {
         self.dismiss(animated: true) {
+            self.player = nil
             self.resignRemoteCommandCenter()
             self.resignInfoCenter()
             NotificationCenter.default.removeObserver(self)
