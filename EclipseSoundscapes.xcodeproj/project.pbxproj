@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		70E439A017019D60659857BF /* Pods_EclipseSoundscapesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 219BB4393901E45FBC7BD829 /* Pods_EclipseSoundscapesTests.framework */; };
 		B70F0E021F2161FE00B9F3BA /* NotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70F0E011F2161FE00B9F3BA /* NotificationHelper.swift */; };
-		B71751021F0DB789002EBE90 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71751011F0DB789002EBE90 /* InfoView.swift */; };
 		B71E206D1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B71E206C1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 */; };
 		B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */; };
 		B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5481ED724F300F9E4F3 /* Main.storyboard */; };
@@ -74,7 +73,7 @@
 		B781E6ED1F31528E0038C3F1 /* PhotoCreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B781E6EC1F31528E0038C3F1 /* PhotoCreditsViewController.swift */; };
 		B781E6EF1F3153560038C3F1 /* PhotoCreditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B781E6EE1F3153560038C3F1 /* PhotoCreditCell.swift */; };
 		B781E6F11F3153670038C3F1 /* PhotoCreditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B781E6F01F3153670038C3F1 /* PhotoCreditCell.xib */; };
-		B79263101F0D740500062B8D /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B792630F1F0D740500062B8D /* InfoTableViewCell.swift */; };
+		B78D815C1F5097BC00D4C440 /* fabric.apikey in Resources */ = {isa = PBXBuildFile; fileRef = B78D815B1F5097BC00D4C440 /* fabric.apikey */; };
 		B792639E1F0D7B8200062B8D /* SPAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79263141F0D7B8200062B8D /* SPAnimation.swift */; };
 		B792639F1F0D7B8200062B8D /* SPAnimationAlpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79263151F0D7B8200062B8D /* SPAnimationAlpha.swift */; };
 		B79263A01F0D7B8200062B8D /* SPAnimationSpring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79263161F0D7B8200062B8D /* SPAnimationSpring.swift */; };
@@ -194,7 +193,6 @@
 		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
 		B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A411F3C0A6A004540C2 /* Intermission.txt */; };
 		B7EF1A441F3C0F7A004540C2 /* ThankYou.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */; };
-		B7F4BF161F45DBE9008A8B0E /* fabric.apikey in Resources */ = {isa = PBXBuildFile; fileRef = B7F4BF151F45DBE9008A8B0E /* fabric.apikey */; };
 		B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */; };
 		B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */; };
 		B7F7559E1F3344700029DB4D /* MediaCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */; };
@@ -230,7 +228,6 @@
 		778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EclipseSoundscapes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B03672B260885DC3EA96D077 /* Pods-EclipseSoundscapesUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesUITests/Pods-EclipseSoundscapesUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B70F0E011F2161FE00B9F3BA /* NotificationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationHelper.swift; sourceTree = "<group>"; };
-		B71751011F0DB789002EBE90 /* InfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		B71E206C1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Realtime_Eclipse_Shorts.mp3; sourceTree = "<group>"; };
 		B72DF5411ED724F300F9E4F3 /* EclipseSoundscapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EclipseSoundscapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -301,7 +298,7 @@
 		B781E6EC1F31528E0038C3F1 /* PhotoCreditsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCreditsViewController.swift; sourceTree = "<group>"; };
 		B781E6EE1F3153560038C3F1 /* PhotoCreditCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCreditCell.swift; sourceTree = "<group>"; };
 		B781E6F01F3153670038C3F1 /* PhotoCreditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoCreditCell.xib; sourceTree = "<group>"; };
-		B792630F1F0D740500062B8D /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
+		B78D815B1F5097BC00D4C440 /* fabric.apikey */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fabric.apikey; sourceTree = "<group>"; };
 		B79263141F0D7B8200062B8D /* SPAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPAnimation.swift; sourceTree = "<group>"; };
 		B79263151F0D7B8200062B8D /* SPAnimationAlpha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPAnimationAlpha.swift; sourceTree = "<group>"; };
 		B79263161F0D7B8200062B8D /* SPAnimationSpring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPAnimationSpring.swift; sourceTree = "<group>"; };
@@ -421,7 +418,6 @@
 		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		B7EF1A411F3C0A6A004540C2 /* Intermission.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Intermission.txt; sourceTree = "<group>"; };
 		B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ThankYou.txt; sourceTree = "<group>"; };
-		B7F4BF151F45DBE9008A8B0E /* fabric.apikey */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fabric.apikey; sourceTree = "<group>"; };
 		B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCenterViewController.swift; sourceTree = "<group>"; };
@@ -519,7 +515,7 @@
 				B72DF54E1ED724F300F9E4F3 /* Assets.xcassets */,
 				B72DF5501ED724F300F9E4F3 /* LaunchScreen.storyboard */,
 				B7964C361EF9B76400000CF8 /* Localizable.strings */,
-				B7F4BF151F45DBE9008A8B0E /* fabric.apikey */,
+				B78D815B1F5097BC00D4C440 /* fabric.apikey */,
 				B72DF5531ED724F300F9E4F3 /* Info.plist */,
 			);
 			path = EclipseSoundscapes;
@@ -1198,8 +1194,6 @@
 				B73B20941F346294003B8D8E /* EventCell.swift */,
 				B73B20961F3464FE003B8D8E /* EventCell.xib */,
 				B7806DB81F0D58CA0052A7CD /* RumbleMap.swift */,
-				B71751011F0DB789002EBE90 /* InfoView.swift */,
-				B792630F1F0D740500062B8D /* InfoTableViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1355,7 +1349,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B7F4BF161F45DBE9008A8B0E /* fabric.apikey in Resources */,
+				B78D815C1F5097BC00D4C440 /* fabric.apikey in Resources */,
 				B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */,
 				B7B16F431F3B3F4D0036E396 /* Diamond_Ring_short.mp3 in Resources */,
 				B7B16F441F3B3F4D0036E396 /* First_Contact_Short.mp3 in Resources */,
@@ -1610,7 +1604,6 @@
 				B7B19F891F2EC32900EDE056 /* SqueezeButton.swift in Sources */,
 				B79263CB1F0D7B8200062B8D /* plist_flags.swift in Sources */,
 				B79263C41F0D7B8200062B8D /* SPRequestPermissionDialogInteractivePresenterInterface.swift in Sources */,
-				B79263101F0D740500062B8D /* InfoTableViewCell.swift in Sources */,
 				B73B20931F34600F003B8D8E /* FutureEventsViewController.swift in Sources */,
 				B763FA011ED864F400EEFB27 /* Tape.swift in Sources */,
 				B745AE371F1E8A230025946C /* LicenseViewController.swift in Sources */,
@@ -1691,7 +1684,6 @@
 				B79263D11F0D7B8200062B8D /* SPGradientViewController.swift in Sources */,
 				B7B16F3B1F3A63620036E396 /* RumbleMapInteractiveViewController.swift in Sources */,
 				B79263E31F0D7B8200062B8D /* SPAligmentView.swift in Sources */,
-				B71751021F0DB789002EBE90 /* InfoView.swift in Sources */,
 				B79263A01F0D7B8200062B8D /* SPAnimationSpring.swift in Sources */,
 				B79263D71F0D7B8200062B8D /* SPRoundButton.swift in Sources */,
 				B79263BE1F0D7B8200062B8D /* SPPermissions.swift in Sources */,

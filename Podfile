@@ -8,7 +8,7 @@ target 'EclipseSoundscapes' do
   # Pods for EclipseSoundscapes
 
 pod 'AudioKit'
- 
+pod 'BRYXBanner'
 pod 'SwiftSpinner'
 pod 'Eureka'
 pod 'RevealingSplashView'
