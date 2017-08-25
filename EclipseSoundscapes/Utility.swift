@@ -100,7 +100,7 @@ class Utility {
         dateFormator.timeZone = TimeZone(abbreviation: "UTC")
         
         guard let conversionDate = dateFormator.date(from: date) else {
-            return "N/A"
+            return "Not Available"
         }
         
         dateFormator.timeZone = .current

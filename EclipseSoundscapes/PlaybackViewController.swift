@@ -73,9 +73,9 @@ class PlaybackViewController: UIViewController {
         return view
     }()
     
-    var media : Media!
+    var media : Media?
     
-    fileprivate var player : TapePlayer!
+    fileprivate var player : TapePlayer?
     
     var progress : Double = 0 {
         didSet {
@@ -119,12 +119,19 @@ class PlaybackViewController: UIViewController {
     }
     
     func reloadUI() {
-        controlsContainerView.backgroundImageView.image = media.image
-        titleLabel.text = media.name
-        infoTextView.text = media.getInfo()
-        update(artwork: media.image!)
-        update(title: media.name)
+        guard let unWrappedMedia = media else {
+            return
+        }
+        
+        if let image = unWrappedMedia.image {
+            update(artwork: image)
+        }
+        update(title: unWrappedMedia.name)
         update(progress: self.progress)
+        
+        controlsContainerView.backgroundImageView.image = unWrappedMedia.image
+        titleLabel.text = unWrappedMedia.name
+        infoTextView.text = unWrappedMedia.getInfo()
     }
     
     override func viewDidLoad() {
@@ -132,6 +139,23 @@ class PlaybackViewController: UIViewController {
         
         // Do any additional setup after loading the view.
         setupView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(checkViewFocus(notification:)), name: .UIAccessibilityElementFocused, object: nil)
+        setupNowPlayingInfoCenter()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        loadMedia()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        player?.stop()
+        NotificationCenter.default.removeObserver(self, name: .UIAccessibilityElementFocused, object: nil)
     }
     
     func setupView() {
@@ -159,25 +183,13 @@ class PlaybackViewController: UIViewController {
         view.backgroundColor = .white
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(checkViewFocus(notification:)), name: .UIAccessibilityElementFocused, object: nil)
-        setupNowPlayingInfoCenter()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        loadMedia()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        player.stop()
-        NotificationCenter.default.removeObserver(self, name: .UIAccessibilityElementFocused, object: nil)
-    }
-    
     func playPauseBtnTouched() {
-        handlePlay(play: !player.isPlaying)
+        guard let playing = player?.isPlaying else {
+            handlePlay(play: false)
+            return // TODO: Throw Error
+        }
+        
+        handlePlay(play: !playing)
     }
     
     func handlePlay(play : Bool) {
@@ -187,9 +199,9 @@ class PlaybackViewController: UIViewController {
                 strongSelf.update(rate: play ? 1 : 0)
                 
                 if play {
-                    strongSelf.player.play()
+                    strongSelf.player?.play()
                 } else {
-                    strongSelf.player.pause()
+                    strongSelf.player?.pause()
                 }
                 strongSelf.updatePlayControl(play: play)
             }
@@ -202,40 +214,53 @@ class PlaybackViewController: UIViewController {
     
     func loadMedia() {
         
-        self.titleLabel.text = media.name
-        self.infoTextView.text = media.getInfo()
+        guard let unWrappedMedia = media, let tape = AudioManager.loadAudio(withName: unWrappedMedia.resourceName, withExtension: unWrappedMedia.mediaType)  else {
+            return //TODO: Inform user that is failed and they should press something to retry
+        }
+        
+        do {
+            player = try TapePlayer(tape: tape)
+        } catch  {
+            print("Error: \(error)")
+            //TODO: Inform user that is failed and they should press something to retry
+        }
+        
+        player!.delegate = self
+        
+        let duration = player!.duration
         
         infoControlInfo = [String: Any]()
         
-        infoControlInfo.updateValue(media.name, forKey: MPMediaItemPropertyTitle)
+        infoControlInfo.updateValue(unWrappedMedia.name, forKey: MPMediaItemPropertyTitle)
+        infoControlInfo.updateValue(duration, forKey: MPMediaItemPropertyPlaybackDuration)
+        infoControlInfo.updateValue(Double(0), forKey: MPNowPlayingInfoPropertyElapsedPlaybackTime)
+        infoControlInfo.updateValue(Double(1), forKey: MPNowPlayingInfoPropertyPlaybackRate)
         
-        if let mediaImage = media.image {
-            self.controlsContainerView.backgroundImageView.image = mediaImage
-            infoControlInfo.updateValue(getNowPlayingInfoCenterArtwork(with: mediaImage), forKey: MPMediaItemPropertyArtwork)
+        if let image = unWrappedMedia.image {
+            self.controlsContainerView.backgroundImageView.image = image
+            infoControlInfo.updateValue(getNowPlayingInfoCenterArtwork(with: image), forKey: MPMediaItemPropertyArtwork)
         }
         
-        if let tape = AudioManager.loadAudio(withName: media.resourceName, withExtension: media.mediaType){
-            self.player = TapePlayer(tape: tape)
-            self.player.delegate = self
-            self.totalDuration = player.duration
-            playerSlider.maximumValue = Float(player.duration)
-            
-            
-            infoControlInfo.updateValue(player.duration, forKey: MPMediaItemPropertyPlaybackDuration)
-            infoControlInfo.updateValue(Double(0), forKey: MPNowPlayingInfoPropertyElapsedPlaybackTime)
-            infoControlInfo.updateValue(Double(1), forKey: MPNowPlayingInfoPropertyPlaybackRate)
-            
-            self.setupNowPlayingInfoCenter(with: infoControlInfo)
-            
-            handlePlay(play: true)
-        }
+        self.titleLabel.text = unWrappedMedia.name
+        self.infoTextView.text = unWrappedMedia.getInfo()
+        self.totalDuration = duration
+        self.playerSlider.maximumValue = Float(duration)
+        
+        self.setupNowPlayingInfoCenter(with: infoControlInfo)
+        
+        handlePlay(play: true)
+        
     }
     
     func checkViewFocus(notification : Notification) {
         if let view = notification.userInfo?[UIAccessibilityFocusedElementKey] as? UIView {
             if view == infoTextView {
-                if player != nil && player.isPlaying { // Checking if nil if the user focuses on the infoTextview before the player is initalized
-                    
+                
+                guard let playing = player?.isPlaying else {
+                    return
+                }
+                
+                if playing {
                     handlePlay(play: false)
                     shouldPlayAgain = true
                     
@@ -244,7 +269,11 @@ class PlaybackViewController: UIViewController {
         }
         if let view = notification.userInfo?[UIAccessibilityUnfocusedElementKey] as? UIView {
             if view == infoTextView {
-                if player != nil && !player.isPlaying && shouldPlayAgain { // Checking if nil if the user focuses on the infoTextview before the player is initalized
+                
+                guard let playing = player?.isPlaying else {
+                    return
+                }
+                if !playing && shouldPlayAgain {
                     handlePlay(play: true)
                     shouldPlayAgain = false
                     
@@ -271,7 +300,10 @@ class PlaybackViewController: UIViewController {
     
     func sliderTouchDown(){
         self.playerSlider.expand()
-        if self.player.isPlaying {
+        guard let playing = player?.isPlaying else {
+            return
+        }
+        if playing {
             handlePlay(play: false)
             shouldPlayAgain = true
         }
@@ -283,7 +315,10 @@ class PlaybackViewController: UIViewController {
     
     func sliderTouchUp() {
         self.playerSlider.compress()
-        if !self.player.isPlaying && shouldPlayAgain  {
+        guard let playing = player?.isPlaying else {
+            return
+        }
+        if !playing && shouldPlayAgain  {
             handlePlay(play: true)
             shouldPlayAgain = false
         }
@@ -291,7 +326,7 @@ class PlaybackViewController: UIViewController {
     
     func skipTo(_ time: Double){
         self.progress = time
-        self.player.changeTime(to: self.progress)
+        self.player?.changeTime(to: self.progress)
         self.update(progress: time)
     }
     
@@ -323,7 +358,7 @@ class PlaybackViewController: UIViewController {
             
             MPRemoteCommandCenter.shared().togglePlayPauseCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
                 if let strongSelf = self {
-                    strongSelf.handlePlay(play: !strongSelf.player.isPlaying)
+                    strongSelf.playPauseBtnTouched()
                     return MPRemoteCommandHandlerStatus.success
                 }
                 return MPRemoteCommandHandlerStatus.noSuchContent
@@ -427,7 +462,11 @@ extension PlaybackViewController : PlayerDelegate {
     }
     func resumed() {
         print("Player Resumed")
-        if player.isPlaying {
+        guard let playing = player?.isPlaying else {
+            return
+        }
+        
+        if playing {
             controlsContainerView.showControls(false)
             controlsContainerView.pausePlayButton.setImage(#imageLiteral(resourceName: "pause").withRenderingMode(.alwaysTemplate), for: UIControlState())
         }

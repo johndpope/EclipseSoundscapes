@@ -20,40 +20,61 @@
 //
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
-import Foundation
-import AudioKit
+import AVFoundation
 
+/// Tape Player Delegate
 protocol PlayerDelegate : NSObjectProtocol {
+    
+    /// Update Progress
+    ///
+    /// - Parameter progress: Current Tape's progress
     func progress(_ progress: Double)
+    
+    /// Notify Player Finished
     func finished()
+    
+    /// Notify Player Interrupted
     func interrupted()
+    
+    /// Notify Player Resumed
     func resumed()
 }
 
 /// Handles operations for Audio Playback
 public class TapePlayer : NSObject {
     
-    private var session = AVAudioSession.sharedInstance()
-    
-    weak var delegate : PlayerDelegate?
+   weak var delegate : PlayerDelegate?
     
     /// Tape to play audio from
     var tape: Tape?
     
+    
+    /// Total duration of the player
     var duration : TimeInterval {
         return player?.duration ?? 0
     }
     
+    /// Returns if the player is currently playing
+    var isPlaying : Bool {
+        return player?.isPlaying ?? false
+    }
+    
+    //MARK: Private Variables
+    
+    /// Local Audio Session
+    private var session = AVAudioSession.sharedInstance()
+    
+    /// Local was playing
     private var wasPlaying = false
+    
+    /// Local isPlaying
     private var playing = false
+    
+    /// Local isFinished
     private var isFinished = false
     
     /// Checks if headphones were plugged
     private var headPhonesPlugged: Bool!
-    
-    var isPlaying : Bool {
-        return player?.isPlaying ?? false
-    }
     
     //Audio player
     private var player : AVAudioPlayer?
@@ -61,9 +82,10 @@ public class TapePlayer : NSObject {
     /// Local Timer to update duration
     fileprivate weak var timer : Timer?
     
+    /// Current Playing Time
     var progress : Double = 0.0
     
-    init(tape: Tape) {
+    init(tape: Tape) throws {
         super.init()
         self.tape = tape
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
@@ -72,7 +94,11 @@ public class TapePlayer : NSObject {
         
         NotificationCenter.default.addObserver(forName: .AVAudioSessionRouteChange, object: nil, queue: OperationQueue.main, using: deviceConnectedNotification(notification:))
         
-        try? prepareSession()
+        do {
+            try prepareSession()
+        } catch  {
+            throw error
+        }
     }
     
     deinit {
@@ -84,6 +110,10 @@ public class TapePlayer : NSObject {
         print("Destroyed Player")
     }
     
+    
+    /// Prepares the Audio Session and player
+    ///
+    /// - Throws: Error in preparing session
     func prepareSession() throws {
         do {
             try session.setCategory(AVAudioSessionCategoryPlayAndRecord, with: .defaultToSpeaker)
@@ -101,10 +131,7 @@ public class TapePlayer : NSObject {
         }
     }
     
-    /// Stop the monitor and the player with a status
-    ///
-    /// - Parameters:
-    ///   - status: Reason why the monitor was stopped
+    /// Stop the player
     public func stop() {
         if !isFinished {
             timer?.invalidate()
@@ -118,6 +145,8 @@ public class TapePlayer : NSObject {
         }
     }
     
+    
+    /// Play audio
     func play() {
         if isFinished {
             try? prepareSession()
@@ -152,6 +181,9 @@ public class TapePlayer : NSObject {
     }
     
     
+    /// Seek Audio forward or backwards
+    ///
+    /// - Parameter time: Time to seek audio to
     public func changeTime(to time: TimeInterval){
         self.player?.currentTime = time
     }
@@ -222,6 +254,8 @@ public class TapePlayer : NSObject {
         }
     }
     
+    
+    /// Callback for AVAudioSessionMediaServicesWereReset notification
     func systemRestart() {
         self.interrupt()
         if let url = tape?.audioUrl {
@@ -237,6 +271,12 @@ public class TapePlayer : NSObject {
         }
     }
     
+    
+    /// Posting to the delegates all on the Main Thread
+    ///
+    /// - Parameters:
+    ///   - status: Current Playback Status
+    ///   - object: Optional object to pass to delegate
     private func post(_ status : PlaybackStatus, _ object: Any? = nil){
         DispatchQueue.main.async {
             switch status {
