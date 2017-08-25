@@ -22,21 +22,10 @@
 
 import UIKit
 
-class SqueezeButton : UIButton {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSqueez()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        addSqueez()
-    }
-    
-    func addSqueez() {
+extension UIButton {
+    func addSqueeze() {
         self.addTarget(self, action: #selector(squeeze), for: [.touchDown, .touchDragInside])
-        self.addTarget(self, action: #selector(unSqueeze), for: [.touchDragExit])
-        self.addTarget(self, action: #selector(unSqueeze), for: .touchUpInside)
+        self.addTarget(self, action: #selector(unSqueeze), for: [.touchDragExit, .touchUpInside])
     }
     
     @objc private func squeeze() {
@@ -59,7 +48,8 @@ class SqueezeButton : UIButton {
 
 extension  UINavigationItem  {
     func addSqeuuzeBackBtn(_ target : Any, action: Selector, for events: UIControlEvents) {
-        let button = SqueezeButton(type: .system)
+        let button = UIButton(type: .system)
+        button.addSqueeze()
         button.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = .black
         button.accessibilityLabel = "Back"

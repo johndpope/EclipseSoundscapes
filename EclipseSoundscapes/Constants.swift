@@ -57,7 +57,7 @@ public enum AudioStatus {
 /// - finished: Audio playback completed
 /// - skip: Plyabck was skipped
 public enum PlaybackStatus {
-    case finished, interrupted
+    case finished, interrupted, resumed, progress
 }
 
 /// Error involved during an Audio operation
