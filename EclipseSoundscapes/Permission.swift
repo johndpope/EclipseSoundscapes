@@ -24,7 +24,7 @@ import Foundation
 import MapKit
 import UserNotifications
 
-public enum PermissionType {
+public enum PermissionType: Int {
     case notification
     case locationAlways
     case locationWhenInUse

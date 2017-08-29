@@ -27,7 +27,7 @@ import Eureka
 /// Walkthrough Controller
 class WalkthroughViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, TypedRowControllerType {
     
-
+    
     var row: RowOf<String>!
     var onDismissCallback: ((UIViewController) -> ())?
     
@@ -266,8 +266,12 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         }
         
         let indexPath = IndexPath(item: currentPage+1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        currentPage += 1
+        if indexPath.section < collectionView.numberOfSections {
+            if indexPath.row < collectionView.numberOfItems(inSection: indexPath.section) {
+                collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+                currentPage += 1
+            }
+        }
     }
     
     /// Performs Paging to Previous Page Cell
@@ -282,10 +286,12 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
             moveControlConstraintsOnScreen()
         }
         
-        let indexPath = IndexPath(item: currentPage - 1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        currentPage -= 1
         
+        let indexPath = IndexPath(item: currentPage - 1, section: 0)
+        if indexPath.row >= 0 {
+            collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            currentPage -= 1
+        }
     }
     
     
@@ -382,7 +388,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         
         setAccessibleElements(for: pageNumber, cell: cell)
     }
-
+    
     /// Moves the walkThrough control buttons and page label off screen
     fileprivate func moveControlConstraintsOffScreen() {
         

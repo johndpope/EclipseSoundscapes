@@ -39,7 +39,8 @@ class PermissionButton : UIButton {
     }
     
     private var permission : PermissionInterface!
-    private var didPress : Bool = false
+    private var didPress = false
+    private var didRequest = false
     
     
     override init(frame: CGRect) {
@@ -93,11 +94,16 @@ class PermissionButton : UIButton {
         let authorized = permission.isAuthorized()
         backgroundColor = authorized ? .white: Color.lead
         setTitleColor(authorized ? .black : .white, for: .normal)
+        
+        didRequest = UserDefaults.standard.bool(forKey: "Permission\(type.rawValue)")
+        if didRequest {
+            accessibilityValue = authorized ? "Allowed" : "Denied"
+        }
     }
     
     /// Setup and request Permission
     func hanldeButtonTouch() {
-        guard self.permissionType != nil else {
+        guard let type = self.permissionType else {
             return
         }
         
@@ -106,11 +112,15 @@ class PermissionButton : UIButton {
                 settingAlert()
             }
         } else {
-            if !permission.isAuthorized() {
-                settingAlert()
-            } else {
+            if !didRequest {
                 permission.request { () -> ()? in
+                    self.didRequest = true
+                    UserDefaults.standard.set(true, forKey: "Permission\(type.rawValue)")
                     return self.handlePermissionRequest()
+                }
+            } else {
+                if !permission.isAuthorized() {
+                    settingAlert()
                 }
             }
         }
@@ -170,7 +180,6 @@ class PermissionButton : UIButton {
     func returnedToApplication() {
         NotificationCenter.default.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
         handlePermissionRequest()
-        
     }
     
     
