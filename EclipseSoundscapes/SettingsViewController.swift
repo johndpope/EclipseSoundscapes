@@ -26,7 +26,7 @@ import CoreLocation
 
 class SettingsViewController : FormViewController {
     
-    var currentSetting : SPRequestPermissionType?
+    var currentSetting : PermissionType?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,14 +45,16 @@ class SettingsViewController : FormViewController {
         form
             +++ SwitchRow("Notification") {
                 $0.title = "Notifications"
-                $0.value = SPRequestPermission.isAllowPermission(.notification)
+                $0.value = Permission.isAllowPermission(.notification) && NotificationHelper.appGrated
                 }.onChange({ (row) in
                     if let switchOn = row.value {
                         if switchOn {
                             NotificationHelper.appGrated = true
                             if !NotificationHelper.isGranted{
                                 self.currentSetting = .notification
-                                SPRequestPermission.dialog.interactive.present(on: self, with: [.notification],dataSource: NotificationDataSource(), delegate: self)
+                                self.present(PermissionViewController.show(with: [.notification], completion: {
+                                    self.didHide()
+                                }), animated: true, completion: nil)
                             }
                         } else {
                             NotificationHelper.appGrated = false
@@ -62,14 +64,16 @@ class SettingsViewController : FormViewController {
                 })
             <<< SwitchRow("Location") {
                 $0.title = "Location"
-                $0.value = SPRequestPermission.isAllowPermission(.locationWhenInUse) && Location.isGranted
+                $0.value = Permission.isAllowPermission(.locationWhenInUse) && Location.appGrated
                 }.onChange({ (row) in
                     if let switchOn = row.value {
                         if switchOn {
                             Location.appGrated = true
                             if !Location.isGranted{
                                 self.currentSetting = .locationWhenInUse
-                                SPRequestPermission.dialog.interactive.present(on: self, with: [.locationWhenInUse],dataSource: LocationDataSource(), delegate: self)
+                                self.present(PermissionViewController.show(with: [.locationWhenInUse], completion: {
+                                    self.didHide()
+                                }), animated: true, completion: nil)
                             }
                         } else {
                             Location.appGrated = false
@@ -81,9 +85,6 @@ class SettingsViewController : FormViewController {
     @objc private func close() {
         self.dismiss(animated: true, completion: nil)
     }
-}
-
-extension SettingsViewController: SPRequestPermissionEventsDelegate {
     
     func didHide() {
         guard let type = currentSetting else {
@@ -92,7 +93,6 @@ extension SettingsViewController: SPRequestPermissionEventsDelegate {
         switch type {
         case .notification:
             let isAllowed = NotificationHelper.checkPermission()
-            NotificationHelper.appGrated = isAllowed
             let row = (form.rowBy(tag: "Notification") as! SwitchRow)
             row.cell.switchControl.setOn(isAllowed, animated: true)
             row.value = isAllowed
@@ -100,7 +100,6 @@ extension SettingsViewController: SPRequestPermissionEventsDelegate {
             break
         case .locationWhenInUse :
             let isAllowed = Location.checkPermission()
-            Location.appGrated = isAllowed
             let row = (form.rowBy(tag: "Location") as! SwitchRow)
             row.cell.switchControl.setOn(isAllowed, animated: true)
             row.value = isAllowed
@@ -111,34 +110,40 @@ extension SettingsViewController: SPRequestPermissionEventsDelegate {
         
         
     }
-    
-    func didAllowPermission(permission: SPRequestPermissionType) {
-        switch permission {
-        case .notification:
-            NotificationHelper.appGrated = true
-            break
-        case .locationWhenInUse :
-            Location.appGrated = true
-            break
-        default:
-            break
-        }
-    }
-    
-    func didDeniedPermission(permission: SPRequestPermissionType) {
-        switch permission {
-        case .notification:
-            NotificationHelper.appGrated = false
-            break
-        case .locationWhenInUse :
-            Location.appGrated = false
-            break
-        default:
-            break
-        }
-    }
-    
-    func didSelectedPermission(permission: SPRequestPermissionType) {
-        
-    }
 }
+
+//extension SettingsViewController: SPRequestPermissionEventsDelegate {
+//
+
+//
+//    func didAllowPermission(permission: SPRequestPermissionType) {
+//        switch permission {
+//        case .notification:
+//            NotificationHelper.appGrated = true
+//            break
+//        case .locationWhenInUse :
+//            Location.appGrated = true
+//            break
+//        default:
+//            break
+//        }
+//    }
+//
+//    func didDeniedPermission(permission: SPRequestPermissionType) {
+//        switch permission {
+//        case .notification:
+//            NotificationHelper.appGrated = false
+//            break
+//        case .locationWhenInUse :
+//            Location.appGrated = false
+//            break
+//        default:
+//            break
+//        }
+//    }
+//
+//    func didSelectedPermission(permission: SPRequestPermissionType) {
+//
+//    }
+//}
+

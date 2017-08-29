@@ -21,6 +21,7 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
+import Material
 
 class NoEclipseView : UIView {
     

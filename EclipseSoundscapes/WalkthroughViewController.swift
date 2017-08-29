@@ -266,7 +266,6 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         }
         
         let indexPath = IndexPath(item: currentPage+1, section: 0)
-        
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         currentPage += 1
     }
@@ -383,8 +382,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         
         setAccessibleElements(for: pageNumber, cell: cell)
     }
-    
-    
+
     /// Moves the walkThrough control buttons and page label off screen
     fileprivate func moveControlConstraintsOffScreen() {
         
@@ -427,7 +425,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PermissionCellId, for: indexPath) as! PermissionCell
             cell.delegate = self
             cell.isAccessibilityElement = false
-            cell.accessibilityElements = [cell.titleLabel, cell.locationBtn, cell.notificationBtn, cell.laterBtn]
+            cell.accessibilityElements = [cell.permissionView]
             return cell
         }
         

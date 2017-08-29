@@ -214,6 +214,34 @@ extension UIColor {
 
 extension UIView {
     
+    @discardableResult
+    func center(in view : UIView) -> [NSLayoutConstraint] {
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        var anchors = [NSLayoutConstraint]()
+        anchors.append(centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        anchors.append(centerYAnchor.constraint(equalTo: view.centerYAnchor))
+        anchors.forEach({$0.isActive = true})
+        
+        return anchors
+    }
+    
+    @discardableResult
+    func setSize(_ width: CGFloat, height: CGFloat ) -> [NSLayoutConstraint]{
+        return self.anchor(nil, left: nil, bottom: nil, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: width, heightConstant: height)
+    }
+    
+    @discardableResult
+    func setSize(widthAnchor: NSLayoutDimension, heightAnchor: NSLayoutDimension) -> [NSLayoutConstraint]{
+        var anchors =  [NSLayoutConstraint]()
+        
+        anchors.append(widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1))
+        anchors.append(heightAnchor.constraint(equalTo: heightAnchor, multiplier: 1))
+        
+        anchors.forEach({$0.isActive = true})
+        return anchors
+    }
+    
     func anchorToTop(_ top: NSLayoutYAxisAnchor? = nil, left: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, right: NSLayoutXAxisAnchor? = nil) {
         
         anchorWithConstantsToTop(top, left: left, bottom: bottom, right: right, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
@@ -263,15 +291,9 @@ extension UIView {
         ///
         /// - Returns: Rombus Pattern View
         class func rombusPattern() -> UIView {
-            let patternView = SPRequestPermissionData.views.patternView()
-            let gradientView = SPGradientWithPictureView.init()
-            gradientView.startColor = SPRequestPermissionData.colors.gradient.dark.lightColor()
-            gradientView.endColor = SPRequestPermissionData.colors.gradient.dark.darkColor()
-            gradientView.startColorPoint = CGPoint.init(x: 0.5, y: 0)
-            gradientView.endColorPoint = CGPoint.init(x: 0.5, y: 1)
-            gradientView.pictureView = patternView
-            
-            return gradientView
+            let iv = UIImageView()
+            iv.image = #imageLiteral(resourceName: "Rhombus Pattern")
+            return iv
         }
         
         func grayScale(point:CGPoint) -> CGFloat {
@@ -345,6 +367,44 @@ extension UIImage {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
+    }
+    
+    func resizeImage(to size: CGSize) -> UIImage {
+        
+        var actualHeight: CGFloat = self.size.height
+        var actualWidth: CGFloat = self.size.width
+        let maxHeight: CGFloat = size.width
+        let maxWidth: CGFloat = size.height
+        var imgRatio: CGFloat = actualWidth/actualHeight
+        let maxRatio: CGFloat = maxWidth/maxHeight
+        let compressionQuality = 0.5//50 percent compression
+        
+        if (actualHeight > maxHeight || actualWidth > maxWidth) {
+            if(imgRatio < maxRatio) {
+                //adjust width according to maxHeight
+                imgRatio = maxHeight / actualHeight
+                actualWidth = imgRatio * actualWidth
+                actualHeight = maxHeight
+            } else if(imgRatio > maxRatio) {
+                //adjust height according to maxWidth
+                imgRatio = maxWidth / actualWidth
+                actualHeight = imgRatio * actualHeight
+                actualWidth = maxWidth
+            } else {
+                actualHeight = maxHeight
+                actualWidth = maxWidth
+            }
+        }
+        
+        let rect: CGRect = CGRect(x: 0.0, y: 0.0, width: actualWidth, height: actualHeight)
+        UIGraphicsBeginImageContext(rect.size)
+        self.draw(in: rect)
+        let image: UIImage  = UIGraphicsGetImageFromCurrentImageContext()!
+        let imageData = UIImageJPEGRepresentation(image, CGFloat(compressionQuality))
+        UIGraphicsEndImageContext()
+        
+        let resizedImage = UIImage(data: imageData!)
+        return resizedImage!
     }
 }
 

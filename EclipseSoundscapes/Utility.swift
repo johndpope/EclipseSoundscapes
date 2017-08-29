@@ -21,8 +21,31 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
+import Material
 
 class Utility {
+    
+    
+    /// Delays given time before closure is excecuted
+    ///
+    /// - Parameters:
+    ///   - delay: Time to delay closure
+    ///   - closure: Action block
+    static func delay(_ delay:Double, closure:@escaping ()->()) {
+        let when = DispatchTime.now() + delay
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            closure()
+        }
+    }
+
+    
+    /// Opens Application Settings
+    static func settings() {
+        let application = UIApplication.shared
+        if let url = URL(string: UIApplicationOpenSettingsURLString) {
+            application.openURL(url)
+        }
+    }
     
     /// Convert TimeInterval into a pretty string
     ///
@@ -115,6 +138,7 @@ class Utility {
     
 }
 
-class Color {
+extension Color {
     static let eclipseOrange = UIColor.init(r: 227, g: 94, b: 5)
+    static let lead = UIColor.init(r: 33, g: 33, b: 33)
 }

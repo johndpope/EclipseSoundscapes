@@ -24,21 +24,6 @@ import UIKit
 import UserNotifications
 import BRYXBanner
 
-class NotificationDataSource : SPRequestPermissionDialogInteractiveDataSource {
-    
-    override func headerTitle() -> String {
-        return "Hello!"
-    }
-    
-    override func headerSubtitle() -> String {
-        return "Don't miss the Eclipse. We need your permission to notify you about Eclipse Events."
-    }
-    
-    override func topAdviceTitle() -> String {
-        return "Allow permission please. This helps to keep you informed with the Eclipse"
-    }
-}
-
 var ReminderCategory = "reminder.category"
 var ReminderAction = "REMINDER_ACTION"
 
@@ -98,11 +83,11 @@ public struct Reminder: OptionSet {
 class NotificationHelper {
     
     static func checkPermission() -> Bool {
-        return SPRequestPermission.isAllowPermission(.notification)
+        return Permission.isAllowPermission(.notification)
     }
     
     static var isGranted : Bool  {
-        return SPRequestPermission.isAllowPermission(.notification) && appGrated
+        return checkPermission() && appGrated
     }
     
     static var appGrated : Bool{
@@ -291,7 +276,7 @@ class NotificationHelper {
         } else {
             body = "The Total Solar Eclipse has begun! Press to listen now."
         }
-    
+        
         if #available(iOS 10.0, *) {
             let listenAction = UNNotificationAction(identifier: ListenAction, title: "Listen Now", options: [.authenticationRequired,.foreground])
             let listenCategory = UNNotificationCategory(identifier: ListenCategory,actions: [listenAction],intentIdentifiers: [], options: [])

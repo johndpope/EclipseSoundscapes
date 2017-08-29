@@ -22,7 +22,7 @@
 
 import Eureka
 
-class FuFutureEventsViewController : FormViewController {
+class FutureEventsViewController : FormViewController {
     
     var futureEvents = [FutureEvent]()
     

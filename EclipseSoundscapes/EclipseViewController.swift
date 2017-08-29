@@ -24,6 +24,7 @@ import Eureka
 import CoreLocation
 import SwiftSpinner
 import BRYXBanner
+import Material
 
 class EclipseViewController : FormViewController {
     
@@ -178,9 +179,9 @@ class EclipseViewController : FormViewController {
             if !Location.checkPermission() {
                 LocationManager.permission(on: self)
             } else {
-                banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.") {
+                banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.", image: #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse"), backgroundColor: Color.eclipseOrange, didTapBlock: {
                     self.present(UINavigationController(rootViewController: SettingsViewController()), animated: true, completion: nil)
-                }
+                })
                 banner?.show(duration: 5.0)
             }
         }

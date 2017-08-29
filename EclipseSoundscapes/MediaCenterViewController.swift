@@ -21,6 +21,7 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
+import Material
 
 class MediaCenterViewController : UIViewController {
     
@@ -35,22 +36,12 @@ class MediaCenterViewController : UIViewController {
         return view
     }()
     
-    var headerView : UIView = {
-        let view = UIView()
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Media")
         view.backgroundColor = Color.eclipseOrange
+        view.delegate = self
         return view
     }()
-    
-    var titleLabel : UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.font = UIFont.getDefautlFont(.bold, size: 20)
-        label.text = "Media"
-        label.accessibilityTraits = UIAccessibilityTraitHeader
-        return label
-    }()
-    
     
     lazy var tableView : UITableView = {
         var tv = UITableView()
@@ -61,31 +52,41 @@ class MediaCenterViewController : UIViewController {
         return tv
     }()
     
-    var comingSoonLabel : UILabel = {
-        var label = UILabel()
-        label.text = "More audio descriptions coming soon..."
-        label.font = UIFont.getDefautlFont(.bold, size: 18)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         registerCell()
         loadDataSource()
         setupView()
-        comingSoonLabel.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 100)
-        tableView.tableFooterView = comingSoonLabel
         
         NotificationHelper.addObserver(self, reminders: [.allDone,.totality,.contact1], selector: #selector(catchReminderNotification(notification:)))
+        
     }
     
     func registerCell() {
         self.tableView.register(MediaCell.self, forCellReuseIdentifier: cellId)
     }
+    
+    
+    
+    func setupView() {
+        
+        self.view.addSubview(fillerView)
+        self.view.addSubview(headerView)
+        self.view.addSubview(tableView)
+        
+        fillerView.anchor(view.topAnchor, left: view.leftAnchor, bottom: headerView.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+        
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
+        
+        
+        let parallavView = ParallaxView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 0))
+        parallavView.backgroundColor = headerView.backgroundColor
+        self.tableView.tableHeaderView  = parallavView
+    }
+    
+    
     
     func catchReminderNotification(notification: Notification) {
         guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
@@ -124,8 +125,6 @@ class MediaCenterViewController : UIViewController {
                 mediaContainer?.append(totalityExperience)
             }
             
-            comingSoonLabel.isHidden = true
-            
         } else if reminder.contains(.contact1) {
             self.mediaContainer?.insert(Media.init(name: "First Contact", resourceName: "First_Contact_full_with_date", infoRecourceName: "First Contact", mediaType: .mp3, image: #imageLiteral(resourceName: "First Contact")), at: 0)
         }
@@ -135,21 +134,7 @@ class MediaCenterViewController : UIViewController {
         }
     }
     
-    func setupView() {
-        
-        self.view.addSubview(fillerView)
-        self.view.addSubview(headerView)
-        self.view.addSubview(tableView)
-        fillerView.anchor(view.topAnchor, left: view.leftAnchor, bottom: headerView.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
-        
-        headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: 60)
-        
-        headerView.addSubview(titleLabel)
-        titleLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
-        titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-        
-        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
-    }
+    
     
     func loadDataSource() {
         self.mediaContainer = [
@@ -172,7 +157,6 @@ class MediaCenterViewController : UIViewController {
             self.tableView.reloadData()
         }
     }
-    
 }
 
 extension MediaCenterViewController: UITableViewDelegate, UITableViewDataSource {
@@ -213,4 +197,26 @@ extension MediaCenterViewController: UITableViewDelegate, UITableViewDataSource 
         cell.media = mediaContainer?[indexPath.row]
         return cell
     }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let tableViewheaderView = self.tableView.tableHeaderView as! ParallaxView
+        tableViewheaderView.scrollViewDidScroll(scrollView: scrollView)
+        headerView.scrollViewDidScroll(scrollView)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        headerView.scrollViewDidEndDecelerating(scrollView)
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        headerView.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
+    }
 }
+
+extension MediaCenterViewController : ShrinkableHeaderViewDelegate {
+    func setScrollPosition(position: CGFloat) {
+        self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: position)
+    }
+}
+
+

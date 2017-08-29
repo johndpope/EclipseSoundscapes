@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import AudioKit
 import BRYXBanner
 import SwiftSpinner
 

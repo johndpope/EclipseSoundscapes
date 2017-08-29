@@ -46,7 +46,7 @@ class LicenseViewController : FormViewController {
                 +++ Section() { section in
                     var header = HeaderFooterView<UIView>(HeaderFooterProvider.class)
                     header.onSetupView = { view, section in
-                        let label = InsetLabel()
+                        let label = UILabel()
                         label.textColor = .black
                         label.text = lib.title
                         label.autoresizingMask = [.flexibleWidth, .flexibleHeight]

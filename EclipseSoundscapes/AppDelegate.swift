@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import AudioKit
 import UserNotifications
 import Fabric
 import Crashlytics
@@ -38,22 +37,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         Crashlytics.start(withAPIKey: Utility.getFile("fabric.apikey", type: "")!)
         
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = notificationDelegate
-            UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { (requests) in
-                print(requests.count)
-                print(requests.debugDescription)
-            })
-        } else {
-            print(application.scheduledLocalNotifications?.count ?? "No Notification scheduled")
-            print(application.scheduledLocalNotifications?.debugDescription ?? "")
-        }
-        
+        window = UIWindow(frame: UIScreen.main.bounds)
         if !UserDefaults.standard.bool(forKey: "WalkThrough") {
-            window = UIWindow(frame: UIScreen.main.bounds)
-            window?.makeKeyAndVisible()
             window?.rootViewController = WalkthroughViewController()
+        } else {
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+            let tab = storyBoard.instantiateViewController(withIdentifier: "Tab")
+            window!.rootViewController = tab
         }
+        window!.makeKeyAndVisible()
+        Splash.splash(over: window!)
         
         return true
     }

@@ -21,23 +21,23 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import Eureka
+import Material
 
 class MoreViewController : FormViewController {
     
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "About Us")
+        view.backgroundColor = Color.lead
+        view.delegate = self
+        view.textColor = .white
+        view.isShrinkable = false
+        return view
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setDefaults()
+        setupView()
         initializeForm()
-        
-        self.navigationController?.navigationBar.barTintColor = UIColor.init(r: 33, g: 33, b: 33)
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-        self.navigationItem.title = "About Us"
-        
-        
-        self.automaticallyAdjustsScrollViewInsets = false
-        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
     }
     
     private func initializeForm() {
@@ -141,13 +141,15 @@ class MoreViewController : FormViewController {
             +++ Section()
     }
     
-    func setDefaults() {
-        self.automaticallyAdjustsScrollViewInsets = false
-        tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake(20, 0, 0, 0)
-        self.tableView.backgroundColor = UIColor(r: 75, g: 75, b: 75)
-        view.backgroundColor = .black
-        URLRow.defaultCellUpdate = { cell, row in cell.textField.textColor = .blue }
+    func setupView() {
+        self.tableView.backgroundColor = Color.lead
+        view.backgroundColor = Color.lead
+        
+        view.addSubview(headerView)
+        
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -155,21 +157,9 @@ class MoreViewController : FormViewController {
     }
 }
 
-class InsetLabel: UILabel {
-    let topInset = CGFloat(10)
-    let bottomInset = CGFloat(10)
-    let leftInset = CGFloat(10)
-    let rightInset = CGFloat(10)
+extension MoreViewController : ShrinkableHeaderViewDelegate {
     
-    override func drawText(in rect: CGRect) {
-        let insets: UIEdgeInsets = UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
-        super.drawText(in: UIEdgeInsetsInsetRect(rect, insets))
-    }
-    
-    override public var intrinsicContentSize: CGSize {
-        var intrinsicSuperViewContentSize = super.intrinsicContentSize
-        intrinsicSuperViewContentSize.height += topInset + bottomInset
-        intrinsicSuperViewContentSize.width += leftInset + rightInset
-        return intrinsicSuperViewContentSize
+    func setScrollPosition(position: CGFloat) {
+        self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: position)
     }
 }

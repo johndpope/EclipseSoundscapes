@@ -21,7 +21,7 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import RevealingSplashView
+import Material
 import BRYXBanner
 
 class TabViewController: UITabBarController {
@@ -45,14 +45,13 @@ class TabViewController: UITabBarController {
     func customizeTabBar() {
         self.tabBar.barTintColor = UIColor.init(r: 33, g: 33, b: 33)
         self.tabBar.tintColor = UIColor.init(r: 227, g: 94, b: 5) // Foreground/Background Ratio 4.50053
+        self.tabBar.isOpaque = false
+        self.tabBar.isTranslucent = false
         
         let width : CGFloat = 50.0
         let height = self.tabBar.frame.height
         
-        self.tabBar.isOpaque = false
-        self.tabBar.isTranslucent = false
-        
-        self.tabBar.selectionIndicatorImage = UIImage.selectionIndiciatorImage(color: UIColor.init(r: 227, g: 94, b: 5), size: CGSize.init(width: width, height: height), lineWidth: 5.0)
+        self.tabBar.selectionIndicatorImage = UIImage.selectionIndiciatorImage(color: UIColor.init(r: 227, g: 94, b: 5), size: CGSize.init(width: width, height: height), lineWidth: 2.0)
         
         for item in self.tabBar.items! {
             item.accessibilityTraits = UIAccessibilityTraitButton
@@ -230,4 +229,6 @@ extension UITabBarController {
     func tabBarIsVisible() -> Bool {
         return self.tabBar.frame.origin.y < view.frame.maxY
     }
+    
+    
 }

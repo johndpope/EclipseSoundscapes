@@ -21,6 +21,7 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
+import Material
 import MediaPlayer
 
 class PlaybackViewController: UIViewController {
@@ -427,7 +428,7 @@ class PlaybackViewController: UIViewController {
         if #available(iOS 10.0, *) {
             let mySize = CGSize(width: 400, height: 400)
             mediaArt = MPMediaItemArtwork(boundsSize:mySize) { sz in
-                return image.resize(to: sz)
+                return image.resizeImage(to: sz)
             }
         } else {
             mediaArt = MPMediaItemArtwork.init(image: image)

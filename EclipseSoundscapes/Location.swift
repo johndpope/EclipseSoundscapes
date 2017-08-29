@@ -53,8 +53,12 @@ public protocol LocationDelegate: NSObjectProtocol {
 /// Handles Obtaining the User's Location
 class Location {
     
+    static func checkPermission() -> Bool {
+        return Permission.isAllowPermission(.locationWhenInUse)
+    }
+    
     static var isGranted : Bool  {
-        return SPRequestPermission.isAllowPermission(.locationWhenInUse) && appGrated
+        return checkPermission() && appGrated
     }
     
     static var appGrated : Bool{
@@ -79,27 +83,6 @@ class Location {
     /// - Returns: Current Status of Location Services
     fileprivate func checkLocationServices() -> Bool {
         return CLLocationManager.locationServicesEnabled()
-    }
-    
-    static func checkPermission() -> Bool {
-        return SPRequestPermission.isAllowPermission(.locationWhenInUse)
-    }
-}
-
-
-
-class LocationDataSource : SPRequestPermissionDialogInteractiveDataSource {
-    
-    override func headerTitle() -> String {
-        return "Hello!"
-    }
-    
-    override func headerSubtitle() -> String {
-        return "Don't miss the Eclipse. We need your location to proceed"
-    }
-    
-    override func topAdviceTitle() -> String {
-        return "Allow permission please. This helps to keep you informed with the Eclipse"
     }
 }
 
@@ -239,7 +222,11 @@ class LocationManager : NSObject {
     }
     
     static func permission(on controller: UIViewController) {
-        SPRequestPermission.dialog.interactive.present(on: controller, with: [.locationWhenInUse], dataSource: LocationDataSource(), delegate: manager)
+        
+        controller.present(PermissionViewController.show(with: [.locationWhenInUse], completion: { 
+            LocationManager.manager.didHide()
+        }), animated: true, completion: nil)
+        
     }
     
     static func getClosestLocation() {
@@ -570,26 +557,14 @@ extension LocationManager : CLLocationManagerDelegate {
     }
 }
 
-extension LocationManager : SPRequestPermissionEventsDelegate {
-    public func didHide() {
+extension LocationManager {
+    func didHide() {
         if Location.isGranted {
             post(action: .granted)
             LocationManager.getLocation()
         } else {
             post(action: .notGranted)
         }
-    }
-    
-    public func didAllowPermission(permission: SPRequestPermissionType) {
-        Location.appGrated = true
-    }
-    
-    public func didDeniedPermission(permission: SPRequestPermissionType) {
-        Location.appGrated = false
-    }
-    
-    public func didSelectedPermission(permission: SPRequestPermissionType) {
-        
     }
 }
 

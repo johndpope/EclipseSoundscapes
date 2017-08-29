@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.2.4</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>Fabric</key>
 	<dict>
 		<key>Kits</key>
@@ -45,10 +45,6 @@
 	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCalendarsUsageDescription</key>
-	<string>We want to set the Eclipse dates in your calendar.</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Contacts permission is for you to share this app.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We would like to use your location to keep you informed about the many Eclipses we support.</string>
 	<key>NSMicrophoneUsageDescription</key>
