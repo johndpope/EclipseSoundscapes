@@ -37,13 +37,27 @@ class Utility {
             closure()
         }
     }
-
+    
     
     /// Opens Application Settings
     static func settings() {
-        let application = UIApplication.shared
         if let url = URL(string: UIApplicationOpenSettingsURLString) {
-            application.openURL(url)
+            openUrl(url)
+        }
+    }
+    
+    /// Open Url
+    ///
+    /// - Parameter url: Destination Url
+    static func openUrl(_ url: URL ){
+        let application = UIApplication.shared
+        if application.canOpenURL(url) {
+            if #available(iOS 10.0, *) {
+                application.open(url, options: [:], completionHandler: nil)
+            } else {
+                // Fallback on earlier versions
+                application.openURL(url)
+            }
         }
     }
     
@@ -74,8 +88,8 @@ class Utility {
         } else if seconds == 0 {
             return "0"
         } else {
-    
-        return String(format:"%i %@ %i %@", minutes, multipleMinutes ? "minutes" : "minute", Int(seconds), multipleSeconds ? "seconds" : "second")
+            
+            return String(format:"%i %@ %i %@", minutes, multipleMinutes ? "minutes" : "minute", Int(seconds), multipleSeconds ? "seconds" : "second")
         }
     }
     
@@ -116,7 +130,7 @@ class Utility {
     /// Get Local Time from UTC
     ///
     /// - Parameter date: UTC Date String
-    /// - Returns: Local Time Date String 
+    /// - Returns: Local Time Date String
     static func UTCToLocal(date:String) -> String {
         let dateFormator = DateFormatter()
         dateFormator.dateFormat = "HH:mm:ss.S"
@@ -136,9 +150,4 @@ class Utility {
         }
     }
     
-}
-
-extension Color {
-    static let eclipseOrange = UIColor.init(r: 227, g: 94, b: 5)
-    static let lead = UIColor.init(r: 33, g: 33, b: 33)
 }

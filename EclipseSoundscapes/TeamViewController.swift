@@ -40,8 +40,8 @@ class TeamViewController : FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
-        
-        self.navigationItem.title = "Our Team"
+        self.title = "Our Team"
+        self.navigationItem.titleLabel.font = UIFont.getDefautlFont(.meduium, size: 16)
         self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
     }
     

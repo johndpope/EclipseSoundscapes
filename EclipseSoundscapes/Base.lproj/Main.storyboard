@@ -5,7 +5,6 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -259,135 +258,9 @@
                     <view key="view" contentMode="scaleToFill" id="ioW-fg-s3b">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4dv-XL-xxk">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VTO-bW-Oae">
-                                        <rect key="frame" x="337" y="31" width="30" height="34"/>
-                                        <accessibility key="accessibilityConfiguration" hint="Shows the next Eclipse Image" label="Next Image"/>
-                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <connections>
-                                            <action selector="nextImage:" destination="JAF-hQ-7vb" eventType="touchUpInside" id="QZC-oq-wFu"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="43n-eJ-SS3">
-                                        <rect key="frame" x="8" y="31" width="30" height="34"/>
-                                        <accessibility key="accessibilityConfiguration" hint="Shows the Previous Eclipse Image" label="Previous Image"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="30" id="irf-MB-MV9"/>
-                                        </constraints>
-                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <connections>
-                                            <action selector="previousImage:" destination="JAF-hQ-7vb" eventType="touchUpInside" id="Ywy-0w-kyj"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZpM-4V-6LY">
-                                        <rect key="frame" x="79" y="16" width="216" height="65"/>
-                                        <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="30"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="centerY" secondItem="ZpM-4V-6LY" secondAttribute="centerY" id="1UK-YS-yGB"/>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="baseline" secondItem="VTO-bW-Oae" secondAttribute="baseline" id="2AA-1C-aYB"/>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="leading" secondItem="4dv-XL-xxk" secondAttribute="leadingMargin" id="2KZ-YQ-oEl"/>
-                                    <constraint firstAttribute="height" constant="80" id="APK-xg-hxJ"/>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="top" secondItem="4dv-XL-xxk" secondAttribute="top" constant="31" id="Gyk-Ya-hhz"/>
-                                    <constraint firstItem="ZpM-4V-6LY" firstAttribute="leading" secondItem="43n-eJ-SS3" secondAttribute="trailing" constant="41" id="Jvw-9w-mlU"/>
-                                    <constraint firstItem="VTO-bW-Oae" firstAttribute="trailing" secondItem="4dv-XL-xxk" secondAttribute="trailingMargin" id="M6A-DE-yxW"/>
-                                    <constraint firstItem="VTO-bW-Oae" firstAttribute="firstBaseline" secondItem="43n-eJ-SS3" secondAttribute="firstBaseline" id="S2G-JB-Wzg"/>
-                                    <constraint firstItem="ZpM-4V-6LY" firstAttribute="top" secondItem="4dv-XL-xxk" secondAttribute="top" constant="16" id="ZNm-CN-mNf"/>
-                                    <constraint firstItem="ZpM-4V-6LY" firstAttribute="centerX" secondItem="4dv-XL-xxk" secondAttribute="centerX" id="eIo-YG-UyH"/>
-                                    <constraint firstItem="43n-eJ-SS3" firstAttribute="top" secondItem="VTO-bW-Oae" secondAttribute="top" id="usu-l2-yXz"/>
-                                </constraints>
-                            </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="white" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uG5-k2-LTz">
-                                <rect key="frame" x="0.0" y="125" width="375" height="493"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Totality" translatesAutoresizingMaskIntoConstraints="NO" id="obB-lR-1Zi">
-                                <rect key="frame" x="0.0" y="125" width="375" height="493"/>
-                            </imageView>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R3m-8g-YBb">
-                                <rect key="frame" x="0.0" y="125" width="375" height="493"/>
-                                <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="0.6985477377300614" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="28"/>
-                                <state key="normal" title="Press to Interact with Rumble Map">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                            </button>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="vVN-42-Xb2">
-                                <rect key="frame" x="0.0" y="80" width="375" height="45"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Py-nu-i4Q">
-                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="45"/>
-                                        <color key="backgroundColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
-                                        <color key="tintColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="Description">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="switchState:" destination="JAF-hQ-7vb" eventType="touchUpInside" id="Zyp-SF-ScY"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JrP-TQ-iWw">
-                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="45"/>
-                                        <color key="backgroundColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
-                                        <color key="tintColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="Rumble Map">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="switchState:" destination="JAF-hQ-7vb" eventType="touchUpInside" id="tu3-cd-qH4"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="vbE-CV-Ina"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstItem="R3m-8g-YBb" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="8Xq-kL-g0V"/>
-                            <constraint firstItem="V7E-o8-Wwf" firstAttribute="top" secondItem="obB-lR-1Zi" secondAttribute="bottom" id="AN5-EY-vR0"/>
-                            <constraint firstItem="4dv-XL-xxk" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="FRD-ev-cNR"/>
-                            <constraint firstItem="obB-lR-1Zi" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="NN1-gc-Cna"/>
-                            <constraint firstItem="4dv-XL-xxk" firstAttribute="top" secondItem="ioW-fg-s3b" secondAttribute="top" id="QvW-yx-KGO"/>
-                            <constraint firstItem="obB-lR-1Zi" firstAttribute="top" secondItem="vVN-42-Xb2" secondAttribute="bottom" id="RHa-8s-9Co"/>
-                            <constraint firstItem="vVN-42-Xb2" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="Rif-Ia-eCD"/>
-                            <constraint firstItem="R3m-8g-YBb" firstAttribute="top" secondItem="vVN-42-Xb2" secondAttribute="bottom" id="YxV-mj-Spf"/>
-                            <constraint firstItem="uG5-k2-LTz" firstAttribute="leading" secondItem="ioW-fg-s3b" secondAttribute="leading" id="bl5-bn-yN6"/>
-                            <constraint firstAttribute="trailing" secondItem="R3m-8g-YBb" secondAttribute="trailing" id="bsA-Bc-bEQ"/>
-                            <constraint firstAttribute="trailing" secondItem="obB-lR-1Zi" secondAttribute="trailing" id="cSa-zN-Mrg"/>
-                            <constraint firstItem="V7E-o8-Wwf" firstAttribute="top" secondItem="uG5-k2-LTz" secondAttribute="bottom" id="e39-wE-2KK"/>
-                            <constraint firstItem="V7E-o8-Wwf" firstAttribute="top" secondItem="R3m-8g-YBb" secondAttribute="bottom" id="fLE-s1-sIJ"/>
-                            <constraint firstAttribute="trailing" secondItem="vVN-42-Xb2" secondAttribute="trailing" id="kKc-H8-rVw"/>
-                            <constraint firstAttribute="trailing" secondItem="uG5-k2-LTz" secondAttribute="trailing" id="lF4-sc-GGz"/>
-                            <constraint firstItem="vVN-42-Xb2" firstAttribute="top" secondItem="4dv-XL-xxk" secondAttribute="bottom" id="q4j-Sc-KlD"/>
-                            <constraint firstAttribute="trailing" secondItem="4dv-XL-xxk" secondAttribute="trailing" id="x0R-Gd-NHO"/>
-                            <constraint firstItem="uG5-k2-LTz" firstAttribute="top" secondItem="vVN-42-Xb2" secondAttribute="bottom" id="zQa-iN-bS8"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Eclipse Features" image="rumbleTouch" selectedImage="rumbleTouch" id="Sis-96-fKs"/>
-                    <connections>
-                        <outlet property="controlView" destination="4dv-XL-xxk" id="Xln-gN-TYy"/>
-                        <outlet property="descriptionBtn" destination="5Py-nu-i4Q" id="EcC-CK-zUN"/>
-                        <outlet property="descriptionTextView" destination="uG5-k2-LTz" id="lLE-ta-QQS"/>
-                        <outlet property="nextBtn" destination="VTO-bW-Oae" id="akv-vO-hcp"/>
-                        <outlet property="previewImageView" destination="obB-lR-1Zi" id="jg5-Bg-K1H"/>
-                        <outlet property="previousBtn" destination="43n-eJ-SS3" id="43C-I0-Et5"/>
-                        <outlet property="rumbleBtn" destination="JrP-TQ-iWw" id="Ak6-YK-hte"/>
-                        <outlet property="startRumbleBtn" destination="R3m-8g-YBb" id="OcH-WD-ZRU"/>
-                        <outlet property="titleLabel" destination="ZpM-4V-6LY" id="7Ta-Xb-xKl"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="85p-XH-9xa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -411,10 +284,10 @@
             </objects>
             <point key="canvasLocation" x="3701.5999999999999" y="-820.83958020989508"/>
         </scene>
-        <!--Fu Future Events View Controller-->
+        <!--Future Events View Controller-->
         <scene sceneID="U9r-Al-7gc">
             <objects>
-                <viewController id="y2F-YI-9ug" customClass="FuFutureEventsViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="y2F-YI-9ug" customClass="FutureEventsViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="f2k-Y7-7UH"/>
                         <viewControllerLayoutGuide type="bottom" id="2DG-Of-EWW"/>
@@ -524,7 +397,6 @@
     </scenes>
     <resources>
         <image name="More" width="16" height="16"/>
-        <image name="Totality" width="1537" height="1078"/>
         <image name="events_icon" width="16" height="16"/>
         <image name="play-main" width="20" height="20"/>
         <image name="rumbleTouch" width="21" height="21"/>

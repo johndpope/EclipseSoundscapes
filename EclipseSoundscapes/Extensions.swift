@@ -21,6 +21,7 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
+import Material
 
 extension UIFontDescriptor {
     
@@ -213,6 +214,13 @@ extension UIColor {
 }
 
 extension UIView {
+    
+    func addSubviews(_ views : UIView...) {
+        views.forEach { (view) in
+            view.translatesAutoresizingMaskIntoConstraints = false
+            self.addSubview(view)
+        }
+    }
     
     @discardableResult
     func center(in view : UIView) -> [NSLayoutConstraint] {
@@ -431,19 +439,8 @@ extension CGPoint : Hashable {
     }
 }
 
-extension UIAlertController {
-    class func appSettingsAlert(title: String, message: String) -> UIAlertController {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { _ in
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(URL.init(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
-            } else {
-                // Fallback on earlier versions
-                UIApplication.shared.openURL(URL.init(string: UIApplicationOpenSettingsURLString)!)
-            }
-        }))
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        return alert
-    }
+extension Color {
+    static let eclipseOrange = UIColor.init(r: 227, g: 94, b: 5)
+    static let lead = UIColor.init(r: 33, g: 33, b: 33)
 }
 

@@ -113,7 +113,6 @@ class MoreViewController : FormViewController {
                 })
             
             
-            
             <<< ButtonRow("Open WalkThrough"){ (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.cell.imageView?.image = #imageLiteral(resourceName: "manual")
@@ -121,6 +120,20 @@ class MoreViewController : FormViewController {
                 }, onDismiss: nil)
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
+                })
+            
+            <<< ButtonRow("Give Feedback"){ (row: ButtonRow) -> Void in
+                row.title = row.tag
+                row.cell.imageView?.image = #imageLiteral(resourceName: "Feedback")
+                }.cellUpdate({ (cell, _) in
+                    cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
+                    cell.textLabel?.textColor = .black
+                    cell.textLabel?.textAlignment = .left
+                }).onCellSelection({ (_, _) in
+                    guard let feedbackUrl = URL(string: "https://goo.gl/forms/YdGzNfAlmQDtDWuY2") else {
+                        return
+                    }
+                    Utility.openUrl(feedbackUrl)
                 })
             
             <<< ButtonRow("Settings"){ (row: ButtonRow) -> Void in
