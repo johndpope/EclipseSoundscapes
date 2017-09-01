@@ -23,7 +23,7 @@
 import UIKit
 import Material
 
-class PermissionViewController : UIViewController, PermissionCellDelegate {
+class PermissionViewController : UIViewController {
     private var permissionView : PermissionView!
     private var completion : (()->Void)!
     
@@ -59,6 +59,7 @@ class PermissionViewController : UIViewController, PermissionCellDelegate {
         
     }
     
+    // Setup and layout view's subviews
     func setupViews() {
         permissionView.delegate = self
         self.view.addSubview(permissionView)
@@ -77,6 +78,7 @@ class PermissionViewController : UIViewController, PermissionCellDelegate {
         panGesture.maximumNumberOfTouches = 1
         self.permissionView.addGestureRecognizer(panGesture)
     }
+    
     
     func didFinish() {
         Utility.delay(0.5) { [weak self] in
@@ -161,4 +163,8 @@ class PermissionViewController : UIViewController, PermissionCellDelegate {
         }
         
     }
+}
+
+extension PermissionViewController: PermissionViewDelegate {
+    
 }

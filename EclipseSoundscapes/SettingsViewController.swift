@@ -104,8 +104,6 @@ class SettingsViewController : FormViewController {
             row.cell.switchControl.setOn(isAllowed, animated: true)
             row.value = isAllowed
             break
-        default:
-            break
         }
         
         

@@ -22,9 +22,13 @@
 
 import UIKit
 import Material
-import BRYXBanner
 
+/// Track the press of the permission buttons
 protocol PermissionButtonDelegate: class {
+    
+    /// Permission button was pressed
+    ///
+    /// - Parameter type: Associated permission type
     func didPressPermission(for type: PermissionType)
 }
 
@@ -32,14 +36,22 @@ class PermissionButton : UIButton {
     
     weak var delegate : PermissionButtonDelegate?
     
-    var permissionType: PermissionType? {
+    /// Associated permission type
+    var permissionType: PermissionType! {
         didSet {
             initalize()
         }
     }
     
+    /// Local Permission Manager
     private var permission : PermissionInterface!
+    
+    
+    /// Track presses
     private var didPress = false
+    
+    
+    /// Track previous permission request
     private var didRequest = false
     
     
@@ -53,6 +65,8 @@ class PermissionButton : UIButton {
         commonInit()
     }
     
+    
+    /// Setup Button
     func commonInit() {
         addSqueeze()
         backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -66,13 +80,11 @@ class PermissionButton : UIButton {
         self.cornerRadius = self.bounds.height/2
     }
     
-    func initalize() {
+    
+    /// Initalize the button for its permission
+    private func initalize() {
         
-        guard let type = self.permissionType else {
-            return
-        }
-        
-        switch type {
+        switch permissionType! {
         case .notification:
             permission = NotificationPermission()
             
@@ -87,25 +99,26 @@ class PermissionButton : UIButton {
             setImage(#imageLiteral(resourceName: "location").withRenderingMode(.alwaysOriginal), for: .normal)
             accessibilityLabel = "Location Permission"
             break
-        default:
-            return
         }
         
         let authorized = permission.isAuthorized()
+        update(authorized)
+    }
+    
+    
+    /// Update button after authorization change
+    private func update(_ authorized : Bool) {
         backgroundColor = authorized ? .white: Color.lead
         setTitleColor(authorized ? .black : .white, for: .normal)
         
-        didRequest = UserDefaults.standard.bool(forKey: "Permission\(type.rawValue)")
+        didRequest = UserDefaults.standard.bool(forKey: "Permission\(permissionType.rawValue)")
         if didRequest {
             accessibilityValue = authorized ? "Allowed" : "Denied"
         }
     }
     
     /// Setup and request Permission
-    func hanldeButtonTouch() {
-        guard let type = self.permissionType else {
-            return
-        }
+    @objc private func hanldeButtonTouch() {
         
         if didPress {
             if !permission.isAuthorized() {
@@ -115,7 +128,7 @@ class PermissionButton : UIButton {
             if !didRequest {
                 permission.request { () -> ()? in
                     self.didRequest = true
-                    UserDefaults.standard.set(true, forKey: "Permission\(type.rawValue)")
+                    UserDefaults.standard.set(true, forKey: "Permission\(self.permissionType.rawValue)")
                     return self.handlePermissionRequest()
                 }
             } else {
@@ -130,12 +143,11 @@ class PermissionButton : UIButton {
     
     
     /// Handle the update to the Permission Buttons after the permission has showed
-    func handlePermissionRequest(){
+    private func handlePermissionRequest(){
+
+        let authorized = permission.isAuthorized()
+        update(authorized)
         
-        let authorized = self.permission.isAuthorized()
-        backgroundColor = authorized ? .white: Color.lead
-        setTitleColor(authorized ? .black : .white, for: .normal)
-        accessibilityValue = authorized ? "Allowed" : "Denied"
         
         if permission is LocationPermission {
             if authorized {
@@ -154,11 +166,7 @@ class PermissionButton : UIButton {
         delegate?.didPressPermission(for: self.permissionType!)
     }
     
-    private func update() {
-        let authorized = permission.isAuthorized()
-        backgroundColor = authorized ? .white: Color.lead
-        setTitleColor(authorized ? .black : .white, for: .normal)
-    }
+    
     
     /// Show Alert that permission has been denied
     private func settingAlert() {
@@ -177,7 +185,9 @@ class PermissionButton : UIButton {
         Utility.getTopViewController().present(alertVC, animated: true, completion: nil)
     }
     
-    func returnedToApplication() {
+    
+    /// Notification handler for when returns from app settings
+    @objc private func returnedToApplication() {
         NotificationCenter.default.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
         handlePermissionRequest()
     }

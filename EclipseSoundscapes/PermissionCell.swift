@@ -11,11 +11,16 @@ import UIKit
 /// Hanldes Permissions for the app
 class PermissionCell: UICollectionViewCell {
     
-    weak var delegate: PermissionCellDelegate? {
+    
+    /// Permission Delegate that is passed to the PermissionView
+    weak var delegate: PermissionViewDelegate? {
         didSet {
             self.permissionView.delegate = delegate
         }
     }
+    
+    
+    /// Local PermissionView
     var permissionView : PermissionView!
     
     override init(frame: CGRect) {
@@ -28,6 +33,7 @@ class PermissionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Setup and layout view's subviews
     func setupView() {
         permissionView = PermissionView(for: [.locationWhenInUse,.notification])
         self.addSubview(permissionView)

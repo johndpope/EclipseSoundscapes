@@ -24,16 +24,16 @@ import UIKit
 import Material
 
 /// Inform the permission's have been accepted or skipped
-protocol PermissionCellDelegate: class {
+protocol PermissionViewDelegate: class {
     
-    /// Send notice that permission's cell has completed
+    /// Send notice that permission view has finished
     func didFinish()
 }
 
 
 class PermissionView: UIView {
     
-    weak var delegate: PermissionCellDelegate?
+    weak var delegate: PermissionViewDelegate?
     
     /// Tracker for Location Permission button touch
     fileprivate var didPressLocation = false
@@ -41,7 +41,12 @@ class PermissionView: UIView {
     /// Tracker for Notification Permission button touch
     fileprivate var didPressNotification = false
     
+    
+    /// Permissions to handle
     var permissions : [PermissionType]!
+    
+    
+    /// Count of permissions in order to track if all permissions have been handled
     fileprivate var count = 0
     
     var titleLabel : UILabel = {
@@ -73,8 +78,11 @@ class PermissionView: UIView {
     }()
     
     
-    lazy var laterBtn : PermissionButton = {
-        var btn = PermissionButton(type: .system)
+    lazy var laterBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: (btn.titleLabel?.font.pointSize)!)
         btn.setTitleColor(.white, for: .normal)
         btn.setTitle("Ask Later", for: .normal)
         btn.addTarget(self, action: #selector(later), for: .touchUpInside)
@@ -100,6 +108,7 @@ class PermissionView: UIView {
         setupViews()
     }
     
+    /// Setup and layout view's subviews
     func setupViews() {
         addSubview(titleLabel)
         addSubview(iconImageView)
@@ -159,8 +168,6 @@ extension PermissionView: PermissionButtonDelegate {
                 count -= 1
                 didPressLocation = true
             }
-            break
-        default:
             break
         }
 

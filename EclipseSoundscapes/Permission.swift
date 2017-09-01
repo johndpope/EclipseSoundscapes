@@ -24,21 +24,36 @@ import Foundation
 import MapKit
 import UserNotifications
 
+
+
+/// Permissions Types for App
+///
+/// - notification: Notification Permission
+/// - locationAlways: Track Location always
+/// - locationWhenInUse: Track Location when app is in use
+/// - locationWithBackground: Track Location in background
 public enum PermissionType: Int {
     case notification
-    case locationAlways
     case locationWhenInUse
-    case locationWithBackground
 }
 
-//MARK: - Interface
+
+/// Helper to quicly check is a permission is authorized
 public struct Permission {
     
+    /// Check if permission is authorized
+    ///
+    /// - Parameter permission: Permission to check
+    /// - Returns: If permission is authorized or not
     static public func isAllowPermission(_ permission: PermissionType) -> Bool {
         let permissionManager = PermissionsManager.init()
         return permissionManager.isAuthorizedPermission(permission)
     }
     
+    /// Check if array of permissions are authorized
+    ///
+    /// - Parameter permissions: Permissions to check
+    /// - Returns: If all permissions are authorized or not
     static public func isAllowPermissions(_ permissions: [PermissionType]) -> Bool {
         for permission in permissions {
             if !self.isAllowPermission(permission) {
@@ -47,12 +62,16 @@ public struct Permission {
         }
         return true
     }
-    
-    private init() {}
 }
 
+
+/// Notification Permission Manager
 class NotificationPermission : PermissionInterface {
     
+    
+    /// Check if Notifiation Permission is authorized
+    ///
+    /// - Returns: Authorization Status
     func isAuthorized() -> Bool {
         let notificationType = UIApplication.shared.currentUserNotificationSettings!.types
         if notificationType == [] {
@@ -62,6 +81,10 @@ class NotificationPermission : PermissionInterface {
         }
     }
     
+    
+    /// Request Notification Permission
+    ///
+    /// - Parameter complectionHandler: optional completion block after request
     func request(withComlectionHandler complectionHandler: @escaping ()->()?) {
         if #available(iOS 10.0, *) {
             let center = UNUserNotificationCenter.current()
@@ -83,10 +106,19 @@ class NotificationPermission : PermissionInterface {
     
 }
 
+/// Location Permission Manager
 class LocationPermission: PermissionInterface {
     
+    
+    /// Current location type
     var type: LocationType
     
+    
+    /// Location Permission Types
+    ///
+    /// - Always: Track Location always (Not Supported)
+    /// - WhenInUse: Track Location when app is in use
+    /// - AlwaysWithBackground: Track Location in background (Not Supported)
     enum LocationType {
         case Always
         case WhenInUse
@@ -97,47 +129,35 @@ class LocationPermission: PermissionInterface {
         self.type = type
     }
     
+    
+    /// Check if Location Permission is authorized
+    ///
+    /// - Returns: Location Permission Status
     func isAuthorized() -> Bool {
         
         let status = CLLocationManager.authorizationStatus()
         
         switch self.type {
-        case .Always:
-            if status == .authorizedAlways {
-                return true
-            } else {
-                return false
-            }
         case .WhenInUse:
             if status == .authorizedWhenInUse {
                 return true
             } else {
                 return false
             }
-        case .AlwaysWithBackground:
-            if status == .authorizedAlways {
-                return true
-            } else {
-                return false
-            }
+        case .Always: // Not Supported
+            return false
+        case .AlwaysWithBackground: // Not Supported
+            return false
         }
     }
     
+    
+    /// Request Location Permission
+    ///
+    /// - Parameter complectionHandler: optional completion block handler after request
     func request(withComlectionHandler complectionHandler: @escaping ()->()?) {
         
         switch self.type {
-        case .Always:
-            if PermissionAlwaysAuthorizationLocationHandler.shared == nil {
-                PermissionAlwaysAuthorizationLocationHandler.shared = PermissionAlwaysAuthorizationLocationHandler()
-            }
-            
-            PermissionAlwaysAuthorizationLocationHandler.shared!.requestPermission { (authorized) in
-                DispatchQueue.main.async {
-                    complectionHandler()
-                    PermissionAlwaysAuthorizationLocationHandler.shared = nil
-                }
-            }
-            break
         case .WhenInUse:
             if PermissionWhenInUseAuthorizationLocationHandler.shared == nil {
                 PermissionWhenInUseAuthorizationLocationHandler.shared = PermissionWhenInUseAuthorizationLocationHandler()
@@ -150,29 +170,33 @@ class LocationPermission: PermissionInterface {
                 }
             }
             break
-        case .AlwaysWithBackground:
-            if PermissionLocationWithBackgroundHandler.shared == nil {
-                PermissionLocationWithBackgroundHandler.shared = PermissionLocationWithBackgroundHandler()
-            }
-            
-            PermissionLocationWithBackgroundHandler.shared!.requestPermission { (authorized) in
-                DispatchQueue.main.async {
-                    complectionHandler()
-                    PermissionLocationWithBackgroundHandler.shared = nil
-                }
-            }
+        case .Always: // Not Supported
+            break
+        case .AlwaysWithBackground: // Not Supported
             break
         }
     }
 }
 
+
+/// Permissions Manager
 class PermissionsManager: PermissionsManagerInterface {
     
+    
+    /// Check if permission is authorized
+    ///
+    /// - Parameter permission: Permission to check
+    /// - Returns: If permission is authorized or not
     func isAuthorizedPermission(_ permission: PermissionType) -> Bool {
         let manager = self.getManagerForPermission(permission)
         return manager.isAuthorized()
     }
     
+    /// Request Location for given Permission
+    ///
+    /// - Parameters:
+    ///   - permission: Permission to request authorization
+    ///   - complectionHandler: optional completion block handler after request
     func requestPermission(_ permission: PermissionType, with complectionHandler: @escaping ()->()) {
         let manager = self.getManagerForPermission(permission)
         manager.request(withComlectionHandler: {
@@ -180,94 +204,37 @@ class PermissionsManager: PermissionsManagerInterface {
         })
     }
     
+    
+    /// Get the appropriate manager for the given permission
+    ///
+    /// - Parameter permission: Permission to requst
+    /// - Returns: appropriate manager for the given permission
     private func getManagerForPermission(_ permission: PermissionType) -> PermissionInterface {
         switch permission {
         case .notification:
             return NotificationPermission()
-        case .locationAlways:
-            return LocationPermission(type: LocationPermission.LocationType.Always)
         case .locationWhenInUse:
             return LocationPermission(type: LocationPermission.LocationType.WhenInUse)
-        case .locationWithBackground:
-            return LocationPermission(type: LocationPermission.LocationType.AlwaysWithBackground)
         }
     }
 }
 
-class PermissionAlwaysAuthorizationLocationHandler: NSObject, CLLocationManagerDelegate {
-    
-    static var shared: PermissionAlwaysAuthorizationLocationHandler?
-    
-    lazy var locationManager: CLLocationManager =  {
-        return CLLocationManager()
-    }()
-    
-    var complectionHandler: PermissionAuthorizationHandlerCompletionBlock?
-    
-    override init() {
-        super.init()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        
-        if whenInUseNotRealChangeStatus {
-            if status == .authorizedWhenInUse {
-                return
-            }
-        }
-        
-        if status == .notDetermined {
-            return
-        }
-        
-        if let complectionHandler = complectionHandler {
-            complectionHandler(isAuthorized())
-        }
-    }
-    
-    private var whenInUseNotRealChangeStatus: Bool = false
-    
-    func requestPermission(_ complectionHandler: @escaping PermissionAuthorizationHandlerCompletionBlock) {
-        self.complectionHandler = complectionHandler
-        
-        let status = CLLocationManager.authorizationStatus()
-        
-        switch status {
-        case .notDetermined:
-            locationManager.delegate = self
-            locationManager.requestAlwaysAuthorization()
-            break
-        case .authorizedWhenInUse:
-            self.whenInUseNotRealChangeStatus = true
-            locationManager.delegate = self
-            locationManager.requestAlwaysAuthorization()
-            break
-        default:
-            complectionHandler(isAuthorized())
-        }
-    }
-    
-    func isAuthorized() -> Bool {
-        let status = CLLocationManager.authorizationStatus()
-        if status == .authorizedAlways {
-            return true
-        }
-        return false
-    }
-    
-    deinit {
-        locationManager.delegate = nil
-    }
-}
 
+/// Handler class for Location Permission (When in Use)
 class PermissionWhenInUseAuthorizationLocationHandler: NSObject, CLLocationManagerDelegate {
     
+    
+    /// Static Handler
     static var shared: PermissionWhenInUseAuthorizationLocationHandler?
     
+    
+    /// Local CLLocation manager
     lazy var locationManager: CLLocationManager =  {
         return CLLocationManager()
     }()
     
+    
+    /// Optional completion block handler for permission requests
     var complectionHandler: PermissionAuthorizationHandlerCompletionBlock?
     
     override init() {
@@ -284,6 +251,9 @@ class PermissionWhenInUseAuthorizationLocationHandler: NSObject, CLLocationManag
         }
     }
     
+    /// Permission Request
+    ///
+    /// - Parameter complectionHandler: Optional completion block for permission requests
     func requestPermission(_ complectionHandler: @escaping PermissionAuthorizationHandlerCompletionBlock) {
         self.complectionHandler = complectionHandler
         
@@ -296,6 +266,9 @@ class PermissionWhenInUseAuthorizationLocationHandler: NSObject, CLLocationManag
         }
     }
     
+    /// Status of Location when in use authorization
+    ///
+    /// - Returns: Location Permission Status
     func isAuthorized() -> Bool {
         let status = CLLocationManager.authorizationStatus()
         if status == .authorizedWhenInUse {
@@ -309,26 +282,14 @@ class PermissionWhenInUseAuthorizationLocationHandler: NSObject, CLLocationManag
     }
 }
 
-class PermissionLocationWithBackgroundHandler: PermissionAlwaysAuthorizationLocationHandler {
-    
-    override func requestPermission(_ complectionHandler: @escaping PermissionAlwaysAuthorizationLocationHandler.PermissionAuthorizationHandlerCompletionBlock) {
-        if #available(iOS 9.0, *) {
-            locationManager.allowsBackgroundLocationUpdates = true
-        }
-        super.requestPermission(complectionHandler)
-    }
-}
-
-extension PermissionAlwaysAuthorizationLocationHandler {
-    
-    typealias PermissionAuthorizationHandlerCompletionBlock = (Bool) -> Void
-}
-
 extension PermissionWhenInUseAuthorizationLocationHandler {
     
+    /// Pretyfied Completion Block Alias
     typealias PermissionAuthorizationHandlerCompletionBlock = (Bool) -> Void
 }
 
+
+/// Permission Manager Protocol that all managers must conform to
 public protocol PermissionsManagerInterface {
     
     func isAuthorizedPermission(_ permission: PermissionType) -> Bool
@@ -336,9 +297,17 @@ public protocol PermissionsManagerInterface {
     func requestPermission(_ permission: PermissionType, with complectionHandler: @escaping ()->())
 }
 
+
+/// Permission Protocol that all interface must conform to
 public protocol PermissionInterface {
     
+    /// Check if Permission is authorized
+    ///
+    /// - Returns: Authorization Status
     func isAuthorized() -> Bool
     
+    /// Request Permission
+    ///
+    /// - Parameter complectionHandler: optional completion block after request
     func request(withComlectionHandler complectionHandler: @escaping ()->()?)
 }
