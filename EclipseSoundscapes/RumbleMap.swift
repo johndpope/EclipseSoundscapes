@@ -358,6 +358,23 @@ class RumbleMap : UIImageView {
     }
 }
 
+extension RumbleMap {
+    func grayScale(point:CGPoint) -> CGFloat {
+        let pixel = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: 4)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+        let context = CGContext(data: pixel, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
+        
+        context!.translateBy(x: -point.x, y: -point.y)
+        layer.render(in: context!)
+        
+        let scale = (CGFloat(pixel[0])/255.0 + CGFloat(pixel[1])/255.0 + CGFloat(pixel[2])/255.0)/3
+        
+        return scale
+        
+    }
+}
+
 extension RumbleMap : UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
@@ -367,6 +384,7 @@ extension RumbleMap : UIGestureRecognizerDelegate {
         return !isRestarting && shouldPlay
     }
 }
+
 
 extension RumbleMap {
     //MARK: Notification Handlers
@@ -411,7 +429,6 @@ extension RumbleMap {
         isRestarting = false
     }
     
-    //TODO: Implement the recording to pause while interruption is in prpogress and restart after interruption is stoped
     /// Interruption Handler
     ///
     /// - Parameter notification: Device generated notification about interruption

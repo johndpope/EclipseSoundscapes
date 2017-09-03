@@ -151,6 +151,13 @@ class LocationPermission: PermissionInterface {
         }
     }
     
+    /// Check if Location Services are enabled
+    ///
+    /// - Returns: Current Status of Location Services
+    func checkLocationServices() -> Bool {
+        return CLLocationManager.locationServicesEnabled()
+    }
+    
     
     /// Request Location Permission
     ///

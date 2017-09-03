@@ -142,48 +142,15 @@ extension UIFontDescriptor {
     }
 }
 
-enum Futura {
-    case condensedMedium
-    case extraBold
-    case meduium
-    case italic
-    case bold
-}
-
-class DynamicLabel : UILabel {
-    
-    var fontName: Futura = .condensedMedium
-    var textStyle: UIFontTextStyle = .body
-    var scale : CGFloat = 1.0
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
-    }
-    
-    init(frame: CGRect = .zero, fontName: Futura = .condensedMedium, textStyle: UIFontTextStyle = .body, scale : CGFloat = 1.0){
-        super.init(frame: frame)
-        self.fontName = fontName
-        self.textStyle = textStyle
-        self.scale = scale
-        self.numberOfLines = 0
-        self.adjustsFontSizeToFitWidth = true
-        self.lineBreakMode = .byWordWrapping
-        setDynamicSize()
-        NotificationCenter.default.addObserver(self, selector: #selector(setDynamicSize), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
-    }
-    
-    func setDynamicSize() {
-        self.font = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(fontName: self.fontName, textStyle: self.textStyle, scale: self.scale), size: 0)
-        superview?.layoutIfNeeded()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 extension UIColor {
+    
+    /// Convience constructor for UIColor
+    /// - Note: Values are out of 0-255
+    /// - Parameters:
+    ///   - r: red
+    ///   - g: green
+    ///   - b: blue
+    ///   - a: alpha
     convenience init(r: Int, g: Int, b: Int, a: CGFloat = 1.0) {
         self.init(
             red: CGFloat(r) / 255.0,
@@ -192,29 +159,14 @@ extension UIColor {
             alpha: a
         )
     }
-    convenience init(hex: String, alpha: CGFloat) {
-        let scanner = Scanner(string: hex)
-        scanner.scanLocation = 0
-        
-        var rgbValue: UInt64 = 0
-        
-        scanner.scanHexInt64(&rgbValue)
-        
-        let r = (rgbValue & 0xff0000) >> 16
-        let g = (rgbValue & 0xff00) >> 8
-        let b = rgbValue & 0xff
-        
-        self.init(
-            red: CGFloat(r) / 0xff,
-            green: CGFloat(g) / 0xff,
-            blue: CGFloat(b) / 0xff, alpha: 1
-        )
-    }
-    
 }
 
 extension UIView {
     
+    /// Add subviews
+    /// - Note: Each view's translatesAutoresizingMaskIntoConstraints attribute is marked as false
+    ///
+    /// - Parameter views: Views to add
     func addSubviews(_ views : UIView...) {
         views.forEach { (view) in
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -222,6 +174,11 @@ extension UIView {
         }
     }
     
+    
+    /// Center a view in given view
+    ///
+    /// - Parameter view: View to center in
+    /// - Returns: Array of NSLayoutContraints
     @discardableResult
     func center(in view : UIView) -> [NSLayoutConstraint] {
         translatesAutoresizingMaskIntoConstraints = false
@@ -234,11 +191,27 @@ extension UIView {
         return anchors
     }
     
+    
+    /// Set the size of the view
+    /// - Note: Values are constant values
+    ///
+    /// - Parameters:
+    ///   - width: Width Constant
+    ///   - height: Height Constant
+    /// - Returns: Array of NSLayoutContraints
     @discardableResult
     func setSize(_ width: CGFloat, height: CGFloat ) -> [NSLayoutConstraint]{
         return self.anchor(nil, left: nil, bottom: nil, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: width, heightConstant: height)
     }
     
+    
+    /// Set the size of the view
+    /// - Note: Values are constrained to layout dimensions
+    ///
+    /// - Parameters:
+    ///   - widthAnchor: Width dimension
+    ///   - heightAnchor: Height dimension
+    /// - Returns: Array of NSLayoutContraints
     @discardableResult
     func setSize(widthAnchor: NSLayoutDimension, heightAnchor: NSLayoutDimension) -> [NSLayoutConstraint]{
         var anchors =  [NSLayoutConstraint]()
@@ -303,24 +276,6 @@ extension UIView {
             iv.image = #imageLiteral(resourceName: "Rhombus Pattern")
             return iv
         }
-        
-        func grayScale(point:CGPoint) -> CGFloat {
-            let pixel = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: 4)
-            let colorSpace = CGColorSpaceCreateDeviceRGB()
-            let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
-            let context = CGContext(data: pixel, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
-            
-            context!.translateBy(x: -point.x, y: -point.y)
-            layer.render(in: context!)
-            
-            let scale = (CGFloat(pixel[0])/255.0 + CGFloat(pixel[1])/255.0 + CGFloat(pixel[2])/255.0)/3
-            
-            return scale
-            
-        }
-    
-
-    
 }
 
 
@@ -329,9 +284,9 @@ extension UIFont {
     /// Generate the system wide font.
     ///
     /// - Parameters:
-    ///   - isBold: Should the text be bold.
-    ///   - size: Font size
-    /// - Returns: UIFont
+    ///   - style: Futura Font style
+    ///   - size: Font point size
+    /// - Returns: Futura UIFont instance
     static func getDefautlFont(_ style : Futura, size: CGFloat) -> UIFont {
         
         var name : String!
@@ -363,12 +318,20 @@ extension UIFont {
     
 }
 
-enum Position {
-    case top, bottom
-}
+
 
 extension UIImage {
-    class func selectionIndiciatorImage(color : UIColor, size: CGSize, lineWidth: CGFloat, position : Position = .top) -> UIImage? {
+    
+    
+    /// Construct selection indicator image
+    ///
+    /// - Parameters:
+    ///   - color: Color of indicator
+    ///   - size: Size of inidicator
+    ///   - lineWidth: Inidicator width
+    ///   - position: Position of line in the image
+    /// - Returns: Selection indicator image
+    class func selectionIndiciatorImage(color : UIColor, size: CGSize, lineWidth: CGFloat, position : ScreenPosition = .top) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         color.setFill()
         UIRectFill(CGRect.init(x: 0, y: position == .top ? 0 : size.height - lineWidth, width: size.width, height: lineWidth))
@@ -377,6 +340,12 @@ extension UIImage {
         return image
     }
     
+    
+    /// Resizes image to the given size
+    /// - Author: Karthick Selvaraj [link](https://stackoverflow.com/questions/42545955/scale-image-to-smaller-size-in-swift3)
+    ///
+    /// - Parameter size: Size to resize to
+    /// - Returns: Newly resized  UIImage
     func resizeImage(to size: CGSize) -> UIImage {
         
         var actualHeight: CGFloat = self.size.height

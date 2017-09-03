@@ -47,6 +47,9 @@ class PermissionButton : UIButton {
     private var permission : PermissionInterface!
     
     
+    /// Key for writing and reading from UserDefaults
+    private var key : String!
+    
     /// Track presses
     private var didPress = false
     
@@ -91,6 +94,7 @@ class PermissionButton : UIButton {
             setTitle("Notifications", for: .normal)
             setImage(#imageLiteral(resourceName: "notifications").withRenderingMode(.alwaysOriginal), for: .normal)
             accessibilityLabel = "Notification Permission"
+            key = "Notification"
             break
         case .locationWhenInUse:
             permission = LocationPermission.init(type: .WhenInUse)
@@ -98,6 +102,7 @@ class PermissionButton : UIButton {
             setTitle("Location", for: .normal)
             setImage(#imageLiteral(resourceName: "location").withRenderingMode(.alwaysOriginal), for: .normal)
             accessibilityLabel = "Location Permission"
+            key = "Location"
             break
         }
         
@@ -111,7 +116,7 @@ class PermissionButton : UIButton {
         backgroundColor = authorized ? .white: Color.lead
         setTitleColor(authorized ? .black : .white, for: .normal)
         
-        didRequest = UserDefaults.standard.bool(forKey: "Permission\(permissionType.rawValue)")
+        didRequest = UserDefaults.standard.bool(forKey: "Permission:\(key)")
         if didRequest {
             accessibilityValue = authorized ? "Allowed" : "Denied"
         }
@@ -120,22 +125,17 @@ class PermissionButton : UIButton {
     /// Setup and request Permission
     @objc private func hanldeButtonTouch() {
         
-        if didPress {
-            if !permission.isAuthorized() {
-                settingAlert()
-            }
+        if (didPress && !permission.isAuthorized()) || (didRequest && !permission.isAuthorized()) {
+            settingAlert()
         } else {
-            if !didRequest {
-                permission.request { () -> ()? in
-                    self.didRequest = true
-                    UserDefaults.standard.set(true, forKey: "Permission\(self.permissionType.rawValue)")
-                    return self.handlePermissionRequest()
+            
+            permission.request(withComlectionHandler: {[weak self] () -> ()? in
+                self?.didRequest = true
+                if let key = self?.key {
+                    UserDefaults.standard.set(true, forKey: "Permission:\(key)")
                 }
-            } else {
-                if !permission.isAuthorized() {
-                    settingAlert()
-                }
-            }
+                return self?.handlePermissionRequest()
+            })
         }
         
         didPress = true
@@ -144,33 +144,55 @@ class PermissionButton : UIButton {
     
     /// Handle the update to the Permission Buttons after the permission has showed
     private func handlePermissionRequest(){
-
+        
         let authorized = permission.isAuthorized()
         update(authorized)
         
-        
         if permission is LocationPermission {
-            if authorized {
-                Location.appGrated = true
-            } else {
-                Location.appGrated = false
+            if let locationPermission = permission as? LocationPermission {
+                if !authorized && !locationPermission.checkLocationServices() {
+                    self.locationSettingsAlert()
+                }
             }
+            
             Location.appGrated = authorized
         } else {
-            if authorized {
-                NotificationHelper.appGrated = true
-            } else {
-                NotificationHelper.appGrated = false
-            }
+            NotificationHelper.appGrated = authorized
         }
         delegate?.didPressPermission(for: self.permissionType!)
     }
     
     
+    private func handleLocationPermission() {
+        let locationPermission = permission as! LocationPermission
+        
+        if !locationPermission.checkLocationServices() {
+            
+        }
+    }
+    
     
     /// Show Alert that permission has been denied
     private func settingAlert() {
-        let alertVC = UIAlertController(title: "Important", message: "Permission has been denied", preferredStyle: .alert)
+        let alertVC = UIAlertController(title: "\(key) permission has been denied", message: "Manage \(key) permission in Settings", preferredStyle: .alert)
+        let settingAction = UIAlertAction(title: "Settings", style: .destructive, handler: { (_) in
+            NotificationCenter.default.addObserver(self, selector: #selector(self.returnedToApplication), name: .UIApplicationDidBecomeActive, object: nil)
+            Utility.settings()
+        })
+        let okayAction = UIAlertAction(title: "Okay", style: .default, handler: { (_) in
+            alertVC.dismiss(animated: true, completion: nil)
+        })
+        
+        alertVC.addAction(settingAction)
+        alertVC.addAction(okayAction)
+        
+        Utility.getTopViewController().present(alertVC, animated: true, completion: nil)
+    }
+    
+    /// Show Alert that permission has been denied
+    private func locationSettingsAlert() {
+        let instructions = "1. Open the Seetings app\n2. Select Privacy\n3. Select Location Services\n4. Turn on Location Services"
+        let alertVC = UIAlertController(title: "Location Services are disabled", message: instructions, preferredStyle: .alert)
         let settingAction = UIAlertAction(title: "Settings", style: .destructive, handler: { (_) in
             NotificationCenter.default.addObserver(self, selector: #selector(self.returnedToApplication), name: .UIApplicationDidBecomeActive, object: nil)
             Utility.settings()

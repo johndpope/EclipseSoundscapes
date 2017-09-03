@@ -215,42 +215,40 @@ class PlaybackViewController: UIViewController {
     
     func loadMedia() {
         
-        guard let unWrappedMedia = media, let tape = AudioManager.loadAudio(withName: unWrappedMedia.resourceName, withExtension: unWrappedMedia.mediaType)  else {
+        guard let unWrappedMedia = media else {
             return //TODO: Inform user that is failed and they should press something to retry
         }
         
         do {
-            player = try TapePlayer(tape: tape)
+            player = try TapePlayer.loadTape(withName: unWrappedMedia.resourceName, withExtension: unWrappedMedia.mediaType)
+            player!.delegate = self
+            
+            let duration = player!.duration
+            
+            infoControlInfo = [String: Any]()
+            
+            infoControlInfo.updateValue(unWrappedMedia.name, forKey: MPMediaItemPropertyTitle)
+            infoControlInfo.updateValue(duration, forKey: MPMediaItemPropertyPlaybackDuration)
+            infoControlInfo.updateValue(Double(0), forKey: MPNowPlayingInfoPropertyElapsedPlaybackTime)
+            infoControlInfo.updateValue(Double(1), forKey: MPNowPlayingInfoPropertyPlaybackRate)
+            
+            if let image = unWrappedMedia.image {
+                self.controlsContainerView.backgroundImageView.image = image
+                infoControlInfo.updateValue(getNowPlayingInfoCenterArtwork(with: image), forKey: MPMediaItemPropertyArtwork)
+            }
+            
+            self.titleLabel.text = unWrappedMedia.name
+            self.infoTextView.text = unWrappedMedia.getInfo()
+            self.totalDuration = duration
+            self.playerSlider.maximumValue = Float(duration)
+            
+            self.setupNowPlayingInfoCenter(with: infoControlInfo)
+            
+            handlePlay(play: true)
         } catch  {
             print("Error: \(error)")
             //TODO: Inform user that is failed and they should press something to retry
         }
-        
-        player!.delegate = self
-        
-        let duration = player!.duration
-        
-        infoControlInfo = [String: Any]()
-        
-        infoControlInfo.updateValue(unWrappedMedia.name, forKey: MPMediaItemPropertyTitle)
-        infoControlInfo.updateValue(duration, forKey: MPMediaItemPropertyPlaybackDuration)
-        infoControlInfo.updateValue(Double(0), forKey: MPNowPlayingInfoPropertyElapsedPlaybackTime)
-        infoControlInfo.updateValue(Double(1), forKey: MPNowPlayingInfoPropertyPlaybackRate)
-        
-        if let image = unWrappedMedia.image {
-            self.controlsContainerView.backgroundImageView.image = image
-            infoControlInfo.updateValue(getNowPlayingInfoCenterArtwork(with: image), forKey: MPMediaItemPropertyArtwork)
-        }
-        
-        self.titleLabel.text = unWrappedMedia.name
-        self.infoTextView.text = unWrappedMedia.getInfo()
-        self.totalDuration = duration
-        self.playerSlider.maximumValue = Float(duration)
-        
-        self.setupNowPlayingInfoCenter(with: infoControlInfo)
-        
-        handlePlay(play: true)
-        
     }
     
     func checkViewFocus(notification : Notification) {

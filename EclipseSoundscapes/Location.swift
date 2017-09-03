@@ -77,13 +77,6 @@ class Location {
         static let locationUnknown = "Locating taking longer than Normal"
         static let unkown = "Error Occured. Press to Retry"
     }
-    
-    /// Check if Location Services are enabled
-    ///
-    /// - Returns: Current Status of Location Services
-    fileprivate func checkLocationServices() -> Bool {
-        return CLLocationManager.locationServicesEnabled()
-    }
 }
 
 typealias PermissionShowedCompletion = ()->Void

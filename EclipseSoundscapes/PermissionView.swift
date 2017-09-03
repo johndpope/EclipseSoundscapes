@@ -148,6 +148,11 @@ class PermissionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        laterBtn.cornerRadius = laterBtn.bounds.height/2
+    }
+    
     /// Tell the delegate that permission cell's job has been completed
     func later() {
         delegate?.didFinish()

@@ -55,11 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         LocationManager.checkEclipseDates()
     }
     
-    func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        // Saves changes in the application's managed object context before the application terminates.
-    }
-    
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UILocalNotification, completionHandler: @escaping () -> Void) {
         notificationDelegate.application(application, handleActionWithIdentifier: identifier, for: notification, completionHandler: completionHandler)
     }
@@ -69,7 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         notificationDelegate.application(application, didReceive: notification)
     }
 
-    
     var shouldSupportAllOrientation = false
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         if (shouldSupportAllOrientation == true){

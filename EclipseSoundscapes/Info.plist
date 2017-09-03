@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>1.2.4</string>
 	<key>Fabric</key>
 	<dict>
 		<key>Kits</key>

@@ -17,7 +17,6 @@
 		B72DF55D1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF55C1ED724F300F9E4F3 /* EclipseSoundscapesTests.swift */; };
 		B72DF5681ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5671ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift */; };
 		B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5781ED7252200F9E4F3 /* Authenticator.swift */; };
-		B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */; };
 		B7372E0C1F27A0CA00A71396 /* EclipseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7372E0B1F27A0CA00A71396 /* EclipseViewController.swift */; };
 		B7372E0E1F27A17E00A71396 /* CountDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7372E0D1F27A17E00A71396 /* CountDownCell.swift */; };
 		B7372E101F27A18C00A71396 /* CountDownCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7372E0F1F27A18C00A71396 /* CountDownCell.xib */; };
@@ -26,8 +25,6 @@
 		B73AE7341EE8332300BDBCE8 /* TapePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73AE7331EE8332300BDBCE8 /* TapePlayer.swift */; };
 		B73AE7361EE860A900BDBCE8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73AE7351EE860A900BDBCE8 /* Constants.swift */; };
 		B73B20931F34600F003B8D8E /* FutureEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B20921F34600F003B8D8E /* FutureEventsViewController.swift */; };
-		B73B20951F346294003B8D8E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B20941F346294003B8D8E /* EventCell.swift */; };
-		B73B20971F3464FE003B8D8E /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B73B20961F3464FE003B8D8E /* EventCell.xib */; };
 		B73B20991F346736003B8D8E /* Future_Eclipses.json in Resources */ = {isa = PBXBuildFile; fileRef = B73B20981F346736003B8D8E /* Future_Eclipses.json */; };
 		B73B20A01F375569003B8D8E /* MediaControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B209F1F375569003B8D8E /* MediaControlView.swift */; };
 		B73B20A21F388EE4003B8D8E /* MainEclipsePolyline.json in Resources */ = {isa = PBXBuildFile; fileRef = B73B20A11F388EE4003B8D8E /* MainEclipsePolyline.json */; };
@@ -79,7 +76,6 @@
 		B78D815C1F5097BC00D4C440 /* fabric.apikey in Resources */ = {isa = PBXBuildFile; fileRef = B78D815B1F5097BC00D4C440 /* fabric.apikey */; };
 		B79263F41F0D828100062B8D /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79263F31F0D828100062B8D /* Location.swift */; };
 		B7964C341EF9B76400000CF8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B7964C361EF9B76400000CF8 /* Localizable.strings */; };
-		B79ED4121EDF5C37001D5745 /* TapeRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */; };
 		B7A3B7801F2B941F0003C2C9 /* Baily's Beads.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7A3B77F1F2B941F0003C2C9 /* Baily's Beads.txt */; };
 		B7A3B7861F2B94380003C2C9 /* Totality.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7A3B7811F2B94380003C2C9 /* Totality.txt */; };
 		B7A3B7871F2B94380003C2C9 /* Prominence.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7A3B7821F2B94380003C2C9 /* Prominence.txt */; };
@@ -114,6 +110,9 @@
 		B7BBB4FC1EE8690A00C0D855 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */; };
 		B7BD1AD31EF02A8800A739FA /* PlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */; };
 		B7C4E1411EE751A6002A0F19 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C4E1401EE751A6002A0F19 /* Utility.swift */; };
+		B7CAD7F41F5C71AB00A194C1 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7CAD7F31F5C71AB00A194C1 /* EventCell.swift */; };
+		B7CAD7F61F5C71CE00A194C1 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7CAD7F51F5C71CE00A194C1 /* EventCell.xib */; };
+		B7D84D0F1F59AEC200D21724 /* DynamicLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D84D0E1F59AEC200D21724 /* DynamicLabel.swift */; };
 		B7DE878F1F20FBE6001F69D8 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */; };
 		B7E7A9881F12A40200B239B8 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9871F12A40200B239B8 /* MoreViewController.swift */; };
 		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
@@ -172,7 +171,6 @@
 		B72DF5671ED724F300F9E4F3 /* EclipseSoundscapesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EclipseSoundscapesUITests.swift; sourceTree = "<group>"; };
 		B72DF5691ED724F300F9E4F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B72DF5781ED7252200F9E4F3 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
-		B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceManager.swift; sourceTree = "<group>"; };
 		B7372E0B1F27A0CA00A71396 /* EclipseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EclipseViewController.swift; sourceTree = "<group>"; };
 		B7372E0D1F27A17E00A71396 /* CountDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountDownCell.swift; sourceTree = "<group>"; };
 		B7372E0F1F27A18C00A71396 /* CountDownCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CountDownCell.xib; sourceTree = "<group>"; };
@@ -181,8 +179,6 @@
 		B73AE7331EE8332300BDBCE8 /* TapePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapePlayer.swift; sourceTree = "<group>"; };
 		B73AE7351EE860A900BDBCE8 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B73B20921F34600F003B8D8E /* FutureEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FutureEventsViewController.swift; sourceTree = "<group>"; };
-		B73B20941F346294003B8D8E /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
-		B73B20961F3464FE003B8D8E /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		B73B20981F346736003B8D8E /* Future_Eclipses.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Future_Eclipses.json; sourceTree = "<group>"; };
 		B73B209F1F375569003B8D8E /* MediaControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaControlView.swift; sourceTree = "<group>"; };
 		B73B20A11F388EE4003B8D8E /* MainEclipsePolyline.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MainEclipsePolyline.json; sourceTree = "<group>"; };
@@ -234,7 +230,6 @@
 		B78D815B1F5097BC00D4C440 /* fabric.apikey */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fabric.apikey; sourceTree = "<group>"; };
 		B79263F31F0D828100062B8D /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		B7964C351EF9B76400000CF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
-		B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapeRecorder.swift; sourceTree = "<group>"; };
 		B7A3B77F1F2B941F0003C2C9 /* Baily's Beads.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Baily's Beads.txt"; sourceTree = "<group>"; };
 		B7A3B7811F2B94380003C2C9 /* Totality.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Totality.txt; sourceTree = "<group>"; };
 		B7A3B7821F2B94380003C2C9 /* Prominence.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Prominence.txt; sourceTree = "<group>"; };
@@ -269,6 +264,9 @@
 		B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
 		B7C4E1401EE751A6002A0F19 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		B7CAD7F31F5C71AB00A194C1 /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
+		B7CAD7F51F5C71CE00A194C1 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
+		B7D84D0E1F59AEC200D21724 /* DynamicLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicLabel.swift; sourceTree = "<group>"; };
 		B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		B7E7A9871F12A40200B239B8 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
@@ -451,7 +449,6 @@
 				B79263F31F0D828100062B8D /* Location.swift */,
 				B79ED4131EDF5CB1001D5745 /* Audio */,
 				B76F344E1EDE1DF8006E76D2 /* Networking */,
-				B72DF57A1ED7252200F9E4F3 /* ResourceManager.swift */,
 				B7C4E1401EE751A6002A0F19 /* Utility.swift */,
 				B77417F31F03628700663C2E /* EclipseTimeGenerator.swift */,
 				B7806DB61F0D58AD0052A7CD /* MarkerContainer.swift */,
@@ -478,7 +475,6 @@
 			children = (
 				B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */,
 				B73AE7331EE8332300BDBCE8 /* TapePlayer.swift */,
-				B79ED4111EDF5C37001D5745 /* TapeRecorder.swift */,
 			);
 			name = Audio;
 			sourceTree = "<group>";
@@ -564,6 +560,7 @@
 		B7F522F31EEC588500A53A4A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B7D84D0E1F59AEC200D21724 /* DynamicLabel.swift */,
 				B7FD16971F545A7800053FA5 /* ShrinkableHeaderView.swift */,
 				B7FD16951F54501B00053FA5 /* ParallaxView.swift */,
 				B7FD16941F53C93800053FA5 /* Cells */,
@@ -619,8 +616,8 @@
 				B781E6F01F3153670038C3F1 /* PhotoCreditCell.xib */,
 				B7372E121F27B4EB00A71396 /* InfoCell.xib */,
 				B7372E141F27B56000A71396 /* InfoCell.swift */,
-				B73B20941F346294003B8D8E /* EventCell.swift */,
-				B73B20961F3464FE003B8D8E /* EventCell.xib */,
+				B7CAD7F31F5C71AB00A194C1 /* EventCell.swift */,
+				B7CAD7F51F5C71CE00A194C1 /* EventCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -767,6 +764,7 @@
 				B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */,
 				B7B16F431F3B3F4D0036E396 /* Diamond_Ring_short.mp3 in Resources */,
 				B7B16F441F3B3F4D0036E396 /* First_Contact_Short.mp3 in Resources */,
+				B7CAD7F61F5C71CE00A194C1 /* EventCell.xib in Resources */,
 				B745AE331F1E79820025946C /* Eureka-License.txt in Resources */,
 				B73B20991F346736003B8D8E /* Future_Eclipses.json in Resources */,
 				B7964C341EF9B76400000CF8 /* Localizable.strings in Resources */,
@@ -792,7 +790,6 @@
 				B745AE351F1E79820025946C /* SwiftSpinner-License.txt in Resources */,
 				B7A3B78A1F2B94380003C2C9 /* Diamond Ring.txt in Resources */,
 				B781E6F11F3153670038C3F1 /* PhotoCreditCell.xib in Resources */,
-				B73B20971F3464FE003B8D8E /* EventCell.xib in Resources */,
 				B7A600B41F3B7C10005870BE /* Diamond_Ring_full.mp3 in Resources */,
 				B7A600B61F3B7C10005870BE /* First_Contact_full_without_date.mp3 in Resources */,
 				B7A3B78C1F2B943F0003C2C9 /* Corona.txt in Resources */,
@@ -1012,8 +1009,6 @@
 				B7BBB4FC1EE8690A00C0D855 /* AudioManager.swift in Sources */,
 				B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */,
 				B745AE1F1F1E65900025946C /* SettingsViewController.swift in Sources */,
-				B73B20951F346294003B8D8E /* EventCell.swift in Sources */,
-				B72DF57E1ED7252200F9E4F3 /* ResourceManager.swift in Sources */,
 				B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */,
 				B77417F11F0361EC00663C2E /* RumbleMapViewController.swift in Sources */,
 				B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */,
@@ -1024,7 +1019,6 @@
 				B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */,
 				B7FD169A1F547F3500053FA5 /* Permission.swift in Sources */,
 				B7FD169D1F54872E00053FA5 /* PermissionButton.swift in Sources */,
-				B79ED4121EDF5C37001D5745 /* TapeRecorder.swift in Sources */,
 				B7B16F3D1F3AB9870036E396 /* Media.swift in Sources */,
 				B7806E601F0D5B580052A7CD /* StringExtensions.swift in Sources */,
 				B78A72DC1F51C0E500C2E540 /* PermissionViewController.swift in Sources */,
@@ -1051,9 +1045,11 @@
 				B745AE1D1F1E65570025946C /* InstructionsViewController.swift in Sources */,
 				B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */,
 				B7806DB71F0D58AD0052A7CD /* MarkerContainer.swift in Sources */,
+				B7CAD7F41F5C71AB00A194C1 /* EventCell.swift in Sources */,
 				B7B16F3B1F3A63620036E396 /* RumbleMapInteractiveViewController.swift in Sources */,
 				B758D8761ED78E310033EE45 /* Uploader.swift in Sources */,
 				B7B19F801F2E901100EDE056 /* WalkthroughViewController.swift in Sources */,
+				B7D84D0F1F59AEC200D21724 /* DynamicLabel.swift in Sources */,
 				B7806E5F1F0D5B580052A7CD /* CountdownViewModel.swift in Sources */,
 				B76282931F2667AB00430319 /* TeamMemberCell.swift in Sources */,
 				B745AE211F1E65B50025946C /* LegalViewController.swift in Sources */,

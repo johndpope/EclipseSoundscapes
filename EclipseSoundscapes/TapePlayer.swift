@@ -22,6 +22,10 @@
 
 import AVFoundation
 
+enum TapeError : Error {
+    case resourceNotFound
+}
+
 /// Tape Player Delegate
 protocol PlayerDelegate : NSObjectProtocol {
     
@@ -110,6 +114,27 @@ public class TapePlayer : NSObject {
         print("Destroyed Player")
     }
     
+    
+    /// Load resource into Tape Player
+    ///
+    /// - Parameters:
+    ///   - name: Name of resource
+    ///   - ext: Resource tyoe
+    /// - Returns: Tape Player
+    /// - Throws: Error involved with trying to load media such as resource not in bundle or error in starting the Audio Session
+    class func loadTape(withName name: String, withExtension ext: FileType?) throws -> TapePlayer {
+        guard let url = Bundle.main.url(forResource: name, withExtension: ext?.rawValue) else {
+            throw TapeError.resourceNotFound
+        }
+        
+        let tape = Tape(audioUrl: url)
+        do {
+            let player = try TapePlayer(tape: tape)
+            return player
+        } catch {
+            throw error
+        }
+    }
     
     /// Prepares the Audio Session and player
     ///

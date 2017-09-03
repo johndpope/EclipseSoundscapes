@@ -66,8 +66,6 @@ class MediaCenterViewController : UIViewController {
         self.tableView.register(MediaCell.self, forCellReuseIdentifier: cellId)
     }
     
-    
-    
     func setupView() {
         
         self.view.addSubview(fillerView)

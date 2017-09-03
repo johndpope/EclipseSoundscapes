@@ -30,9 +30,31 @@ public enum PlaybackStatus {
     case finished, interrupted, resumed, progress
 }
 
-/// Audio File Type
+/// File Types
+///
+/// - m4a: m4a audio file
+/// - mp3: mp3 audio file
+/// - wav: wav audio file
 enum FileType : String {
     case m4a = "m4a"
     case mp3 = "mp3"
     case wav = "wav"
+}
+
+/// Futura Font Family
+enum Futura {
+    case condensedMedium
+    case extraBold
+    case meduium
+    case italic
+    case bold
+}
+
+
+/// Position of the screen
+///
+/// - top: Top of screen
+/// - bottom: Bottom on screen
+enum ScreenPosition {
+    case top, bottom
 }

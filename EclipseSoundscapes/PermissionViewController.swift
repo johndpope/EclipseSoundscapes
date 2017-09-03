@@ -40,8 +40,12 @@ class PermissionViewController : UIViewController {
         return btn
     }()
     
-    
-    
+    /// Show the PermissionView with the given permissions
+    ///
+    /// - Parameters:
+    ///   - permissions: Permissions to show
+    ///   - completion: Optional completion after the permission view dismisses
+    /// - Returns: PermissionViewController to manage the view
     class func show(with permissions: [PermissionType], completion: @escaping ()->Void) -> PermissionViewController{
         let permissionVc = PermissionViewController()
         permissionVc.modalPresentationStyle = .overCurrentContext
@@ -55,8 +59,6 @@ class PermissionViewController : UIViewController {
         setupViews()
         view.backgroundColor = .clear
         view.isOpaque = false
-        
-        
     }
     
     // Setup and layout view's subviews
@@ -70,7 +72,6 @@ class PermissionViewController : UIViewController {
         self.permissionView.layer.anchorPoint = CGPoint.init(x: 0.5, y: 0.5)
         
         
-        
         permissionView.addSubview(backBtn)
         backBtn.anchorWithConstantsToTop(permissionView.topAnchor, left: permissionView.leftAnchor, bottom: nil, right: nil, topConstant: 10, leftConstant: 10, bottomConstant: 0, rightConstant: 0)
         
@@ -80,24 +81,24 @@ class PermissionViewController : UIViewController {
     }
     
     
-    func didFinish() {
-        Utility.delay(0.5) { [weak self] in
-            self?.close()
-        }
-    }
-    
-    @objc private func close() {
+    @objc fileprivate func close() {
         self.dismiss(animated: true) {
             self.completion()
         }
     }
     
-    //MARK: - animator
+    //MARK: - Drag and Pan animations for dismissing View
     
+    
+    /// Controller's Center
     var centerPoint: CGPoint {
         return view.center
     }
     
+    
+    /// Handle drag and pan animations
+    ///
+    /// - Parameter recognizer: UIPanGestureRecognizer
     func handlePan(_ recognizer: UIPanGestureRecognizer) {
         if !didTouchButton {
             
@@ -157,6 +158,7 @@ class PermissionViewController : UIViewController {
     }
     
     
+    /// Animate the close the permissionView
     func hide() {
         permissionView.animate([.translate(x: 0, y: 1000, z: 0),.scale(0.9), .fadeOut]) {
             self.close()
@@ -166,5 +168,9 @@ class PermissionViewController : UIViewController {
 }
 
 extension PermissionViewController: PermissionViewDelegate {
-    
+    func didFinish() {
+        Utility.delay(0.5) { [weak self] in
+            self?.close()
+        }
+    }
 }
