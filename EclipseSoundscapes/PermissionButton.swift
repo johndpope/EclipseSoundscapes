@@ -48,7 +48,7 @@ class PermissionButton : UIButton {
     
     
     /// Key for writing and reading from UserDefaults
-    private var key : String!
+    private var key = ""
     
     /// Track presses
     private var didPress = false
@@ -116,7 +116,7 @@ class PermissionButton : UIButton {
         backgroundColor = authorized ? .white: Color.lead
         setTitleColor(authorized ? .black : .white, for: .normal)
         
-        didRequest = UserDefaults.standard.bool(forKey: "Permission:\(key)")
+        didRequest = UserDefaults.checkRequestPermission(forKey: key)
         if didRequest {
             accessibilityValue = authorized ? "Allowed" : "Denied"
         }
@@ -125,14 +125,12 @@ class PermissionButton : UIButton {
     /// Setup and request Permission
     @objc private func hanldeButtonTouch() {
         
-        if (didPress && !permission.isAuthorized()) || (didRequest && !permission.isAuthorized()) {
-            settingAlert()
+        if (didPress && !permission.isAuthorized()) || (didRequest && !permission.isAuthorized())  {
+            handlePermissionRequest()
         } else {
-            
             permission.request(withComlectionHandler: {[weak self] () -> ()? in
-                self?.didRequest = true
                 if let key = self?.key {
-                    UserDefaults.standard.set(true, forKey: "Permission:\(key)")
+                    UserDefaults.setRequestPermission(key, value: true)
                 }
                 return self?.handlePermissionRequest()
             })
@@ -149,13 +147,7 @@ class PermissionButton : UIButton {
         update(authorized)
         
         if permission is LocationPermission {
-            if let locationPermission = permission as? LocationPermission {
-                if !authorized && !locationPermission.checkLocationServices() {
-                    self.locationSettingsAlert()
-                }
-            }
-            
-            Location.appGrated = authorized
+           handleLocationPermission(authorized)
         } else {
             NotificationHelper.appGrated = authorized
         }
@@ -163,12 +155,21 @@ class PermissionButton : UIButton {
     }
     
     
-    private func handleLocationPermission() {
-        let locationPermission = permission as! LocationPermission
-        
-        if !locationPermission.checkLocationServices() {
-            
+    private func handleLocationPermission(_ authorized: Bool) {
+        if let locationPermission = permission as? LocationPermission {
+            if !authorized {
+                if !locationPermission.checkLocationServices() {
+                    locationSettingsAlert(completion:{
+                        UserDefaults.setRequestPermission(self.key, value: false)
+                        self.didPress = false
+                        self.didRequest = false
+                    })
+                } else {
+                    settingAlert()
+                }
+            }
         }
+        Location.appGrated = authorized
     }
     
     
@@ -190,11 +191,12 @@ class PermissionButton : UIButton {
     }
     
     /// Show Alert that permission has been denied
-    private func locationSettingsAlert() {
+    private func locationSettingsAlert(completion: (()->Void)? = nil) {
         let instructions = "1. Open the Seetings app\n2. Select Privacy\n3. Select Location Services\n4. Turn on Location Services"
         let alertVC = UIAlertController(title: "Location Services are disabled", message: instructions, preferredStyle: .alert)
         let settingAction = UIAlertAction(title: "Settings", style: .destructive, handler: { (_) in
             NotificationCenter.default.addObserver(self, selector: #selector(self.returnedToApplication), name: .UIApplicationDidBecomeActive, object: nil)
+            completion?()
             Utility.settings()
         })
         let okayAction = UIAlertAction(title: "Okay", style: .default, handler: { (_) in
@@ -211,9 +213,21 @@ class PermissionButton : UIButton {
     /// Notification handler for when returns from app settings
     @objc private func returnedToApplication() {
         NotificationCenter.default.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
-        handlePermissionRequest()
+//        handlePermissionRequest()
+        hanldeButtonTouch()
+    }
+
+}
+
+extension UserDefaults {
+    
+    class func setRequestPermission(_ key: String, value: Bool) {
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: key)
     }
     
-    
+    class func checkRequestPermission(forKey key: String) -> Bool {
+        return UserDefaults.standard.bool(forKey: key)
+    }
     
 }

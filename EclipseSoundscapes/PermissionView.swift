@@ -77,12 +77,11 @@ class PermissionView: UIView {
         return label
     }()
     
-    
     lazy var laterBtn : UIButton = {
         var btn = UIButton(type: .system)
         btn.addSqueeze()
         btn.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        btn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: (btn.titleLabel?.font.pointSize)!)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.extraBold, size: (btn.titleLabel?.font.pointSize)!)
         btn.setTitleColor(.white, for: .normal)
         btn.setTitle("Ask Later", for: .normal)
         btn.addTarget(self, action: #selector(later), for: .touchUpInside)

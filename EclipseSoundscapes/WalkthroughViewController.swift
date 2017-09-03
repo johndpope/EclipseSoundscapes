@@ -206,37 +206,38 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     
     /// Skip WalkThrough Button
     lazy var skipButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Skip", for: .normal)
-        button.addTarget(self, action: #selector(skip), for: .touchUpInside)
-        button.setTitleColor(UIColor.init(r: 227, g: 94, b: 5), for: .normal)
-        button.accessibilityLabel = "Skip to end of Walk Through"
-        return button
+        let btn = UIButton(type: .system)
+        btn.setTitle("Skip", for: .normal)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.extraBold, size: (btn.titleLabel?.font.pointSize)!)
+        btn.addTarget(self, action: #selector(skip), for: .touchUpInside)
+        btn.setTitleColor(UIColor.init(r: 227, g: 94, b: 5), for: .normal)
+        btn.accessibilityLabel = "Skip to end of Walk Through"
+        return btn
     }()
     
     
     /// Next Page Button
     lazy var nextButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "Right_Arrow"), for: .normal)
-        button.tintColor = UIColor.init(r: 227, g: 94, b: 5)
-        button.addTarget(self, action: #selector(nextPage), for: .touchUpInside)
-        button.accessibilityLabel = "Next Page"
-        button.accessibilityTraits |= UIAccessibilityTraitCausesPageTurn
-        return button
+        let btn = UIButton(type: .system)
+        btn.setImage(#imageLiteral(resourceName: "Right_Arrow"), for: .normal)
+        btn.tintColor = UIColor.init(r: 227, g: 94, b: 5)
+        btn.addTarget(self, action: #selector(nextPage), for: .touchUpInside)
+        btn.accessibilityLabel = "Next Page"
+        btn.accessibilityTraits |= UIAccessibilityTraitCausesPageTurn
+        return btn
     }()
     
     
     /// Previous Page Button
     lazy var previousButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "Left_Arrow"), for: .normal)
-        button.tintColor = UIColor.init(r: 227, g: 94, b: 5)
-        button.addTarget(self, action: #selector(previousPage), for: .touchUpInside)
-        button.isHidden = true
-        button.accessibilityLabel = "Previous Page"
-        button.accessibilityTraits |= UIAccessibilityTraitCausesPageTurn
-        return button
+        let btn = UIButton(type: .system)
+        btn.setImage(#imageLiteral(resourceName: "Left_Arrow"), for: .normal)
+        btn.tintColor = UIColor.init(r: 227, g: 94, b: 5)
+        btn.addTarget(self, action: #selector(previousPage), for: .touchUpInside)
+        btn.isHidden = true
+        btn.accessibilityLabel = "Previous Page"
+        btn.accessibilityTraits |= UIAccessibilityTraitCausesPageTurn
+        return btn
     }()
     
     required init?(coder aDecoder: NSCoder) {
