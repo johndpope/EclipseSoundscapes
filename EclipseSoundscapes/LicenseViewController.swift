@@ -23,7 +23,10 @@
 import Eureka
 import UIKit
 
-class LicenseViewController : FormViewController {
+class LicenseViewController : FormViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
     
     var libraries : [OpenSourceLibrary] = [OpenSourceLibrary.init(title: "Eclipse Soundscapes", license: "LICENSE")]
     

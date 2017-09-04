@@ -22,7 +22,10 @@
 
 import Eureka
 
-class LegalViewController : FormViewController {
+class LegalViewController : FormViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
     
     
     override func viewDidLoad() {

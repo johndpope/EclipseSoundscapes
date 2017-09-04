@@ -23,8 +23,10 @@
 import Eureka
 import CoreLocation
 
-
-class SettingsViewController : FormViewController {
+class SettingsViewController : FormViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
     
     var currentSetting : PermissionType?
     

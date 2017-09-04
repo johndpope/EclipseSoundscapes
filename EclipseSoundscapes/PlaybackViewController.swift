@@ -139,7 +139,7 @@ class PlaybackViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        setupView()
+        setupViews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -159,7 +159,9 @@ class PlaybackViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .UIAccessibilityElementFocused, object: nil)
     }
     
-    func setupView() {
+    func setupViews() {
+        view.backgroundColor = .white
+        
         controlsContainerView.setCloseAction(self, action: #selector(close))
         controlsContainerView.setPlayPauseAction(self, action: #selector(playPauseBtnTouched))
         
@@ -170,9 +172,7 @@ class PlaybackViewController: UIViewController {
         
         playerSlider.anchor(nil, left: controlsContainerView.leftAnchor, bottom: controlsContainerView.bottomAnchor, right: controlsContainerView.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: -15, rightConstant: 0, widthConstant: 0, heightConstant: 30)
         
-        view.addSubview(titleLabel)
-        view.addSubview(infoTextView)
-        view.addSubview(lineSeparatorView)
+        view.addSubviews(titleLabel, infoTextView, lineSeparatorView)
         
         titleLabel.anchorWithConstantsToTop(playerSlider.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 10, rightConstant: 0)
         
@@ -180,8 +180,6 @@ class PlaybackViewController: UIViewController {
         
         
         infoTextView.anchorWithConstantsToTop(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
-        
-        view.backgroundColor = .white
     }
     
     func playPauseBtnTouched() {

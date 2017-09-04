@@ -54,11 +54,12 @@ class ShrinkableHeaderView : UIView {
         }
     }
     
-    init(title: String) {
+    init(title: String, titleColor: UIColor = .white) {
         super.init(frame: .zero)
         
         addSubview(titleLabel)
         titleLabel.text = title
+        titleLabel.textColor = titleColor
         titleLabel.center(in: self)
         titleLabel.setSize(widthAnchor: widthAnchor, heightAnchor: heightAnchor)
     }

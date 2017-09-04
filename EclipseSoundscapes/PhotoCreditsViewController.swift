@@ -23,7 +23,10 @@
 import UIKit
 import Eureka
 
-class PhotoCreditsViewController : FormViewController {
+class PhotoCreditsViewController : FormViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
     
     let credits = [
                    PhotoCredit(name: "1st Contact", website: "https://xrt.cfa.harvard.edu/xpow/20160315.html", makers: "XRT team(SAO, NASA, JAXA, NAOJ)", photo: #imageLiteral(resourceName: "First Contact")),

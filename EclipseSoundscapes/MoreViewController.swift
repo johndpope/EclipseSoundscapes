@@ -36,9 +36,21 @@ class MoreViewController : FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        setupViews()
         initializeForm()
     }
+    
+    func setupViews() {
+        self.tableView.backgroundColor = Color.lead
+        view.backgroundColor = Color.lead
+        
+        view.addSubview(headerView)
+        
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
+    }
+    
     
     private func initializeForm() {
         form
@@ -97,7 +109,8 @@ class MoreViewController : FormViewController {
             <<< ButtonRow("Our Partners") { (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.cell.imageView?.image = #imageLiteral(resourceName: "partners")
-                row.presentationMode = .segueName(segueName: "Partners", onDismiss: nil)
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return PartnersViewController()
+                }, onDismiss: nil)
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
@@ -154,16 +167,6 @@ class MoreViewController : FormViewController {
             +++ Section()
     }
     
-    func setupView() {
-        self.tableView.backgroundColor = Color.lead
-        view.backgroundColor = Color.lead
-        
-        view.addSubview(headerView)
-        
-        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
-        
-        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
-    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

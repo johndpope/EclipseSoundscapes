@@ -107,7 +107,6 @@
 		B7B19F861F2E909500EDE056 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B19F831F2E909500EDE056 /* Page.swift */; };
 		B7B19F871F2E909500EDE056 /* PageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B19F841F2E909500EDE056 /* PageCell.swift */; };
 		B7B19F891F2EC32900EDE056 /* SqueezeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B19F881F2EC32900EDE056 /* SqueezeButton.swift */; };
-		B7BBB4FC1EE8690A00C0D855 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */; };
 		B7BD1AD31EF02A8800A739FA /* PlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */; };
 		B7C4E1411EE751A6002A0F19 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C4E1401EE751A6002A0F19 /* Utility.swift */; };
 		B7CAD7F41F5C71AB00A194C1 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7CAD7F31F5C71AB00A194C1 /* EventCell.swift */; };
@@ -118,7 +117,6 @@
 		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
 		B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A411F3C0A6A004540C2 /* Intermission.txt */; };
 		B7EF1A441F3C0F7A004540C2 /* ThankYou.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */; };
-		B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */; };
 		B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */; };
 		B7F7559E1F3344700029DB4D /* MediaCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */; };
 		B7F755A01F3344F30029DB4D /* MediaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F7559F1F3344F30029DB4D /* MediaCell.swift */; };
@@ -261,7 +259,6 @@
 		B7B19F831F2E909500EDE056 /* Page.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		B7B19F841F2E909500EDE056 /* PageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCell.swift; sourceTree = "<group>"; };
 		B7B19F881F2EC32900EDE056 /* SqueezeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqueezeButton.swift; sourceTree = "<group>"; };
-		B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
 		B7C4E1401EE751A6002A0F19 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		B7CAD7F31F5C71AB00A194C1 /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
@@ -272,7 +269,6 @@
 		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		B7EF1A411F3C0A6A004540C2 /* Intermission.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Intermission.txt; sourceTree = "<group>"; };
 		B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ThankYou.txt; sourceTree = "<group>"; };
-		B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCenterViewController.swift; sourceTree = "<group>"; };
 		B7F7559F1F3344F30029DB4D /* MediaCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCell.swift; sourceTree = "<group>"; };
@@ -473,7 +469,6 @@
 		B79ED4131EDF5CB1001D5745 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				B7BBB4FB1EE8690A00C0D855 /* AudioManager.swift */,
 				B73AE7331EE8332300BDBCE8 /* TapePlayer.swift */,
 			);
 			name = Audio;
@@ -582,7 +577,6 @@
 				B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */,
 				B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */,
 				B7372E0B1F27A0CA00A71396 /* EclipseViewController.swift */,
-				B7F522F51EEF0A9400A53A4A /* RecordingViewController.swift */,
 				B77417F01F0361EC00663C2E /* RumbleMapViewController.swift */,
 				B7B16F3A1F3A63620036E396 /* RumbleMapInteractiveViewController.swift */,
 				B7E7A9871F12A40200B239B8 /* MoreViewController.swift */,
@@ -1006,12 +1000,10 @@
 				B73B20931F34600F003B8D8E /* FutureEventsViewController.swift in Sources */,
 				B763FA011ED864F400EEFB27 /* Tape.swift in Sources */,
 				B745AE371F1E8A230025946C /* LicenseViewController.swift in Sources */,
-				B7BBB4FC1EE8690A00C0D855 /* AudioManager.swift in Sources */,
 				B72DF57C1ED7252200F9E4F3 /* Authenticator.swift in Sources */,
 				B745AE1F1F1E65900025946C /* SettingsViewController.swift in Sources */,
 				B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */,
 				B77417F11F0361EC00663C2E /* RumbleMapViewController.swift in Sources */,
-				B7F522F61EEF0A9400A53A4A /* RecordingViewController.swift in Sources */,
 				B7806E5D1F0D5B580052A7CD /* CountdownTimeLeft.swift in Sources */,
 				B7806DB51F0D43880052A7CD /* Extensions.swift in Sources */,
 				B781E6ED1F31528E0038C3F1 /* PhotoCreditsViewController.swift in Sources */,

@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import Eureka
 
-class PrivacyPolicyViewController: UIViewController {
+class PrivacyPolicyViewController: UIViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
     
     var infoTextView : UITextView = {
         let tv = UITextView()

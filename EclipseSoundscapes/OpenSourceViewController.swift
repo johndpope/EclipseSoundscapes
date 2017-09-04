@@ -24,7 +24,10 @@
 
 import Eureka
 
-class OpenSourceViewController : FormViewController {
+class OpenSourceViewController : FormViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
     
     
     var libraries : [OpenSourceLibrary] = [OpenSourceLibrary.init(title: "AudioKit", license: "AudioKit-License"),

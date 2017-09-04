@@ -155,15 +155,19 @@ class PermissionButton : UIButton {
     }
     
     
+    
+    /// Handle Location Permission
+    ///
+    /// - Parameter authorized: Status of Location permission
     private func handleLocationPermission(_ authorized: Bool) {
         if let locationPermission = permission as? LocationPermission {
             if !authorized {
                 if !locationPermission.checkLocationServices() {
-                    locationSettingsAlert(completion:{
+                    locationSettingsAlert {
                         UserDefaults.setRequestPermission(self.key, value: false)
                         self.didPress = false
                         self.didRequest = false
-                    })
+                    }
                 } else {
                     settingAlert()
                 }
@@ -191,12 +195,14 @@ class PermissionButton : UIButton {
     }
     
     /// Show Alert that permission has been denied
-    private func locationSettingsAlert(completion: (()->Void)? = nil) {
+    ///
+    /// - Parameter completion: Completion block to execute after user presses Settings action
+    private func locationSettingsAlert(_ completion: @escaping (()->Void)) {
         let instructions = "1. Open the Seetings app\n2. Select Privacy\n3. Select Location Services\n4. Turn on Location Services"
         let alertVC = UIAlertController(title: "Location Services are disabled", message: instructions, preferredStyle: .alert)
         let settingAction = UIAlertAction(title: "Settings", style: .destructive, handler: { (_) in
             NotificationCenter.default.addObserver(self, selector: #selector(self.returnedToApplication), name: .UIApplicationDidBecomeActive, object: nil)
-            completion?()
+            completion()
             Utility.settings()
         })
         let okayAction = UIAlertAction(title: "Okay", style: .default, handler: { (_) in

@@ -22,7 +22,10 @@
 
 import Eureka
 
-class TeamViewController : FormViewController {
+class TeamViewController : FormViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
     
     
     var members : [TeamMember] = [

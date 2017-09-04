@@ -28,7 +28,6 @@ import Material
 
 class EclipseViewController : FormViewController {
     
-    @IBOutlet weak var errorBtn: UIButton!
     var banner : Banner?
     
     var locator = Location()
@@ -41,6 +40,18 @@ class EclipseViewController : FormViewController {
     
     var noEclipseView : NoEclipseView?
     
+    let errorBtn: UIButton = {
+        var btn = UIButton(type: .system)
+        btn.backgroundColor = .clear
+        btn.addTarget(self, action: #selector(didTapErrorBtn), for: .touchUpInside)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: 25)
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.numberOfLines = 0
+        btn.titleLabel?.textAlignment = .center
+        btn.setTitle(Location.string.general, for: .normal)
+        return btn
+    }()
+    
     deinit {
         LocationManager.removeObserver(self)
     }
@@ -48,8 +59,10 @@ class EclipseViewController : FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupViews()
         initializeForm()
-        configureContent()
+        
+        
         LocationManager.addObserver(self)
         if Location.isGranted {
             getlocation(animated: !foundLocationOnce)
@@ -138,21 +151,14 @@ class EclipseViewController : FormViewController {
         section.header?.height = {CGFloat.leastNormalMagnitude}
     }
     
-    func configureContent() {
+    func setupViews() {
         
         let background = UIView.rombusPattern()
-        background.frame = view.bounds
-        background.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        background.translatesAutoresizingMaskIntoConstraints = false
         view.insertSubview(background, at: 0)
-        
-        errorBtn.backgroundColor = .clear
-        errorBtn.addTarget(self, action: #selector(didTapErrorBtn), for: .touchUpInside)
-        errorBtn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: 25)
-        errorBtn.setTitleColor(.white, for: .normal)
-        errorBtn.titleLabel?.numberOfLines = 0
-        errorBtn.titleLabel?.textAlignment = .center
-        errorBtn.setTitle(Location.string.general, for: .normal)
-        
+        view.addSubviews(errorBtn)
+        background.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+        errorBtn.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
     func hideCountdown() {
@@ -395,7 +401,6 @@ class EclipseViewController : FormViewController {
     func toggleNoEclipse(show: Bool){
         
         if show {
-            
             if noEclipseView != nil {
                 return
             }

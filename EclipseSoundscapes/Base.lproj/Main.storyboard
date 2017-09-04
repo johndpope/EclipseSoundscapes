@@ -5,7 +5,6 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -46,7 +45,6 @@
                     <navigationItem key="navigationItem" id="HG9-9u-i94"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
-                        <segue destination="c5i-11-RKf" kind="presentation" identifier="Partners" id="gOA-5o-iXa"/>
                         <segue destination="yHa-rY-yr4" kind="presentation" identifier="Settings" id="Aak-4J-Wwv"/>
                         <segue destination="qhE-pO-hqL" kind="show" identifier="Legal" id="LXM-TZ-BEe"/>
                         <segue destination="UOA-dm-sWl" kind="show" identifier="Team" id="sr0-47-6ak"/>
@@ -56,25 +54,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYI-MY-Wj5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1962" y="457"/>
-        </scene>
-        <!--Partners View Controller-->
-        <scene sceneID="4qC-wJ-B56">
-            <objects>
-                <viewController id="hEN-5q-AW7" customClass="PartnersViewController" customModule="EclipseSoundscapes" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="R98-lq-Sil"/>
-                        <viewControllerLayoutGuide type="bottom" id="ZtI-xp-mEZ"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="4ck-XB-QDi">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="wU8-6S-CaW"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="f0d-js-pdj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5580" y="633.73313343328346"/>
         </scene>
         <!--Legal View Controller-->
         <scene sceneID="yhg-9v-gKE">
@@ -225,23 +204,9 @@
                     <view key="view" contentMode="scaleToFill" id="erX-q0-3Ub">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ka-MH-Imi">
-                                <rect key="frame" x="5" y="0.0" width="363" height="618"/>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="7ka-MH-Imi" firstAttribute="bottom" secondItem="YqU-I7-P7G" secondAttribute="top" id="0IV-sD-x1P"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="7ka-MH-Imi" secondAttribute="trailing" constant="-9" id="DX2-fr-v3S"/>
-                            <constraint firstItem="7ka-MH-Imi" firstAttribute="leading" secondItem="erX-q0-3Ub" secondAttribute="leadingMargin" constant="-11" id="W1C-pw-svD"/>
-                            <constraint firstItem="7ka-MH-Imi" firstAttribute="top" secondItem="erX-q0-3Ub" secondAttribute="top" id="WFe-qR-rrU"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Eclipse Center" image="events_icon" id="rp4-S2-pww"/>
-                    <connections>
-                        <outlet property="errorBtn" destination="7ka-MH-Imi" id="5BU-Kf-gWR"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZIw-Q3-IRR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -320,24 +285,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h73-zg-FQR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5396" y="1409"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="nda-Vh-mDN">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="c5i-11-RKf" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="DgY-H2-7mi">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="hEN-5q-AW7" kind="relationship" relationship="rootViewController" id="Zp5-Xq-SGP"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qBi-VT-SrH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4640.8000000000002" y="633.73313343328346"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="rVE-Qe-Asv">

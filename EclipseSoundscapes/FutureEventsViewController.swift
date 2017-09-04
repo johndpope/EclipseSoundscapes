@@ -22,7 +22,10 @@
 
 import Eureka
 
-class FutureEventsViewController : FormViewController {
+class FutureEventsViewController : FormViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
     
     var futureEvents = [FutureEvent]()
     

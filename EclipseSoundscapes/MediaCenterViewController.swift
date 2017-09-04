@@ -27,7 +27,6 @@ class MediaCenterViewController : UIViewController {
     
     let cellId = "cellId"
     
-    
     var mediaContainer : [Media]?
     
     var fillerView : UIView = {
@@ -37,7 +36,7 @@ class MediaCenterViewController : UIViewController {
     }()
     
     lazy var headerView : ShrinkableHeaderView = {
-        let view = ShrinkableHeaderView(title: "Media")
+        let view = ShrinkableHeaderView(title: "Media", titleColor: .black)
         view.backgroundColor = Color.eclipseOrange
         view.delegate = self
         return view
@@ -171,13 +170,7 @@ extension MediaCenterViewController: UITableViewDelegate, UITableViewDataSource 
         }
         
         let playbackVc = PlaybackViewController()
-        
         playbackVc.media = media
-        
-        //        if media is RealtimeEvent {
-        //            playbackVc.isRealtimeEvent = true
-        //        }
-        
         self.present(playbackVc, animated: true, completion: nil)
     }
     

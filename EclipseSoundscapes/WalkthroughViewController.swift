@@ -25,12 +25,10 @@ import Eureka
 
 
 /// Walkthrough Controller
-class WalkthroughViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, TypedRowControllerType {
-    
+class WalkthroughViewController : UIViewController, TypedRowControllerType, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var row: RowOf<String>!
     var onDismissCallback: ((UIViewController) -> ())?
-    
     
     /// Bool if the walktrhough is showing for the first time ever
     private var isBegining = true
@@ -240,23 +238,11 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         return btn
     }()
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    
-    init(_ callback: ((UIViewController) -> ())? = nil) {
-        super.init(nibName: nil, bundle: nil)
-        onDismissCallback = callback
-        
+    override func viewDidLoad() {
+        super.viewDidLoad()
         if UserDefaults.standard.bool(forKey: "WalkThrough"){
             changeViewForRegularUse()
         }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
         setupViews()
         registerCells()
     }
