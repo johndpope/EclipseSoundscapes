@@ -23,12 +23,10 @@
 import Eureka
 import CoreLocation
 import SwiftSpinner
-import BRYXBanner
 import Material
 
 class EclipseViewController : FormViewController {
     
-    var banner : Banner?
     
     var locator = Location()
     
@@ -174,7 +172,6 @@ class EclipseViewController : FormViewController {
     }
     
     func getlocation(animated : Bool) {
-        banner?.dismiss()
         
         if Location.isGranted {
             if animated {
@@ -182,14 +179,7 @@ class EclipseViewController : FormViewController {
             }
             LocationManager.getLocation()
         } else {
-            if !Location.checkPermission() {
-                LocationManager.permission(on: self)
-            } else {
-                banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.", image: #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse"), backgroundColor: Color.eclipseOrange, didTapBlock: {
-                    self.present(UINavigationController(rootViewController: SettingsViewController()), animated: true, completion: nil)
-                })
-                banner?.show(duration: 5.0)
-            }
+            LocationManager.permission(on: self)
         }
     }
     
@@ -492,15 +482,6 @@ extension EclipseViewController : LocationDelegate {
     
     func notGranted() {
         showError()
-        
-        if !Location.isGranted {
-            banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.") {
-                self.present(UINavigationController(rootViewController: SettingsViewController()), animated: true, completion: nil)
-            }
-            banner?.show(duration: 5.0)
-        } else {
-            LocationManager.permission(on: self)
-        }
     }
     
     func didGrant() {

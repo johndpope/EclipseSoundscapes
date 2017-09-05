@@ -39,6 +39,7 @@ class MediaCenterViewController : UIViewController {
         let view = ShrinkableHeaderView(title: "Media", titleColor: .black)
         view.backgroundColor = Color.eclipseOrange
         view.delegate = self
+        view.separatorLine.isHidden = true
         return view
     }()
     

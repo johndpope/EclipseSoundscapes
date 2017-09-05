@@ -24,6 +24,7 @@ import UIKit
 import Material
 
 class PermissionViewController : UIViewController {
+    
     private var permissionView : PermissionView!
     private var completion : (()->Void)!
     
@@ -35,10 +36,19 @@ class PermissionViewController : UIViewController {
         btn.addSqueeze()
         btn.setImage(#imageLiteral(resourceName: "Left_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
         btn.tintColor = .black
-        btn.addTarget(self, action: #selector(close), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(hide), for: .touchUpInside)
         btn.accessibilityLabel = "Back"
         return btn
     }()
+    
+    var backgroundView : UIView = {
+        var view = UIView()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        view.alpha = 0
+        return view
+    }()
+    
+    
     
     /// Show the PermissionView with the given permissions
     ///
@@ -58,43 +68,46 @@ class PermissionViewController : UIViewController {
         super.viewDidLoad()
         setupViews()
         view.backgroundColor = .clear
-        view.isOpaque = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        permissionView.transform = CGAffineTransform.init(scaleX: CGFloat.leastNonzeroMagnitude
+            , y: CGFloat.leastNonzeroMagnitude)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        show()
     }
     
     // Setup and layout view's subviews
     func setupViews() {
         permissionView.delegate = self
-        self.view.addSubview(permissionView)
+        self.view.addSubviews(backgroundView, permissionView)
+        
+        backgroundView.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
         
         permissionView.anchor(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 30, leftConstant: 10, bottomConstant: 30, rightConstant: 10, widthConstant: 0, heightConstant: 0)
         
         permissionView.cornerRadius = 20
         self.permissionView.layer.anchorPoint = CGPoint.init(x: 0.5, y: 0.5)
         
-        
-        permissionView.addSubview(backBtn)
-        backBtn.anchorWithConstantsToTop(permissionView.topAnchor, left: permissionView.leftAnchor, bottom: nil, right: nil, topConstant: 10, leftConstant: 10, bottomConstant: 0, rightConstant: 0)
+        permissionView.addSubviews(backBtn)
+        backBtn.centerYAnchor.constraint(equalTo: permissionView.titleLabel.centerYAnchor).isActive = true
+        backBtn.leftAnchor.constraint(equalTo: permissionView.leftAnchor, constant: 10).isActive = true
         
         let panGesture = UIPanGestureRecognizer.init(target: self, action: #selector(self.handlePan(_:)))
         panGesture.maximumNumberOfTouches = 1
         self.permissionView.addGestureRecognizer(panGesture)
     }
     
-    
-    @objc fileprivate func close() {
-        self.dismiss(animated: true) {
-            self.completion()
-        }
-    }
-    
     //MARK: - Drag and Pan animations for dismissing View
-    
     
     /// Controller's Center
     var centerPoint: CGPoint {
         return view.center
     }
-    
     
     /// Handle drag and pan animations
     ///
@@ -130,8 +143,10 @@ class PermissionViewController : UIViewController {
                     let percent = (bottom-distanceMoved)/bottom
                     print("percent: \(percent)")
                     contentView.alpha = percent
+                    self.backgroundView.alpha = percent
                 } else {
-                    contentView.alpha = 1
+                    contentView.alpha = 1.0
+                    self.backgroundView.alpha = 1.0
                 }
                 
                 
@@ -140,15 +155,11 @@ class PermissionViewController : UIViewController {
                 break
             case .ended:
                 if willDismiss {
-                    self.hide()
+                    self.gravityHide()
                     return
                 }
                 else {
-                    UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveLinear, animations: {
-                        contentView.center = self.centerPoint
-                        contentView.transform = CGAffineTransform.identity
-                        contentView.alpha = 1.0
-                    }, completion: nil)
+                    returnCenter()
                 }
                 break
             default:
@@ -157,19 +168,60 @@ class PermissionViewController : UIViewController {
         }
     }
     
+    /// Animate the showing of the permissionView
+    func show() {
+        UIView.animate(withDuration: 0.5) {
+            self.backgroundView.alpha = 1.0
+            
+        }
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveLinear, animations: {
+            self.permissionView.transform = .identity
+        }, completion: nil)
+    }
+    
     
     /// Animate the close the permissionView
     func hide() {
-        permissionView.animate([.translate(x: 0, y: 1000, z: 0),.scale(0.9), .fadeOut]) {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.backgroundView.alpha = 0.0
+            self.permissionView.alpha = 0.0
+            self.permissionView.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
+        }, completion: { (_) in
             self.close()
+        })
+    }
+    
+    /// Animate the close the permissionView
+    func gravityHide() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.backgroundView.alpha = 0.0
+            self.permissionView.transform = CGAffineTransform.init(translationX: 0, y: 1000)
+        }, completion: { (_) in
+            self.close()
+        })
+    }
+    
+    
+    /// Close the controller and call completion
+    @objc fileprivate func close() {
+        self.dismiss(animated: true) {
+            self.completion()
         }
-        
+    }
+    
+    func returnCenter() {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveLinear, animations: {
+            self.permissionView.center = self.centerPoint
+            self.permissionView.transform = CGAffineTransform.identity
+            self.permissionView.alpha = 1.0
+            self.backgroundView.alpha = 1.0
+        }, completion: nil)
     }
 }
 
 extension PermissionViewController: PermissionViewDelegate {
     func didFinish() {
-        Utility.delay(0.5) { [weak self] in
+        Utility.delay(0.3) { [weak self] in
             self?.close()
         }
     }

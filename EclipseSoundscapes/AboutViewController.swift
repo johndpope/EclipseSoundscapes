@@ -1,5 +1,5 @@
 //
-//  MoreViewController.swift
+//  AboutViewController.swift
 //  EclipseSoundscapes
 //
 //  Created by Arlindo Goncalves on 7/9/17.
@@ -23,14 +23,14 @@
 import Eureka
 import Material
 
-class MoreViewController : FormViewController {
+class AboutViewController : FormViewController {
     
     lazy var headerView : ShrinkableHeaderView = {
-        let view = ShrinkableHeaderView(title: "About Us")
+        let view = ShrinkableHeaderView(title: "About Us", titleColor: .white)
         view.backgroundColor = Color.lead
-        view.delegate = self
         view.textColor = .white
         view.isShrinkable = false
+        view.separatorLine.isHidden = true
         return view
     }()
     
@@ -101,7 +101,8 @@ class MoreViewController : FormViewController {
             <<< ButtonRow("Our team") { (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.cell.imageView?.image = #imageLiteral(resourceName: "team")
-                row.presentationMode = .segueName(segueName: "Team", onDismiss: nil)
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return TeamViewController()
+                }, onDismiss: nil)
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
@@ -119,7 +120,8 @@ class MoreViewController : FormViewController {
                 row.title = row.tag
                 row.cell.imageView?.image = #imageLiteral(resourceName: "events_icon").withRenderingMode(.alwaysTemplate)
                 row.cell.imageView?.tintColor = Color.eclipseOrange
-                row.presentationMode = .segueName(segueName: "Future", onDismiss: nil)
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return FutureEventsViewController()
+                }, onDismiss: nil)
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                     cell.textLabel?.adjustsFontSizeToFitWidth = true
@@ -152,14 +154,16 @@ class MoreViewController : FormViewController {
             <<< ButtonRow("Settings"){ (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.cell.imageView?.image = #imageLiteral(resourceName: "settings")
-                row.presentationMode = .segueName(segueName: "Settings", onDismiss: nil)
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return SettingsViewController()
+                }, onDismiss: nil)
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
             <<< ButtonRow("Legal"){ (row: ButtonRow) -> Void in
                 row.title = row.tag
                 row.cell.imageView?.image = #imageLiteral(resourceName: "legal")
-                row.presentationMode = .segueName(segueName: "Legal", onDismiss: nil)
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return LegalViewController()
+                }, onDismiss: nil)
                 }.cellUpdate({ (cell, _) in
                     cell.textLabel?.font = UIFont.getDefautlFont(.meduium, size: 16)
                 })
@@ -170,12 +174,5 @@ class MoreViewController : FormViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
-    }
-}
-
-extension MoreViewController : ShrinkableHeaderViewDelegate {
-    
-    func setScrollPosition(position: CGFloat) {
-        self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: position)
     }
 }

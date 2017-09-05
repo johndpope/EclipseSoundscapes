@@ -170,6 +170,7 @@ class RumbleMapViewController: UIViewController {
     var stopGesture : UITapGestureRecognizer?
     
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

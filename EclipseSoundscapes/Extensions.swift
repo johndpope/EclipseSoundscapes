@@ -412,5 +412,7 @@ extension CGPoint : Hashable {
 extension Color {
     static let eclipseOrange = UIColor.init(r: 227, g: 94, b: 5)
     static let lead = UIColor.init(r: 33, g: 33, b: 33)
+    static let NavBarColor = UIColor.init(r: 245, g: 245, b: 247)
+    static let NavBarSeparatorColor = UIColor.init(r: 176, g: 176, b: 181)
 }
 

@@ -113,7 +113,7 @@
 		B7CAD7F61F5C71CE00A194C1 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7CAD7F51F5C71CE00A194C1 /* EventCell.xib */; };
 		B7D84D0F1F59AEC200D21724 /* DynamicLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D84D0E1F59AEC200D21724 /* DynamicLabel.swift */; };
 		B7DE878F1F20FBE6001F69D8 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */; };
-		B7E7A9881F12A40200B239B8 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9871F12A40200B239B8 /* MoreViewController.swift */; };
+		B7E7A9881F12A40200B239B8 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9871F12A40200B239B8 /* AboutViewController.swift */; };
 		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
 		B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A411F3C0A6A004540C2 /* Intermission.txt */; };
 		B7EF1A441F3C0F7A004540C2 /* ThankYou.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */; };
@@ -265,7 +265,7 @@
 		B7CAD7F51F5C71CE00A194C1 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		B7D84D0E1F59AEC200D21724 /* DynamicLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicLabel.swift; sourceTree = "<group>"; };
 		B7DE878E1F20FBE6001F69D8 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
-		B7E7A9871F12A40200B239B8 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		B7E7A9871F12A40200B239B8 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		B7EF1A411F3C0A6A004540C2 /* Intermission.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Intermission.txt; sourceTree = "<group>"; };
 		B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ThankYou.txt; sourceTree = "<group>"; };
@@ -579,7 +579,7 @@
 				B7372E0B1F27A0CA00A71396 /* EclipseViewController.swift */,
 				B77417F01F0361EC00663C2E /* RumbleMapViewController.swift */,
 				B7B16F3A1F3A63620036E396 /* RumbleMapInteractiveViewController.swift */,
-				B7E7A9871F12A40200B239B8 /* MoreViewController.swift */,
+				B7E7A9871F12A40200B239B8 /* AboutViewController.swift */,
 				B745AE181F1E3BB20025946C /* PartnersViewController.swift */,
 				B745AE3A1F1E8D260025946C /* TeamViewController.swift */,
 				B745AE1C1F1E65570025946C /* InstructionsViewController.swift */,
@@ -1016,7 +1016,7 @@
 				B78A72DC1F51C0E500C2E540 /* PermissionViewController.swift in Sources */,
 				B7806DB91F0D58CA0052A7CD /* RumbleMap.swift in Sources */,
 				B76282951F266B4200430319 /* PartnerCell.swift in Sources */,
-				B7E7A9881F12A40200B239B8 /* MoreViewController.swift in Sources */,
+				B7E7A9881F12A40200B239B8 /* AboutViewController.swift in Sources */,
 				B781E6EF1F3153560038C3F1 /* PhotoCreditCell.swift in Sources */,
 				B7806E611F0D5B580052A7CD /* UIViewExtensions.swift in Sources */,
 				B7FD16981F545A7800053FA5 /* ShrinkableHeaderView.swift in Sources */,

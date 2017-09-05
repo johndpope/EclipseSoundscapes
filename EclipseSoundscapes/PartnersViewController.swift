@@ -30,9 +30,8 @@ class PartnersViewController : FormViewController, TypedRowControllerType {
     
     lazy var headerView : ShrinkableHeaderView = {
         let view = ShrinkableHeaderView(title: "Our Partners", titleColor: .black)
-        view.backgroundColor = Color.eclipseOrange
+        view.backgroundColor = Color.NavBarColor
         view.maxHeaderHeight = 60
-        view.delegate = self
         view.isShrinkable = false
         return view
     }()
@@ -40,7 +39,7 @@ class PartnersViewController : FormViewController, TypedRowControllerType {
     lazy var backBtn : UIButton = {
         var btn = UIButton(type: .system)
         btn.addSqueeze()
-        btn.setImage(#imageLiteral(resourceName: "Left_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
         btn.tintColor = .black
         btn.addTarget(self, action: #selector(close), for: .touchUpInside)
         btn.accessibilityLabel = "Back"
@@ -74,7 +73,7 @@ class PartnersViewController : FormViewController, TypedRowControllerType {
     }
     
     func setupViews() {
-        view.backgroundColor = Color.eclipseOrange
+        view.backgroundColor = headerView.backgroundColor
         view.addSubview(headerView)
         
         headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
@@ -147,13 +146,6 @@ class PartnersViewController : FormViewController, TypedRowControllerType {
     
     @objc private func close() {
         self.dismiss(animated: true, completion: nil)
-    }
-}
-
-extension PartnersViewController : ShrinkableHeaderViewDelegate {
-    
-    func setScrollPosition(position: CGFloat) {
-        self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: position)
     }
 }
 

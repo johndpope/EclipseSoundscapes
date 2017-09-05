@@ -21,9 +21,10 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
+import Material
 
-protocol ShrinkableHeaderViewDelegate : class {
-    func setScrollPosition(position: CGFloat)
+@objc protocol ShrinkableHeaderViewDelegate : class {
+    @objc optional func setScrollPosition(position: CGFloat)
 }
 
 class ShrinkableHeaderView : UIView {
@@ -41,12 +42,23 @@ class ShrinkableHeaderView : UIView {
     
     var titleLabel : UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.font = UIFont.getDefautlFont(.bold, size: 20)
+        label.font = UIFont.getDefautlFont(.bold, size: 18)
         label.accessibilityTraits = UIAccessibilityTraitHeader
         return label
     }()
+    
+    var separatorLine : UIView = {
+        var view = UIView()
+        view.backgroundColor = Color.NavBarSeparatorColor
+        return view
+    }()
+    
+    var titleText : String? {
+        didSet {
+            self.titleLabel.text = titleText
+        }
+    }
     
     var textColor : UIColor = .black {
         didSet {
@@ -54,18 +66,26 @@ class ShrinkableHeaderView : UIView {
         }
     }
     
-    init(title: String, titleColor: UIColor = .white) {
+    init(title: String? = nil, titleColor: UIColor = .black) {
         super.init(frame: .zero)
-        
-        addSubview(titleLabel)
-        titleLabel.text = title
-        titleLabel.textColor = titleColor
-        titleLabel.center(in: self)
-        titleLabel.setSize(widthAnchor: widthAnchor, heightAnchor: heightAnchor)
+        self.textColor = titleColor
+        self.titleText = title
+        commonInit()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        commonInit()
+    }
+    
+    func commonInit() {
+        addSubviews(titleLabel, separatorLine)
+        titleLabel.text = titleText
+        titleLabel.textColor = textColor
+        titleLabel.center(in: self)
+        titleLabel.setSize(widthAnchor: widthAnchor, heightAnchor: heightAnchor)
+        
+        separatorLine.anchor(nil, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0.5)
     }
     
     
@@ -93,7 +113,7 @@ class ShrinkableHeaderView : UIView {
             if newHeight != self.headerHeightConstraint.constant {
                 self.headerHeightConstraint.constant = newHeight
                 self.updateHeader()
-                delegate?.setScrollPosition(position: self.previousScrollOffset)
+                delegate?.setScrollPosition?(position: self.previousScrollOffset)
             }
             
             self.previousScrollOffset = scrollView.contentOffset.y

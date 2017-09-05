@@ -23,11 +23,30 @@
 //  Disclaimer: The logos of NASA, Smithsonian and the Eclipse Soundscapes partners and affiliates are not to be used in any manner that suggests or implies that NASA, Smithsonian or any Eclipse Soundscapes partners and affiliates have endorsed or approved of the activities, products, and/or services of the organization using the Eclipse Soundscapes open source materials, or that NASA, Smithsonian, or any Eclipse Soundscapes partners and affiliates are the source of any such activities, products or services.
 
 import Eureka
+import Material
 
 class OpenSourceViewController : FormViewController, TypedRowControllerType {
     
     var row: RowOf<String>!
     var onDismissCallback: ((UIViewController) -> ())?
+    
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Open Source Libraries", titleColor: .black)
+        view.backgroundColor = Color.NavBarColor
+        view.maxHeaderHeight = 60
+        view.isShrinkable = false
+        return view
+    }()
+    
+    lazy var backBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.tintColor = .black
+        btn.addTarget(self, action: #selector(close), for: .touchUpInside)
+        btn.accessibilityLabel = "Back"
+        return btn
+    }()
     
     
     var libraries : [OpenSourceLibrary] = [OpenSourceLibrary.init(title: "AudioKit", license: "AudioKit-License"),
@@ -37,17 +56,24 @@ class OpenSourceViewController : FormViewController, TypedRowControllerType {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViews()
         initializeForm()
+    }
+    
+    func setupViews() {
+        view.backgroundColor = headerView.backgroundColor
+        view.addSubview(headerView)
         
-        self.navigationItem.title = "Open Source Libraries"
-        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        headerView.addSubviews(backBtn)
+        backBtn.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        backBtn.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 10).isActive = true
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
     }
     
     private func initializeForm() {
-        
-        self.automaticallyAdjustsScrollViewInsets = false
-        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
         
         form
             +++ Section() { section in
@@ -112,7 +138,7 @@ class OpenSourceViewController : FormViewController, TypedRowControllerType {
         
     }
     
-    func close() {
-       _ = self.navigationController?.popViewController(animated: true)
+    @objc private func close() {
+        self.dismiss(animated: true, completion: nil)
     }
 }

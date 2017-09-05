@@ -147,11 +147,10 @@ class PermissionButton : UIButton {
         update(authorized)
         
         if permission is LocationPermission {
-           handleLocationPermission(authorized)
+            handleLocationPermission(authorized)
         } else {
-            NotificationHelper.appGrated = authorized
+            handleNotificationPermission(authorized)
         }
-        delegate?.didPressPermission(for: self.permissionType!)
     }
     
     
@@ -171,9 +170,24 @@ class PermissionButton : UIButton {
                 } else {
                     settingAlert()
                 }
+            } else {
+                delegate?.didPressPermission(for: self.permissionType!)
             }
         }
         Location.appGrated = authorized
+    }
+    
+    /// Handle Notification Permission
+    ///
+    /// - Parameter authorized: Status of Notification permission
+    private func handleNotificationPermission(_ authorized: Bool) {
+        if !authorized {
+            settingAlert()
+        } else {
+            delegate?.didPressPermission(for: self.permissionType!)
+        }
+        
+        NotificationHelper.appGrated = authorized
     }
     
     
@@ -219,10 +233,9 @@ class PermissionButton : UIButton {
     /// Notification handler for when returns from app settings
     @objc private func returnedToApplication() {
         NotificationCenter.default.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
-//        handlePermissionRequest()
         hanldeButtonTouch()
     }
-
+    
 }
 
 extension UserDefaults {
