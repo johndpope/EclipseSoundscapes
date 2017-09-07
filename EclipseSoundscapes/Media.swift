@@ -59,26 +59,41 @@ class RealtimeMedia : NSObject {
     }
     
 }
+
+struct RealtimeMediaData {
+    var name : String
+    var info : String
+    var image : UIImage
+    
+    init(_ name: String, info: String, image: UIImage) {
+        self.name = name
+        self.info = info
+        self.image = image
+    }
+}
+
 public class RealtimeEvent: Media {
     
     let END = -3
     let INTERMISSION = -2
+    
     private var index = -1
     
-    var mediaInterval : [Double]!
-    
-    private var names: [String]!
-    private var images : [UIImage]?
-    private var infoResourceNames : [String]!
-    
     private var media : [RealtimeMedia]!
+    
+    var currentData: RealtimeMediaData?
     
     
     init(name: String, resourceName: String, mediaType: FileType, image: UIImage, media : RealtimeMedia...) {
         super.init(name: name, resourceName: resourceName, infoRecourceName: media[0].infoRecourceName, mediaType: mediaType, image: image)
         self.media = media
+        
+        let data = self.media[0]
+        if let name = data.name, let infoFileName = data.infoRecourceName, let image = data.image {
+            currentData = RealtimeMediaData.init(name, info: getInfo(infoFileName), image: image)
+        }
     }
-    
+
     func shouldChangeMedia(for time: Double) -> Bool {
         
         let index = getIndex(for: time)
@@ -109,7 +124,7 @@ public class RealtimeEvent: Media {
         return INTERMISSION
     }
     
-    private func getNextMedia(after time: Double) -> RealtimeMedia {
+    private func getNextMedia(after time: Double) -> String {
         var targetMedia : RealtimeMedia!
         for i in 0 ..< media.count {
             let tempMedia = self.media[i]
@@ -122,32 +137,40 @@ public class RealtimeEvent: Media {
             targetMedia = media[media.count-1]
         }
         
-        return targetMedia
+        return targetMedia.name
     }
     
-    func loadNextMedia(for time : Double) {
-        
+    func loadNext(at time: Double) {
         let index = getIndex(for: time)
+        self.index = index
+        
+        var name = ""
+        var infoFileName = ""
+        var image : UIImage!
         
         switch index {
         case END :
-            self.name = "All Done!"
-            self.infoRecourceName = "ThankYou"
-            self.image = #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse")
+            name = "All Done!"
+            infoFileName = "ThankYou"
+            image = #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse")
             break
         case INTERMISSION:
-            self.name = "\(getNextMedia(after: time).name!) Up Next"
-            self.infoRecourceName = "Intermission"
-            self.image = #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse")
+            name = "\(getNextMedia(after: time)) Up Next"
+            infoFileName = "Intermission"
+            image = #imageLiteral(resourceName: "EclipseSoundscapes-Eclipse")
             break
         default:
-            self.index = index
             let media = self.media[self.index]
-            self.name = media.name
-            self.infoRecourceName = media.infoRecourceName
-            self.image = media.image
+            name = media.name
+            print(name)
+            infoFileName = media.infoRecourceName
+            image = media.image
         }
-        
+        currentData = RealtimeMediaData.init(name, info: getInfo(infoFileName), image: image)
+    }
+    
+    func getInfo(_ filename: String) -> String {
+        return Utility.getFile(filename, type: "txt") ?? "No Info Provided"
     }
     
 }

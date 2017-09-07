@@ -85,10 +85,10 @@ class PlaybackViewController: UIViewController {
             if media is RealtimeEvent {
                 let realtimeMedia = media as! RealtimeEvent
                 if realtimeMedia.shouldChangeMedia(for: progress) {
-                    realtimeMedia.loadNextMedia(for: progress)
+                    realtimeMedia.loadNext(at: progress)
                     DispatchQueue.main.async { [weak self] in
                         if let strongSelf = self {
-                            strongSelf.reloadUI()
+                            strongSelf.reloadRealtimeUI()
                         }
                         
                     }
@@ -133,6 +133,22 @@ class PlaybackViewController: UIViewController {
         controlsContainerView.backgroundImageView.image = unWrappedMedia.image
         titleLabel.text = unWrappedMedia.name
         infoTextView.text = unWrappedMedia.getInfo()
+    }
+    
+    func reloadRealtimeUI() {
+        
+        guard let realtime = media as? RealtimeEvent, let data = realtime.currentData else {
+            return
+        }
+        
+        update(artwork: data.image)
+        update(title: data.name)
+        update(progress: self.progress)
+        
+        controlsContainerView.backgroundImageView.image = data.image
+        titleLabel.text = data.name
+        infoTextView.text = data.info
+        
     }
     
     override func viewDidLoad() {
@@ -241,6 +257,10 @@ class PlaybackViewController: UIViewController {
             self.playerSlider.maximumValue = Float(duration)
             
             self.setupNowPlayingInfoCenter(with: infoControlInfo)
+            
+            if unWrappedMedia is RealtimeEvent {
+                reloadRealtimeUI()
+            }
             
             handlePlay(play: true)
         } catch  {

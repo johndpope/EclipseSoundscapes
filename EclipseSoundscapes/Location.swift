@@ -53,6 +53,9 @@ public protocol LocationDelegate: NSObjectProtocol {
 /// Handles Obtaining the User's Location
 class Location {
     
+    /// Check system wide notification permission status
+    ///
+    /// - Returns: Status
     static func checkPermission() -> Bool {
         return Permission.isAllowPermission(.locationWhenInUse)
     }

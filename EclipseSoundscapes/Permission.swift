@@ -318,3 +318,21 @@ public protocol PermissionInterface {
     /// - Parameter complectionHandler: optional completion block after request
     func request(withComlectionHandler complectionHandler: @escaping ()->()?)
 }
+
+//public protocol PermissionHelperInterface {
+//    
+//    /// Check system wide permission status
+//    ///
+//    /// - Returns: Status
+//    static func checkPermission() -> Bool {
+//    return Permission.isAllowPermission(.notification)
+//    }
+//    
+//    
+//    /// Status of Permission
+//    static var isGranted : Bool
+//    
+//    
+//    /// Checks the application wide permission status
+//    static var appGrated : Bool
+//}

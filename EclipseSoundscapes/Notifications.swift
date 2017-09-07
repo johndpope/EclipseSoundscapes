@@ -69,6 +69,8 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
     
 }
 
+
+/// Types of Notification Reminders
 public struct Reminder: OptionSet {
     public let rawValue: Int
     public init(rawValue:Int){ self.rawValue = rawValue}
@@ -80,16 +82,26 @@ public struct Reminder: OptionSet {
     static let allDone = Reminder(rawValue: 16)
 }
 
+
+/// Handles all Notification posting and permissions statuses
 class NotificationHelper {
     
+    
+    /// Check system wide notification permission status
+    ///
+    /// - Returns: Status
     static func checkPermission() -> Bool {
         return Permission.isAllowPermission(.notification)
     }
     
+    
+    /// Status of Notification Permission
     static var isGranted : Bool  {
         return checkPermission() && appGrated
     }
     
+    
+    /// Checks the application wide notification permission status
     static var appGrated : Bool{
         get {
             return UserDefaults.standard.bool(forKey: "NotificationGranted")
@@ -99,6 +111,7 @@ class NotificationHelper {
         }
     }
     
+    /// Tracker for if Eclipse Event Reminders have been setup
     static var didSetReminderObservers : Bool {
         get {
             return UserDefaults.standard.bool(forKey: "Reminders")
@@ -108,6 +121,12 @@ class NotificationHelper {
         }
     }
     
+    
+    /// Post notification to observers of the given Reminder
+    ///
+    /// - Parameters:
+    ///   - reminder: Reminder
+    ///   - notify: Should Notify Observers
     class func postNotification(for reminder: Reminder, notify: Bool = true){
         
         var name : Notification.Name!
@@ -159,6 +178,13 @@ class NotificationHelper {
         }
     }
     
+    
+    /// Add Observers to the given Reminder
+    ///
+    /// - Parameters:
+    ///   - observer: Observer
+    ///   - reminders: Reminder
+    ///   - selector: Selector to perform as notification is posted
     static func addObserver(_ observer : Any, reminders : Reminder, selector: Selector){
         
         if reminders.contains(.firstReminder) {
@@ -178,6 +204,12 @@ class NotificationHelper {
         }
     }
     
+    
+    /// Remove observer for the given Reminder
+    ///
+    /// - Parameters:
+    ///   - observer: Observer
+    ///   - reminders: Reminder to observe
     static func removeObserver(_ observer: Any, reminders: Reminder) {
         if reminders.contains(.firstReminder) {
             cleanNotificationList(reminder: .firstReminder)
@@ -200,6 +232,10 @@ class NotificationHelper {
         }
     }
     
+    
+    /// Remove Delivered Notifications
+    ///
+    /// - Parameter reminder: Reminder that the notification is associated to
     private static func cleanNotificationList(reminder: Reminder) {
         if #available(iOS 10.0, *) {
             var identifier : String!
@@ -229,10 +265,20 @@ class NotificationHelper {
         }
     }
     
-    static func removeAllObservers(_ observer: Any) {
+    
+    /// Remove observer from recieving notifications
+    ///
+    /// - Parameter observer: Observer
+    static func removeObserver(_ observer: Any) {
         NotificationCenter.default.removeObserver(observer)
     }
     
+    
+    /// Setup Reminder Notification
+    ///
+    /// - Parameters:
+    ///   - date: Date to fire notification
+    ///   - reminder: Reminder associated to the notification
     class func reminderNotification(for date: Date, reminder: Reminder) {
         if #available(iOS 10.0, *) {
             let reminderAction = UNNotificationAction(identifier: ReminderAction, title: "Okay", options: [.destructive])
@@ -267,6 +313,11 @@ class NotificationHelper {
         add(with: date, title: "Eclipse Soundscapes", body: message, categoryId: ReminderCategory, reminder: reminder)
     }
     
+    /// Setup Listen Notification
+    ///
+    /// - Parameters:
+    ///   - date: Date to fire notification
+    ///   - reminder: Reminder associated to the notification
     class func listenNotification(for date: Date, reminder: Reminder) {
         
         var body : String!
@@ -303,6 +354,15 @@ class NotificationHelper {
         add(with: date, title: "Eclipse Soundscapes", body: body, categoryId: ListenCategory, reminder: reminder)
     }
     
+    
+    /// Register notification to application
+    ///
+    /// - Parameters:
+    ///   - date: Date to fire notification
+    ///   - title: Notification's title
+    ///   - body: Notification's body
+    ///   - categoryId: Notification's category id
+    ///   - reminder: Reminder associated to the notification
     private class func add(with date: Date, title: String, body: String, categoryId : String?, reminder: Reminder) {
         if #available(iOS 10.0, *) {
             let content = UNMutableNotificationContent()

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		70E439A017019D60659857BF /* Pods_EclipseSoundscapesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 219BB4393901E45FBC7BD829 /* Pods_EclipseSoundscapesTests.framework */; };
-		B70F0E021F2161FE00B9F3BA /* NotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70F0E011F2161FE00B9F3BA /* NotificationHelper.swift */; };
+		B70F0E021F2161FE00B9F3BA /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70F0E011F2161FE00B9F3BA /* Notifications.swift */; };
 		B71E206D1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B71E206C1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 */; };
 		B72DF5451ED724F300F9E4F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */; };
 		B72DF54A1ED724F300F9E4F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B72DF5481ED724F300F9E4F3 /* Main.storyboard */; };
@@ -47,7 +47,6 @@
 		B75632B61F04038500106B46 /* xytick.wav in Resources */ = {isa = PBXBuildFile; fileRef = B75632B51F04038500106B46 /* xytick.wav */; };
 		B758D8741ED78E120033EE45 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8731ED78E120033EE45 /* Downloader.swift */; };
 		B758D8761ED78E310033EE45 /* Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B758D8751ED78E310033EE45 /* Uploader.swift */; };
-		B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */; };
 		B75A137D1F43914000F5C27A /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75A137C1F43914000F5C27A /* PrivacyPolicyViewController.swift */; };
 		B76282901F26667C00430319 /* TeamMemberCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B762828E1F26667C00430319 /* TeamMemberCell.xib */; };
 		B76282931F2667AB00430319 /* TeamMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76282921F2667AB00430319 /* TeamMemberCell.swift */; };
@@ -154,7 +153,7 @@
 		5A5604FF69C8CA6A252C43F5 /* Pods-EclipseSoundscapesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesTests/Pods-EclipseSoundscapesTests.debug.xcconfig"; sourceTree = "<group>"; };
 		778A3D697CB2FFD5E4930902 /* Pods_EclipseSoundscapes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EclipseSoundscapes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B03672B260885DC3EA96D077 /* Pods-EclipseSoundscapesUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EclipseSoundscapesUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EclipseSoundscapesUITests/Pods-EclipseSoundscapesUITests.release.xcconfig"; sourceTree = "<group>"; };
-		B70F0E011F2161FE00B9F3BA /* NotificationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationHelper.swift; sourceTree = "<group>"; };
+		B70F0E011F2161FE00B9F3BA /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		B71E206C1F3E20B500DBB82C /* Realtime_Eclipse_Shorts.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Realtime_Eclipse_Shorts.mp3; sourceTree = "<group>"; };
 		B72DF5411ED724F300F9E4F3 /* EclipseSoundscapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EclipseSoundscapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B72DF5441ED724F300F9E4F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -199,7 +198,6 @@
 		B75632B51F04038500106B46 /* xytick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = xytick.wav; sourceTree = "<group>"; };
 		B758D8731ED78E120033EE45 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		B758D8751ED78E310033EE45 /* Uploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Uploader.swift; sourceTree = "<group>"; };
-		B758D8781ED794790033EE45 /* Recordings.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Recordings.xcdatamodel; sourceTree = "<group>"; };
 		B75A137C1F43914000F5C27A /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		B762828E1F26667C00430319 /* TeamMemberCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamMemberCell.xib; sourceTree = "<group>"; };
 		B76282921F2667AB00430319 /* TeamMemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamMemberCell.swift; sourceTree = "<group>"; };
@@ -421,7 +419,6 @@
 			children = (
 				B7B19F831F2E909500EDE056 /* Page.swift */,
 				B7B16F3C1F3AB9870036E396 /* Media.swift */,
-				B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */,
 				B745AE221F1E697F0025946C /* OpenSourceLibrary.swift */,
 				B763FA001ED864F400EEFB27 /* Tape.swift */,
 			);
@@ -441,7 +438,7 @@
 		B76F34501EDE1E1D006E76D2 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				B70F0E011F2161FE00B9F3BA /* NotificationHelper.swift */,
+				B70F0E011F2161FE00B9F3BA /* Notifications.swift */,
 				B79263F31F0D828100062B8D /* Location.swift */,
 				B79ED4131EDF5CB1001D5745 /* Audio */,
 				B76F344E1EDE1DF8006E76D2 /* Networking */,
@@ -1024,7 +1021,7 @@
 				B7BD1AD31EF02A8800A739FA /* PlaybackViewController.swift in Sources */,
 				B7B19F861F2E909500EDE056 /* Page.swift in Sources */,
 				B7FD16961F54501B00053FA5 /* ParallaxView.swift in Sources */,
-				B70F0E021F2161FE00B9F3BA /* NotificationHelper.swift in Sources */,
+				B70F0E021F2161FE00B9F3BA /* Notifications.swift in Sources */,
 				B7806E5E1F0D5B580052A7CD /* CountdownView.swift in Sources */,
 				B7372E151F27B56000A71396 /* InfoCell.swift in Sources */,
 				B7F755A01F3344F30029DB4D /* MediaCell.swift in Sources */,
@@ -1049,7 +1046,6 @@
 				B7372E0E1F27A17E00A71396 /* CountDownCell.swift in Sources */,
 				B7B19F871F2E909500EDE056 /* PageCell.swift in Sources */,
 				B7B19F851F2E909500EDE056 /* PermissionCell.swift in Sources */,
-				B758D8791ED794790033EE45 /* Recordings.xcdatamodeld in Sources */,
 				B7477FF81F51A4CD0057D87C /* Splash.swift in Sources */,
 				B745AE3B1F1E8D260025946C /* TeamViewController.swift in Sources */,
 				B745AE191F1E3BB20025946C /* PartnersViewController.swift in Sources */,
@@ -1377,19 +1373,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		B758D8771ED794790033EE45 /* Recordings.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				B758D8781ED794790033EE45 /* Recordings.xcdatamodel */,
-			);
-			currentVersion = B758D8781ED794790033EE45 /* Recordings.xcdatamodel */;
-			path = Recordings.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = B72DF5391ED724F300F9E4F3 /* Project object */;
 }
