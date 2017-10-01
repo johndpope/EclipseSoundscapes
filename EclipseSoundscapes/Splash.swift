@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import Material
 
 class Splash : UIView {
     
@@ -61,18 +60,17 @@ class Splash : UIView {
     
     private func animate(_ completion: (()-> Void)? = nil) {
         
-        imageView.animate([.delay(1),
-                           .duration(TimeInterval(0.5)),
-                           .scale(2.0),.depth(.depth3)]) { [weak self] in
-                            
-                            self?.imageView.animate([.delay(TimeInterval(0.5)),.duration(1),
-                                                     .scale(),
-                                                     .fadeOut])
-                            
-                            self?.animate([.delay(1),.duration(1),.fadeOut], completion: {
-                                completion?()
-                                self?.removeFromSuperview()
-                            })
+        UIView.animate(withDuration: 0.5, delay: 1.0, options: .curveLinear, animations: {
+            self.imageView.transform = CGAffineTransform.init(scaleX: 2.0, y: 2.0)
+        }) { (_) in
+            UIView.animate(withDuration: 1.5, delay: 0.5, options: .curveLinear, animations: {
+                self.imageView.transform = .identity
+                self.imageView.alpha = 0.0
+                self.alpha = 0.0
+            }) { [weak self] (_)  in
+                completion?()
+                self?.removeFromSuperview()
+            }
         }
     }
 }

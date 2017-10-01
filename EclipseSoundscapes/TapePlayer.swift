@@ -281,7 +281,7 @@ public class TapePlayer : NSObject {
     
     
     /// Callback for AVAudioSessionMediaServicesWereReset notification
-    func systemRestart() {
+    @objc func systemRestart() {
         self.interrupt()
         if let url = tape?.audioUrl {
             do {

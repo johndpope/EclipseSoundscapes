@@ -48,7 +48,7 @@ class DynamicLabel : UILabel {
         NotificationCenter.default.addObserver(self, selector: #selector(setDynamicSize), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
     }
     
-    func setDynamicSize() {
+    @objc func setDynamicSize() {
         self.font = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(fontName: self.fontName, textStyle: self.textStyle, scale: self.scale), size: 0)
         superview?.layoutIfNeeded()
     }

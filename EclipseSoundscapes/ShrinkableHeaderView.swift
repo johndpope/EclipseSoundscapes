@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import Material
 
 @objc protocol ShrinkableHeaderViewDelegate : class {
     @objc optional func setScrollPosition(position: CGFloat)

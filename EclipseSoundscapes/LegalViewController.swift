@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import Eureka
-import Material
 
 class LegalViewController : FormViewController, TypedRowControllerType {
     

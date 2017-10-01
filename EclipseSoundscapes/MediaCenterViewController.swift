@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import Material
 
 class MediaCenterViewController : UIViewController {
     
@@ -86,7 +85,7 @@ class MediaCenterViewController : UIViewController {
     
     
     
-    func catchReminderNotification(notification: Notification) {
+    @objc func catchReminderNotification(notification: Notification) {
         guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
             return
         }

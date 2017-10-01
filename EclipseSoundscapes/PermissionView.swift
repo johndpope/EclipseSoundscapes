@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import Material
 
 /// Inform the permission's have been accepted or skipped
 protocol PermissionViewDelegate: class {
@@ -129,7 +128,7 @@ class PermissionView: UIView {
         for permission in permissions {
             let permissionBtn = PermissionButton(type: .system)
             permissionBtn.permissionType = permission
-            permissionBtn.setSize(stackView.width, height: 50)
+            permissionBtn.setSize(stackView.frame.width, height: 50)
             permissionBtn.delegate = self
             stackView.addArrangedSubview(permissionBtn)
         }
@@ -149,11 +148,11 @@ class PermissionView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        laterBtn.cornerRadius = laterBtn.bounds.height/2
+        laterBtn.layer.cornerRadius = laterBtn.bounds.height/2
     }
     
     /// Tell the delegate that permission cell's job has been completed
-    func later() {
+    @objc func later() {
         delegate?.didFinish()
     }
 }

@@ -20,7 +20,6 @@
 //
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
-import Material
 import Eureka
 
 class PhotoCreditsViewController : FormViewController, TypedRowControllerType {

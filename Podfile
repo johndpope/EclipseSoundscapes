@@ -10,15 +10,10 @@ target 'EclipseSoundscapes' do
 pod 'AudioKit'
 pod 'BRYXBanner'
 pod 'SwiftSpinner'
-
-#Xcode 9
-#pod 'Eureka', :git => "https://github.com/xmartlabs/Eureka.git", :branch => 'revert-1193-feature/Xcode9-Swift3_2'
-
 pod 'Eureka'
 pod 'Fabric'
 pod 'Crashlytics'
-
-pod 'Material'
+#pod 'Material'
 
 
   target 'EclipseSoundscapesTests' do

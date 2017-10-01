@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import Material
 
 class PermissionViewController : UIViewController {
     
@@ -90,7 +89,7 @@ class PermissionViewController : UIViewController {
         
         permissionView.anchor(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 30, leftConstant: 10, bottomConstant: 30, rightConstant: 10, widthConstant: 0, heightConstant: 0)
         
-        permissionView.cornerRadius = 20
+        permissionView.layer.cornerRadius = 20
         self.permissionView.layer.anchorPoint = CGPoint.init(x: 0.5, y: 0.5)
         
         permissionView.addSubviews(backBtn)
@@ -112,7 +111,7 @@ class PermissionViewController : UIViewController {
     /// Handle drag and pan animations
     ///
     /// - Parameter recognizer: UIPanGestureRecognizer
-    func handlePan(_ recognizer: UIPanGestureRecognizer) {
+    @objc func handlePan(_ recognizer: UIPanGestureRecognizer) {
         if !didTouchButton {
             
             let contentView = recognizer.view!
@@ -128,9 +127,9 @@ class PermissionViewController : UIViewController {
                 let movingCenter = CGPoint(x: contentView.center.x + panOffset.x, y: contentView.center.y + panOffset.y)
                 recognizer.view!.center = movingCenter
                 
-                let center = movingCenter.y + contentView.height/4
+                let center = movingCenter.y + contentView.frame.height/4
                 
-                let bottom = view.height
+                let bottom = view.frame.height
                 if center > bottom {
                     willDismiss = true
                 }
@@ -181,7 +180,7 @@ class PermissionViewController : UIViewController {
     
     
     /// Animate the close the permissionView
-    func hide() {
+    @objc func hide() {
         UIView.animate(withDuration: 0.2, animations: {
             self.backgroundView.alpha = 0.0
             self.permissionView.alpha = 0.0

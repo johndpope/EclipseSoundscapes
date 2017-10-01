@@ -23,7 +23,6 @@
 import Eureka
 import CoreLocation
 import SwiftSpinner
-import Material
 
 class EclipseViewController : FormViewController {
     
@@ -159,7 +158,7 @@ class EclipseViewController : FormViewController {
         errorBtn.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
-    func hideCountdown() {
+    @objc func hideCountdown() {
         if let row = form.rowBy(tag: "Countdown") as? CountDownRow {
             row.hidden = true
             row.evaluateHidden()
@@ -167,7 +166,7 @@ class EclipseViewController : FormViewController {
         NotificationHelper.removeObserver(self, reminders: .contact1)
     }
     
-    func didTapErrorBtn() {
+    @objc func didTapErrorBtn() {
         getlocation(animated: true)
     }
     
@@ -381,7 +380,7 @@ class EclipseViewController : FormViewController {
         longRow.cell.detailTextLabel?.text = long
     }
     
-    func getClosesLocation() {
+    @objc func getClosesLocation() {
         LocationManager.getClosestLocation()
         toggleNoEclipse(show: false)
     }

@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import Material
 import BRYXBanner
 
 class TabViewController: UITabBarController {
@@ -81,7 +80,7 @@ class TabViewController: UITabBarController {
         NotificationHelper.addObserver(self, reminders: reminders, selector: #selector(catchEclipseNotification(notification:)))
     }
     
-    func catchEclipseNotification(notification: Notification){
+    @objc func catchEclipseNotification(notification: Notification){
         switch notification.name {
         case Notification.Name.EclipseFirstReminder:
             
@@ -177,7 +176,7 @@ class TabViewController: UITabBarController {
         UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, banner)
     }
     
-    func updateTimeforBanner() {
+    @objc func updateTimeforBanner() {
         if countdown > 0 {
             countdown -= 1
         }

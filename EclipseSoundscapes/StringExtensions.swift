@@ -32,7 +32,7 @@ extension String {
             return self
         }
         
-        return self[(self.startIndex ..< self.characters.index(self.startIndex, offsetBy: 1))]
+        return String(self[(self.startIndex ..< self.characters.index(self.startIndex, offsetBy: 1))])
     }
     
     /**
@@ -43,6 +43,6 @@ extension String {
             return self
         }
         
-        return self[(self.characters.index(self.endIndex, offsetBy: -1) ..< self.endIndex)]
+        return String(self[(self.characters.index(self.endIndex, offsetBy: -1) ..< self.endIndex)])
     }
 }

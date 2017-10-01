@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Material
 import Eureka
 
 class PrivacyPolicyViewController: UIViewController, TypedRowControllerType {
@@ -78,7 +77,7 @@ class PrivacyPolicyViewController: UIViewController, TypedRowControllerType {
     func createParagraphAttribute() ->NSParagraphStyle {
         var paragraphStyle: NSMutableParagraphStyle
         paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-        paragraphStyle.tabStops = [NSTextTab(textAlignment: .left, location: 0, options: NSDictionary() as! [String : AnyObject])]
+        paragraphStyle.tabStops = [NSTextTab(textAlignment: .left, location: 0, options: [:])]
         paragraphStyle.defaultTabInterval = 15
         paragraphStyle.firstLineHeadIndent = 0
         paragraphStyle.headIndent = 15

@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import Material
 import MediaPlayer
 
 class PlaybackViewController: UIViewController {
@@ -198,7 +197,7 @@ class PlaybackViewController: UIViewController {
         infoTextView.anchorWithConstantsToTop(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
     }
     
-    func playPauseBtnTouched() {
+    @objc func playPauseBtnTouched() {
         guard let playing = player?.isPlaying else {
             handlePlay(play: false)
             return // TODO: Throw Error
@@ -269,7 +268,7 @@ class PlaybackViewController: UIViewController {
         }
     }
     
-    func checkViewFocus(notification : Notification) {
+    @objc func checkViewFocus(notification : Notification) {
         if let view = notification.userInfo?[UIAccessibilityFocusedElementKey] as? UIView {
             if view == infoTextView {
                 
@@ -304,7 +303,7 @@ class PlaybackViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func close() {
+ @objc func close() {
         self.dismiss(animated: true) {
             self.player = nil
             self.resignRemoteCommandCenter()
@@ -315,7 +314,7 @@ class PlaybackViewController: UIViewController {
     
     var shouldPlayAgain : Bool = false
     
-    func sliderTouchDown(){
+    @objc func sliderTouchDown(){
         self.playerSlider.expand()
         guard let playing = player?.isPlaying else {
             return
@@ -326,11 +325,11 @@ class PlaybackViewController: UIViewController {
         }
     }
     
-    func sliderChanged(_ sender: UISlider) {
+    @objc func sliderChanged(_ sender: UISlider) {
         skipTo(Double(sender.value))
     }
     
-    func sliderTouchUp() {
+    @objc func sliderTouchUp() {
         self.playerSlider.compress()
         guard let playing = player?.isPlaying else {
             return

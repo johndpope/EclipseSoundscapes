@@ -115,11 +115,11 @@ class RumbleMapInteractiveViewController: UIViewController {
         
     }
         
-    func close() {
+    @objc func close() {
         self.dismiss(animated: true, completion: nil)
     }
     
-    func openInstructions() {
+    @objc func openInstructions() {
         self.present(IntructionsViewController(), animated: true, completion: nil)
     }
     

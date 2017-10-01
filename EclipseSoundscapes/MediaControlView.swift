@@ -178,7 +178,7 @@ class MediaControlView : UIView {
         
     }
     
-    func handleControlTouch(){
+    @objc func handleControlTouch(){
         if !isPlaying {
             return
         }
@@ -190,7 +190,7 @@ class MediaControlView : UIView {
         }
     }
     
-    func automaticHide() {
+    @objc func automaticHide() {
         if controlsShowing && isPlaying {
             showControls(false)
         }
@@ -198,7 +198,7 @@ class MediaControlView : UIView {
         timer = nil
     }
     
-    func voiceOverNotification(notification: Notification) {
+    @objc func voiceOverNotification(notification: Notification) {
         showControls(UIAccessibilityIsVoiceOverRunning())
     }
     

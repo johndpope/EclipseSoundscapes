@@ -26,16 +26,16 @@ class PageCell: UICollectionViewCell {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .center
             
-            let attributedText = NSMutableAttributedString(string: page.title, attributes: [NSFontAttributeName: UIFont.getDefautlFont(.meduium, size: 20), NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: paragraphStyle])
+            let attributedText = NSMutableAttributedString(string: page.title, attributes: [NSAttributedStringKey.font: UIFont.getDefautlFont(.meduium, size: 20), NSAttributedStringKey.foregroundColor: color, NSAttributedStringKey.paragraphStyle: paragraphStyle])
             
-            attributedText.append(NSAttributedString(string: "\n\n\(page.message)", attributes: [NSFontAttributeName: UIFont.getDefautlFont(.meduium, size: 14), NSForegroundColorAttributeName: color, ]))
+            attributedText.append(NSAttributedString(string: "\n\n\(page.message)", attributes: [NSAttributedStringKey.font: UIFont.getDefautlFont(.meduium, size: 14), NSAttributedStringKey.foregroundColor: color, ]))
             
             let paragraphStyle2 = NSMutableParagraphStyle()
             paragraphStyle2.alignment = .center
             
             let start = page.title.characters.count
             let length = attributedText.string.characters.count - start
-            attributedText.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle2, range: NSRange(location: start, length: length))
+            attributedText.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle2, range: NSRange(location: start, length: length))
             
             infoView.content = attributedText
         }

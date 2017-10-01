@@ -286,7 +286,7 @@ class WalkthroughViewController : UIViewController, TypedRowControllerType, UICo
     
     
     /// Performs Paging to Next Page Cell
-    func nextPage() {
+    @objc func nextPage() {
         //we are on the last page
         if currentPage == pages.count {
             return
@@ -307,7 +307,7 @@ class WalkthroughViewController : UIViewController, TypedRowControllerType, UICo
     }
     
     /// Performs Paging to Previous Page Cell
-    func previousPage() {
+    @objc func previousPage() {
         //on the first page
         if currentPage == 0 {
             return
@@ -327,7 +327,7 @@ class WalkthroughViewController : UIViewController, TypedRowControllerType, UICo
     }
     
     /// Skips to the end of the walkthrough
-    func skip() {
+    @objc func skip() {
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.previousButton)
         currentPage = pages.count
         

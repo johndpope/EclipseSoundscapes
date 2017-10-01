@@ -23,7 +23,6 @@
 //  Disclaimer: The logos of NASA, Smithsonian and the Eclipse Soundscapes partners and affiliates are not to be used in any manner that suggests or implies that NASA, Smithsonian or any Eclipse Soundscapes partners and affiliates have endorsed or approved of the activities, products, and/or services of the organization using the Eclipse Soundscapes open source materials, or that NASA, Smithsonian, or any Eclipse Soundscapes partners and affiliates are the source of any such activities, products or services.
 
 import Eureka
-import Material
 
 class OpenSourceViewController : FormViewController, TypedRowControllerType {
     

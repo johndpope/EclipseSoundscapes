@@ -184,7 +184,7 @@ class RumbleMap : UIImageView {
         
     }
     
-    func touchDown(_ recognizer: UILongPressGestureRecognizer) {
+    @objc func touchDown(_ recognizer: UILongPressGestureRecognizer) {
         if !AudioKit.engine.isRunning {
             restart()
         }
@@ -207,7 +207,7 @@ class RumbleMap : UIImageView {
         }
     }
     
-    func handlePan(_ recognizer: UIPanGestureRecognizer) {
+    @objc func handlePan(_ recognizer: UIPanGestureRecognizer) {
         if !AudioKit.engine.isRunning {
             restart()
         }
@@ -259,7 +259,7 @@ class RumbleMap : UIImageView {
         
     }
     
-    func saveMarkerPosition(_ recognizer: UILongPressGestureRecognizer) {
+    @objc func saveMarkerPosition(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             let location = recognizer.location(in: recognizer.view)
             if !(markerContainer?.contains(location) ?? true) {
@@ -294,7 +294,7 @@ class RumbleMap : UIImageView {
         }
     }
     
-    func stop() {
+    @objc func stop() {
         isActive = false
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self)
     }
@@ -389,12 +389,12 @@ extension RumbleMap : UIGestureRecognizerDelegate {
 extension RumbleMap {
     //MARK: Notification Handlers
     
-    func returnToApplication(){
+    @objc func returnToApplication(){
         shouldPlay = true
         setSession(active: true)//Returned
     }
     
-    func leftApplication() {
+    @objc func leftApplication() {
         shouldPlay = false
         setSession(active: false)//Left
     }
@@ -403,7 +403,7 @@ extension RumbleMap {
     /// Notification handler for AVAudioSessionRouteChange to catch changes to device connection from the audio jack.
     ///
     /// - Parameter notification: Notification object cointaing AVAudioSessionRouteChange data
-    func deviceConnectedNotification(notification: Notification){
+    @objc func deviceConnectedNotification(notification: Notification){
         
         let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
         switch audioRouteChangeReason {
@@ -432,7 +432,7 @@ extension RumbleMap {
     /// Interruption Handler
     ///
     /// - Parameter notification: Device generated notification about interruption
-    func handleInterruption(_ notification: Notification) {
+    @objc func handleInterruption(_ notification: Notification) {
         guard let info = notification.userInfo,
             let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
             let type = AVAudioSessionInterruptionType(rawValue: typeValue) else {

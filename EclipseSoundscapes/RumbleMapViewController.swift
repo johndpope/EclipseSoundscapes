@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import Material
 import BRYXBanner
 
 class Event: NSObject {
@@ -32,7 +31,7 @@ class Event: NSObject {
     init(name: String) {
         self.name = name
         let text = Utility.getFile(name, type: "txt")
-        self.info = NSAttributedString(string: text ?? "", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont.getDefautlFont(.meduium, size: 18)])
+        self.info = NSAttributedString(string: text ?? "", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.getDefautlFont(.meduium, size: 18)])
         
         self.image = UIImage(named: name)
     }
@@ -40,7 +39,7 @@ class Event: NSObject {
     init(name: String, resourceName: String, image: UIImage){
         self.name = name
         let text = Utility.getFile(resourceName, type: "txt")
-        self.info = NSAttributedString(string: text ?? "", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont.getDefautlFont(.meduium, size: 18)])
+        self.info = NSAttributedString(string: text ?? "", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.getDefautlFont(.meduium, size: 18)])
         
         self.image = image
     }
@@ -50,8 +49,6 @@ class Event: NSObject {
 class RumbleMapViewController: UIViewController {
     
     var EventImages : [Event]!
-    
-    
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -185,7 +182,7 @@ class RumbleMapViewController: UIViewController {
         NotificationHelper.addObserver(self, reminders: [.allDone,.totality,.contact1], selector: #selector(catchReminderNotification(notification:)))
     }
     
-    func catchReminderNotification(notification: Notification) {
+    @objc func catchReminderNotification(notification: Notification) {
         guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
             return
         }
@@ -293,14 +290,14 @@ class RumbleMapViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func openRumbleMap() {
+    @objc func openRumbleMap() {
         let interactiveVC = RumbleMapInteractiveViewController()
         interactiveVC.event = EventImages[currentIndex]
         self.present(interactiveVC, animated: true, completion: nil)
     }
     
     
-    func nextImage(_ sender: UIButton) {
+    @objc func nextImage(_ sender: UIButton) {
         currentIndex += 1
         
         if currentIndex > EventImages.count-1 {
@@ -311,7 +308,7 @@ class RumbleMapViewController: UIViewController {
         previewImageView.image = EventImages[currentIndex].image
     }
     
-    func previousImage(_ sender: UIButton) {
+    @objc func previousImage(_ sender: UIButton) {
         currentIndex -= 1
         
         if currentIndex < 0 {
@@ -322,7 +319,7 @@ class RumbleMapViewController: UIViewController {
         previewImageView.image = EventImages[currentIndex].image
     }
     
-    func switchState(_ sender: UIButton) {
+    @objc func switchState(_ sender: UIButton) {
         if sender == rumbleBtn {
             descriptionTextView.isHidden = true
             startRumbleBtn.isHidden = false

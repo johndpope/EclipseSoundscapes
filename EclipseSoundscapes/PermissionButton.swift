@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import Material
 
 /// Track the press of the permission buttons
 protocol PermissionButtonDelegate: class {
@@ -80,7 +79,7 @@ class PermissionButton : UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.cornerRadius = self.bounds.height/2
+        self.layer.cornerRadius = self.bounds.height/2
     }
     
     

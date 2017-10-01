@@ -87,7 +87,7 @@ final class PartnerCell: Cell<Partner>, CellType {
         return true
     }
     
-    func openWebsite() {
+    @objc func openWebsite() {
         guard let partner = row.value, let url = URL.init(string: partner.website) else {
             return
         }

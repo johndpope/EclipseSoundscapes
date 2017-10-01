@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import Material
 
 extension UIFontDescriptor {
     
@@ -409,7 +408,7 @@ extension CGPoint : Hashable {
     }
 }
 
-extension Color {
+class Color {
     static let eclipseOrange = UIColor.init(r: 227, g: 94, b: 5)
     static let lead = UIColor.init(r: 33, g: 33, b: 33)
     static let NavBarColor = UIColor.init(r: 245, g: 245, b: 247)
