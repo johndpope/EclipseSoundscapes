@@ -96,11 +96,16 @@ class RumbleMapInteractiveViewController: UIViewController {
         
         rumbleMap.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: closeBtn.topAnchor, right: view.rightAnchor)
         
-        closeBtn.anchor(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.centerXAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0.5, widthConstant: 0, heightConstant: 50)
-        instructionBtn.anchor(nil, left: view.centerXAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0.5, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        if #available(iOS 11.0, *) {
+            closeBtn.anchor(nil, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.centerXAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0.5, widthConstant: 0, heightConstant: 50)
+            instructionBtn.anchor(nil, left: view.centerXAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0.5, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        } else {
+            closeBtn.anchor(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.centerXAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0.5, widthConstant: 0, heightConstant: 50)
+            instructionBtn.anchor(nil, left: view.centerXAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0.5, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        }
         
         lineSeparatorView1.anchor(nil, left: view.leftAnchor, bottom: closeBtn.topAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 1)
-        lineSeparatorView2.anchor(closeBtn.topAnchor, left: closeBtn.rightAnchor, bottom: view.bottomAnchor, right: instructionBtn.leftAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+        lineSeparatorView2.anchor(closeBtn.topAnchor, left: closeBtn.rightAnchor, bottom: closeBtn.bottomAnchor, right: instructionBtn.leftAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
     }
     
     
@@ -124,7 +129,11 @@ class RumbleMapInteractiveViewController: UIViewController {
     }
     
     override var prefersStatusBarHidden: Bool {
-        return false
+        return true
+    }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .slide
     }
     
 }

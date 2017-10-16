@@ -10,6 +10,8 @@ import UIKit
 
 class PageCell: UICollectionViewCell {
     
+    static let InfoHeight = UIScreen.main.bounds.height/3 + 15
+    
     var page: Page? {
         didSet {
             
@@ -50,8 +52,6 @@ class PageCell: UICollectionViewCell {
     let imageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-        iv.backgroundColor = .yellow
-        iv.image = UIImage(named: "page1")
         iv.clipsToBounds = true
         return iv
     }()
@@ -74,7 +74,7 @@ class PageCell: UICollectionViewCell {
         addSubview(lineSeparatorView)
         
         imageView.anchorToTop(topAnchor, left: leftAnchor, bottom: infoView.topAnchor, right: rightAnchor)
-        infoView.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, heightConstant: self.frame.height/3 + 15)
+        infoView.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, heightConstant: PageCell.InfoHeight)
         
         lineSeparatorView.anchorToTop(nil, left: leftAnchor, bottom: infoView.topAnchor, right: rightAnchor)
         lineSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true

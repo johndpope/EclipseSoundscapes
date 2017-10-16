@@ -116,7 +116,7 @@
 		B7E7A98A1F12A59600B239B8 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7A9891F12A59600B239B8 /* LogoView.swift */; };
 		B7EF1A421F3C0A6A004540C2 /* Intermission.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A411F3C0A6A004540C2 /* Intermission.txt */; };
 		B7EF1A441F3C0F7A004540C2 /* ThankYou.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */; };
-		B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */; };
+		B7F522F91EEF0D4A00A53A4A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F522F81EEF0D4A00A53A4A /* MainViewController.swift */; };
 		B7F7559E1F3344700029DB4D /* MediaCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */; };
 		B7F755A01F3344F30029DB4D /* MediaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F7559F1F3344F30029DB4D /* MediaCell.swift */; };
 		B7FD16961F54501B00053FA5 /* ParallaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FD16951F54501B00053FA5 /* ParallaxView.swift */; };
@@ -267,7 +267,7 @@
 		B7E7A9891F12A59600B239B8 /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		B7EF1A411F3C0A6A004540C2 /* Intermission.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Intermission.txt; sourceTree = "<group>"; };
 		B7EF1A431F3C0F7A004540C2 /* ThankYou.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ThankYou.txt; sourceTree = "<group>"; };
-		B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
+		B7F522F81EEF0D4A00A53A4A /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCenterViewController.swift; sourceTree = "<group>"; };
 		B7F7559F1F3344F30029DB4D /* MediaCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCell.swift; sourceTree = "<group>"; };
 		B7FD16951F54501B00053FA5 /* ParallaxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParallaxView.swift; sourceTree = "<group>"; };
@@ -570,7 +570,7 @@
 		B7F522F71EEF0A9B00A53A4A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				B7F522F81EEF0D4A00A53A4A /* TabViewController.swift */,
+				B7F522F81EEF0D4A00A53A4A /* MainViewController.swift */,
 				B7F7559D1F3344700029DB4D /* MediaCenterViewController.swift */,
 				B7BD1AD21EF02A8800A739FA /* PlaybackViewController.swift */,
 				B7372E0B1F27A0CA00A71396 /* EclipseViewController.swift */,
@@ -1008,7 +1008,7 @@
 				B7806DB51F0D43880052A7CD /* Extensions.swift in Sources */,
 				B781E6ED1F31528E0038C3F1 /* PhotoCreditsViewController.swift in Sources */,
 				B77417F41F03628700663C2E /* EclipseTimeGenerator.swift in Sources */,
-				B7F522F91EEF0D4A00A53A4A /* TabViewController.swift in Sources */,
+				B7F522F91EEF0D4A00A53A4A /* MainViewController.swift in Sources */,
 				B7FD169A1F547F3500053FA5 /* Permission.swift in Sources */,
 				B7FD169D1F54872E00053FA5 /* PermissionButton.swift in Sources */,
 				B7B16F3D1F3AB9870036E396 /* Media.swift in Sources */,

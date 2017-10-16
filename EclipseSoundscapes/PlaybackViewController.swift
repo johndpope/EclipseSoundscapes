@@ -25,9 +25,11 @@ import MediaPlayer
 
 class PlaybackViewController: UIViewController {
     
-    let controlsContainerView: MediaControlView = {
+    lazy var controlsContainerView: MediaControlView = {
         let view = MediaControlView()
         view.backgroundColor = .black
+        view.setCloseAction(self, action: #selector(close))
+        view.setPlayPauseAction(self, action: #selector(playPauseBtnTouched))
         return view
     }()
     
@@ -46,6 +48,7 @@ class PlaybackViewController: UIViewController {
     
     var titleLabel : UILabel = {
         let label = UILabel()
+        label.backgroundColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.font = UIFont.getDefautlFont(.bold, size: 20)
@@ -70,6 +73,13 @@ class PlaybackViewController: UIViewController {
         let view = UIView()
         view.isAccessibilityElement = false
         view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        return view
+    }()
+    
+    let fillerView: UIView = {
+        let view = UIView()
+        view.isAccessibilityElement = false
+        view.backgroundColor = .black
         return view
     }()
     
@@ -109,14 +119,8 @@ class PlaybackViewController: UIViewController {
             self.infoTextView.isAccessibilityElement = !isRealtimeEvent
         }
     }
-    
-    
+
     var infoControlInfo : [String: Any]!
-    
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
     
     func reloadUI() {
         guard let unWrappedMedia = media else {
@@ -157,6 +161,7 @@ class PlaybackViewController: UIViewController {
         setupViews()
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(checkViewFocus(notification:)), name: .UIAccessibilityElementFocused, object: nil)
@@ -174,20 +179,24 @@ class PlaybackViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .UIAccessibilityElementFocused, object: nil)
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     func setupViews() {
         view.backgroundColor = .white
         
-        controlsContainerView.setCloseAction(self, action: #selector(close))
-        controlsContainerView.setPlayPauseAction(self, action: #selector(playPauseBtnTouched))
+        view.addSubviews(controlsContainerView, playerSlider, titleLabel, infoTextView, lineSeparatorView)
         
-        view.addSubview(controlsContainerView)
-        controlsContainerView.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: view.frame.width * 9 / 16)
-        
-        view.addSubview(playerSlider)
+        if #available(iOS 11.0, *), Device.isIphoneX() {
+            controlsContainerView.anchor(view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: view.frame.width * 9 / 16)
+            view.addSubview(fillerView)
+            fillerView.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.topAnchor, right: view.rightAnchor)
+        } else {
+            controlsContainerView.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: view.frame.width * 9 / 16)
+        }
         
         playerSlider.anchor(nil, left: controlsContainerView.leftAnchor, bottom: controlsContainerView.bottomAnchor, right: controlsContainerView.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: -15, rightConstant: 0, widthConstant: 0, heightConstant: 30)
-        
-        view.addSubviews(titleLabel, infoTextView, lineSeparatorView)
         
         titleLabel.anchorWithConstantsToTop(playerSlider.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 10, rightConstant: 0)
         
@@ -303,7 +312,7 @@ class PlaybackViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
- @objc func close() {
+    @objc func close() {
         self.dismiss(animated: true) {
             self.player = nil
             self.resignRemoteCommandCenter()

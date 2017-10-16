@@ -259,7 +259,12 @@ class WalkthroughViewController : UIViewController, TypedRowControllerType, UICo
         
         view.addSubviews(collectionView, pageLabel, skipButton, nextButton, previousButton)
         
-        pageLabelbottomAnchor = pageLabel.anchor(nil, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: view.frame.height/3 + 15 + 10, rightConstant: 4, widthConstant: 0, heightConstant: 10).first
+        if #available(iOS 11.0, *), Device.isIphoneX() {
+            pageLabelbottomAnchor = pageLabel.anchor(nil, left: nil, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: PageCell.InfoHeight - 10, rightConstant: 4, widthConstant: 0, heightConstant: 10).first
+        } else {
+            // Fallback on earlier versions
+            pageLabelbottomAnchor = pageLabel.anchor(nil, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: PageCell.InfoHeight + 10, rightConstant: 4, widthConstant: 0, heightConstant: 10).first
+        }
         
         skipButtonRightAnchor = skipButton.anchor(nextButton.bottomAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 0, rightConstant: 4, widthConstant: 60, heightConstant: 0)[1]
         
@@ -390,7 +395,13 @@ class WalkthroughViewController : UIViewController, TypedRowControllerType, UICo
         skipButtonRightAnchor?.constant = -4
         nextButtonTopAnchor?.constant = 16
         previousButtonTopAnchor?.constant = 16
-        pageLabelbottomAnchor?.constant = -(view.frame.height/3 + 15 + 10)
+        
+        if #available(iOS 11.0, *), Device.isIphoneX() {
+            pageLabelbottomAnchor?.constant = -(PageCell.InfoHeight - 10)
+        } else {
+            pageLabelbottomAnchor?.constant = -(PageCell.InfoHeight + 10)
+        }
+        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -460,8 +471,6 @@ class WalkthroughViewController : UIViewController, TypedRowControllerType, UICo
 extension WalkthroughViewController: PermissionViewDelegate {
     func didFinish() {
         UserDefaults.standard.set(true, forKey: "WalkThrough")
-        let stb = UIStoryboard(name: "Main", bundle: nil)
-        let tabBarController = stb.instantiateViewController(withIdentifier: "Tab") as! TabViewController
-        self.present(tabBarController, animated: true)
+        self.present(MainViewController(), animated: true)
     }
 }

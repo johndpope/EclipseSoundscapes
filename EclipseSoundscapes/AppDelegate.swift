@@ -41,9 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if !UserDefaults.standard.bool(forKey: "WalkThrough") {
             window?.rootViewController = WalkthroughViewController()
         } else {
-            let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-            let tab = storyBoard.instantiateViewController(withIdentifier: "Tab")
-            window!.rootViewController = tab
+            window!.rootViewController = MainViewController()
         }
         window!.makeKeyAndVisible()
         Splash.splash(over: window!)
@@ -52,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        LocationManager.checkEclipseDates()
+//        LocationManager.checkEclipseDates()
     }
     
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UILocalNotification, completionHandler: @escaping () -> Void) {

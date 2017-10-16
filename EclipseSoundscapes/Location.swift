@@ -142,7 +142,7 @@ class LocationManager : NSObject {
     }
     
     static func addObserver(_ delegate : LocationDelegate){
-        print("Delegate hash value: \(delegate.hash)")
+//        print("Delegate hash value: \(delegate.hash)")
         manager.observers.updateValue(delegate, forKey: delegate.hash)
     }
     
@@ -315,93 +315,59 @@ class LocationManager : NSObject {
             return
         }
         
-        guard let c1 = generator.contact1.eventDate(), let totality = generator.contact2.eventDate(), let end = generator.contact3.eventDate() else {
+        guard let c1 = generator.contact1.eventDate(), let totality = generator.contact2.eventDate() else {
             return
         }
         
-        if LocationManager.DEBUG {
-            tempDate = Date()
-            
-            if tempDate >= end {
-                return
-            }
-            
-            let future1 = tempDate.addingTimeInterval(0.5*60)
-            let future2 = tempDate.addingTimeInterval(1*60)
-            let future3 = tempDate.addingTimeInterval(3*60)
-            let future4 = tempDate.addingTimeInterval(3.5*60)
-            
-            
-            if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
-                //            NotificationHelper.reminderNotification(for: c1.addingTimeInterval(-LocationManager.preNotificationOffset), reminder: .firstReminder)
-                NotificationHelper.reminderNotification(for: future1, reminder: .firstReminder)
-            }
-            
-            if !UserDefaults.standard.bool(forKey: "Contact1Done") {
-                //            NotificationHelper.listenNotification(for: c1, reminder: .contact1)
-                NotificationHelper.listenNotification(for: future2, reminder: .contact1)
-            }
-            
-            if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
-                //            NotificationHelper.reminderNotification(for: totality.addingTimeInterval(-LocationManager.preNotificationOffset), reminder: .totaltyReminder)
-                NotificationHelper.reminderNotification(for: future3, reminder: .totaltyReminder)
-            }
-            
-            if !UserDefaults.standard.bool(forKey: "TotalityDone") {
-                //            NotificationHelper.listenNotification(for: totality, reminder: .totality)
-                NotificationHelper.listenNotification(for: future4, reminder: .totality)
-            }
-
-        } else {
-            
-            let today = Date()
-            
-            if today >= totality {
-                return
-            }
-            
-            let totalityOffsetDate = totality.addingTimeInterval(-(10 + 120)) // 2 Minutes and 10 seconds before the eclipse totality
-            let totalityReminderDate = totality.addingTimeInterval(-LocationManager.preNotificationOffset * 2)
-            
-            if !UserDefaults.standard.bool(forKey: "TotalityDone") {
-                NotificationHelper.listenNotification(for: totalityOffsetDate, reminder: .totality)
-                
-                print("Totality Notification Scheduled")
-            }
-            
-            let toalityPreDate = totalityReminderDate
-            if today >= toalityPreDate {
-                return
-            }
-            
-            if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
-                NotificationHelper.reminderNotification(for: toalityPreDate, reminder: .totaltyReminder)
-                print("TotalityPre Notification Scheduled")
-            }
-            
-            if today >= c1 {
-                return
-            }
-            
-            let c1OffsetDate = c1.addingTimeInterval(-10) // 10 seconds before the contact 1
-            let c1ReminderDate = c1.addingTimeInterval(-LocationManager.preNotificationOffset)
-            
-            if !UserDefaults.standard.bool(forKey: "Contact1Done") {
-                NotificationHelper.listenNotification(for: c1OffsetDate, reminder: .contact1)
-                print("Contact 1 Notification Scheduled")
-            }
         
-            let contact1PreDate = c1ReminderDate
-            if today >= contact1PreDate {
-                return
-            }
-            
-            if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
-                NotificationHelper.reminderNotification(for: contact1PreDate, reminder: .firstReminder)
-                print("Contact 1 Pre Notification Scheduled")
-            }
-            
+        let today = Date()
+        
+        if today >= totality {
+            return
         }
+        
+        let totalityOffsetDate = totality.addingTimeInterval(-(10 + 120)) // 2 Minutes and 10 seconds before the eclipse totality
+        let totalityReminderDate = totality.addingTimeInterval(-LocationManager.preNotificationOffset * 2)
+        
+        if !UserDefaults.standard.bool(forKey: "TotalityDone") {
+            NotificationHelper.listenNotification(for: totalityOffsetDate, reminder: .totality)
+            
+            print("Totality Notification Scheduled")
+        }
+        
+        let toalityPreDate = totalityReminderDate
+        if today >= toalityPreDate {
+            return
+        }
+        
+        if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
+            NotificationHelper.reminderNotification(for: toalityPreDate, reminder: .totaltyReminder)
+            print("TotalityPre Notification Scheduled")
+        }
+        
+        if today >= c1 {
+            return
+        }
+        
+        let c1OffsetDate = c1.addingTimeInterval(-10) // 10 seconds before the contact 1
+        let c1ReminderDate = c1.addingTimeInterval(-LocationManager.preNotificationOffset)
+        
+        if !UserDefaults.standard.bool(forKey: "Contact1Done") {
+            NotificationHelper.listenNotification(for: c1OffsetDate, reminder: .contact1)
+            print("Contact 1 Notification Scheduled")
+        }
+        
+        let contact1PreDate = c1ReminderDate
+        if today >= contact1PreDate {
+            return
+        }
+        
+        if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
+            NotificationHelper.reminderNotification(for: contact1PreDate, reminder: .firstReminder)
+            print("Contact 1 Pre Notification Scheduled")
+        }
+        
+        
     }
     
     static func checkEclipseDates() {
@@ -452,76 +418,43 @@ class LocationManager : NSObject {
             return
         }
         
-        if LocationManager.DEBUG {
-            
-            if let tempDate = LocationManager.tempDate {
-                if currentDate >= tempDate.addingTimeInterval(3.5*60) {
-                    if !UserDefaults.standard.bool(forKey: "TotalityDone") {
-                        NotificationHelper.postNotification(for: .totality)
-                        return
-                    }
-                }
-                
-                if currentDate >= tempDate.addingTimeInterval(3*60) {
-                    if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
-                        NotificationHelper.postNotification(for: .totaltyReminder)
-                        return
-                    }
-                }
-                
-                if currentDate >= tempDate.addingTimeInterval(1*60) {
-                    if !UserDefaults.standard.bool(forKey: "Contact1Done") {
-                        NotificationHelper.postNotification(for: .contact1)
-                        return
-                    }
-                }
-                
-                
-                if currentDate >= tempDate.addingTimeInterval(0.5*60){
-                    if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
-                        NotificationHelper.postNotification(for: .firstReminder)
-                        return
-                    }
-                }
-            }
-        } else {
-            
-            let totalityOffsetDate = totality.addingTimeInterval(-(10 + 120)) // 2 Minutes and 10 seconds before the eclipse totality
-            let totalityReminderDate = totality.addingTimeInterval(-LocationManager.preNotificationOffset * 2)
-            
-            if currentDate >= totalityOffsetDate {
-                if !UserDefaults.standard.bool(forKey: "TotalityDone") {
-                    NotificationHelper.postNotification(for: .totality, notify: currentDate >= totalityOffsetDate.WINDOW_OF_NOTIFICATION)
-                    return
-                }
-            }
-            
-            if currentDate >= totalityReminderDate {
-                if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
-                    NotificationHelper.postNotification(for: .totaltyReminder)
-                    return
-                }
-            }
-            
-            let c1OffsetDate = c1.addingTimeInterval(-10) // 10 seconds before the contact 1
-            let c1ReminderDate = c1.addingTimeInterval(-LocationManager.preNotificationOffset)
-            
-            if currentDate >= c1OffsetDate {
-                
-                if !UserDefaults.standard.bool(forKey: "Contact1Done") {
-                    NotificationHelper.postNotification(for: .contact1, notify: currentDate >= c1OffsetDate.WINDOW_OF_NOTIFICATION)
-                    return
-                }
-            }
-            
-            
-            if currentDate >= c1ReminderDate {
-                if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
-                    NotificationHelper.postNotification(for: .firstReminder)
-                    return
-                }
+        
+        let totalityOffsetDate = totality.addingTimeInterval(-(10 + 120)) // 2 Minutes and 10 seconds before the eclipse totality
+        let totalityReminderDate = totality.addingTimeInterval(-LocationManager.preNotificationOffset * 2)
+        
+        if currentDate >= totalityOffsetDate {
+            if !UserDefaults.standard.bool(forKey: "TotalityDone") {
+                NotificationHelper.postNotification(for: .totality, notify: currentDate >= totalityOffsetDate.WINDOW_OF_NOTIFICATION)
+                return
             }
         }
+        
+        if currentDate >= totalityReminderDate {
+            if !UserDefaults.standard.bool(forKey: "TotalityReminder") {
+                NotificationHelper.postNotification(for: .totaltyReminder)
+                return
+            }
+        }
+        
+        let c1OffsetDate = c1.addingTimeInterval(-10) // 10 seconds before the contact 1
+        let c1ReminderDate = c1.addingTimeInterval(-LocationManager.preNotificationOffset)
+        
+        if currentDate >= c1OffsetDate {
+            
+            if !UserDefaults.standard.bool(forKey: "Contact1Done") {
+                NotificationHelper.postNotification(for: .contact1, notify: currentDate >= c1OffsetDate.WINDOW_OF_NOTIFICATION)
+                return
+            }
+        }
+        
+        
+        if currentDate >= c1ReminderDate {
+            if !UserDefaults.standard.bool(forKey: "Contact1Reminder") {
+                NotificationHelper.postNotification(for: .firstReminder)
+                return
+            }
+        }
+        
         
     }
 }
@@ -540,10 +473,10 @@ extension LocationManager : CLLocationManagerDelegate {
             reoccuringRequests()
         }
         
-        if LocationManager.shouldCheckEclipseTimes {
-            LocationManager.checkEclipseDates()
-            LocationManager.shouldCheckEclipseTimes = false
-        }
+        //        if LocationManager.shouldCheckEclipseTimes {
+        //            LocationManager.checkEclipseDates()
+        //            LocationManager.shouldCheckEclipseTimes = false
+        //        }
         
     }
     

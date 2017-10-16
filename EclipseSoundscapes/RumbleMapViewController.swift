@@ -133,8 +133,6 @@ class RumbleMapViewController: UIViewController {
         return label
     }()
     
-    
-    
     var descriptionTextView: UITextView = {
         var tv = UITextView()
         tv.textContainerInset = UIEdgeInsetsMake(20, 20, 10, 20)
@@ -162,12 +160,6 @@ class RumbleMapViewController: UIViewController {
     
     var currentIndex = 0
     
-    var modScale : CGFloat = 6
-    
-    var stopGesture : UITapGestureRecognizer?
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -175,20 +167,20 @@ class RumbleMapViewController: UIViewController {
         view.backgroundColor = .black
         setupViews()
         loadImages()
-        addObservers()
+//        addObservers()
     }
     
-    func addObservers() {
-        NotificationHelper.addObserver(self, reminders: [.allDone,.totality,.contact1], selector: #selector(catchReminderNotification(notification:)))
-    }
-    
-    @objc func catchReminderNotification(notification: Notification) {
-        guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
-            return
-        }
-        reloadViews(for: reminder)
-        
-    }
+//    func addObservers() {
+//        NotificationHelper.addObserver(self, reminders: [.allDone,.totality,.contact1], selector: #selector(catchReminderNotification(notification:)))
+//    }
+//
+//    @objc func catchReminderNotification(notification: Notification) {
+//        guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
+//            return
+//        }
+//        reloadViews(for: reminder)
+//
+//    }
     
     func setupViews() {
         view.addSubviews(fillerView, controlView, stackView, previewImageView, startRumbleBtn, descriptionTextView)
@@ -233,50 +225,50 @@ class RumbleMapViewController: UIViewController {
     }
     
     
-    func reloadViews(for reminder : Reminder) {
-        if reminder.contains(.allDone) || reminder.contains(.totality) {
-            EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
-                           Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
-                           Event(name: "Corona"),
-                           Event(name: "Diamond Ring"),
-                           Event(name: "Helmet Streamers"),
-                           Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
-                           Event(name: "Prominence"),
-                           Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed")),
-                           Event(name: "Totality")]
-            
-        } else if reminder.contains(.contact1) {
-            EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
-                           Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
-                           Event(name: "Corona"),
-                           Event(name: "Diamond Ring"),
-                           Event(name: "Helmet Streamers"),
-                           Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
-                           Event(name: "Prominence"),
-                           Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed"))]
-            currentIndex += 1
-        }
-    }
+//    func reloadViews(for reminder : Reminder) {
+//        if reminder.contains(.allDone) || reminder.contains(.totality) {
+//            EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
+//                           Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
+//                           Event(name: "Corona"),
+//                           Event(name: "Diamond Ring"),
+//                           Event(name: "Helmet Streamers"),
+//                           Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
+//                           Event(name: "Prominence"),
+//                           Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed")),
+//                           Event(name: "Totality")]
+//
+//        } else if reminder.contains(.contact1) {
+//            EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
+//                           Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
+//                           Event(name: "Corona"),
+//                           Event(name: "Diamond Ring"),
+//                           Event(name: "Helmet Streamers"),
+//                           Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
+//                           Event(name: "Prominence"),
+//                           Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed"))]
+//            currentIndex += 1
+//        }
+//    }
     
     func loadImages() {
-        EventImages = [Event(name: "Baily's Beads"),
+        EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
                        Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
                        Event(name: "Corona"),
                        Event(name: "Diamond Ring"),
                        Event(name: "Helmet Streamers"),
                        Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
                        Event(name: "Prominence"),
-                       Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed"))
-        ]
+                       Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed")),
+                       Event(name: "Totality")]
         
         
-        if UserDefaults.standard.bool(forKey: "Contact1Done") {
-            reloadViews(for: .contact1)
-        }
-        
-        if UserDefaults.standard.bool(forKey: "TotalityDone") {
-            reloadViews(for: .totality)
-        }
+//        if UserDefaults.standard.bool(forKey: "Contact1Done") {
+//            reloadViews(for: .contact1)
+//        }
+//
+//        if UserDefaults.standard.bool(forKey: "TotalityDone") {
+//            reloadViews(for: .totality)
+//        }
         
         
         titleLabel.text = EventImages[currentIndex].name

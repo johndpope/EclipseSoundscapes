@@ -42,7 +42,7 @@ class ShrinkableHeaderView : UIView {
     var titleLabel : UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont.getDefautlFont(.bold, size: 18)
+        label.font = UIFont.getDefautlFont(.bold, size: 20)
         label.accessibilityTraits = UIAccessibilityTraitHeader
         return label
     }()

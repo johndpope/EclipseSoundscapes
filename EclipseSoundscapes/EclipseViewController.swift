@@ -26,7 +26,6 @@ import SwiftSpinner
 
 class EclipseViewController : FormViewController {
     
-    
     var locator = Location()
     
     var isSpinnerShowing = false
@@ -36,6 +35,15 @@ class EclipseViewController : FormViewController {
     var LocationKey : String?
     
     var noEclipseView : NoEclipseView?
+    
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Eclipse Center", titleColor: .white)
+        view.backgroundColor = Color.lead
+        view.textColor = .white
+        view.isShrinkable = false
+        view.separatorLine.isHidden = true
+        return view
+    }()
     
     let errorBtn: UIButton = {
         var btn = UIButton(type: .system)
@@ -58,25 +66,20 @@ class EclipseViewController : FormViewController {
         
         setupViews()
         initializeForm()
+        hideCountdown()
         
         
         LocationManager.addObserver(self)
         if Location.isGranted {
             getlocation(animated: !foundLocationOnce)
         }
-        
-        NotificationHelper.addObserver(self, reminders: .contact1, selector: #selector(hideCountdown))
     }
     
     private func initializeForm() {
         
-        self.automaticallyAdjustsScrollViewInsets = false
-        tableView.contentInset = UIEdgeInsetsMake(25, 0, 44, 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake(20, 0, 0, 0)
         
         tableView.isHidden = true
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
-        tableView.backgroundColor = .clear
         
         LabelRow.defaultCellUpdate = { cell, row in
             cell.backgroundColor = .clear
@@ -150,11 +153,16 @@ class EclipseViewController : FormViewController {
     
     func setupViews() {
         
-        let background = UIView.rombusPattern()
-        background.translatesAutoresizingMaskIntoConstraints = false
-        view.insertSubview(background, at: 0)
+        self.tableView.backgroundColor = Color.lead
+        view.backgroundColor = Color.lead
+        
+        view.addSubview(headerView)
+        
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
+        
         view.addSubviews(errorBtn)
-        background.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
         errorBtn.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     

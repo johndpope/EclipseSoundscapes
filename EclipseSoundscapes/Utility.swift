@@ -21,9 +21,9 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
+import Device_swift
 
 class Utility {
-    
     
     /// Delays given time before closure is excecuted
     ///
@@ -149,4 +149,10 @@ class Utility {
         }
     }
     
+}
+
+struct Device {
+    static func isIphoneX()-> Bool {
+        return UIDevice.current.deviceType == .iPhoneX
+    }
 }

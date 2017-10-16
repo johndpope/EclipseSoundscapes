@@ -115,11 +115,6 @@ class MediaControlView : UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(voiceOverNotification(notification:)), name: NSNotification.Name(rawValue: UIAccessibilityVoiceOverStatusChanged), object: nil)
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setupGradientLayer()
-    }
-    
     func setupView() {
         self.addSubview(backgroundImageView)
         self.addSubview(closeButton)
@@ -167,12 +162,10 @@ class MediaControlView : UIView {
         if show || UIAccessibilityIsVoiceOverRunning()  {
             UIView.animate(withDuration: 0.3, delay: delay, options: .curveEaseOut, animations: {
                 self.pausePlayButton.alpha = 1
-                self.gradientLayer.opacity = 1
             })
         } else {
             UIView.animate(withDuration: 0.3, delay: delay, options: .curveEaseOut, animations: {
                 self.pausePlayButton.alpha = 0
-                self.gradientLayer.opacity = 0
             })
         }
         
@@ -200,15 +193,6 @@ class MediaControlView : UIView {
     
     @objc func voiceOverNotification(notification: Notification) {
         showControls(UIAccessibilityIsVoiceOverRunning())
-    }
-    
-    var gradientLayer : CAGradientLayer!
-    fileprivate func setupGradientLayer() {
-        gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.frame
-        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
-        gradientLayer.locations = [0.7, 1.2]
-        self.layer.insertSublayer(gradientLayer, at: 0)
     }
 }
 

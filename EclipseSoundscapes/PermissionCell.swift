@@ -36,7 +36,13 @@ class PermissionCell: UICollectionViewCell {
     /// Setup and layout view's subviews
     func setupView() {
         permissionView = PermissionView(for: [.locationWhenInUse,.notification])
+        backgroundColor = permissionView.backgroundColor
         self.addSubview(permissionView)
-        permissionView.anchorToTop(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+        if #available(iOS 11.0, *), Device.isIphoneX() {
+            permissionView.anchorToTop(safeAreaLayoutGuide.topAnchor, left: leftAnchor, bottom: safeAreaLayoutGuide.bottomAnchor, right: rightAnchor)
+        } else  {
+            permissionView.anchorToTop(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+        }
+        
     }
 }
