@@ -172,7 +172,7 @@ class MediaControlView : UIView {
     }
     
     @objc func handleControlTouch(){
-        if !isPlaying {
+        if !isPlaying && controlsShowing {
             return
         }
         if controlsShowing {
@@ -192,7 +192,7 @@ class MediaControlView : UIView {
     }
     
     @objc func voiceOverNotification(notification: Notification) {
-        showControls(UIAccessibilityIsVoiceOverRunning())
+        handleControlTouch()
     }
 }
 

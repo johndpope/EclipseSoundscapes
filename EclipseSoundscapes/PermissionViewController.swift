@@ -140,7 +140,6 @@ class PermissionViewController : UIViewController {
                 if movingCenter.y > self.centerPoint.y {
                     let distanceMoved = movingCenter.y - self.centerPoint.y
                     let percent = (bottom-distanceMoved)/bottom
-                    print("percent: \(percent)")
                     contentView.alpha = percent
                     self.backgroundView.alpha = percent
                 } else {

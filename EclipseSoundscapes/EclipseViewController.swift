@@ -47,7 +47,7 @@ class EclipseViewController : FormViewController {
     
     let errorBtn: UIButton = {
         var btn = UIButton(type: .system)
-        btn.backgroundColor = .clear
+        btn.backgroundColor = .black
         btn.addTarget(self, action: #selector(didTapErrorBtn), for: .touchUpInside)
         btn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: 25)
         btn.setTitleColor(.white, for: .normal)
