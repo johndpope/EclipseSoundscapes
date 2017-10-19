@@ -25,9 +25,11 @@ import MediaPlayer
 
 class PlaybackViewController: UIViewController {
     
-    let controlsContainerView: MediaControlView = {
+    lazy var controlsContainerView: MediaControlView = {
         let view = MediaControlView()
         view.backgroundColor = .black
+        view.setCloseAction(self, action: #selector(close))
+        view.setPlayPauseAction(self, action: #selector(playPauseBtnTouched))
         return view
     }()
     
@@ -46,6 +48,7 @@ class PlaybackViewController: UIViewController {
     
     var titleLabel : UILabel = {
         let label = UILabel()
+        label.backgroundColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.font = UIFont.getDefautlFont(.bold, size: 20)
@@ -73,9 +76,16 @@ class PlaybackViewController: UIViewController {
         return view
     }()
     
-    var media : Media!
+    let fillerView: UIView = {
+        let view = UIView()
+        view.isAccessibilityElement = false
+        view.backgroundColor = .black
+        return view
+    }()
     
-    fileprivate var player : TapePlayer!
+    var media : Media?
+    
+    fileprivate var player : TapePlayer?
     
     var progress : Double = 0 {
         didSet {
@@ -84,10 +94,10 @@ class PlaybackViewController: UIViewController {
             if media is RealtimeEvent {
                 let realtimeMedia = media as! RealtimeEvent
                 if realtimeMedia.shouldChangeMedia(for: progress) {
-                    realtimeMedia.loadNextMedia(for: progress)
+                    realtimeMedia.loadNext(at: progress)
                     DispatchQueue.main.async { [weak self] in
                         if let strongSelf = self {
-                            strongSelf.reloadUI()
+                            strongSelf.reloadRealtimeUI()
                         }
                         
                     }
@@ -109,55 +119,48 @@ class PlaybackViewController: UIViewController {
             self.infoTextView.isAccessibilityElement = !isRealtimeEvent
         }
     }
-    
-    
+
     var infoControlInfo : [String: Any]!
     
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
+    func reloadUI() {
+        guard let unWrappedMedia = media else {
+            return
+        }
+        
+        if let image = unWrappedMedia.image {
+            update(artwork: image)
+        }
+        update(title: unWrappedMedia.name)
+        update(progress: self.progress)
+        
+        controlsContainerView.backgroundImageView.image = unWrappedMedia.image
+        titleLabel.text = unWrappedMedia.name
+        infoTextView.text = unWrappedMedia.getInfo()
     }
     
-    func reloadUI() {
-        controlsContainerView.backgroundImageView.image = media.image
-        titleLabel.text = media.name
-        infoTextView.text = media.getInfo()
-        update(artwork: media.image!)
-        update(title: media.name)
+    func reloadRealtimeUI() {
+        
+        guard let realtime = media as? RealtimeEvent, let data = realtime.currentData else {
+            return
+        }
+        
+        update(artwork: data.image)
+        update(title: data.name)
         update(progress: self.progress)
+        
+        controlsContainerView.backgroundImageView.image = data.image
+        titleLabel.text = data.name
+        infoTextView.text = data.info
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        setupView()
+        setupViews()
     }
     
-    func setupView() {
-        controlsContainerView.setCloseAction(self, action: #selector(close))
-        controlsContainerView.setPlayPauseAction(self, action: #selector(playPauseBtnTouched))
-        
-        view.addSubview(controlsContainerView)
-        controlsContainerView.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: view.frame.width * 9 / 16)
-        
-        view.addSubview(playerSlider)
-        
-        playerSlider.anchor(nil, left: controlsContainerView.leftAnchor, bottom: controlsContainerView.bottomAnchor, right: controlsContainerView.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: -15, rightConstant: 0, widthConstant: 0, heightConstant: 30)
-        
-        view.addSubview(titleLabel)
-        view.addSubview(infoTextView)
-        view.addSubview(lineSeparatorView)
-        
-        titleLabel.anchorWithConstantsToTop(playerSlider.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 10, rightConstant: 0)
-        
-        lineSeparatorView.anchor(titleLabel.bottomAnchor, left: view.leftAnchor, bottom: infoTextView.topAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 10, rightConstant: 0, widthConstant: 0, heightConstant: 1)
-        
-        
-        infoTextView.anchorWithConstantsToTop(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
-        
-        view.backgroundColor = .white
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -172,12 +175,44 @@ class PlaybackViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        player.stop()
+        player?.stop()
         NotificationCenter.default.removeObserver(self, name: .UIAccessibilityElementFocused, object: nil)
     }
     
-    func playPauseBtnTouched() {
-        handlePlay(play: !player.isPlaying)
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    func setupViews() {
+        view.backgroundColor = .white
+        
+        view.addSubviews(controlsContainerView, playerSlider, titleLabel, infoTextView, lineSeparatorView)
+        
+        if #available(iOS 11.0, *), Device.isIphoneX() {
+            controlsContainerView.anchor(view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: view.frame.width * 9 / 16)
+            view.addSubview(fillerView)
+            fillerView.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.topAnchor, right: view.rightAnchor)
+        } else {
+            controlsContainerView.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: view.frame.width * 9 / 16)
+        }
+        
+        playerSlider.anchor(nil, left: controlsContainerView.leftAnchor, bottom: controlsContainerView.bottomAnchor, right: controlsContainerView.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: -15, rightConstant: 0, widthConstant: 0, heightConstant: 30)
+        
+        titleLabel.anchorWithConstantsToTop(playerSlider.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 10, rightConstant: 0)
+        
+        lineSeparatorView.anchor(titleLabel.bottomAnchor, left: view.leftAnchor, bottom: infoTextView.topAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 10, rightConstant: 0, widthConstant: 0, heightConstant: 1)
+        
+        
+        infoTextView.anchorWithConstantsToTop(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
+    }
+    
+    @objc func playPauseBtnTouched() {
+        guard let playing = player?.isPlaying else {
+            handlePlay(play: false)
+            return // TODO: Throw Error
+        }
+        
+        handlePlay(play: !playing)
     }
     
     func handlePlay(play : Bool) {
@@ -187,9 +222,9 @@ class PlaybackViewController: UIViewController {
                 strongSelf.update(rate: play ? 1 : 0)
                 
                 if play {
-                    strongSelf.player.play()
+                    strongSelf.player?.play()
                 } else {
-                    strongSelf.player.pause()
+                    strongSelf.player?.pause()
                 }
                 strongSelf.updatePlayControl(play: play)
             }
@@ -202,40 +237,55 @@ class PlaybackViewController: UIViewController {
     
     func loadMedia() {
         
-        self.titleLabel.text = media.name
-        self.infoTextView.text = media.getInfo()
-        
-        infoControlInfo = [String: Any]()
-        
-        infoControlInfo.updateValue(media.name, forKey: MPMediaItemPropertyTitle)
-        
-        if let mediaImage = media.image {
-            self.controlsContainerView.backgroundImageView.image = mediaImage
-            infoControlInfo.updateValue(getNowPlayingInfoCenterArtwork(with: mediaImage), forKey: MPMediaItemPropertyArtwork)
+        guard let unWrappedMedia = media else {
+            return //TODO: Inform user that is failed and they should press something to retry
         }
         
-        if let tape = AudioManager.loadAudio(withName: media.resourceName, withExtension: media.mediaType){
-            self.player = TapePlayer(tape: tape)
-            self.player.delegate = self
-            self.totalDuration = player.duration
-            playerSlider.maximumValue = Float(player.duration)
+        do {
+            player = try TapePlayer.loadTape(withName: unWrappedMedia.resourceName, withExtension: unWrappedMedia.mediaType)
+            player!.delegate = self
             
+            let duration = player!.duration
             
-            infoControlInfo.updateValue(player.duration, forKey: MPMediaItemPropertyPlaybackDuration)
+            infoControlInfo = [String: Any]()
+            
+            infoControlInfo.updateValue(unWrappedMedia.name, forKey: MPMediaItemPropertyTitle)
+            infoControlInfo.updateValue(duration, forKey: MPMediaItemPropertyPlaybackDuration)
             infoControlInfo.updateValue(Double(0), forKey: MPNowPlayingInfoPropertyElapsedPlaybackTime)
             infoControlInfo.updateValue(Double(1), forKey: MPNowPlayingInfoPropertyPlaybackRate)
             
+            if let image = unWrappedMedia.image {
+                self.controlsContainerView.backgroundImageView.image = image
+                infoControlInfo.updateValue(getNowPlayingInfoCenterArtwork(with: image), forKey: MPMediaItemPropertyArtwork)
+            }
+            
+            self.titleLabel.text = unWrappedMedia.name
+            self.infoTextView.text = unWrappedMedia.getInfo()
+            self.totalDuration = duration
+            self.playerSlider.maximumValue = Float(duration)
+            
             self.setupNowPlayingInfoCenter(with: infoControlInfo)
             
+            if unWrappedMedia is RealtimeEvent {
+                reloadRealtimeUI()
+            }
+            
             handlePlay(play: true)
+        } catch  {
+            print("Error: \(error)")
+            //TODO: Inform user that is failed and they should press something to retry
         }
     }
     
-    func checkViewFocus(notification : Notification) {
+    @objc func checkViewFocus(notification : Notification) {
         if let view = notification.userInfo?[UIAccessibilityFocusedElementKey] as? UIView {
             if view == infoTextView {
-                if player != nil && player.isPlaying { // Checking if nil if the user focuses on the infoTextview before the player is initalized
-                    
+                
+                guard let playing = player?.isPlaying else {
+                    return
+                }
+                
+                if playing {
                     handlePlay(play: false)
                     shouldPlayAgain = true
                     
@@ -244,7 +294,11 @@ class PlaybackViewController: UIViewController {
         }
         if let view = notification.userInfo?[UIAccessibilityUnfocusedElementKey] as? UIView {
             if view == infoTextView {
-                if player != nil && !player.isPlaying && shouldPlayAgain { // Checking if nil if the user focuses on the infoTextview before the player is initalized
+                
+                guard let playing = player?.isPlaying else {
+                    return
+                }
+                if !playing && shouldPlayAgain {
                     handlePlay(play: true)
                     shouldPlayAgain = false
                     
@@ -258,7 +312,7 @@ class PlaybackViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func close() {
+    @objc func close() {
         self.dismiss(animated: true) {
             self.player = nil
             self.resignRemoteCommandCenter()
@@ -269,21 +323,27 @@ class PlaybackViewController: UIViewController {
     
     var shouldPlayAgain : Bool = false
     
-    func sliderTouchDown(){
+    @objc func sliderTouchDown(){
         self.playerSlider.expand()
-        if self.player.isPlaying {
+        guard let playing = player?.isPlaying else {
+            return
+        }
+        if playing {
             handlePlay(play: false)
             shouldPlayAgain = true
         }
     }
     
-    func sliderChanged(_ sender: UISlider) {
+    @objc func sliderChanged(_ sender: UISlider) {
         skipTo(Double(sender.value))
     }
     
-    func sliderTouchUp() {
+    @objc func sliderTouchUp() {
         self.playerSlider.compress()
-        if !self.player.isPlaying && shouldPlayAgain  {
+        guard let playing = player?.isPlaying else {
+            return
+        }
+        if !playing && shouldPlayAgain  {
             handlePlay(play: true)
             shouldPlayAgain = false
         }
@@ -291,7 +351,7 @@ class PlaybackViewController: UIViewController {
     
     func skipTo(_ time: Double){
         self.progress = time
-        self.player.changeTime(to: self.progress)
+        self.player?.changeTime(to: self.progress)
         self.update(progress: time)
     }
     
@@ -323,7 +383,7 @@ class PlaybackViewController: UIViewController {
             
             MPRemoteCommandCenter.shared().togglePlayPauseCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
                 if let strongSelf = self {
-                    strongSelf.handlePlay(play: !strongSelf.player.isPlaying)
+                    strongSelf.playPauseBtnTouched()
                     return MPRemoteCommandHandlerStatus.success
                 }
                 return MPRemoteCommandHandlerStatus.noSuchContent
@@ -392,7 +452,7 @@ class PlaybackViewController: UIViewController {
         if #available(iOS 10.0, *) {
             let mySize = CGSize(width: 400, height: 400)
             mediaArt = MPMediaItemArtwork(boundsSize:mySize) { sz in
-                return image.resize(to: sz)
+                return image.resizeImage(to: sz)
             }
         } else {
             mediaArt = MPMediaItemArtwork.init(image: image)
@@ -427,7 +487,11 @@ extension PlaybackViewController : PlayerDelegate {
     }
     func resumed() {
         print("Player Resumed")
-        if player.isPlaying {
+        guard let playing = player?.isPlaying else {
+            return
+        }
+        
+        if playing {
             controlsContainerView.showControls(false)
             controlsContainerView.pausePlayButton.setImage(#imageLiteral(resourceName: "pause").withRenderingMode(.alwaysTemplate), for: UIControlState())
         }

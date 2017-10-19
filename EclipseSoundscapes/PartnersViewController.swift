@@ -22,8 +22,28 @@
 
 import Eureka
 
-class PartnersViewController : FormViewController {
+class PartnersViewController : FormViewController, TypedRowControllerType {
     
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
+    
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Our Partners", titleColor: .black)
+        view.backgroundColor = Color.NavBarColor
+        view.maxHeaderHeight = 60
+        view.isShrinkable = false
+        return view
+    }()
+    
+    lazy var backBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.tintColor = .black
+        btn.addTarget(self, action: #selector(close), for: .touchUpInside)
+        btn.accessibilityLabel = "Back"
+        return btn
+    }()
     
     var partners : [Partner] = [
         Partner(name: "NASA", website: "https://www.nasa.gov/", bio: "NASA is an independent agency of the United States federal government which conducts the civilian space program, aeronautics, and aerospace research. NASA is leading an educational outreach effort surrounding the August 2017 Eclipse which includes information and live coverage of the event. NASA is partnering with Eclipse Soundscapes to provide the script calculating the timing of the eclipse, as well as the funding that makes Eclipse Soundscapes possible.", photo: #imageLiteral(resourceName: "NASA")),
@@ -47,18 +67,25 @@ class PartnersViewController : FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViews()
         initializeForm()
+    }
+    
+    func setupViews() {
+        view.backgroundColor = headerView.backgroundColor
+        view.addSubview(headerView)
         
-        self.navigationItem.title = "Our Partners"
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
         
-        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
+        headerView.addSubviews(backBtn)
+        backBtn.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        backBtn.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 10).isActive = true
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
     }
     
     private func initializeForm() {
         
-        self.automaticallyAdjustsScrollViewInsets = false
-        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
         
         for partner in partners {
             addPartner(partner)
@@ -68,6 +95,7 @@ class PartnersViewController : FormViewController {
         section.header = HeaderFooterView<UIView>(HeaderFooterProvider.class)
         section.header?.height = {CGFloat.leastNormalMagnitude}
     }
+    
     
     func addPartner(_ partner: Partner) {
         form

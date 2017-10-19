@@ -77,7 +77,7 @@ class IntructionsViewController : UIViewController, TypedRowControllerType {
         backBtn.anchorWithConstantsToTop(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: 10, leftConstant: 10, bottomConstant: 0, rightConstant: 0)
     }
     
-    func close() {
+    @objc func close() {
         self.dismiss(animated: true, completion: nil)
     }
 }

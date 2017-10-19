@@ -21,8 +21,44 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
+import Device_swift
 
 class Utility {
+    
+    /// Delays given time before closure is excecuted
+    ///
+    /// - Parameters:
+    ///   - delay: Time to delay closure
+    ///   - closure: Action block
+    static func delay(_ delay:Double, closure:@escaping ()->()) {
+        let when = DispatchTime.now() + delay
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            closure()
+        }
+    }
+    
+    
+    /// Opens Application Settings
+    static func settings() {
+        if let url = URL(string: UIApplicationOpenSettingsURLString) {
+            openUrl(url)
+        }
+    }
+    
+    /// Open Url
+    ///
+    /// - Parameter url: Destination Url
+    static func openUrl(_ url: URL ){
+        let application = UIApplication.shared
+        if application.canOpenURL(url) {
+            if #available(iOS 10.0, *) {
+                application.open(url, options: [:], completionHandler: nil)
+            } else {
+                // Fallback on earlier versions
+                application.openURL(url)
+            }
+        }
+    }
     
     /// Convert TimeInterval into a pretty string
     ///
@@ -51,8 +87,8 @@ class Utility {
         } else if seconds == 0 {
             return "0"
         } else {
-    
-        return String(format:"%i %@ %i %@", minutes, multipleMinutes ? "minutes" : "minute", Int(seconds), multipleSeconds ? "seconds" : "second")
+            
+            return String(format:"%i %@ %i %@", minutes, multipleMinutes ? "minutes" : "minute", Int(seconds), multipleSeconds ? "seconds" : "second")
         }
     }
     
@@ -93,14 +129,14 @@ class Utility {
     /// Get Local Time from UTC
     ///
     /// - Parameter date: UTC Date String
-    /// - Returns: Local Time Date String 
+    /// - Returns: Local Time Date String
     static func UTCToLocal(date:String) -> String {
         let dateFormator = DateFormatter()
         dateFormator.dateFormat = "HH:mm:ss.S"
         dateFormator.timeZone = TimeZone(abbreviation: "UTC")
         
         guard let conversionDate = dateFormator.date(from: date) else {
-            return "N/A"
+            return "Not Available"
         }
         
         dateFormator.timeZone = .current
@@ -115,6 +151,8 @@ class Utility {
     
 }
 
-class Color {
-    static let eclipseOrange = UIColor.init(r: 227, g: 94, b: 5)
+struct Device {
+    static func isIphoneX()-> Bool {
+        return UIDevice.current.deviceType == .iPhoneX
+    }
 }

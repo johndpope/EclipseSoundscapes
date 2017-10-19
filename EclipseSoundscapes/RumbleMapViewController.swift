@@ -21,7 +21,6 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import UIKit
-import AudioKit
 import BRYXBanner
 
 class Event: NSObject {
@@ -32,7 +31,7 @@ class Event: NSObject {
     init(name: String) {
         self.name = name
         let text = Utility.getFile(name, type: "txt")
-        self.info = NSAttributedString(string: text ?? "", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont.getDefautlFont(.meduium, size: 18)])
+        self.info = NSAttributedString(string: text ?? "", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.getDefautlFont(.meduium, size: 18)])
         
         self.image = UIImage(named: name)
     }
@@ -40,7 +39,7 @@ class Event: NSObject {
     init(name: String, resourceName: String, image: UIImage){
         self.name = name
         let text = Utility.getFile(resourceName, type: "txt")
-        self.info = NSAttributedString(string: text ?? "", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont.getDefautlFont(.meduium, size: 18)])
+        self.info = NSAttributedString(string: text ?? "", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.getDefautlFont(.meduium, size: 18)])
         
         self.image = image
     }
@@ -51,107 +50,225 @@ class RumbleMapViewController: UIViewController {
     
     var EventImages : [Event]!
     
-    
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
-    @IBOutlet weak var descriptionBtn: UIButton!
-    @IBOutlet weak var rumbleBtn: UIButton!
+    lazy var descriptionBtn: UIButton = {
+        var btn = UIButton(type: .system)
+        btn.setTitleColor(.white, for: .normal)
+        btn.setTitle("Description", for: .normal)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.meduium, size: 20)
+        btn.tintColor = Color.eclipseOrange
+        btn.accessibilityTraits |= UIAccessibilityTraitSelected
+        btn.backgroundColor = Color.lead
+        btn.addTarget(self, action: #selector(switchState(_:)), for: .touchUpInside)
+        return btn
+    }()
     
-    @IBOutlet weak var controlView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
+    lazy var rumbleBtn: UIButton = {
+        var btn = UIButton(type: .system)
+        btn.setTitleColor(.white, for: .normal)
+        btn.setTitle("Rumble Map", for: .normal)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.meduium, size: 20)
+        btn.backgroundColor = Color.lead
+        btn.tintColor = Color.lead
+        btn.addTarget(self, action: #selector(switchState(_:)), for: .touchUpInside)
+        return btn
+    }()
     
-    @IBOutlet weak var nextBtn: UIButton!
-    @IBOutlet weak var previousBtn: UIButton!
-    @IBOutlet weak var descriptionTextView: UITextView!
+    lazy var nextBtn: UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "Right_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.tintColor = .white
+        btn.accessibilityHint = "Shows the next Eclipse Image"
+        btn.addTarget(self, action: #selector(nextImage(_:)), for: .touchUpInside)
+        return btn
+    }()
     
-    @IBOutlet weak var startRumbleBtn: UIButton!
-    @IBOutlet weak var previewImageView: UIImageView!
+    lazy var previousBtn: UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "Left_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.tintColor = .white
+        btn.accessibilityHint = "Shows the previous Eclipse Image"
+        btn.addTarget(self, action: #selector(previousImage(_:)), for: .touchUpInside)
+        return btn
+    }()
+    
+    lazy var startRumbleBtn: UIButton = {
+        var btn = UIButton(type: .system)
+        btn.setTitleColor(.white, for: .normal)
+        btn.setTitle("Press to Interact with Rumble Map", for: .normal)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: 28)
+        btn.titleLabel?.numberOfLines = 0
+        btn.titleLabel?.textAlignment = .center
+        btn.addTarget(self, action: #selector(openRumbleMap), for: .touchUpInside)
+        btn.isHidden = true
+        return btn
+    }()
+    
+    
+    var fillerView : UIView = {
+        let view = UIView()
+        view.backgroundColor = Color.lead
+        return view
+    }()
+    
+    var controlView: UIView = {
+        var view = UIView()
+        view.backgroundColor = Color.lead
+        return view
+    }()
+    
+    var titleLabel: UILabel = {
+        var label = UILabel()
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.textColor = .white
+        label.font = UIFont.getDefautlFont(.extraBold, size: 22)
+        label.adjustsFontSizeToFitWidth = true
+        label.accessibilityTraits = UIAccessibilityTraitHeader
+        return label
+    }()
+    
+    var descriptionTextView: UITextView = {
+        var tv = UITextView()
+        tv.textContainerInset = UIEdgeInsetsMake(20, 20, 10, 20)
+        tv.accessibilityTraits = UIAccessibilityTraitStaticText
+        tv.backgroundColor = .black
+        tv.isEditable = false
+        return tv
+    }()
+    
+    
+    var previewImageView: UIImageView = {
+        var iv = UIImageView()
+        iv.contentMode = .scaleAspectFit
+        iv.isHidden = true
+        return iv
+    }()
+    
+    var stackView : UIStackView = {
+       var sv = UIStackView()
+        sv.alignment = .fill
+        sv.axis = .horizontal
+        sv.distribution = .fillEqually
+        return sv
+    }()
     
     var currentIndex = 0
-    
-    var modScale : CGFloat = 6
-    
-    
-    var stopGesture : UITapGestureRecognizer?
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        
-        
-        controlView.isAccessibilityElement = false
-        controlView.accessibilityElements = [previousBtn, titleLabel, nextBtn]
-        
-        configureView()
+        view.backgroundColor = .black
+        setupViews()
         loadImages()
-        setText()
-        
-        addObservers()
+//        addObservers()
     }
     
-    func addObservers() {
-        NotificationHelper.addObserver(self, reminders: [.allDone,.totality,.contact1], selector: #selector(catchReminderNotification(notification:)))
+//    func addObservers() {
+//        NotificationHelper.addObserver(self, reminders: [.allDone,.totality,.contact1], selector: #selector(catchReminderNotification(notification:)))
+//    }
+//
+//    @objc func catchReminderNotification(notification: Notification) {
+//        guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
+//            return
+//        }
+//        reloadViews(for: reminder)
+//
+//    }
+    
+    func setupViews() {
+        view.addSubviews(fillerView, controlView, stackView, previewImageView, startRumbleBtn, descriptionTextView)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(setText), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        fillerView.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: controlView.topAnchor, right: view.rightAnchor)
+        
+        controlView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: stackView.topAnchor, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 60)
+        
+        controlView.addSubviews(previousBtn, titleLabel, nextBtn)
+        
+        titleLabel.centerYAnchor.constraint(equalTo: controlView.centerYAnchor).isActive = true
+        titleLabel.anchor(controlView.topAnchor, left: previousBtn.rightAnchor, bottom: controlView.bottomAnchor, right: nextBtn.leftAnchor, topConstant: 2, leftConstant: 2, bottomConstant: 2, rightConstant: 2, widthConstant: 0, heightConstant: 0)
+        
+        previousBtn.setSize(35, height: 35)
+        previousBtn.leftAnchor.constraint(equalTo: controlView.leftAnchor, constant: 10).isActive = true
+        previousBtn.centerYAnchor.constraint(equalTo: controlView.centerYAnchor).isActive = true
+        
+        nextBtn.setSize(35, height: 35)
+        nextBtn.rightAnchor.constraint(equalTo: controlView.rightAnchor, constant: -10).isActive = true
+        nextBtn.centerYAnchor.constraint(equalTo: controlView.centerYAnchor).isActive = true
+        
+        stackView.anchor(nil, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        
+        stackView.addArrangedSubview(descriptionBtn)
+        stackView.addArrangedSubview(rumbleBtn)
+        
+        previewImageView.anchorToTop(stackView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+        startRumbleBtn.anchorToTop(stackView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+        descriptionTextView.anchorToTop(stackView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
-    func catchReminderNotification(notification: Notification) {
-        guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
-            return
-        }
-        reloadViews(for: reminder)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let height = rumbleBtn.bounds.height
+        let rWidth = rumbleBtn.bounds.width
+        let bWidth = descriptionBtn.bounds.width
         
+        descriptionBtn.setBackgroundImage(UIImage.selectionIndiciatorImage(color: Color.eclipseOrange, size: CGSize.init(width: rWidth, height: height), lineWidth: 2, position: .bottom)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        
+        
+        rumbleBtn.setBackgroundImage(UIImage.selectionIndiciatorImage(color: .white, size: CGSize.init(width: bWidth, height: height), lineWidth: 2, position: .bottom)?.withRenderingMode(.alwaysTemplate), for: .normal)
     }
     
-    func reloadViews(for reminder : Reminder) {
-        if reminder.contains(.allDone) || reminder.contains(.totality) {
-            EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
-                           Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
-                           Event(name: "Corona"),
-                           Event(name: "Diamond Ring"),
-                           Event(name: "Helmet Streamers"),
-                           Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
-                           Event(name: "Prominence"),
-                           Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed")),
-                           Event(name: "Totality")]
-            
-        } else if reminder.contains(.contact1) {
-            EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
-                           Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
-                           Event(name: "Corona"),
-                           Event(name: "Diamond Ring"),
-                           Event(name: "Helmet Streamers"),
-                           Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
-                           Event(name: "Prominence"),
-                           Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed"))]
-            currentIndex += 1
-        }
-    }
+    
+//    func reloadViews(for reminder : Reminder) {
+//        if reminder.contains(.allDone) || reminder.contains(.totality) {
+//            EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
+//                           Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
+//                           Event(name: "Corona"),
+//                           Event(name: "Diamond Ring"),
+//                           Event(name: "Helmet Streamers"),
+//                           Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
+//                           Event(name: "Prominence"),
+//                           Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed")),
+//                           Event(name: "Totality")]
+//
+//        } else if reminder.contains(.contact1) {
+//            EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
+//                           Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
+//                           Event(name: "Corona"),
+//                           Event(name: "Diamond Ring"),
+//                           Event(name: "Helmet Streamers"),
+//                           Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
+//                           Event(name: "Prominence"),
+//                           Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed"))]
+//            currentIndex += 1
+//        }
+//    }
     
     func loadImages() {
-        EventImages = [Event(name: "Baily's Beads"),
+        EventImages = [Event(name: "First Contact"),Event(name: "Baily's Beads"),
                        Event(name: "Baily's Beads Zoomed", resourceName: "Baily's Beads", image: #imageLiteral(resourceName: "Baily's Beads Zoomed")),
                        Event(name: "Corona"),
                        Event(name: "Diamond Ring"),
                        Event(name: "Helmet Streamers"),
                        Event(name: "Helmet Streamers Zoomed", resourceName: "Helmet Streamers", image: #imageLiteral(resourceName: "Helmet Streamers Zoomed")),
                        Event(name: "Prominence"),
-                       Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed"))
-        ]
+                       Event(name: "Prominence Zoomed", resourceName: "Prominence", image: #imageLiteral(resourceName: "Prominence Zoomed")),
+                       Event(name: "Totality")]
         
         
-        if UserDefaults.standard.bool(forKey: "Contact1Done") {
-            reloadViews(for: .contact1)
-        }
-        
-        if UserDefaults.standard.bool(forKey: "TotalityDone") {
-            reloadViews(for: .totality)
-        }
+//        if UserDefaults.standard.bool(forKey: "Contact1Done") {
+//            reloadViews(for: .contact1)
+//        }
+//
+//        if UserDefaults.standard.bool(forKey: "TotalityDone") {
+//            reloadViews(for: .totality)
+//        }
         
         
         titleLabel.text = EventImages[currentIndex].name
@@ -160,63 +277,19 @@ class RumbleMapViewController: UIViewController {
         
     }
     
-    func configureView() {
-        let background = UIView.rombusPattern()
-        background.frame = view.bounds
-        background.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.insertSubview(background, at: 0)
-        
-        startRumbleBtn.addTarget(self, action: #selector(openRumbleMap), for: .touchUpInside)
-        startRumbleBtn.titleLabel?.numberOfLines = 0
-        startRumbleBtn.titleLabel?.textAlignment = .center
-        
-        nextBtn.setImage(#imageLiteral(resourceName: "Right_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
-        nextBtn.tintColor = .white
-        nextBtn.accessibilityHint = "Shows the next Eclipse Image"
-        
-        
-        previousBtn.setImage(#imageLiteral(resourceName: "Left_Arrow").withRenderingMode(.alwaysTemplate), for: .normal)
-        previousBtn.tintColor = .white
-        previousBtn.accessibilityHint = "Shows the previous Eclipse Image"
-        
-        titleLabel.adjustsFontSizeToFitWidth = true
-        titleLabel.accessibilityTraits = UIAccessibilityTraitHeader
-        
-        let height = rumbleBtn.frame.height
-        let rWidth = rumbleBtn.frame.width
-        let bWidth = descriptionBtn.frame.width
-        
-        descriptionBtn.setBackgroundImage(UIImage.selectionIndiciatorImage(color: UIColor.init(r: 227, g: 94, b: 5), size: CGSize.init(width: rWidth, height: height), lineWidth: 2, position: .bottom)?.withRenderingMode(.alwaysTemplate), for: .normal)
-        
-        descriptionBtn.tintColor = UIColor.init(r: 227, g: 94, b: 5)
-        descriptionBtn.accessibilityTraits |= UIAccessibilityTraitSelected
-        
-        rumbleBtn.setBackgroundImage(UIImage.selectionIndiciatorImage(color: .white, size: CGSize.init(width: bWidth, height: height), lineWidth: 2, position: .bottom)?.withRenderingMode(.alwaysTemplate), for: .normal)
-        
-        descriptionTextView.textContainerInset = UIEdgeInsetsMake(20, 20, 10, 20)
-        descriptionTextView.accessibilityTraits = UIAccessibilityTraitStaticText
-    }
-    
-    
-    func setText() {
-        titleLabel.font = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(fontName: .bold, textStyle: .headline), size: 0)
-    }
-    
-    
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    func openRumbleMap() {
+    @objc func openRumbleMap() {
         let interactiveVC = RumbleMapInteractiveViewController()
         interactiveVC.event = EventImages[currentIndex]
         self.present(interactiveVC, animated: true, completion: nil)
     }
     
     
-    @IBAction func nextImage(_ sender: Any) {
+    @objc func nextImage(_ sender: UIButton) {
         currentIndex += 1
         
         if currentIndex > EventImages.count-1 {
@@ -227,7 +300,7 @@ class RumbleMapViewController: UIViewController {
         previewImageView.image = EventImages[currentIndex].image
     }
     
-    @IBAction func previousImage(_ sender: Any) {
+    @objc func previousImage(_ sender: UIButton) {
         currentIndex -= 1
         
         if currentIndex < 0 {
@@ -238,31 +311,24 @@ class RumbleMapViewController: UIViewController {
         previewImageView.image = EventImages[currentIndex].image
     }
     
-    func unregisterGesture(for view: UIView) {
-        if let recognizers = view.gestureRecognizers {
-            for recognizer in recognizers {
-                view.removeGestureRecognizer(recognizer)
-            }
-        }
-    }
-    @IBAction func switchState(_ sender: UIButton) {
+    @objc func switchState(_ sender: UIButton) {
         if sender == rumbleBtn {
             descriptionTextView.isHidden = true
             startRumbleBtn.isHidden = false
             previewImageView.isHidden = false
-            descriptionBtn.tintColor = UIColor(r: 33, g: 33, b: 33)
+            descriptionBtn.tintColor = Color.lead
             descriptionBtn.accessibilityTraits &= ~UIAccessibilityTraitSelected
             
         } else if sender == descriptionBtn {
             descriptionTextView.isHidden = false
             startRumbleBtn.isHidden = true
             previewImageView.isHidden = true
-            rumbleBtn.tintColor = UIColor(r: 33, g: 33, b: 33)
+            rumbleBtn.tintColor = Color.lead
             rumbleBtn.accessibilityHint = nil
             rumbleBtn.accessibilityTraits &= ~UIAccessibilityTraitSelected
         }
         
-        sender.tintColor = UIColor.init(r: 227, g: 94, b: 5)
+        sender.tintColor = Color.eclipseOrange
         sender.accessibilityTraits ^= UIAccessibilityTraitSelected
     }
     

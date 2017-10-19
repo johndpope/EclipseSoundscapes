@@ -22,8 +22,28 @@
 
 import Eureka
 
-class TeamViewController : FormViewController {
+class TeamViewController : FormViewController, TypedRowControllerType {
     
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
+    
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Our Team", titleColor: .black)
+        view.backgroundColor = Color.NavBarColor
+        view.maxHeaderHeight = 60
+        view.isShrinkable = false
+        return view
+    }()
+    
+    lazy var backBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.tintColor = .black
+        btn.addTarget(self, action: #selector(close), for: .touchUpInside)
+        btn.accessibilityLabel = "Back"
+        return btn
+    }()
     
     var members : [TeamMember] = [
         TeamMember(name: "Dr. Henry Winter", jobTitle: "Principal Investigator", bio: "Dr. Henry 'Trae' Winter III, an astrophysicist at the Harvard-Smithsonian Center for Astrophysics (CfA), has worked on eight NASA missions observing the Sun. His primary research focus is improving computer simulations to explore energy is released in the Sun's atmosphere, the corona, and in other stars. Dr. Winter has designed video wall exhibits for the Cooper-Hewitt National Design Museum, the National Air and Space Museum, North Carolina State University’s Hunt Library, and the Harvard Art Museums’ Lightbox Gallery. In addition to Eclipse Soundscapes, his current project “The Tactile Sun” aims to engage the blind and visually disabled community with universally designed solar exhibits. Dr. Winter has spearheaded many efforts to engage the public in scientific discovery, including work with the Montana Space Grant Consortium's Space Public Outreach Team, the Yohkoh Public Outreach Project, and science education programs at the Salish-Kootenai Flathead Lake Reservation. Currently Dr. Winter is the Chairperson of the Astrolabe Advisory Board, Chairperson of the AAS Eclipse Task Force Education Committee, active member of the Education and Public Outreach Committee for the Solar Physics Division (SPD) of the AAS, Press Officer for the SPD, and Co-Director of the CfA's Solar REU Summer Intern Program sponsored by the National Science Foundation.", photo: #imageLiteral(resourceName: "Henry Winter")),
@@ -39,18 +59,24 @@ class TeamViewController : FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViews()
         initializeForm()
+    }
+    
+    func setupViews() {
+        view.backgroundColor = headerView.backgroundColor
+        view.addSubview(headerView)
         
-        self.navigationItem.title = "Our Team"
-        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        headerView.addSubviews(backBtn)
+        backBtn.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        backBtn.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 10).isActive = true
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
     }
     
     private func initializeForm() {
-        
-        self.automaticallyAdjustsScrollViewInsets = false
-        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        
         
         for member in members {
             addMember(member)

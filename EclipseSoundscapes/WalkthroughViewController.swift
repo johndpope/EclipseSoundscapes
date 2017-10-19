@@ -25,12 +25,10 @@ import Eureka
 
 
 /// Walkthrough Controller
-class WalkthroughViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, TypedRowControllerType {
+class WalkthroughViewController : UIViewController, TypedRowControllerType, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-
     var row: RowOf<String>!
     var onDismissCallback: ((UIViewController) -> ())?
-    
     
     /// Bool if the walktrhough is showing for the first time ever
     private var isBegining = true
@@ -56,7 +54,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     /// Permission cell reuse id
     let PermissionCellId = "permissionCellId"
     
-    //MARK: Constraints to animate controls on and off screen
+    //MARK: Constraints and constants to animate controls on and off screen
     var pageLabelbottomAnchor: NSLayoutConstraint?
     var skipButtonRightAnchor: NSLayoutConstraint?
     var nextButtonTopAnchor: NSLayoutConstraint?
@@ -206,115 +204,67 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     
     /// Skip WalkThrough Button
     lazy var skipButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Skip", for: .normal)
-        button.addTarget(self, action: #selector(skip), for: .touchUpInside)
-        button.setTitleColor(UIColor.init(r: 227, g: 94, b: 5), for: .normal)
-        button.accessibilityLabel = "Skip to end of Walk Through"
-        return button
+        let btn = UIButton(type: .system)
+        btn.setTitle("Skip", for: .normal)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.extraBold, size: (btn.titleLabel?.font.pointSize)!)
+        btn.addTarget(self, action: #selector(skip), for: .touchUpInside)
+        btn.setTitleColor(UIColor.init(r: 227, g: 94, b: 5), for: .normal)
+        btn.accessibilityLabel = "Skip to end of Walk Through"
+        return btn
     }()
-    
-    
-    /// Skips the WalkThrough
-    func skip() {
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.previousButton)
-        currentPage = pages.count
-        
-        let indexPath = IndexPath(item: currentPage, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        moveControlConstraintsOffScreen()
-        self.previousButton.tintColor = .black
-        
-    }
     
     
     /// Next Page Button
     lazy var nextButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "Right_Arrow"), for: .normal)
-        button.tintColor = UIColor.init(r: 227, g: 94, b: 5)
-        button.addTarget(self, action: #selector(nextPage), for: .touchUpInside)
-        button.accessibilityLabel = "Next Page"
-        button.accessibilityTraits |= UIAccessibilityTraitCausesPageTurn
-        return button
+        let btn = UIButton(type: .system)
+        btn.setImage(#imageLiteral(resourceName: "Right_Arrow"), for: .normal)
+        btn.tintColor = UIColor.init(r: 227, g: 94, b: 5)
+        btn.addTarget(self, action: #selector(nextPage), for: .touchUpInside)
+        btn.accessibilityLabel = "Next Page"
+        btn.accessibilityTraits |= UIAccessibilityTraitCausesPageTurn
+        return btn
     }()
     
     
     /// Previous Page Button
     lazy var previousButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "Left_Arrow"), for: .normal)
-        button.tintColor = UIColor.init(r: 227, g: 94, b: 5)
-        button.addTarget(self, action: #selector(previousPage), for: .touchUpInside)
-        button.isHidden = true
-        button.accessibilityLabel = "Previous Page"
-        button.accessibilityTraits |= UIAccessibilityTraitCausesPageTurn
-        return button
+        let btn = UIButton(type: .system)
+        btn.setImage(#imageLiteral(resourceName: "Left_Arrow"), for: .normal)
+        btn.tintColor = UIColor.init(r: 227, g: 94, b: 5)
+        btn.addTarget(self, action: #selector(previousPage), for: .touchUpInside)
+        btn.isHidden = true
+        btn.accessibilityLabel = "Previous Page"
+        btn.accessibilityTraits |= UIAccessibilityTraitCausesPageTurn
+        return btn
     }()
-    
-    
-    /// Performs Paging to Next Page Cell
-    func nextPage() {
-        //we are on the last page
-        if currentPage == pages.count {
-            return
-        }
-        
-        //second last page
-        if currentPage == pages.count - 1 {
-            moveControlConstraintsOffScreen()
-        }
-        
-        let indexPath = IndexPath(item: currentPage+1, section: 0)
-        
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        currentPage += 1
-    }
-    
-    /// Performs Paging to Previous Page Cell
-    func previousPage() {
-        //on the first page
-        if currentPage == 0 {
-            return
-        }
-        
-        //last page
-        if currentPage == pages.count {
-            moveControlConstraintsOnScreen()
-        }
-        
-        let indexPath = IndexPath(item: currentPage - 1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        currentPage -= 1
-        
-    }
-    
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    init(_ callback: ((UIViewController) -> ())? = nil) {
-        super.init(nibName: nil, bundle: nil)
-        onDismissCallback = callback
-        
-        if UserDefaults.standard.bool(forKey: "WalkThrough"){
-            changeViewForRegularUse()
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if UserDefaults.standard.bool(forKey: "WalkThrough"){
+            changeViewForRegularUse()
+        }
+        setupViews()
+        registerCells()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let cell = collectionView.cellForItem(at: IndexPath(item: currentPage, section: 0))
+        setAccessibleElements(for: currentPage, cell: cell)
+    }
+    
+    /// Setup and layout view's subviews
+    func setupViews() {
         self.view.accessibilityElements = [collectionView, nextButton, skipButton, pageLabel]
         
-        view.addSubview(collectionView)
-        view.addSubview(pageLabel)
-        view.addSubview(skipButton)
-        view.addSubview(nextButton)
-        view.addSubview(previousButton)
+        view.addSubviews(collectionView, pageLabel, skipButton, nextButton, previousButton)
         
-        pageLabelbottomAnchor = pageLabel.anchor(nil, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: view.frame.height/3 + 15 + 10, rightConstant: 4, widthConstant: 0, heightConstant: 10).first
+        if #available(iOS 11.0, *), Device.isIphoneX() {
+            pageLabelbottomAnchor = pageLabel.anchor(nil, left: nil, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: PageCell.InfoHeight - 10, rightConstant: 4, widthConstant: 0, heightConstant: 10).first
+        } else {
+            // Fallback on earlier versions
+            pageLabelbottomAnchor = pageLabel.anchor(nil, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: PageCell.InfoHeight + 10, rightConstant: 4, widthConstant: 0, heightConstant: 10).first
+        }
         
         skipButtonRightAnchor = skipButton.anchor(nextButton.bottomAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 0, rightConstant: 4, widthConstant: 60, heightConstant: 0)[1]
         
@@ -325,17 +275,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         //use autolayout instead
         collectionView.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
         
-        registerCells()
-        
-        
         pageLabel.text = "Page 1 of \(isBegining ? pages.count+1 : pages.count)"
         pageLabel.accessibilityLabel = "Walk Through Page 1 of \(isBegining ? pages.count+1 : pages.count)"
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        let cell = collectionView.cellForItem(at: IndexPath(item: currentPage, section: 0))
-        setAccessibleElements(for: currentPage, cell: cell)
     }
     
     
@@ -348,12 +289,65 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         skipButton.addTarget(self, action: #selector(close), for: .touchUpInside)
     }
     
-    var pageControlRightConstant : CGFloat = 0
-    var skipButtonRightConstant : CGFloat = 0
-    var nextButtonTopConstant : CGFloat = 0
-    var previousButtonTopConstant : CGFloat = 0
     
+    /// Performs Paging to Next Page Cell
+    @objc func nextPage() {
+        //we are on the last page
+        if currentPage == pages.count {
+            return
+        }
+        
+        //second last page
+        if currentPage == pages.count - 1 {
+            moveControlConstraintsOffScreen()
+        }
+        
+        let indexPath = IndexPath(item: currentPage+1, section: 0)
+        if indexPath.section < collectionView.numberOfSections { //Check if valid IndexPath
+            if indexPath.row < collectionView.numberOfItems(inSection: indexPath.section) {
+                collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+                currentPage += 1
+            }
+        }
+    }
     
+    /// Performs Paging to Previous Page Cell
+    @objc func previousPage() {
+        //on the first page
+        if currentPage == 0 {
+            return
+        }
+        
+        //last page
+        if currentPage == pages.count {
+            moveControlConstraintsOnScreen()
+        }
+        
+        
+        let indexPath = IndexPath(item: currentPage - 1, section: 0)
+        if indexPath.row >= 0 { //Check if valid IndexPath
+            collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            currentPage -= 1
+        }
+    }
+    
+    /// Skips to the end of the walkthrough
+    @objc func skip() {
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.previousButton)
+        currentPage = pages.count
+        
+        let indexPath = IndexPath(item: currentPage, section: 0)
+        if indexPath.section < collectionView.numberOfSections { //Check if valid IndexPath
+            if indexPath.row < collectionView.numberOfItems(inSection: indexPath.section) {
+                collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+                moveControlConstraintsOffScreen()
+                self.previousButton.tintColor = .black
+            }
+        }
+        
+        
+    }
+
     /// Track the Current Page after a scroll drag is perfomed
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let scrollOffset = targetContentOffset.pointee.x
@@ -373,7 +367,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         setAccessibleElements(for: pageNumber, cell: cell)
     }
     
-    /// Track the Current Page after a scroll is perfomed from next/previous button press
+    /// Track the Current Page after a scroll is perfomed from next/previous/skip button press
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         
         let scrollOffset = scrollView.contentOffset.x
@@ -383,7 +377,6 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         
         setAccessibleElements(for: pageNumber, cell: cell)
     }
-    
     
     /// Moves the walkThrough control buttons and page label off screen
     fileprivate func moveControlConstraintsOffScreen() {
@@ -402,7 +395,13 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         skipButtonRightAnchor?.constant = -4
         nextButtonTopAnchor?.constant = 16
         previousButtonTopAnchor?.constant = 16
-        pageLabelbottomAnchor?.constant = -(view.frame.height/3 + 15 + 10)
+        
+        if #available(iOS 11.0, *), Device.isIphoneX() {
+            pageLabelbottomAnchor?.constant = -(PageCell.InfoHeight - 10)
+        } else {
+            pageLabelbottomAnchor?.constant = -(PageCell.InfoHeight + 10)
+        }
+        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -427,7 +426,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PermissionCellId, for: indexPath) as! PermissionCell
             cell.delegate = self
             cell.isAccessibilityElement = false
-            cell.accessibilityElements = [cell.titleLabel, cell.locationBtn, cell.notificationBtn, cell.laterBtn]
+            cell.accessibilityElements = [cell.permissionView]
             return cell
         }
         
@@ -469,11 +468,9 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     }
     
 }
-extension WalkthroughViewController: PermissionCellDelegate {
+extension WalkthroughViewController: PermissionViewDelegate {
     func didFinish() {
         UserDefaults.standard.set(true, forKey: "WalkThrough")
-        let stb = UIStoryboard(name: "Main", bundle: nil)
-        let tabBarController = stb.instantiateViewController(withIdentifier: "Tab") as! TabViewController
-        self.present(tabBarController, animated: true)
+        self.present(MainViewController(), animated: true)
     }
 }

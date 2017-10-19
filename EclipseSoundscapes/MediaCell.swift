@@ -36,6 +36,7 @@ class MediaCell : UITableViewCell {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
+        iv.layer.cornerRadius = 10
         return iv
     }()
     

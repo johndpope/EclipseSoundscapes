@@ -26,7 +26,6 @@ class MediaCenterViewController : UIViewController {
     
     let cellId = "cellId"
     
-    
     var mediaContainer : [Media]?
     
     var fillerView : UIView = {
@@ -35,22 +34,13 @@ class MediaCenterViewController : UIViewController {
         return view
     }()
     
-    var headerView : UIView = {
-        let view = UIView()
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Media", titleColor: .black)
         view.backgroundColor = Color.eclipseOrange
+        view.delegate = self
+        view.separatorLine.isHidden = true
         return view
     }()
-    
-    var titleLabel : UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.font = UIFont.getDefautlFont(.bold, size: 20)
-        label.text = "Media"
-        label.accessibilityTraits = UIAccessibilityTraitHeader
-        return label
-    }()
-    
     
     lazy var tableView : UITableView = {
         var tv = UITableView()
@@ -61,78 +51,18 @@ class MediaCenterViewController : UIViewController {
         return tv
     }()
     
-    var comingSoonLabel : UILabel = {
-        var label = UILabel()
-        label.text = "More audio descriptions coming soon..."
-        label.font = UIFont.getDefautlFont(.bold, size: 18)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         registerCell()
         loadDataSource()
         setupView()
-        comingSoonLabel.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 100)
-        tableView.tableFooterView = comingSoonLabel
         
-        NotificationHelper.addObserver(self, reminders: [.allDone,.totality,.contact1], selector: #selector(catchReminderNotification(notification:)))
+//        NotificationHelper.addObserver(self, reminders: [.allDone,.totality,.contact1], selector: #selector(catchReminderNotification(notification:)))
+        
     }
     
     func registerCell() {
         self.tableView.register(MediaCell.self, forCellReuseIdentifier: cellId)
-    }
-    
-    func catchReminderNotification(notification: Notification) {
-        guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
-            return
-        }
-        reloadMedia(for: reminder)
-        
-    }
-    
-    func reloadMedia(for reminder: Reminder) {
-        if reminder.contains(.allDone) || reminder.contains(.totality) {
-            
-            let totality = Media.init(name: "Totality", resourceName: "Totality_full", infoRecourceName: "Totality", mediaType: .mp3, image: #imageLiteral(resourceName: "Totality"))
-            
-            let sunAsAStar = Media.init(name: "Sun as a Star", resourceName: "Sun_as_a_Star_full", infoRecourceName: "Sun as a Star", mediaType: .mp3, image: #imageLiteral(resourceName: "Sun as a Star"))
-            
-            let totalityExperience = RealtimeEvent(name: "Totality Experience", resourceName: "Realtime_Eclipse_Shorts", mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Totality"), media:
-                RealtimeMedia(name: "Baily's Beads", infoRecourceName: "Baily's Beads-Short", image: #imageLiteral(resourceName: "Baily's Beads"), startTime: 0, endTime: 24),
-                                                   RealtimeMedia(name: "Totality", infoRecourceName: "Totality-Short", image: #imageLiteral(resourceName: "Totality"), startTime: 120, endTime: 145),
-                                                   RealtimeMedia(name: "Diamond Ring", infoRecourceName: "Diamond Ring-Short", image: #imageLiteral(resourceName: "Diamond Ring"), startTime: 200, endTime: 213),
-                                                   RealtimeMedia(name: "Sun as a Star", infoRecourceName: "Sun as a Star", image: #imageLiteral(resourceName: "Sun as a Star"), startTime: 320, endTime: 355))
-            
-            if !(mediaContainer?.contains(where: { (media) -> Bool in
-                return media.name == totality.name
-            }))! {
-                mediaContainer?.append(totality)
-            }
-            if !(mediaContainer?.contains(where: { (media) -> Bool in
-                return media.name == sunAsAStar.name
-            }))! {
-                mediaContainer?.append(sunAsAStar)
-            }
-            if !(mediaContainer?.contains(where: { (media) -> Bool in
-                return media.name == totalityExperience.name
-            }))! {
-                mediaContainer?.append(totalityExperience)
-            }
-            
-            comingSoonLabel.isHidden = true
-            
-        } else if reminder.contains(.contact1) {
-            self.mediaContainer?.insert(Media.init(name: "First Contact", resourceName: "First_Contact_full_with_date", infoRecourceName: "First Contact", mediaType: .mp3, image: #imageLiteral(resourceName: "First Contact")), at: 0)
-        }
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
     }
     
     func setupView() {
@@ -140,16 +70,68 @@ class MediaCenterViewController : UIViewController {
         self.view.addSubview(fillerView)
         self.view.addSubview(headerView)
         self.view.addSubview(tableView)
+        
         fillerView.anchor(view.topAnchor, left: view.leftAnchor, bottom: headerView.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         
-        headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: 60)
-        
-        headerView.addSubview(titleLabel)
-        titleLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
-        titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
         
         tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
+        
+        
+        let parallavView = ParallaxView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 0))
+        parallavView.backgroundColor = headerView.backgroundColor
+        self.tableView.tableHeaderView  = parallavView
     }
+    
+    
+    
+//    @objc func catchReminderNotification(notification: Notification) {
+//        guard let reminder = notification.userInfo?["Reminder"] as? Reminder else {
+//            return
+//        }
+//        reloadMedia(for: reminder)
+//
+//    }
+    
+//    func reloadMedia(for reminder: Reminder) {
+//        if reminder.contains(.allDone) || reminder.contains(.totality) {
+//
+//            let totality = Media.init(name: "Totality", resourceName: "Totality_full", infoRecourceName: "Totality", mediaType: .mp3, image: #imageLiteral(resourceName: "Totality"))
+//
+//            let sunAsAStar = Media.init(name: "Sun as a Star", resourceName: "Sun_as_a_Star_full", infoRecourceName: "Sun as a Star", mediaType: .mp3, image: #imageLiteral(resourceName: "Sun as a Star"))
+//
+//            let totalityExperience = RealtimeEvent(name: "Totality Experience", resourceName: "Realtime_Eclipse_Shorts", mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Totality"), media:
+//                RealtimeMedia(name: "Baily's Beads", infoRecourceName: "Baily's Beads-Short", image: #imageLiteral(resourceName: "Baily's Beads"), startTime: 0, endTime: 24),
+//                                                   RealtimeMedia(name: "Totality", infoRecourceName: "Totality-Short", image: #imageLiteral(resourceName: "Totality"), startTime: 120, endTime: 145),
+//                                                   RealtimeMedia(name: "Diamond Ring", infoRecourceName: "Diamond Ring-Short", image: #imageLiteral(resourceName: "Diamond Ring"), startTime: 200, endTime: 213),
+//                                                   RealtimeMedia(name: "Sun as a Star", infoRecourceName: "Sun as a Star", image: #imageLiteral(resourceName: "Sun as a Star"), startTime: 320, endTime: 355))
+//
+//            if !(mediaContainer?.contains(where: { (media) -> Bool in
+//                return media.name == totality.name
+//            }))! {
+//                mediaContainer?.append(totality)
+//            }
+//            if !(mediaContainer?.contains(where: { (media) -> Bool in
+//                return media.name == sunAsAStar.name
+//            }))! {
+//                mediaContainer?.append(sunAsAStar)
+//            }
+//            if !(mediaContainer?.contains(where: { (media) -> Bool in
+//                return media.name == totalityExperience.name
+//            }))! {
+//                mediaContainer?.append(totalityExperience)
+//            }
+//
+//        } else if reminder.contains(.contact1) {
+//            self.mediaContainer?.insert(Media.init(name: "First Contact", resourceName: "First_Contact_full_with_date", infoRecourceName: "First Contact", mediaType: .mp3, image: #imageLiteral(resourceName: "First Contact")), at: 0)
+//        }
+//
+//        DispatchQueue.main.async {
+//            self.tableView.reloadData()
+//        }
+//    }
+//
+    
     
     func loadDataSource() {
         self.mediaContainer = [
@@ -158,21 +140,21 @@ class MediaCenterViewController : UIViewController {
             Media.init(name: "Corona", resourceName: "Corona_full", infoRecourceName: "Corona" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Corona")),
             Media.init(name: "Helmet Streamers", resourceName: "Helmet_Streamers_full", infoRecourceName: "Helmet Streamers" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Helmet Streamers")),
             Media.init(name: "Diamond Ring", resourceName: "Diamond_Ring_full", infoRecourceName: "Diamond Ring" ,mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Diamond Ring")),
+            Media.init(name: "Totality", resourceName: "Totality_full", infoRecourceName: "Totality", mediaType: .mp3, image: #imageLiteral(resourceName: "Totality")),
+            
+            Media.init(name: "Sun as a Star", resourceName: "Sun_as_a_Star_full", infoRecourceName: "Sun as a Star", mediaType: .mp3, image: #imageLiteral(resourceName: "Sun as a Star")),
+            
+            RealtimeEvent(name: "Totality Experience", resourceName: "Realtime_Eclipse_Shorts", mediaType: FileType.mp3, image: #imageLiteral(resourceName: "Totality"), media:
+                RealtimeMedia(name: "Baily's Beads", infoRecourceName: "Baily's Beads-Short", image: #imageLiteral(resourceName: "Baily's Beads"), startTime: 0, endTime: 24),
+                          RealtimeMedia(name: "Totality", infoRecourceName: "Totality-Short", image: #imageLiteral(resourceName: "Totality"), startTime: 120, endTime: 145),
+                          RealtimeMedia(name: "Diamond Ring", infoRecourceName: "Diamond Ring-Short", image: #imageLiteral(resourceName: "Diamond Ring"), startTime: 200, endTime: 213),
+                          RealtimeMedia(name: "Sun as a Star", infoRecourceName: "Sun as a Star", image: #imageLiteral(resourceName: "Sun as a Star"), startTime: 320, endTime: 355))
         ]
-        
-        if UserDefaults.standard.bool(forKey: "Contact1Done") {
-            reloadMedia(for: .contact1)
-        }
-        
-        if UserDefaults.standard.bool(forKey: "TotalityDone") {
-            reloadMedia(for: .totality)
-        }
         
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
-    
 }
 
 extension MediaCenterViewController: UITableViewDelegate, UITableViewDataSource {
@@ -189,13 +171,7 @@ extension MediaCenterViewController: UITableViewDelegate, UITableViewDataSource 
         }
         
         let playbackVc = PlaybackViewController()
-        
         playbackVc.media = media
-        
-        //        if media is RealtimeEvent {
-        //            playbackVc.isRealtimeEvent = true
-        //        }
-        
         self.present(playbackVc, animated: true, completion: nil)
     }
     
@@ -213,4 +189,26 @@ extension MediaCenterViewController: UITableViewDelegate, UITableViewDataSource 
         cell.media = mediaContainer?[indexPath.row]
         return cell
     }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let tableViewheaderView = self.tableView.tableHeaderView as! ParallaxView
+        tableViewheaderView.scrollViewDidScroll(scrollView: scrollView)
+        headerView.scrollViewDidScroll(scrollView)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        headerView.scrollViewDidEndDecelerating(scrollView)
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        headerView.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
+    }
 }
+
+extension MediaCenterViewController : ShrinkableHeaderViewDelegate {
+    func setScrollPosition(position: CGFloat) {
+        self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: position)
+    }
+}
+
+

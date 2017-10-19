@@ -7,8 +7,30 @@
 //
 
 import UIKit
+import Eureka
 
-class PrivacyPolicyViewController: UIViewController {
+class PrivacyPolicyViewController: UIViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
+    
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Privacy Policy", titleColor: .black)
+        view.backgroundColor = Color.NavBarColor
+        view.maxHeaderHeight = 60
+        view.isShrinkable = false
+        return view
+    }()
+    
+    lazy var backBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.tintColor = .black
+        btn.addTarget(self, action: #selector(close), for: .touchUpInside)
+        btn.accessibilityLabel = "Back"
+        return btn
+    }()
     
     var infoTextView : UITextView = {
         let tv = UITextView()
@@ -24,34 +46,22 @@ class PrivacyPolicyViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        self.navigationItem.title = "Privacy Policy"
-        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
-        
-        
-        view.addSubview(infoTextView)
-        self.infoTextView.anchorToTop(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
-        
+        setupViews()
         setText()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func setupViews() {
+        view.backgroundColor = headerView.backgroundColor
+        view.addSubviews(headerView, infoTextView)
+        
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        headerView.addSubviews(backBtn)
+        backBtn.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        backBtn.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 10).isActive = true
+        
+        self.infoTextView.anchorToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
     
     func setText() {
         let bullet1 = "\u{2022}Crashlytics:\n\tFor the capture and collection of anonymous crash logs to help us identify bugs in our software. The Crashlytics Privacy Policy can be found at \nhttp://try.crashlytics.com/terms/\n\n"
@@ -67,7 +77,7 @@ class PrivacyPolicyViewController: UIViewController {
     func createParagraphAttribute() ->NSParagraphStyle {
         var paragraphStyle: NSMutableParagraphStyle
         paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-        paragraphStyle.tabStops = [NSTextTab(textAlignment: .left, location: 0, options: NSDictionary() as! [String : AnyObject])]
+        paragraphStyle.tabStops = [NSTextTab(textAlignment: .left, location: 0, options: [:])]
         paragraphStyle.defaultTabInterval = 15
         paragraphStyle.firstLineHeadIndent = 0
         paragraphStyle.headIndent = 15
@@ -76,7 +86,7 @@ class PrivacyPolicyViewController: UIViewController {
     }
     
 
-    func close() {
-        _ = self.navigationController?.popViewController(animated: true)
+    @objc private func close() {
+        self.dismiss(animated: true, completion: nil)
     }
 }

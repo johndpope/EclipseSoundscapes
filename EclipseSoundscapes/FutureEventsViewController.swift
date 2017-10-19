@@ -22,7 +22,29 @@
 
 import Eureka
 
-class FuFutureEventsViewController : FormViewController {
+class FutureEventsViewController : FormViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
+    
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Eclipses We Support", titleColor: .black)
+        view.backgroundColor = Color.NavBarColor
+        view.maxHeaderHeight = 60
+        view.isShrinkable = false
+        return view
+    }()
+    
+    lazy var backBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.tintColor = .black
+        btn.addTarget(self, action: #selector(close), for: .touchUpInside)
+        btn.accessibilityLabel = "Back"
+        return btn
+    }()
+    
     
     var futureEvents = [FutureEvent]()
     
@@ -30,19 +52,25 @@ class FuFutureEventsViewController : FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         load()
+        setupViews()
         initializeForm()
+    }
+    
+    func setupViews() {
+        view.backgroundColor = headerView.backgroundColor
+        view.addSubview(headerView)
         
-        self.navigationItem.title = "Eclipses We Support"
-        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        headerView.addSubviews(backBtn)
+        backBtn.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        backBtn.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 10).isActive = true
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
     }
     
     private func initializeForm() {
-        
-        self.automaticallyAdjustsScrollViewInsets = false
-        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        
-        
+
         for event in futureEvents {
             addEvent(event)
         }

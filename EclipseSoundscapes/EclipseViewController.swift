@@ -23,12 +23,8 @@
 import Eureka
 import CoreLocation
 import SwiftSpinner
-import BRYXBanner
 
 class EclipseViewController : FormViewController {
-    
-    @IBOutlet weak var errorBtn: UIButton!
-    var banner : Banner?
     
     var locator = Location()
     
@@ -40,6 +36,27 @@ class EclipseViewController : FormViewController {
     
     var noEclipseView : NoEclipseView?
     
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Eclipse Center", titleColor: .white)
+        view.backgroundColor = Color.lead
+        view.textColor = .white
+        view.isShrinkable = false
+        view.separatorLine.isHidden = true
+        return view
+    }()
+    
+    let errorBtn: UIButton = {
+        var btn = UIButton(type: .system)
+        btn.backgroundColor = .black
+        btn.addTarget(self, action: #selector(didTapErrorBtn), for: .touchUpInside)
+        btn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: 25)
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.numberOfLines = 0
+        btn.titleLabel?.textAlignment = .center
+        btn.setTitle(Location.string.general, for: .normal)
+        return btn
+    }()
+    
     deinit {
         LocationManager.removeObserver(self)
     }
@@ -47,25 +64,22 @@ class EclipseViewController : FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupViews()
         initializeForm()
-        configureContent()
+        hideCountdown()
+        
+        
         LocationManager.addObserver(self)
         if Location.isGranted {
             getlocation(animated: !foundLocationOnce)
         }
-        
-        NotificationHelper.addObserver(self, reminders: .contact1, selector: #selector(hideCountdown))
     }
     
     private func initializeForm() {
         
-        self.automaticallyAdjustsScrollViewInsets = false
-        tableView.contentInset = UIEdgeInsetsMake(25, 0, 44, 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake(20, 0, 0, 0)
         
         tableView.isHidden = true
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
-        tableView.backgroundColor = .clear
         
         LabelRow.defaultCellUpdate = { cell, row in
             cell.backgroundColor = .clear
@@ -137,24 +151,22 @@ class EclipseViewController : FormViewController {
         section.header?.height = {CGFloat.leastNormalMagnitude}
     }
     
-    func configureContent() {
+    func setupViews() {
         
-        let background = UIView.rombusPattern()
-        background.frame = view.bounds
-        background.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.insertSubview(background, at: 0)
+        self.tableView.backgroundColor = Color.lead
+        view.backgroundColor = Color.lead
         
-        errorBtn.backgroundColor = .clear
-        errorBtn.addTarget(self, action: #selector(didTapErrorBtn), for: .touchUpInside)
-        errorBtn.titleLabel?.font = UIFont.getDefautlFont(.bold, size: 25)
-        errorBtn.setTitleColor(.white, for: .normal)
-        errorBtn.titleLabel?.numberOfLines = 0
-        errorBtn.titleLabel?.textAlignment = .center
-        errorBtn.setTitle(Location.string.general, for: .normal)
+        view.addSubview(headerView)
         
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
+        
+        view.addSubviews(errorBtn)
+        errorBtn.anchorToTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
-    func hideCountdown() {
+    @objc func hideCountdown() {
         if let row = form.rowBy(tag: "Countdown") as? CountDownRow {
             row.hidden = true
             row.evaluateHidden()
@@ -162,12 +174,11 @@ class EclipseViewController : FormViewController {
         NotificationHelper.removeObserver(self, reminders: .contact1)
     }
     
-    func didTapErrorBtn() {
+    @objc func didTapErrorBtn() {
         getlocation(animated: true)
     }
     
     func getlocation(animated : Bool) {
-        banner?.dismiss()
         
         if Location.isGranted {
             if animated {
@@ -175,14 +186,7 @@ class EclipseViewController : FormViewController {
             }
             LocationManager.getLocation()
         } else {
-            if !Location.checkPermission() {
-                LocationManager.permission(on: self)
-            } else {
-                banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.") {
-                    self.present(UINavigationController(rootViewController: SettingsViewController()), animated: true, completion: nil)
-                }
-                banner?.show(duration: 5.0)
-            }
+            LocationManager.permission(on: self)
         }
     }
     
@@ -384,7 +388,7 @@ class EclipseViewController : FormViewController {
         longRow.cell.detailTextLabel?.text = long
     }
     
-    func getClosesLocation() {
+    @objc func getClosesLocation() {
         LocationManager.getClosestLocation()
         toggleNoEclipse(show: false)
     }
@@ -394,7 +398,6 @@ class EclipseViewController : FormViewController {
     func toggleNoEclipse(show: Bool){
         
         if show {
-            
             if noEclipseView != nil {
                 return
             }
@@ -486,15 +489,6 @@ extension EclipseViewController : LocationDelegate {
     
     func notGranted() {
         showError()
-        
-        if !Location.isGranted {
-            banner = Banner(title: "Location Settings is Turned off", subtitle: "Go to More > Settings > Enable Location or Tap to go.") {
-                self.present(UINavigationController(rootViewController: SettingsViewController()), animated: true, completion: nil)
-            }
-            banner?.show(duration: 5.0)
-        } else {
-            LocationManager.permission(on: self)
-        }
     }
     
     func didGrant() {

@@ -111,6 +111,7 @@ class RumbleMap : UIImageView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
+        
     }
     
     func commonInit() {
@@ -183,7 +184,7 @@ class RumbleMap : UIImageView {
         
     }
     
-    func touchDown(_ recognizer: UILongPressGestureRecognizer) {
+    @objc func touchDown(_ recognizer: UILongPressGestureRecognizer) {
         if !AudioKit.engine.isRunning {
             restart()
         }
@@ -206,7 +207,7 @@ class RumbleMap : UIImageView {
         }
     }
     
-    func handlePan(_ recognizer: UIPanGestureRecognizer) {
+    @objc func handlePan(_ recognizer: UIPanGestureRecognizer) {
         if !AudioKit.engine.isRunning {
             restart()
         }
@@ -258,7 +259,7 @@ class RumbleMap : UIImageView {
         
     }
     
-    func saveMarkerPosition(_ recognizer: UILongPressGestureRecognizer) {
+    @objc func saveMarkerPosition(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             let location = recognizer.location(in: recognizer.view)
             if !(markerContainer?.contains(location) ?? true) {
@@ -293,7 +294,7 @@ class RumbleMap : UIImageView {
         }
     }
     
-    func stop() {
+    @objc func stop() {
         isActive = false
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self)
     }
@@ -357,6 +358,23 @@ class RumbleMap : UIImageView {
     }
 }
 
+extension RumbleMap {
+    func grayScale(point:CGPoint) -> CGFloat {
+        let pixel = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: 4)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+        let context = CGContext(data: pixel, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
+        
+        context!.translateBy(x: -point.x, y: -point.y)
+        layer.render(in: context!)
+        
+        let scale = (CGFloat(pixel[0])/255.0 + CGFloat(pixel[1])/255.0 + CGFloat(pixel[2])/255.0)/3
+        
+        return scale
+        
+    }
+}
+
 extension RumbleMap : UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
@@ -367,15 +385,16 @@ extension RumbleMap : UIGestureRecognizerDelegate {
     }
 }
 
+
 extension RumbleMap {
     //MARK: Notification Handlers
     
-    func returnToApplication(){
+    @objc func returnToApplication(){
         shouldPlay = true
         setSession(active: true)//Returned
     }
     
-    func leftApplication() {
+    @objc func leftApplication() {
         shouldPlay = false
         setSession(active: false)//Left
     }
@@ -384,7 +403,7 @@ extension RumbleMap {
     /// Notification handler for AVAudioSessionRouteChange to catch changes to device connection from the audio jack.
     ///
     /// - Parameter notification: Notification object cointaing AVAudioSessionRouteChange data
-    func deviceConnectedNotification(notification: Notification){
+    @objc func deviceConnectedNotification(notification: Notification){
         
         let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
         switch audioRouteChangeReason {
@@ -410,11 +429,10 @@ extension RumbleMap {
         isRestarting = false
     }
     
-    //TODO: Implement the recording to pause while interruption is in prpogress and restart after interruption is stoped
     /// Interruption Handler
     ///
     /// - Parameter notification: Device generated notification about interruption
-    func handleInterruption(_ notification: Notification) {
+    @objc func handleInterruption(_ notification: Notification) {
         guard let info = notification.userInfo,
             let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
             let type = AVAudioSessionInterruptionType(rawValue: typeValue) else {

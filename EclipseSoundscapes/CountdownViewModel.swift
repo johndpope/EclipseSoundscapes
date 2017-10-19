@@ -35,7 +35,7 @@ class CountdownViewModel {
     func observe(_ endDate: Date, handler : @escaping (CountdownTimeLeft, Bool) -> Void) {
         let queue = DispatchQueue.global(qos: .default)
         timer = DispatchSource.makeTimerSource(flags: DispatchSource.TimerFlags(rawValue: UInt(0)), queue: queue)
-        timer?.scheduleRepeating(deadline: DispatchTime.now(), interval: .seconds(1), leeway: .seconds(0))
+        timer?.schedule(deadline: DispatchTime.now(), repeating: .seconds(1), leeway: .seconds(0))
         
         timer?.setEventHandler(handler: {
             if self.isCountdownCompleted(endDate) {

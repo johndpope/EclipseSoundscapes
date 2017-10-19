@@ -25,7 +25,7 @@ import UIKit
 extension UIButton {
     func addSqueeze() {
         self.addTarget(self, action: #selector(squeeze), for: [.touchDown, .touchDragInside])
-        self.addTarget(self, action: #selector(unSqueeze), for: [.touchDragExit, .touchUpInside])
+        self.addTarget(self, action: #selector(unSqueeze), for: [.touchDragExit, .touchUpInside,.touchCancel])
     }
     
     @objc private func squeeze() {

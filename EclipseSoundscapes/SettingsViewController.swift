@@ -21,38 +21,66 @@
 //  For Contact email: arlindo@eclipsesoundscapes.org
 
 import Eureka
-import CoreLocation
 
-
-class SettingsViewController : FormViewController {
+class SettingsViewController : FormViewController, TypedRowControllerType {
     
-    var currentSetting : SPRequestPermissionType?
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
+    
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Settings", titleColor: .black)
+        view.backgroundColor = Color.NavBarColor
+        view.maxHeaderHeight = 60
+        view.isShrinkable = false
+        return view
+    }()
+    
+    lazy var backBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.tintColor = .black
+        btn.addTarget(self, action: #selector(close), for: .touchUpInside)
+        btn.accessibilityLabel = "Back"
+        return btn
+    }()
+    
+    var currentSetting : PermissionType?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViews()
         initializeForm()
-        self.navigationItem.title = "Settings"
+    }
+    
+    func setupViews() {
+        view.backgroundColor = headerView.backgroundColor
+        view.addSubview(headerView)
         
-        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        headerView.addSubviews(backBtn)
+        backBtn.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        backBtn.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 10).isActive = true
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
     }
     
     @objc private func initializeForm() {
         
-        self.automaticallyAdjustsScrollViewInsets = false
-        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        
         form
             +++ SwitchRow("Notification") {
                 $0.title = "Notifications"
-                $0.value = SPRequestPermission.isAllowPermission(.notification)
+                $0.value = Permission.isAllowPermission(.notification) && NotificationHelper.appGrated
                 }.onChange({ (row) in
                     if let switchOn = row.value {
                         if switchOn {
                             NotificationHelper.appGrated = true
                             if !NotificationHelper.isGranted{
                                 self.currentSetting = .notification
-                                SPRequestPermission.dialog.interactive.present(on: self, with: [.notification],dataSource: NotificationDataSource(), delegate: self)
+                                self.present(PermissionViewController.show(with: [.notification], completion: {
+                                    self.didHide()
+                                }), animated: true, completion: nil)
                             }
                         } else {
                             NotificationHelper.appGrated = false
@@ -62,14 +90,16 @@ class SettingsViewController : FormViewController {
                 })
             <<< SwitchRow("Location") {
                 $0.title = "Location"
-                $0.value = SPRequestPermission.isAllowPermission(.locationWhenInUse) && Location.isGranted
+                $0.value = Permission.isAllowPermission(.locationWhenInUse) && Location.appGrated
                 }.onChange({ (row) in
                     if let switchOn = row.value {
                         if switchOn {
                             Location.appGrated = true
                             if !Location.isGranted{
                                 self.currentSetting = .locationWhenInUse
-                                SPRequestPermission.dialog.interactive.present(on: self, with: [.locationWhenInUse],dataSource: LocationDataSource(), delegate: self)
+                                self.present(PermissionViewController.show(with: [.locationWhenInUse], completion: {
+                                    self.didHide()
+                                }), animated: true, completion: nil)
                             }
                         } else {
                             Location.appGrated = false
@@ -81,9 +111,6 @@ class SettingsViewController : FormViewController {
     @objc private func close() {
         self.dismiss(animated: true, completion: nil)
     }
-}
-
-extension SettingsViewController: SPRequestPermissionEventsDelegate {
     
     func didHide() {
         guard let type = currentSetting else {
@@ -92,7 +119,6 @@ extension SettingsViewController: SPRequestPermissionEventsDelegate {
         switch type {
         case .notification:
             let isAllowed = NotificationHelper.checkPermission()
-            NotificationHelper.appGrated = isAllowed
             let row = (form.rowBy(tag: "Notification") as! SwitchRow)
             row.cell.switchControl.setOn(isAllowed, animated: true)
             row.value = isAllowed
@@ -100,45 +126,12 @@ extension SettingsViewController: SPRequestPermissionEventsDelegate {
             break
         case .locationWhenInUse :
             let isAllowed = Location.checkPermission()
-            Location.appGrated = isAllowed
             let row = (form.rowBy(tag: "Location") as! SwitchRow)
             row.cell.switchControl.setOn(isAllowed, animated: true)
             row.value = isAllowed
             break
-        default:
-            break
         }
         
-        
-    }
-    
-    func didAllowPermission(permission: SPRequestPermissionType) {
-        switch permission {
-        case .notification:
-            NotificationHelper.appGrated = true
-            break
-        case .locationWhenInUse :
-            Location.appGrated = true
-            break
-        default:
-            break
-        }
-    }
-    
-    func didDeniedPermission(permission: SPRequestPermissionType) {
-        switch permission {
-        case .notification:
-            NotificationHelper.appGrated = false
-            break
-        case .locationWhenInUse :
-            Location.appGrated = false
-            break
-        default:
-            break
-        }
-    }
-    
-    func didSelectedPermission(permission: SPRequestPermissionType) {
         
     }
 }

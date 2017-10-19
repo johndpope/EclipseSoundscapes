@@ -73,3 +73,4 @@ Podfile.lock
 **/GoogleService-Info.plist
 fabric.apikey
 fabric.buildsecret
+Reports/

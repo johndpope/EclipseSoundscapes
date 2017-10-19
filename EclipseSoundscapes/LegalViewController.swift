@@ -22,40 +22,72 @@
 
 import Eureka
 
-class LegalViewController : FormViewController {
+class LegalViewController : FormViewController, TypedRowControllerType {
+    
+    var row: RowOf<String>!
+    var onDismissCallback: ((UIViewController) -> ())?
+    
+    lazy var headerView : ShrinkableHeaderView = {
+        let view = ShrinkableHeaderView(title: "Legal", titleColor: .black)
+        view.backgroundColor = Color.NavBarColor
+        view.maxHeaderHeight = 60
+        view.isShrinkable = false
+        return view
+    }()
+    
+    lazy var backBtn : UIButton = {
+        var btn = UIButton(type: .system)
+        btn.addSqueeze()
+        btn.setImage(#imageLiteral(resourceName: "left-small").withRenderingMode(.alwaysTemplate), for: .normal)
+        btn.tintColor = .black
+        btn.addTarget(self, action: #selector(close), for: .touchUpInside)
+        btn.accessibilityLabel = "Back"
+        return btn
+    }()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViews()
         initializeForm()
+    }
+    
+    func setupViews() {
+        view.backgroundColor = headerView.backgroundColor
+        view.addSubview(headerView)
         
-        self.navigationItem.title = "Legal"
-        self.navigationItem.addSqeuuzeBackBtn(self, action: #selector(close), for: .touchUpInside)
+        headerView.headerHeightConstraint = headerView.anchor(topLayoutGuide.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0,widthConstant: 0, heightConstant: headerView.maxHeaderHeight).last!
+        
+        headerView.addSubviews(backBtn)
+        backBtn.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        backBtn.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 10).isActive = true
+        
+        tableView.anchorWithConstantsToTop(headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
     }
     
     private func initializeForm() {
-        
-        self.automaticallyAdjustsScrollViewInsets = false
-        tableView.contentInset = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 20, 0, 0, 0)
-        
+
         form
             +++ ButtonRow("License"){(row: ButtonRow) -> Void in
                 row.title = row.tag
-                row.presentationMode = PresentationMode.segueName(segueName: "License", onDismiss: nil)
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return LicenseViewController()
+                }, onDismiss: nil)
             }
             <<< ButtonRow("Open Source Libraries"){(row: ButtonRow) -> Void in
                 row.title = row.tag
-                row.presentationMode = PresentationMode.segueName(segueName: "OpenSourceLibraries", onDismiss: nil)
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return OpenSourceViewController()
+                }, onDismiss: nil)
                 
             }
             <<< ButtonRow("Photo Credits"){(row: ButtonRow) -> Void in
                 row.title = row.tag
-                row.presentationMode = PresentationMode.segueName(segueName: "Photo Credits", onDismiss: nil)
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return PhotoCreditsViewController()
+                }, onDismiss: nil)
             }
             <<< ButtonRow("Privacy Policy"){(row: ButtonRow) -> Void in
                 row.title = row.tag
-                row.presentationMode = PresentationMode.segueName(segueName: "PrivacyPolicy", onDismiss: nil)
+                row.presentationMode = .presentModally(controllerProvider: ControllerProvider.callback { return PrivacyPolicyViewController()
+                }, onDismiss: nil)
         }
         
     }

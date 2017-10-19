@@ -93,7 +93,7 @@ final class PhotoCreditCell: Cell<PhotoCredit>, CellType {
         return true
     }
     
-    func openWebsite() {
+    @objc func openWebsite() {
         guard let photo = row.value, let url = URL.init(string: photo.website) else {
             return
         }
